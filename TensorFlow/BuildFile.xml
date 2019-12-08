@@ -1,0 +1,6 @@
+<use name="FWCore/Utilities"/>
+<use name="LLPReco/DataFormats"/>
+<use name="PhysicsTools/TensorFlow"/>
+<export>
+  <lib name="1"/>
+</export>
