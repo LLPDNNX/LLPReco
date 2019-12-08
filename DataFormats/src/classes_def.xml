@@ -1,0 +1,12 @@
+<lcgdict>
+    <class name="llpdnnx::ShallowTagInfoFeatures"/>
+    <class name="llpdnnx::JetFeatures"/>
+    <class name="llpdnnx::SecondaryVertexFeatures"/>
+    <class name="llpdnnx::ChargedCandidateFeatures"/>
+    <class name="llpdnnx::NeutralCandidateFeatures"/>
+    <class name="llpdnnx::XTagFeatures"/>
+    <class name="reco::FeaturesTagInfo<llpdnnx::XTagFeatures>"/>
+    <class name="edm::Wrapper<reco::FeaturesTagInfo<llpdnnx:XTagFeatures> >"/>
+    <class name="edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::XTagFeatures>>>"/>
+    <class name="std::vector<reco::FeaturesTagInfo<llpdnnx::XTagFeatures>>"/>
+</lcgdict>

@@ -1,0 +1,18 @@
+<use   name="LLPReco/DataFormats"/>
+<use   name="FWCore/Framework"/>
+<use   name="FWCore/ServiceRegistry"/>
+<use   name="FWCore/PluginManager"/>
+<use   name="DataFormats/Common"/>
+<use   name="DataFormats/PatCandidates"/>
+<use   name="DataFormats/Candidate"/>
+<use   name="DataFormats/HepMCCandidate"/>
+<use   name="DataFormats/BTauReco"/>
+<use   name="DataFormats/BTauReco"/>
+<use   name="DataFormats/Common"/>
+<use   name="RecoBTag/FeatureTools"/>
+<use   name="RecoBTag/TrackProbability"/>
+<use   name="TrackingTools/IPTools"/>
+
+<export>
+  <lib   name="1"/>
+</export>
