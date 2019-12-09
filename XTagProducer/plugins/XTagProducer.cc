@@ -17,7 +17,7 @@
 #include "FWCore/Framework/interface/makeRefToBaseProdFrom.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
-#include "LLPReco/TensorFlow/interface/tensor_fillers.h"
+#include "LLPReco/XTagProducer/interface/tensor_fillers.h"
 
 
 
@@ -202,7 +202,7 @@ void
 XTagProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   edm::ParameterSetDescription desc;
   desc.add<edm::InputTag>("src", edm::InputTag("pfXTagInfos"));
-  desc.add<edm::FileInPath>("graph_path", edm::FileInPath("LLPReco/TensorFlow/data/da.pb"));
+  desc.add<edm::FileInPath>("graph_path", edm::FileInPath("LLPReco/XTagProducer/data/da.pb"));
   descriptions.add("pfXTags", desc);
 }
 

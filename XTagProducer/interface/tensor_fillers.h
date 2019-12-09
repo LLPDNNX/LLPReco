@@ -1,5 +1,5 @@
-#ifndef LLPReco_TensorFlow_tensor_fillers_h
-#define LLPReco_TensorFlow_tensor_fillers_h
+#ifndef LLPReco_XTagProducer_tensor_fillers_h
+#define LLPReco_XTagProducer_tensor_fillers_h
 
 #include "PhysicsTools/TensorFlow/interface/TensorFlow.h"
 #include "LLPReco/DataFormats/interface/XTagInfo.h"
