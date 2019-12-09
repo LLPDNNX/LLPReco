@@ -158,8 +158,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.tag_info_features.csv_trackSip3dValAboveCharm = vars.get(reco::btau::trackSip3dValAboveCharm, -1);
         features.tag_info_features.csv_trackSip3dSigAboveCharm = vars.get(reco::btau::trackSip3dSigAboveCharm, -1);
         features.tag_info_features.csv_jetNTracksEtaRel = vars.get(reco::btau::jetNTracksEtaRel, -1);
-        //features.tag_info_features.csv_jetNSelectedTracks =
-        //std::min(vars.getList(reco::btau::trackMomentum, false).size(), max_jetNSelectedTracks);
+        features.tag_info_features.csv_jetNSelectedTracks = vars.get(reco::btau::jetNSelectedTracks, -1);
                 
 
         // fill features from secondary vertices
@@ -260,6 +259,11 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_features.cpf_trackSip2dSig=std::abs(meas_ip2d.significance());
             cpf_features.cpf_trackSip3dVal=std::abs(meas_ip3d.value());
             cpf_features.cpf_trackSip3dSig=std::abs(meas_ip3d.significance());
+            if (std::isnan(cpf_features.cpf_trackSip2dSig) || std::isnan(cpf_features.cpf_trackSip3dSig))
+            {
+                cpf_features.cpf_trackSip2dSig=-1.;
+                cpf_features.cpf_trackSip3dSig=-1.;
+            }
                 
             cpf_features.cpf_trackJetDistVal = jetdist.value();
             cpf_features.cpf_trackJetDistSig = jetdist.significance();

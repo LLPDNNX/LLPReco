@@ -24,7 +24,6 @@ namespace llpdnnx {
     *(++ptr) = features.cpf_features.size();
     *(++ptr) = features.npf_features.size();
     *(++ptr) = features.sv_features.size();
-    *(++ptr) = features.npv;
     // variables from ShallowTagInfo
     const auto& tag_info_features = features.tag_info_features;
     *(++ptr) = tag_info_features.csv_trackSumJetEtRatio;
@@ -66,14 +65,14 @@ namespace llpdnnx {
     *(++ptr) = cpf_features.cpf_trackSip3dVal;
     *(++ptr) = cpf_features.cpf_trackSip3dSig;
     *(++ptr) = cpf_features.cpf_trackJetDistVal;
-    *(++ptr) = cpf_features.cpf_trackJetDistSig;
     *(++ptr) = cpf_features.cpf_ptrel;
     *(++ptr) = cpf_features.cpf_drminsv;
     *(++ptr) = cpf_features.cpf_vertex_association;
+    *(++ptr) = cpf_features.cpf_fromPV;
     *(++ptr) = cpf_features.cpf_puppi_weight;
     *(++ptr) = cpf_features.cpf_track_chi2;
-    *(++ptr) = cpf_features.cpf_track_quality;
     *(++ptr) = cpf_features.cpf_track_ndof;
+    *(++ptr) = cpf_features.cpf_track_quality;
   }
 
   void npf_tensor_filler(tensorflow::Tensor& tensor,

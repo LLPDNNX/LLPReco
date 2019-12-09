@@ -43,7 +43,15 @@ XTagProducer::XTagProducer(const edm::ParameterSet& iConfig)
      _graphDef(tensorflow::loadGraphDef(iConfig.getParameter<edm::FileInPath>("graph_path").fullPath())),
     _session(nullptr)
 {
-    _session = tensorflow::createSession(_graphDef);
+
+    tensorflow::setLogging("3");
+     // get threading config and build session options
+    tensorflow::SessionOptions sessionOptions;
+    //tensorflow::setThreading(sessionOptions, 1, "no_threads");
+
+
+    // create the session using the meta graph from the cache
+    _session = tensorflow::createSession(_graphDef, sessionOptions); 
     produces<reco::JetTagCollection>();
 
 }
@@ -88,69 +96,103 @@ XTagProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       };
 
     tensorflow::NamedTensorList _input_tensors;
-    for (std::size_t i = 0; i < input_names_.size(); i++) {
+    _input_tensors.resize(input_sizes.size());
+
+    for (unsigned int i = 0; i < input_names_.size(); i++) {
         std::string group_name = input_names_[i];
         tensorflow::Tensor group_tensor(tensorflow::DT_FLOAT, input_sizes[i]);
-
-        _input_tensors.push_back(tensorflow::NamedTensor(group_name, group_tensor));
+        _input_tensors[i] = tensorflow::NamedTensor(group_name, group_tensor);
     }
 
     // Fill with zeros
-    for (std::size_t i = 0; i < input_sizes.size(); i++) {
+    for (unsigned int i = 0; i < input_sizes.size(); i++) {
         _input_tensors[i].second.flat<float>().setZero();
     }
 
     // fill values of the input tensors
-    for (std::size_t itag= 0; itag < tag_infos->size(); itag++) {
+    for (unsigned int itag= 0; itag < ntags; itag++) {
         const auto& features = tag_infos->at(itag).features();
         //{"gen", "globalvars", "cpf", "npf", "sv"};
         // keep ctau at 1 mm for now
         auto cpf = features.cpf_features;
-        size_t ncpf = cpf.size();
+        unsigned int ncpf = std::min((unsigned int)cpf.size(), (unsigned int)25);
         auto npf = features.npf_features;
-        size_t nnpf = npf.size();
+        unsigned int nnpf = std::min((unsigned int)npf.size(), (unsigned int)25);
         auto sv = features.sv_features;
-        size_t nsv = sv.size();
+        unsigned int nsv = std::min((unsigned int)sv.size(), (unsigned int)4);
 
         jet_tensor_filler(_input_tensors.at(1).second, itag, features);
+        /*
+        tensorflow::TTypes<float, 2>::Tensor globals = _input_tensors.at(1).second.flat_inner_dims<float>();
+        for (unsigned int i = 0; i < 14; i++){
+            std::cout << globals(itag, i) << " ";
+        }
+        */
 
-        for (size_t i = 0; i < ncpf; i++){
+        for (unsigned int i = 0; i < ncpf; i++){
             cpf_tensor_filler(_input_tensors.at(2).second, itag, i, cpf.at(i));
         }
 
-        for (size_t i = 0; i < nnpf; i++){
+
+        for (unsigned int i = 0; i < nnpf; i++){
             npf_tensor_filler(_input_tensors.at(3).second, itag, i, npf.at(i));
         }
 
-        for (size_t i = 0; i < nsv; i++){
+        for (unsigned int i = 0; i < nsv; i++){
             sv_tensor_filler(_input_tensors.at(4).second, itag, i, sv.at(i));
         }
-
     }
+
+    /*
+    auto cpfs = _input_tensors.at(2).second.shaped<float, 3>({ntags, 25, 18});
+    auto npfs = _input_tensors.at(3).second.shaped<float, 3>({ntags, 25, 6});
+    auto svs = _input_tensors.at(4).second.shaped<float, 3>({ntags, 4, 12});
+    for (unsigned int itag= 0; itag < ntags; itag++) {
+        std::cout << "tag number: " << itag << std::endl;
+
+        for (unsigned int i = 0; i < 25; i++){
+            std::cout << "cand number: " << i;
+            for (unsigned int j = 0; j < 18; j++){
+                std::cout << cpfs(itag, i, j) << " ";
+            }
+            std::cout << std::endl;
+        }
+
+        for (unsigned int i = 0; i < 25; i++){
+            std::cout << "cand number: " << i;
+            for (unsigned int j = 0; j < 6; j++){
+                std::cout << npfs(itag, i, j) << " ";
+            }
+            std::cout << std::endl;
+        }
+        for (unsigned int i = 0; i < 4; i++){
+            std::cout << "cand number: " << i;
+            for (unsigned int j = 0; j < 12; j++){
+                std::cout << svs(itag, i, j) << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+    */
 
     std::vector<tensorflow::Tensor> outputs;
     tensorflow::run(_session, _input_tensors, { "prediction" }, &outputs);
+    tensorflow::TTypes<float, 2>::Tensor scores = outputs[0].flat_inner_dims<float>();
 
-    for (unsigned int itag = 0; itag < tag_infos->size() ; itag++) {
+    for (unsigned int itag = 0; itag < ntags; itag++) {
         const auto& jet_ref = tag_infos->at(itag).jet();
-        tensorflow::TTypes<float, 2>::Tensor scores = outputs[0].flat_inner_dims<float>();
-        (*(output_tags))[jet_ref] = scores(itag, 0); // LLP probability?
-        //std::cout << scores(itag, 0) << std::endl;
+        (*(output_tags))[jet_ref] = scores(itag, 4); // LLP probability
+        //std::cout << scores(itag, 4) << std::endl;
     }
-
     iEvent.put(std::move(output_tags));
-
-   
-    // define a tensor and fill it with range(10)
+    //_session->reset();
 }
 
-// ------------ method called once each stream before processing any runs, lumis or events  ------------
 void
 XTagProducer::beginStream(edm::StreamID)
 {
 }
 
-// ------------ method called once each stream after processing all runs, lumis and events  ------------
 void
 XTagProducer::endStream() {
 }
