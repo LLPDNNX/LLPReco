@@ -17,6 +17,8 @@
 #include "FWCore/Framework/interface/makeRefToBaseProdFrom.h"
 #include "FWCore/MessageLogger/interface/MessageLogger.h"
 
+#include "LLPReco/TensorFlow/interface/tensor_fillers.h"
+
 
 
 class XTagProducer : public edm::stream::EDProducer<> {
@@ -30,7 +32,6 @@ class XTagProducer : public edm::stream::EDProducer<> {
       const edm::EDGetTokenT<std::vector<reco::XTagInfo>> _src;
       tensorflow::GraphDef* _graphDef;
       tensorflow::Session* _session;
-      std::vector<std::pair<std::string, tensorflow::Tensor>> _inputs;
 
       virtual void beginStream(edm::StreamID) override;
       virtual void produce(edm::Event&, const edm::EventSetup&) override;
@@ -43,6 +44,8 @@ XTagProducer::XTagProducer(const edm::ParameterSet& iConfig)
     _session(nullptr)
 {
     _session = tensorflow::createSession(_graphDef);
+    produces<reco::JetTagCollection>();
+
 }
 
 
@@ -73,72 +76,73 @@ XTagProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       output_tags = std::make_unique<reco::JetTagCollection>();
     }
 
-    std::vector<std::string> input_names_({"gen", "globalvars", "cpf", "npf", "sv"});
+    std::vector<std::string> input_names_{"gen", "globalvars", "cpf", "npf", "sv"};
+    unsigned int ntags = tag_infos->size();
 
     std::vector<tensorflow::TensorShape> input_sizes{
-        {1, 1},  
-        {1, 13},
-        {1, 25, 18},
-        {1, 25, 6},
-        {1, 4, 12},
+        {ntags, 1},  
+        {ntags, 14},
+        {ntags, 25, 18},
+        {ntags, 25, 6},
+        {ntags, 4, 12},
       };
 
-    tensorflow::NamedTensorList input_tensors;
-    for (std::size_t i = 0; i < input_sizes.size(); i++) {
-        input_tensors[i] =
-            tensorflow::NamedTensor(input_names_[i], tensorflow::Tensor(tensorflow::DT_FLOAT, input_sizes.at(i)));
+    tensorflow::NamedTensorList _input_tensors;
+    for (std::size_t i = 0; i < input_names_.size(); i++) {
+        std::string group_name = input_names_[i];
+        tensorflow::Tensor group_tensor(tensorflow::DT_FLOAT, input_sizes[i]);
+
+        _input_tensors.push_back(tensorflow::NamedTensor(group_name, group_tensor));
     }
 
+    // Fill with zeros
     for (std::size_t i = 0; i < input_sizes.size(); i++) {
-        input_tensors[i].second.flat<float>().setZero();
+        _input_tensors[i].second.flat<float>().setZero();
+    }
+
+    // fill values of the input tensors
+    for (std::size_t itag= 0; itag < tag_infos->size(); itag++) {
+        const auto& features = tag_infos->at(itag).features();
+        //{"gen", "globalvars", "cpf", "npf", "sv"};
+        // keep ctau at 1 mm for now
+        auto cpf = features.cpf_features;
+        size_t ncpf = cpf.size();
+        auto npf = features.npf_features;
+        size_t nnpf = npf.size();
+        auto sv = features.sv_features;
+        size_t nsv = sv.size();
+
+        jet_tensor_filler(_input_tensors.at(1).second, itag, features);
+
+        for (size_t i = 0; i < ncpf; i++){
+            cpf_tensor_filler(_input_tensors.at(2).second, itag, i, cpf.at(i));
+        }
+
+        for (size_t i = 0; i < nnpf; i++){
+            npf_tensor_filler(_input_tensors.at(3).second, itag, i, npf.at(i));
+        }
+
+        for (size_t i = 0; i < nsv; i++){
+            sv_tensor_filler(_input_tensors.at(4).second, itag, i, sv.at(i));
+        }
+
     }
 
     std::vector<tensorflow::Tensor> outputs;
-    tensorflow::run(_session, input_tensors, { "output" }, &outputs);
+    tensorflow::run(_session, _input_tensors, { "prediction" }, &outputs);
 
-    edm::LogInfo ("category") << " -> " << outputs[0].matrix<float>()(0, 0);
+    for (unsigned int itag = 0; itag < tag_infos->size() ; itag++) {
+        const auto& jet_ref = tag_infos->at(itag).jet();
+        tensorflow::TTypes<float, 2>::Tensor scores = outputs[0].flat_inner_dims<float>();
+        (*(output_tags))[jet_ref] = scores(itag, 0); // LLP probability?
+        //std::cout << scores(itag, 0) << std::endl;
+    }
 
-    //iEvent.put(std::move(output_tags));
+    iEvent.put(std::move(output_tags));
 
    
     // define a tensor and fill it with range(10)
-    /*
-    tensorflow::Tensor input(tensorflow::DT_FLOAT, { 1, 10 });
-    float* d = input.flat<float>().data();
-    for (float i = 0; i < 10; i++, d++)
-    {
-        *d = i;
-    }
-
-    // define the output and run
-    std::cout << "session.run" << std::endl;
-    std::vector<tensorflow::Tensor> outputs;
-    tensorflow::run(session_, { { "input", input } }, { "output" }, &outputs);
-
-    // check and print the output
-    std::cout << " -> " << outputs[0].matrix<float>()(0, 0) << std::endl << std::endl;
-
-
-            //auto tensor_shape = _graphDef.node(inode).attr().at("shape").shape();
-        //if (_graphDef.node(inode).name()==featureGroup->name())
-        //{
-            //foundNode = true;
-            //check rank
-            //if (tensor_shape.dim_size()!=(int64_t)group_shape.size())
-            //{
-                //throw std::runtime_error("Mismatching input rank (config: "+std::to_string(group_shape.size())+"; pb: "+std::to_string(tensor_shape.dim_size())+") for feature group '"+featureGroup->name()+"'");
-            //check shape - ignore batch dim
-            for (size_t idim = 1; idim < group_shape.size(); ++idim)
-            {
-                if ((int64_t)tensor_shape.dim(idim).size()!=group_shape[idim])
-                {
-                    throw std::runtime_error("Mismatching input shapes in dimension '"+std::to_string(idim+1)+"' (config: "+std::to_string(group_shape[idim])+"; pb: "+std::to_string(tensor_shape.dim(idim).size())+") for feature group '"+featureGroup->name()+"'");
-                }
-            }
-            break;
-*/
 }
-
 
 // ------------ method called once each stream before processing any runs, lumis or events  ------------
 void
@@ -150,38 +154,6 @@ XTagProducer::beginStream(edm::StreamID)
 void
 XTagProducer::endStream() {
 }
-
-// ------------ method called when starting to processes a run  ------------
-/*
-void
-XTagProducer::beginRun(edm::Run const&, edm::EventSetup const&)
-{
-}
-*/
- 
-// ------------ method called when ending the processing of a run  ------------
-/*
-void
-XTagProducer::endRun(edm::Run const&, edm::EventSetup const&)
-{
-}
-*/
- 
-// ------------ method called when starting to processes a luminosity block  ------------
-/*
-void
-XTagProducer::beginLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
-{
-}
-*/
- 
-// ------------ method called when ending the processing of a luminosity block  ------------
-/*
-void
-XTagProducer::endLuminosityBlock(edm::LuminosityBlock const&, edm::EventSetup const&)
-{
-}
-*/
  
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void

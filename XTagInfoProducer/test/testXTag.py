@@ -13,7 +13,7 @@ from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag (process.GlobalTag, 'auto:run2_mc')
 
 ## Events to process
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 
 ## Input files
 process.source = cms.Source("PoolSource",
@@ -66,8 +66,8 @@ process.task = cms.Task(
         process.pfDeepCSVTagInfos,
         process.patJetCorrFactors,
         process.pfXTagInfos,
-        process.updatedPatJets,
-        process.pfXTags
+        process.pfXTags,
+        process.updatedPatJets
 )
 process.p = cms.Path(process.task)
 
