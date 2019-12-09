@@ -1,4 +1,12 @@
 <use name="FWCore/Framework"/>
 <use name="FWCore/PluginManager"/>
 <use name="FWCore/ParameterSet"/>
-<flags EDM_PLUGIN="1"/>
+<use name="PhysicsTools/TensorFlow"/>
+<use name="LLPReco/DataFormats"/>
+<library file="*.cc" name="RecoBTagTensorFlowPlugins">
+    <use name="LLPReco/DataFormats"/>
+    <use name="LLPReco/TensorFlow"/>
+    <use name="PhysicsTools/TensorFlow"/>
+    <flags EDM_PLUGIN="1"/>
+
+</library>

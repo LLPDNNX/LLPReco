@@ -8,6 +8,7 @@ process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 process.load("TrackingTools/TransientTrack/TransientTrackBuilder_cfi")
+process.load("FWCore.MessageLogger.MessageLogger_cfi")
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag (process.GlobalTag, 'auto:run2_mc')
 
@@ -50,6 +51,10 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     secondary_vertices = cms.InputTag("slimmedSecondaryVertices")
 )
 
+process.pfXTags = cms.EDProducer("XTagProducer",
+    graph_path=cms.FileInPath("LLPReco/TensorFlow/data/da.pb"),
+    src=cms.InputTag("pfXTagInfos")
+)
 
 process.options = cms.untracked.PSet(
         wantSummary = cms.untracked.bool(True)
@@ -62,6 +67,7 @@ process.task = cms.Task(
         process.patJetCorrFactors,
         process.pfXTagInfos,
         process.updatedPatJets,
+        process.pfXTags
 )
 process.p = cms.Path(process.task)
 

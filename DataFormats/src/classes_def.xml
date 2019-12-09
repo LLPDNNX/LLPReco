@@ -5,8 +5,16 @@
     <class name="llpdnnx::ChargedCandidateFeatures"/>
     <class name="llpdnnx::NeutralCandidateFeatures"/>
     <class name="llpdnnx::XTagFeatures"/>
+    <class name="reco::XTagInfo"/>
     <class name="reco::FeaturesTagInfo<llpdnnx::XTagFeatures>"/>
+    <class name="reco::XTagInfoCollection"/>
+    <class name="reco::XTagInfoRef"/>
+
+
     <class name="edm::Wrapper<reco::FeaturesTagInfo<llpdnnx:XTagFeatures> >"/>
     <class name="edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::XTagFeatures>>>"/>
     <class name="std::vector<reco::FeaturesTagInfo<llpdnnx::XTagFeatures>>"/>
+
+    <class name="edm::reftobase::Holder<reco::BaseTagInfo, reco::XTagInfoRef>" />
+    <class name="edm::reftobase::RefHolder<reco::XTagInfoRef>" />
 </lcgdict>
