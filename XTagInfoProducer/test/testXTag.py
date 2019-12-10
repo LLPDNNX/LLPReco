@@ -19,6 +19,7 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(100) )
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
         'root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/LLP/LLP_miniaodv180920/SMS-T1qqqq_ctau-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/SMS-T1qqqq_ctau-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/LLP_miniaodv180920/180926_191050/0000/T1qqqqLL_MINIAODSIM_82.root'
+        #'root://cms-xrd-global.cern.ch://store/mc/RunIISummer16MiniAODv2/QCD_Pt_800to1000_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/110000/182EF290-92B1-E611-A574-0CC47A7C361E.root',
     )
 )
 
@@ -52,8 +53,9 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
 )
 
 process.pfXTags = cms.EDProducer("XTagProducer",
-    graph_path=cms.FileInPath("LLPReco/TensorFlow/data/da.pb"),
-    src=cms.InputTag("pfXTagInfos")
+    graph_path=cms.FileInPath("LLPReco/XTagProducer/data/da.pb"),
+    src=cms.InputTag("pfXTagInfos"),
+    ctau_values=cms.vdouble(-3., 0., 3.) # provide log(ctau/1mm) to be evaluated: i.e. 1 mum, 1 mm and 1 m here
 )
 
 process.options = cms.untracked.PSet(

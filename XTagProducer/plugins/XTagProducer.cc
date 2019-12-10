@@ -31,6 +31,7 @@ class XTagProducer : public edm::stream::EDProducer<> {
    private:
       const edm::EDGetTokenT<std::vector<reco::XTagInfo>> _src;
       tensorflow::GraphDef* _graphDef;
+      std::vector<std::pair<std::string, double>> _ctau_pairs;
       tensorflow::Session* _session;
 
       virtual void beginStream(edm::StreamID) override;
@@ -44,6 +45,11 @@ XTagProducer::XTagProducer(const edm::ParameterSet& iConfig)
     _session(nullptr)
 {
 
+    std::vector<double> _ctau_values = iConfig.getParameter<std::vector<double>>("ctau_values");
+    std::vector<std::string> _ctau_descriptors = iConfig.getParameter<std::vector<std::string>>("ctau_descriptors");
+     for (unsigned int i; i < _ctau_values.size(); i++){
+         _ctau_pairs.emplace_back(std::pair(_ctau_descriptors.at(i), _ctau_values.at(i) ));
+     }
     tensorflow::setLogging("3");
      // get threading config and build session options
     tensorflow::SessionOptions sessionOptions;
@@ -52,7 +58,9 @@ XTagProducer::XTagProducer(const edm::ParameterSet& iConfig)
 
     // create the session using the meta graph from the cache
     _session = tensorflow::createSession(_graphDef, sessionOptions); 
-    produces<reco::JetTagCollection>();
+    for (const auto& ctau_pair : _ctau_pairs) {
+        produces<reco::JetTagCollection>(ctau_pair.first);
+    }
 
 }
 
@@ -75,14 +83,17 @@ XTagProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     iEvent.getByToken(_src, tag_infos);
 
     // initialize output collection
-    std::unique_ptr<reco::JetTagCollection> output_tags;
-    if (!tag_infos->empty()) {
-      auto jet_ref = tag_infos->begin()->jet();
-      output_tags = std::make_unique<reco::JetTagCollection>(edm::makeRefToBaseProdFrom(jet_ref, iEvent));
-    } 
-    else {
-      output_tags = std::make_unique<reco::JetTagCollection>();
+    std::vector<std::unique_ptr<reco::JetTagCollection>> output_tags;
+    for (unsigned int ictau; ictau < _ctau_pairs.size(); ictau++){
+        if (!tag_infos->empty()) {
+          auto jet_ref = tag_infos->begin()->jet();
+          output_tags.emplace_back(std::make_unique<reco::JetTagCollection>(edm::makeRefToBaseProdFrom(jet_ref, iEvent)));
+        } 
+        else {
+          output_tags.emplace_back(std::make_unique<reco::JetTagCollection>());
+        }
     }
+
 
     std::vector<std::string> input_names_{"gen", "globalvars", "cpf", "npf", "sv"};
     unsigned int ntags = tag_infos->size();
@@ -175,16 +186,25 @@ XTagProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
     */
 
-    std::vector<tensorflow::Tensor> outputs;
-    tensorflow::run(_session, _input_tensors, { "prediction" }, &outputs);
-    tensorflow::TTypes<float, 2>::Tensor scores = outputs[0].flat_inner_dims<float>();
+    for (unsigned int ictau; ictau < _ctau_pairs.size(); ictau++){
+        double ctau = _ctau_pairs.at(ictau).second;
+        for (unsigned int itag = 0; itag < ntags; itag++) {
+             float *ptr = &(_input_tensors.at(0).second).matrix<float>()(itag, 0);
+             *ptr = ctau;
+        }
 
-    for (unsigned int itag = 0; itag < ntags; itag++) {
-        const auto& jet_ref = tag_infos->at(itag).jet();
-        (*(output_tags))[jet_ref] = scores(itag, 4); // LLP probability
-        //std::cout << scores(itag, 4) << std::endl;
+        std::vector<tensorflow::Tensor> outputs;
+        tensorflow::run(_session, _input_tensors, { "prediction" }, &outputs);
+        tensorflow::TTypes<float, 2>::Tensor scores = outputs[0].flat_inner_dims<float>();
+
+        for (unsigned int itag = 0; itag < ntags; itag++) {
+            const auto& jet_ref = tag_infos->at(itag).jet();
+            (*(output_tags.at(ictau)))[jet_ref] = scores(itag, 4); // LLP probability
+            //std::cout << scores(itag, 4) << std::endl;
+        }
+
+        iEvent.put(std::move(output_tags[ictau]), _ctau_pairs.at(ictau).first);
     }
-    iEvent.put(std::move(output_tags));
     //_session->reset();
 }
 
@@ -203,6 +223,8 @@ XTagProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   edm::ParameterSetDescription desc;
   desc.add<edm::InputTag>("src", edm::InputTag("pfXTagInfos"));
   desc.add<edm::FileInPath>("graph_path", edm::FileInPath("LLPReco/XTagProducer/data/da.pb"));
+  desc.add<std::vector<double>>("ctau_values", std::vector<double>({-3., 0., 3.}));
+  desc.add<std::vector<std::string>>("ctau_descriptors", std::vector<std::string>({"0p001", "1", "1000"}));
   descriptions.add("pfXTags", desc);
 }
 

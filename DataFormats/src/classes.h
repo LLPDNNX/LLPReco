@@ -11,12 +11,12 @@ namespace {
         reco::FeaturesTagInfo<llpdnnx::XTagFeatures> dummy2;
         edm::Wrapper<reco::FeaturesTagInfo<llpdnnx::XTagFeatures>> dummy3;
 
+
         llpdnnx::XTagFeatures dummy4;
         llpdnnx::JetFeatures dummy5;
         llpdnnx::SecondaryVertexFeatures dummy6;
         llpdnnx::ChargedCandidateFeatures dummy7;
         llpdnnx::NeutralCandidateFeatures dummy8;
-
 
     };
 
