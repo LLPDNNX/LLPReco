@@ -17,9 +17,6 @@ Example configuration file
 cmsRun LLPReco/XTagInfoProducer/test/testXTag.py 
 ```
 
-The output can be analysed in a similar way to b-tagging, as described here:
-```
-https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookBTagging
-```
+The output can be analysed in a similar way to b-tagging, as described here <https://twiki.cern.ch/twiki/bin/view/CMSPublic/WorkBookBTagging>
 
 For example, ```recoJetedmRefToBaseProdTofloatsAssociationVector_pfXTags_1000_USER.obj.data_``` will correspond to the tagger evaluated at 1000 mm. Note that tagger output might be meaningless for jets with |η| > 2.4.

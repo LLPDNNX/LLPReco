@@ -95,15 +95,15 @@ XTagProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
 
-    std::vector<std::string> input_names_{"gen", "globalvars", "cpf", "npf", "sv"};
+    std::vector<std::string> input_names_{"globalvars", "cpf", "npf", "sv", "gen"};
     unsigned int ntags = tag_infos->size();
 
     std::vector<tensorflow::TensorShape> input_sizes{
-        {ntags, 1},  
         {ntags, 14},
         {ntags, 25, 18},
         {ntags, 25, 6},
         {ntags, 4, 12},
+        {ntags, 1},  
       };
 
     tensorflow::NamedTensorList _input_tensors;
@@ -132,32 +132,27 @@ XTagProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         auto sv = features.sv_features;
         unsigned int nsv = std::min((unsigned int)sv.size(), (unsigned int)4);
 
-        jet_tensor_filler(_input_tensors.at(1).second, itag, features);
-        /*
-        tensorflow::TTypes<float, 2>::Tensor globals = _input_tensors.at(1).second.flat_inner_dims<float>();
-        for (unsigned int i = 0; i < 14; i++){
-            std::cout << globals(itag, i) << " ";
-        }
-        */
+        jet_tensor_filler(_input_tensors.at(0).second, itag, features);
+
 
         for (unsigned int i = 0; i < ncpf; i++){
-            cpf_tensor_filler(_input_tensors.at(2).second, itag, i, cpf.at(i));
+            cpf_tensor_filler(_input_tensors.at(1).second, itag, i, cpf.at(i));
         }
 
 
         for (unsigned int i = 0; i < nnpf; i++){
-            npf_tensor_filler(_input_tensors.at(3).second, itag, i, npf.at(i));
+            npf_tensor_filler(_input_tensors.at(2).second, itag, i, npf.at(i));
         }
 
         for (unsigned int i = 0; i < nsv; i++){
-            sv_tensor_filler(_input_tensors.at(4).second, itag, i, sv.at(i));
+            sv_tensor_filler(_input_tensors.at(3).second, itag, i, sv.at(i));
         }
     }
 
     /*
-    auto cpfs = _input_tensors.at(2).second.shaped<float, 3>({ntags, 25, 18});
-    auto npfs = _input_tensors.at(3).second.shaped<float, 3>({ntags, 25, 6});
-    auto svs = _input_tensors.at(4).second.shaped<float, 3>({ntags, 4, 12});
+    auto cpfs = _input_tensors.at(1).second.shaped<float, 3>({ntags, 25, 18});
+    auto npfs = _input_tensors.at(2).second.shaped<float, 3>({ntags, 25, 6});
+    auto svs = _input_tensors.at(3).second.shaped<float, 3>({ntags, 4, 12});
     for (unsigned int itag= 0; itag < ntags; itag++) {
         std::cout << "tag number: " << itag << std::endl;
 
@@ -189,18 +184,18 @@ XTagProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     for (unsigned int ictau; ictau < _ctau_pairs.size(); ictau++){
         double ctau = _ctau_pairs.at(ictau).second;
         for (unsigned int itag = 0; itag < ntags; itag++) {
-             float *ptr = &(_input_tensors.at(0).second).matrix<float>()(itag, 0);
+             float *ptr = &(_input_tensors.at(4).second).matrix<float>()(itag, 0);
              *ptr = ctau;
         }
 
         std::vector<tensorflow::Tensor> outputs;
-        tensorflow::run(_session, _input_tensors, { "prediction" }, &outputs);
-        tensorflow::TTypes<float, 2>::Tensor scores = outputs[0].flat_inner_dims<float>();
+        tensorflow::run(_session, _input_tensors, {"prediction"}, &outputs);
+        auto scores = outputs[0].matrix<float>();
 
         for (unsigned int itag = 0; itag < ntags; itag++) {
             const auto& jet_ref = tag_infos->at(itag).jet();
+            //std::cout << "tag number: " << scores(itag, 0) << ", " << scores(itag, 1) << ", " << scores(itag, 2) << ", " << scores(itag, 3) << ", " << scores(itag, 4) << ", " << std::endl;
             (*(output_tags.at(ictau)))[jet_ref] = scores(itag, 4); // LLP probability
-            //std::cout << scores(itag, 4) << std::endl;
         }
 
         iEvent.put(std::move(output_tags[ictau]), _ctau_pairs.at(ictau).first);
@@ -223,8 +218,8 @@ XTagProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
   edm::ParameterSetDescription desc;
   desc.add<edm::InputTag>("src", edm::InputTag("pfXTagInfos"));
   desc.add<edm::FileInPath>("graph_path", edm::FileInPath("LLPReco/XTagProducer/data/da.pb"));
-  desc.add<std::vector<double>>("ctau_values", std::vector<double>({-3., 0., 3.}));
-  desc.add<std::vector<std::string>>("ctau_descriptors", std::vector<std::string>({"0p001", "1", "1000"}));
+  desc.add<std::vector<double>>("ctau_values", std::vector<double>({-2., 0., 3.}));
+  desc.add<std::vector<std::string>>("ctau_descriptors", std::vector<std::string>({"0p01", "1", "1000"}));
   descriptions.add("pfXTags", desc);
 }
 

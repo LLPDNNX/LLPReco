@@ -122,7 +122,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
         // Start with global jet features
-        features.jet_features.pt = jet.pt();  // uncorrected
+        features.jet_features.pt = std::log10(jet.pt());  // uncorrected
         features.jet_features.eta = jet.eta();
         features.jet_features.mass = jet.mass();
         features.jet_features.energy = jet.energy();
