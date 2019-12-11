@@ -195,7 +195,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             
             reco::Candidate::Vector distance(sv.vx() - pv.x(), sv.vy() - pv.y(), sv.vz() - pv.z());
             sv_features.sv_costhetasvpv = sv.momentum().Unit().Dot(distance.Unit());
-            sv_features.sv_enratio = sv.energy()/jet.correctedJet("Uncorrected").pt();
+            sv_features.sv_enratio = sv.energy()/jet.pt();
             
 
             features.sv_features.emplace_back(sv_features);
