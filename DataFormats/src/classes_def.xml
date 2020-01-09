@@ -17,4 +17,29 @@
 
     <class name="edm::reftobase::Holder<reco::BaseTagInfo, reco::XTagInfoRef>" />
     <class name="edm::reftobase::RefHolder<reco::XTagInfoRef>" />
+    
+    
+    <class name="llpdnnx::DisplacedGenVertex"/>
+    <class name="std::vector<llpdnnx::DisplacedGenVertex>"/>
+    <class name="edm::Wrapper<std::vector<llpdnnx::DisplacedGenVertex> >"/>
+    <class name="edm::Ref<std::vector<llpdnnx::DisplacedGenVertex>>"/>
+    <class name="edm::Wrapper<edm::Ref<std::vector<llpdnnx::DisplacedGenVertex>>>"/>
+    <class name="edm::RefVector<std::vector<llpdnnx::DisplacedGenVertex>>"/>
+    <class name="edm::Wrapper<edm::RefVector<std::vector<llpdnnx::DisplacedGenVertex>>>"/>
+
+    <class name="edm::Ptr<llpdnnx::DisplacedGenVertex>"/>
+    <class name="edm::Wrapper<edm::Ptr<llpdnnx::DisplacedGenVertex>>"/>
+    
+    <class name="edm::Ptr<std::vector<llpdnnx::DisplacedGenVertex>>"/>
+    <class name="edm::Wrapper<edm::Ptr<std::vector<llpdnnx::DisplacedGenVertex>>>"/>
+    <class name="edm::PtrVector<llpdnnx::DisplacedGenVertex>"/>
+    <class name="edm::Wrapper<edm::PtrVector<llpdnnx::DisplacedGenVertex>>"/>
+    
+    <class name="edm::PtrVector<reco::GenParticle>"/>
+    <class name="edm::Wrapper<edm::PtrVector<reco::GenParticle>>"/>
+    
+    <class name="llpdnnx::LLPLabel"/>
+    <class name="std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>>"/>
+    <class name="edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>>>"/>
+    
 </lcgdict>
