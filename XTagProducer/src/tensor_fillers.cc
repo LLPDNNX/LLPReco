@@ -37,18 +37,6 @@ namespace llpdnnx {
     *(++ptr) = tag_info_features.csv_jetNTracksEtaRel;
   }
 
-  void jet4vec_tensor_filler(tensorflow::Tensor& tensor,
-                             std::size_t jet_n,
-                             const llpdnnx::XTagFeatures& features) {
-    float* ptr = &tensor.matrix<float>()(jet_n, 0);
-
-    // jet 4 vector variables
-    const auto& jet_features = features.jet_features;
-    *ptr = jet_features.pt;
-    *(++ptr) = jet_features.eta;
-  }
-
-
   void cpf_tensor_filler(tensorflow::Tensor& tensor,
                           std::size_t jet_n,
                           std::size_t cpf_n,

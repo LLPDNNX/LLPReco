@@ -1,3 +1,3 @@
 #Automatically created by SCRAM
 import os
-__path__.append(os.path.dirname(os.path.abspath(__file__).rsplit('/RecoLLP/XTagInfoProducer/',1)[0])+'/cfipython/slc6_amd64_gcc700/RecoLLP/XTagInfoProducer')
+__path__.append(os.path.dirname(os.path.abspath(__file__).rsplit('/LLPReco/XTagInfoProducer/',1)[0])+'/cfipython/slc7_amd64_gcc700/LLPReco/XTagInfoProducer')

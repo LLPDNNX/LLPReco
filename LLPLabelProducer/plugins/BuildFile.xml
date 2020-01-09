@@ -1,0 +1,18 @@
+<use   name="FWCore/Framework"/>
+<use   name="FWCore/ServiceRegistry"/>
+<use   name="SimGeneral/HepPDTRecord"/>
+<use   name="SimDataFormats/GeneratorProducts"/>
+<use   name="GeneratorInterface/Core"/>
+<use   name="DataFormats/Common"/>
+<use   name="DataFormats/PatCandidates"/>
+<use   name="DataFormats/Candidate"/>
+<use   name="DataFormats/HepMCCandidate"/>
+<use   name="LLPReco/DataFormats"/>
+<use   name="PhysicsTools/UtilAlgos"/>
+<library file="DisplacedGenVertexProducer.cc" name="DisplacedGenVertexProducerPlugin">
+  <flags EDM_PLUGIN="1"/>
+</library>
+<library file="LLPLabelProducer.cc" name="LLPLabelProducerPlugin">
+  <flags EDM_PLUGIN="1"/>
+</library>
+
