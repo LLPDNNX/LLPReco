@@ -81,7 +81,7 @@ sv_token_(consumes<reco::VertexCompositePtrCandidateCollection>(iConfig.getParam
 shallow_tag_info_token_(
     consumes<edm::View<reco::ShallowTagInfo>>(iConfig.getParameter<edm::InputTag>("shallow_tag_infos")))
 {
-produces<XTagInfoCollection>();
+    produces<XTagInfoCollection>();
 }
 
 

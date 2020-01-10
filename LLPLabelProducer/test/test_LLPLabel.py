@@ -29,6 +29,14 @@ process.options   = cms.untracked.PSet(
 
 process.load('LLPReco.LLPLabelProducer.GenDisplacedVertices_cff')
 
+
+process.llpLabels = cms.EDProducer(
+    "LLPLabelProducer",
+    srcVertices = cms.InputTag("displacedGenVertices"),
+    srcJets = cms.InputTag("slimmedJets")
+)
+
+
 process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",                     
     compressionAlgorithm = cms.untracked.string('LZMA'),    
     compressionLevel = cms.untracked.int32(4),              
@@ -42,10 +50,12 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     fileName = cms.untracked.string('test.root'),  
     outputCommands = cms.untracked.vstring(
        'drop *',
-       'keep *_displacedGenVertices_*_DISPLACED',
+       'keep *_*_*_TEST',
     ),
     overrideInputFileSplitLevels = cms.untracked.bool(True) 
 )           
 
-process.endpath = cms.EndPath(process.displacedGenVertexSequence*process.MINIAODSIMoutput) 
-            
+process.path = cms.Path(process.displacedGenVertexSequence*process.llpLabels) 
+process.endpath = cms.EndPath(process.MINIAODSIMoutput) 
+
+           

@@ -22,6 +22,7 @@ class LLPLabel {
             isUD,
             isG,
             
+            isLLP_L, //prompt lepton
             isLLP_Q, //single light quark
             isLLP_QL, //single light quark + prompt lepton
             isLLP_QQ, //double light quark
@@ -36,17 +37,29 @@ class LLPLabel {
         };
         
         Type type;
+        
+        int partonFlavor;
+        int hadronFlavor;
 
-        float sharedVertexFraction;
         float displacement;
         float displacement_xy;
         float displacement_z;
         float decay_angle;
+        
+        
+        LLPLabel():
+            type(Type::isUndefined),
+            partonFlavor(0),
+            hadronFlavor(0),
+            displacement(0),
+            displacement_xy(0),
+            displacement_z(0),
+            decay_angle(0)
+        {
+        }
 };
 
-typedef  reco::FeaturesTagInfo<LLPLabel> LLPLabelInfo;
 
-DECLARE_EDM_REFS( LLPLabelInfo )
 
 }
 
