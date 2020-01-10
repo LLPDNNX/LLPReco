@@ -39,6 +39,7 @@
     <class name="edm::Wrapper<edm::PtrVector<reco::GenParticle>>"/>
     
     <class name="llpdnnx::LLPLabel"/>
+    <class name="reco::FeaturesTagInfo<llpdnnx::LLPLabel>"/>
     <class name="std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>>"/>
     <class name="edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>>>"/>
     

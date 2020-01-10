@@ -37,8 +37,9 @@ namespace {
         edm::Wrapper<edm::PtrVector<reco::GenParticle>> dummy18;
         
         llpdnnx::LLPLabel dummy19;
-        std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>> dummy20;
-        edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>>> dummy21;
+        reco::FeaturesTagInfo<llpdnnx::LLPLabel> dummy20;
+        std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>> dummy21;
+        edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>>> dummy22;
 
     };
 
