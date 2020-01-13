@@ -252,17 +252,40 @@ for moduleName in [
         print "removing module: ",moduleName
         process.nanoSequence.remove(getattr(process,moduleName))
         process.nanoSequenceMC.remove(getattr(process,moduleName))
- 
+
+'''
+process.load('LLPReco.LLPLabelProducer.GenDisplacedVertices_cff')
+process.llpLabels = cms.EDProducer(
+        "LLPLabelProducer",
+        srcVertices = cms.InputTag("displacedGenVertices"),
+        srcJets = cms.InputTag("slimmedJets")
+        )
+
+
+process.llpinfo = cms.PSet(
+            type = cms.string("LLPInfo"),
+            displacedGenVertices = cms.InputTag("displacedGenVertices"),
+            LLPtype = cms.string(options.LLPtype)
+        )
+
+'''
+
 
 if options.isData:
-    process.nanoAOD_step = cms.Path(process.nanoSequence+process.nanoXTable)
+    process.nanoAOD_step = cms.Path(
+        process.patJetCorrFactors+
+        process.updatedPatJets+
+        process.pfXTagInfos+
+        process.nanoTable+
+        process.nanoSequence
+    )
 else:
     process.nanoAOD_step = cms.Path(
-    process.patJetCorrFactors+
-    process.updatedPatJets+
-    process.pfXTagInfos+
-    process.nanoTable+
-    process.nanoSequenceMC
+        process.patJetCorrFactors+
+        process.updatedPatJets+
+        process.pfXTagInfos+
+        process.nanoTable+
+        process.nanoSequenceMC+
     )
     
 process.endjob_step = cms.EndPath(process.endOfProcess)

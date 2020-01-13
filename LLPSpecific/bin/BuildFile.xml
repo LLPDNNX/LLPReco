@@ -1,0 +1,3 @@
+<bin name="evaluateModel" file="evaluateModel.cc">
+    <use name="tensorflow-cc" />
+</bin>
