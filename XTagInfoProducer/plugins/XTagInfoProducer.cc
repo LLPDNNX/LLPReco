@@ -330,7 +330,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
               const pat::Muon& muon = muons->at(imuon);
               if(muon.isGlobalMuon() == 0) continue ; 
-              if(abs(muon.pt()  - constituent->pt()) < 0.01 &&  abs(muon.eta() - constituent->eta()) < 0.01 &&  abs(muon.eta() - constituent->eta()) < 0.01 )	{
+              if( abs(muon.eta() - constituent->eta()) < 0.01 &&  abs(muon.phi() - constituent->phi()) < 0.01 )	{
+	  
 
                  mu_features.mu_isGlobal = muon.isGlobalMuon() ;                                   
         	 mu_features.mu_isTight = muon.isTightMuon(pv);                                     
@@ -413,9 +414,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      
          const pat::Electron& electron = electrons->at(ielectron);
 
-        // if (!electron.isGlobalMuon() || (electron.pt() != constituent->pt() || electron.eta() != constituent->eta())) continue ;
     
-         if( abs(electron.pt() -  constituent->pt()) < 0.01&&  abs(electron.eta() - constituent->eta()) < 0.01 ){
+         if( abs(electron.eta() - constituent->eta()) < 0.01 && abs(electron.phi() - constituent->phi()) < 0.01 ){
 
 
          elec_features.elec_pt = electron.pt() ;
