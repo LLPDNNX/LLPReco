@@ -428,8 +428,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 	 elec_features.elec_jetDeltaR = reco::deltaR(electron , jet) ; 
 	 elec_features.elec_EtFromCaloEn = electron.caloEnergy() * sin(electron.p4().theta());
 
-// Add to interface 
-//
          elec_features.elec_isEB = electron.isEB() ;  
          elec_features.elec_isEE  = electron.isEE();
          elec_features.elec_ecalEnergy  = electron.ecalEnergy();
@@ -440,30 +438,53 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          elec_features.elec_2dIP = electron.dB() ; 
 	 elec_features.elec_2dIPSig = electron.dB()/electron.edB() ; 
 
-// Super Cluster variables.
-//
-  	 elec_features.elecSC_energy = electron.superCluster()->energy() ; 
-	 elec_features.elecSC_eta = electron.superCluster()->eta();
- 	 elec_features.elecSC_phi = electron.superCluster()->phi();
-         elec_features.elec_et = electron.superCluster()->energy() * sin(electron.p4().theta());
-         elec_features.elec_eSuperClusterOverP  = electron.eSuperClusterOverP();
+
+
+
+	 elec_features.elec_numberOfBrems  = electron.numberOfBrems () ; 
+         elec_features.elec_fbrem = electron.fbrem() ; 
+         elec_features.elec_e1x5 = electron.e1x5() ; 
+         elec_features.elec_e2x5Max = electron.e2x5Max() ; 
+         elec_features.elec_e5x5 = electron.e5x5() ;
+//New : 
+         elec_features.elec_hadronicOverEm = electron.hadronicOverEm() ;  
+	 elec_features.elec_full5x5_sigmaIetaIeta = electron.full5x5_sigmaIetaIeta();
+ 	 elec_features.elec_deltaEtaEleClusterTrackAtCalo  = electron.deltaEtaEleClusterTrackAtCalo();
+	 elec_features.elec_deltaEtaSeedClusterTrackAtCalo = electron.deltaEtaSeedClusterTrackAtCalo () ; 
+	 elec_features.elec_deltaEtaSeedClusterTrackAtVtx = electron.deltaEtaSeedClusterTrackAtVtx();
+
+	 elec_features.elec_deltaEtaSuperClusterTrackAtVtx = electron.deltaEtaSuperClusterTrackAtVtx() ;  
+	 elec_features.elec_deltaPhiEleClusterTrackAtCalo = electron.deltaPhiEleClusterTrackAtCalo() ; 
+	 elec_features.elec_deltaPhiSeedClusterTrackAtCalo = electron.deltaPhiSeedClusterTrackAtCalo() ; 
+	 elec_features.elec_deltaPhiSuperClusterTrackAtVtx = electron.deltaPhiSuperClusterTrackAtVtx ()  ;
 
 //GSF -> Gaussian Sum Filter
  
 	 elec_features.elec_dxy = electron.gsfTrack()->dxy(pv.position()) ; 
 	 elec_features.elec_dz = electron.gsfTrack()->dz(pv.position()) ;
 	 elec_features.elec_nbOfMissingHits = electron.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS) ; 
-         elec_features.elec_gsfCharge = electron.gsfTrack()->charge() ; 
+         elec_features.elec_gsfCharge = electron.gsfTrack()->charge() ;
+ 
+// Super Cluster variables.
+//
+  	 elec_features.elecSC_energy = electron.superCluster()->energy() ; 
+	 elec_features.elecSC_eta = electron.superCluster()->eta();
+ 	 elec_features.elecSC_phi = electron.superCluster()->phi();
+         elec_features.elecSC_et = electron.superCluster()->energy() * sin(electron.p4().theta());
+         elec_features.elecSC_eSuperClusterOverP  = electron.eSuperClusterOverP();
 
-
-         elec_features.elec_fbrem = electron.fbrem() ; 
-         elec_features.elec_e2x5Max = electron.e2x5Max() ; 
-         elec_features.elec_e1x5 = electron.e1x5() ; 
-         elec_features.elec_e5x5 = electron.e5x5() ; 
+	
+	 elec_features.elec_scE1x5 = electron.scE1x5 () ; 
+	 elec_features.elec_scE2x5Max  = electron.scE2x5Max() ; 
+	 elec_features.elec_scE5x5 = electron.scE5x5 () ; 
+	 elec_features.elec_scPixCharge = electron.scPixCharge() ; 
+	 elec_features.elec_scSigmaEtaEta = electron.scSigmaEtaEta() ; 
+	 elec_features.elec_scSigmaIEtaIEta = electron.scSigmaIEtaIEta() ;
+	 elec_features.elec_superClusterFbrem = electron.superClusterFbrem() ; 
 
 // electron Isolation 
 //
-
+	elec_features.elec_hcalPFClusterIso = electron.hcalPFClusterIso() ; 
         elec_features.elec_dr03TkSumPt = electron.dr03TkSumPt() ;
  
         elec_features.elec_hcalDepth1OverEcal = electron.hcalDepth1OverEcal() ; 
