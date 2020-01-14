@@ -81,10 +81,6 @@ private:
 
     edm::EDGetTokenT< pat::MuonCollection > muonsMiniAODToken_;
     edm::EDGetTokenT< pat::ElectronCollection > electronsMiniAODToken_;
- /*   edm::EDGetTokenT<edm::ValueMap<bool>>eleVetoToken_;
-    edm::EDGetTokenT<edm::ValueMap<bool>>eleLooseToken_;
-    edm::EDGetTokenT<edm::ValueMap<bool>>eleMediumToken_;
-    edm::EDGetTokenT<edm::ValueMap<bool>>eleTightToken_;*/
 
 
 };
@@ -427,6 +423,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          elec_features.elec_energy = electron.energy() ; 
 	 elec_features.elec_jetDeltaR = reco::deltaR(electron , jet) ; 
 	 elec_features.elec_EtFromCaloEn = electron.caloEnergy() * sin(electron.p4().theta());
+	 elec_features.elec_ecalDrivenSeed = electron.ecalDrivenSeed() ;
 
          elec_features.elec_isEB = electron.isEB() ;  
          elec_features.elec_isEE  = electron.isEE();
@@ -437,18 +434,45 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 	 elec_features.elec_3dIPSig = electron.dB(pat::Electron::PV3D); 
          elec_features.elec_2dIP = electron.dB() ; 
 	 elec_features.elec_2dIPSig = electron.dB()/electron.edB() ; 
+         elec_features.elec_sCseedEta = electron.superCluster()->seed()->eta();
+ 	 std::cout << " elec_features.elec_sCseedEta  : "<< elec_features.elec_sCseedEta <<std::endl ; 
 
 
 
-
-	 elec_features.elec_numberOfBrems  = electron.numberOfBrems () ; 
+	 elec_features.elec_numberOfBrems  = electron.numberOfBrems () ;
+	 elec_features.elec_trackFbrem  = electron.trackFbrem() ; 
          elec_features.elec_fbrem = electron.fbrem() ; 
          elec_features.elec_e1x5 = electron.e1x5() ; 
          elec_features.elec_e2x5Max = electron.e2x5Max() ; 
          elec_features.elec_e5x5 = electron.e5x5() ;
+	 elec_features.eSeedClusterOverP = electron.eSeedClusterOverP() ;
+   	 elec_features.eSeedClusterOverPout = electron.eSeedClusterOverPout() ; 
+	 elec_features.eSuperClusterOverP = electron.eSuperClusterOverP() ; 
+	 elec_features.eTop = electron.eTop() ;  
 //New : 
          elec_features.elec_hadronicOverEm = electron.hadronicOverEm() ;  
 	 elec_features.elec_full5x5_sigmaIetaIeta = electron.full5x5_sigmaIetaIeta();
+
+	  elec_features.elec_full5x5_e1x5  = electron.full5x5_e1x5() ;
+	  elec_features.elec_full5x5_e2x5Bottom  = electron.full5x5_e2x5Bottom() ;
+	  elec_features.elec_full5x5_e2x5Left  = electron.full5x5_e2x5Left() ;
+	  elec_features.elec_full5x5_e2x5Max  = electron.full5x5_e2x5Max() ;
+	  elec_features.elec_full5x5_e2x5Right  = electron.full5x5_e2x5Right() ;
+	  elec_features.elec_full5x5_e2x5Top  = electron.full5x5_e2x5Top() ;
+	  elec_features.elec_full5x5_eBottom  = electron.full5x5_eBottom() ;
+	  elec_features.elec_full5x5_eLeft = electron.full5x5_eLeft() ;
+	  elec_features.elec_full5x5_eRight = electron.full5x5_eRight() ;
+	  elec_features.elec_full5x5_eTop = electron.full5x5_eTop() ;
+	  elec_features.elec_full5x5_hcalDepth1OverEcal  = electron.full5x5_hcalDepth1OverEcal() ;
+	  elec_features.elec_full5x5_hcalDepth1OverEcalBc  = electron.full5x5_hcalDepth1OverEcalBc() ;
+	  elec_features.elec_full5x5_hcalDepth2OverEcal = electron.full5x5_hcalDepth2OverEcal() ;
+	  elec_features.elec_full5x5_hcalDepth2OverEcalBc  = electron.full5x5_hcalDepth2OverEcalBc() ;
+	  elec_features.elec_full5x5_hcalOverEcal  = electron.full5x5_hcalOverEcal() ;
+	  elec_features.elec_full5x5_hcalOverEcalBc = electron.full5x5_hcalOverEcalBc() ;   
+	  elec_features.elec_full5x5_r9  = electron.full5x5_r9() ;
+
+
+
  	 elec_features.elec_deltaEtaEleClusterTrackAtCalo  = electron.deltaEtaEleClusterTrackAtCalo();
 	 elec_features.elec_deltaEtaSeedClusterTrackAtCalo = electron.deltaEtaSeedClusterTrackAtCalo () ; 
 	 elec_features.elec_deltaEtaSeedClusterTrackAtVtx = electron.deltaEtaSeedClusterTrackAtVtx();
@@ -484,6 +508,13 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 // electron Isolation 
 //
+	elec_features.elec_particleIso  = electron.particleIso() ; 
+	elec_features.elec_neutralHadronIso  = electron.neutralHadronIso() ;
+	elec_features.elec_photonIso = electron.photonIso() ; 
+	elec_features.elec_puChargedHadronIso = electron.puChargedHadronIso () ; 
+	elec_features.elec_trackIso = electron.trackIso() ;
+  
+	elec_features.elec_ecalPFClusterIso = electron.ecalPFClusterIso() ; 
 	elec_features.elec_hcalPFClusterIso = electron.hcalPFClusterIso() ; 
         elec_features.elec_dr03TkSumPt = electron.dr03TkSumPt() ;
  
