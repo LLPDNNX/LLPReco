@@ -2,12 +2,24 @@ import FWCore.ParameterSet.Config as cms
 
 from FWCore.ParameterSet.VarParsing import VarParsing
 
+
+#######  NEW Electron part : 
+
+from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
+from RecoEgamma.ElectronIdentification.egmGsfElectronIDs_cfi import *
+from RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi import *
+
 process = cms.Process("USER")
+
+process.options = cms.untracked.PSet( allowUnscheduled = cms.untracked.bool(True) )
 
 process.load("Configuration.StandardSequences.MagneticField_cff")
 process.load("Configuration.Geometry.GeometryRecoDB_cff")
 process.load("Configuration.StandardSequences.FrontierConditions_GlobalTag_cff")
 process.load("TrackingTools/TransientTrack/TransientTrackBuilder_cfi")
+process.load("Configuration.StandardSequences.Services_cff")
+process.load("RecoEgamma.ElectronIdentification.ElectronMVAValueMapProducer_cfi")
+
 from Configuration.AlCa.GlobalTag import GlobalTag
 process.GlobalTag = GlobalTag (process.GlobalTag, 'auto:run2_mc')
 
@@ -28,6 +40,28 @@ process.OUT = cms.OutputModule("PoolOutputModule",
     outputCommands = cms.untracked.vstring(['keep *'])
 )
 process.endpath= cms.EndPath(process.OUT)
+
+
+########## New Electron ID ##################
+
+from PhysicsTools.SelectorUtils.tools.vid_id_tools import DataFormat, switchOnVIDElectronIdProducer, setupAllVIDIdsInModule, setupVIDElectronSelection
+switchOnVIDElectronIdProducer(process, DataFormat.MiniAOD)
+
+process.egmGsfElectronIDs.physicsObjectSrc = "slimmedElectrons"
+
+id_modules = [
+    'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_GeneralPurpose_V1_cff',
+    'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff'
+    ]
+
+for mod in id_modules:
+    setupAllVIDIdsInModule(process, mod, setupVIDElectronSelection)
+
+    setupEgammaPostRecoSeq(process,
+                           runVID=False, #saves CPU time by not needlessly re-running VID, if you want the Fall17V2 IDs, set this to True or remove (default is True)
+                           era='2016-Legacy'
+    )
+
 
 ## b-tag discriminators
 bTagDiscriminators = [
@@ -254,19 +288,39 @@ process.pfDeepFlavourTagInfos = cms.EDProducer("DeepFlavourTagInfoProducer",
     secondary_vertices = cms.InputTag("slimmedSecondaryVertices"),
     shallow_tag_infos = cms.InputTag("pfDeepCSVTagInfos"),
     vertex_associator = cms.InputTag("primaryVertexAssociation","original"),
-    vertices = cms.InputTag("offlineSlimmedPrimaryVertices")
+    vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    muonSrc  = cms.InputTag("slimmedMuons"),
+    electronSrc = cms.InputTag("slimmedElectrons"), 
+    electronsVeto  = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-veto"),
+    electronsLoose = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
+    electronsMedium= cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-medium"),
+    electronsTight = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-tight")
 )
+
+process.XTagInfo  = cms.EDAnalyzer('XTagInfo',
+    muonSrc  = cms.InputTag("slimmedMuons"),
+    electronSrc = cms.InputTag("slimmedElectrons"), 
+    electronsVeto  = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-veto"),
+    electronsLoose = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
+    electronsMedium= cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-medium"),
+    electronsTight = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-tight"),
+)
+
 process.updatedPatJets.addTagInfos = cms.bool(True)
 
 process.options = cms.untracked.PSet(
         wantSummary = cms.untracked.bool(True), # while the timing of this is not reliable in unscheduled mode, it still helps understanding what was actually run
 )
 
-process.task = cms.Task(
+process.task = cms.Task(  
         process.pfInclusiveSecondaryVertexFinderTagInfos,
         process.pfImpactParameterTagInfos,
         process.pfDeepCSVTagInfos,
         process.pfDeepFlavourTagInfos,
         process.pfDeepFlavourJetTags, 
 )
-process.p = cms.Path(process.task)
+process.p = cms.Path(
+	process.egammaPostRecoSeq *
+	process.task *
+	process.XTagInfo  
+)
