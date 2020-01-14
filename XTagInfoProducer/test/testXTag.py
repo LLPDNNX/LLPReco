@@ -21,7 +21,8 @@ process.source = cms.Source("PoolSource",
         #"root://cms-xrd-global.cern.ch///store/mc/RunIIFall17MiniAODv2/gluinoGMSB_M2500_ctau1000p0_TuneCP2_13TeV_pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/80000/C65B9A27-9208-E911-8C95-485B39897242.root"
         #"root://cms-xrd-global.cern.ch://store/mc/RunIISummer16MiniAODv2/SMS-T1qqqq_ctau-0p01_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_GridpackScan_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/110000/FE913E88-B389-E711-A5A6-001E67579ED8.root",
         #'root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/LLP/LLP_miniaodv180920/SMS-T1qqqq_ctau-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/SMS-T1qqqq_ctau-10_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/LLP_miniaodv180920/180926_191050/0000/T1qqqqLL_MINIAODSIM_82.root'
-        'root://cms-xrd-global.cern.ch://store/mc/RunIISummer16MiniAODv2/QCD_Pt_800to1000_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/110000/182EF290-92B1-E611-A574-0CC47A7C361E.root',
+       #'root://cms-xrd-global.cern.ch://store/mc/RunIISummer16MiniAODv2/QCD_Pt_800to1000_TuneCUETP8M1_13TeV_pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/110000/182EF290-92B1-E611-A574-0CC47A7C361E.root',
+        'root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-15_V-6.76017751246e-05_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_9.root',
     )
 )
 
@@ -49,6 +50,12 @@ process.updatedPatJets.addTagInfos = cms.bool(True)
 
 process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     jets = cms.InputTag("updatedPatJets"),
+    muonSrc  = cms.InputTag("slimmedMuons"),
+    electronSrc = cms.InputTag("slimmedElectrons"),
+  # electronsVeto  = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-veto"),
+  # electronsLoose = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
+  # electronsMedium= cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-medium"),
+  # electronsTight = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-tight"),
     shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfos'),
     vertices = cms.InputTag('offlineSlimmedPrimaryVertices'),
     secondary_vertices = cms.InputTag("slimmedSecondaryVertices")

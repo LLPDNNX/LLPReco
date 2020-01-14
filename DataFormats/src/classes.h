@@ -17,6 +17,8 @@ namespace {
         llpdnnx::SecondaryVertexFeatures dummy6;
         llpdnnx::ChargedCandidateFeatures dummy7;
         llpdnnx::NeutralCandidateFeatures dummy8;
+        llpdnnx::ElectronCandidateFeatures dummy9;
+        llpdnnx::MuonCandidateFeatures dummy10;
 
     };
 
