@@ -41,7 +41,7 @@ class DisplacedGenVertexProducer:
         {
             
             int absPdgId = std::abs(genParticle.pdgId());
-            if (absPdgId==111)
+            if (absPdgId==111) //ignore pi0 to gamma gamma
             {
                 return true;
             }
@@ -117,7 +117,7 @@ DisplacedGenVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
     
     edm::Handle<edm::View<reco::GenJet>> genJetCollection;
     iEvent.getByToken(_genJetToken, genJetCollection);
-    
+
     std::unordered_map<size_t,unsigned int> genParticleToVertexGroupMap;
     std::shared_ptr<reco::Candidate::Point> hardInteractionVertex(nullptr);
     
@@ -135,7 +135,6 @@ DisplacedGenVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
             }
             else if (distance(*hardInteractionVertex,correctedDisplacement(genParticle))>1e-10)
             {
-                std::cout<<"pdg="<<genParticle.pdgId()<<"; ";
                 throw cms::Exception("DisplacedGenVertexProducer: multiple hard interaction vertices found!");
             }
         }
@@ -280,7 +279,6 @@ DisplacedGenVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
                 
                 if (shared>maxShared)
                 {
-                   
                     maxShared = shared;
                     maxIndex = indexPair.first;
                 }

@@ -12,6 +12,12 @@
 <library file="DisplacedGenVertexProducer.cc" name="DisplacedGenVertexProducerPlugin">
   <flags EDM_PLUGIN="1"/>
 </library>
+<library file="LLPGenDecayInfoProducer.cc" name="LLPGenDecayInfoProducerPlugin">
+  <flags EDM_PLUGIN="1"/>
+</library>
+<library file="LLPGhostFlavourProducer.cc" name="LLPGhostFlavourProducerPlugin">
+  <flags EDM_PLUGIN="1"/>
+</library>
 <library file="LLPLabelProducer.cc" name="LLPLabelProducerPlugin">
   <flags EDM_PLUGIN="1"/>
 </library>

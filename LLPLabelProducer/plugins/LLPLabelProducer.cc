@@ -27,6 +27,8 @@
 
 #include "DataFormats/PatCandidates/interface/Jet.h"
 
+#include "LLPReco/DataFormats/interface/LLPGhostFlavourInfo.h"
+
 using llpdnnx::DisplacedGenVertex;
 using llpdnnx::DisplacedGenVertexCollection;
 
@@ -35,11 +37,24 @@ class LLPLabelProducer:
     
 {
     private:
+        struct LLPDecay
+        {
+            const reco::GenParticle* llp;
+            std::vector<const reco::GenParticle*> decayProducts;
+            
+            LLPDecay():
+                llp(nullptr)
+            {
+            }
+        };
+    
+    
         static int getHadronFlavor(const reco::Candidate& genParticle)
         {
             int absPdgId = std::abs(genParticle.pdgId());
             if (absPdgId<100)
             {
+                if (absPdgId<6) return absPdgId; //parton
                 return 0; //not a hadron
             }
             int nq3 = (absPdgId/     10)%10; //quark content
@@ -52,9 +67,9 @@ class LLPLabelProducer:
     
         edm::EDGetTokenT<edm::View<pat::Jet>> jetToken_;
         edm::EDGetTokenT<edm::View<llpdnnx::DisplacedGenVertex>> displacedGenVertexToken_;
+        edm::EDGetTokenT<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>> llpFlavourInfoToken_;
 
         virtual void produce(edm::Event& iEvent, const edm::EventSetup& iSetup) override;
-               
 
     public:
         explicit LLPLabelProducer(const edm::ParameterSet&);
@@ -64,14 +79,10 @@ class LLPLabelProducer:
 
 };
 
-
-//
-// constructors and destructor
-
-//
 LLPLabelProducer::LLPLabelProducer(const edm::ParameterSet& iConfig):
     jetToken_(consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("srcJets"))),
-    displacedGenVertexToken_(consumes<edm::View<llpdnnx::DisplacedGenVertex>>(iConfig.getParameter<edm::InputTag>("srcVertices")))
+    displacedGenVertexToken_(consumes<edm::View<llpdnnx::DisplacedGenVertex>>(iConfig.getParameter<edm::InputTag>("srcVertices"))),
+    llpFlavourInfoToken_(consumes<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>>(iConfig.getParameter<edm::InputTag>("srcFlavourInfo")))
 {
     produces<reco::LLPLabelInfoCollection>();
 }
@@ -82,6 +93,7 @@ LLPLabelProducer::~LLPLabelProducer()
 }
 
 
+
 // ------------ method called to produce the data  ------------
 void
 LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
@@ -89,9 +101,12 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     edm::Handle<edm::View<pat::Jet>> jetCollection;
     iEvent.getByToken(jetToken_, jetCollection);
-            
+          
     edm::Handle<edm::View<llpdnnx::DisplacedGenVertex>> displacedGenVertexCollection;
     iEvent.getByToken(displacedGenVertexToken_, displacedGenVertexCollection);
+    
+    edm::Handle<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>> llpGhostFlavourInfoMap;
+    iEvent.getByToken(llpFlavourInfoToken_, llpGhostFlavourInfoMap);
     
     auto outputLLPLabelInfo = std::make_unique<reco::LLPLabelInfoCollection>();
     
@@ -219,54 +234,124 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
             
             
-            /*
+            
             if (displacedGenVertexCollection.product())
             {
+                //find matching gen jet and corresponding vertex
                 float dRmin = 0.4;
-                //float maxDisplacement2 = 0;
-                //int llpId = 0;
-                //const reco::GenJet* genJetBest = nullptr;
+                const llpdnnx::DisplacedGenVertex* matchedVertex = nullptr;
+                const reco::GenJet* matchedGenJet = nullptr;
                 for (const auto& vertex: *displacedGenVertexCollection)
                 {
                     for(unsigned int igenJet = 0; igenJet<vertex.genJets.size();++igenJet)
                     {
                         const reco::GenJet& genJet = vertex.genJets.at(igenJet);
                         float dRGenJets = reco::deltaR(genJet,jet);
-                        //if (vertex.motherVertex.isNull()) continue;
-                        //std::cout<<" - pt="<<genJet.pt()<<", dR="<<dRGenJets<<", frac="<<vertex.jetFractions[igenJet]<<std::endl;
-                        //float displacement2 = (vertex.motherVertex->vertex-vertex.vertex).mag2();
+                        
                         if(dRGenJets<dRmin)
                         {
                             dRmin = dRGenJets;
-                            //displacement2 = maxDisplacement2;
-                            //genJetBest = &genJet;
-                            if (not vertex.motherLongLivedParticle.isNull())
+                            matchedVertex = &vertex;
+                            matchedGenJet = &genJet;
+                        }
+                    }
+                }
+                
+                if (matchedVertex and matchedGenJet)
+                {
+                    int maxFlavor = 0;
+                    
+                    //take displacement from matched vertex, i.e. end of potential decay chain = largest displacement
+                    label.displacement = std::log10(std::max<float>(matchedVertex->d3d(),1e-10));
+                    label.displacement_xy = std::log10(std::max<float>(matchedVertex->dxy(),1e-10));
+                    label.displacement_z = std::log10(std::max<float>(matchedVertex->dz(),1e-10));
+
+                    //iteratively check the decay chain to detect e.g. LLP->B->C
+                    
+                    const llpdnnx::DisplacedGenVertex* llpVertex = nullptr;
+                    const llpdnnx::DisplacedGenVertex* parentVertex = matchedVertex;
+                    while (parentVertex)
+                    {
+                        if (not parentVertex->motherLongLivedParticle.isNull())
+                        {
+                            const auto &mother = *(parentVertex->motherLongLivedParticle);
+                            if (maxFlavor<getHadronFlavor(mother))
                             {
-                                const auto &mother = *(vertex.motherLongLivedParticle);
-                                if (getHadronFlavor(mother)>10000)
-                                {
-                                    data.fromLLP = 1;
-                                }
-                                //llpId = mother.pdgId();
-                                
-                                data.sharedVertexFraction = vertex.jetFractions[igenJet];
-                                data.decay_angle = angle(genJet.p4(),mother.p4());
-                                data.displacement = std::log10(std::max<float>(vertex.d3d(),1e-10));
-                                data.displacement_xy = std::log10(std::max<float>(vertex.dxy(),1e-10));
-                                data.displacement_z = std::log10(std::max<float>(vertex.dz(),1e-10));	
+                                maxFlavor = getHadronFlavor(mother);
+                                label.llpId = mother.pdgId();
+                                label.decay_angle = angle(matchedGenJet->p4(),mother.p4());
+                                label.betagamma = mother.p()/std::max(mother.mass(),1e-10);
+                                llpVertex = parentVertex;
                             }
                         }
-                    }		
+                        parentVertex = parentVertex->motherVertex.get(); //will be null if no mother
+                    }
+                    if (maxFlavor>10000)
+                    {
+                        const std::vector<llpdnnx::LLPGhostFlavour>& llpGhostFlavours = (*llpGhostFlavourInfoMap)[jet_ref].llpFlavours;
+                        
+                        int nQ = 0;
+                        int nMU = 0;
+                        int nE = 0;
+                        int nB = 0;
+                        
+                        for (auto const& llpGhostFlavour: llpGhostFlavours)
+                        {
+                            auto const& ghost = llpGhostFlavour.ghost;
+                            
+                            //this will associate the decay vertex with a llp decay
+                            
+                            if (std::sqrt((ghost->vertex()-llpVertex->vertex).mag2())>1e-10)
+                            {
+                                continue;
+                            }
+                            
+                            
+                            int absId = abs(ghost->pdgId());
+                            if (absId==13) nMU+=1;
+                            if (absId==11) nE+=1;
+                            if (absId==5) nB+=1;
+                            if (absId<5 or absId==21) nQ+=1;
+                                
+                        }
+                        label.type = llpdnnx::LLPLabel::Type::isLLP_RAD; //default
+                        
+                        if (nMU==0 and nE==0)
+                        {
+                            if (nQ==1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_Q;
+                            if (nQ==0 and nB==1) label.type = llpdnnx::LLPLabel::Type::isLLP_B;
+                            
+                            if (nQ>1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_QQ;
+                            if (nB>1 or (nQ==1 and nB==1)) label.type = llpdnnx::LLPLabel::Type::isLLP_BB;
+                        }
+                        else if (nE>=1 and nMU==0)
+                        {
+                            if (nQ==0 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_E;
+                            
+                            if (nQ==1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_QE;
+                            if (nQ==0 and nB==1) label.type = llpdnnx::LLPLabel::Type::isLLP_BE;
+                            
+                            if (nQ>1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_QQE;
+                            if (nB>1 or (nQ==1 and nB==1)) label.type = llpdnnx::LLPLabel::Type::isLLP_BBE;
+                        }
+                        else if (nMU>=1) //accept any additional number of electrons
+                        {
+                            if (nQ==0 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_MU;
+                            
+                            if (nQ==1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_QMU;
+                            if (nQ==0 and nB==1) label.type = llpdnnx::LLPLabel::Type::isLLP_BMU;
+                            
+                            if (nQ>1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_QQMU;
+                            if (nB>1 or (nQ==1 and nB==1)) label.type = llpdnnx::LLPLabel::Type::isLLP_BBMU;
+                        } 
+                    }
                 }
             }
-            */
         }
+        //std::cout<<"  jet: "<<ijet<<"/"<<(jetCollection->size())<<", pt="<<jet.pt()<<", eta="<<jet.eta()<<", phi="<<jet.phi()<<", type="<< llpdnnx::LLPLabel::typeToString(label.type)<<", df="<<(label.llpId)<<", d="<<(label.displacement)<<std::endl;
 
-        
         outputLLPLabelInfo->emplace_back(label,jet_ref);
-
     }
-
 }
 
 

@@ -43,4 +43,13 @@
     <class name="std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>>"/>
     <class name="edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>>>"/>
     
+    <class name="llpdnnx::LLPGenDecayInfo"/>
+    <class name="std::vector<llpdnnx::LLPGenDecayInfo>"/>
+    <class name="edm::Wrapper<std::vector<llpdnnx::LLPGenDecayInfo>>"/>
+    
+    <class name="llpdnnx::LLPGhostFlavourInfo"/>
+    <class name="std::vector<llpdnnx::LLPGhostFlavourInfo>"/>
+    <class name="edm::Wrapper<std::vector<llpdnnx::LLPGhostFlavourInfo>>"/>
+    <class name="edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>"/>
+    <class name="edm::Wrapper<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>>"/>
 </lcgdict>
