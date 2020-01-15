@@ -62,6 +62,7 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig)
     produces<nanoaod::FlatTable>("cpf");
     produces<nanoaod::FlatTable>("npf");
     produces<nanoaod::FlatTable>("sv");
+    produces<nanoaod::FlatTable>("length");
 }
 
 
@@ -79,6 +80,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     edm::Handle<std::vector<reco::XTagInfo>> tag_infos;
     iEvent.getByToken(_src, tag_infos);
     unsigned int ntags = tag_infos->size();
+    
+    auto lengthTable = std::make_unique<nanoaod::FlatTable>(ntags, "length", false, false);
+    std::vector<int> cpf_length;
+    std::vector<int> npf_length;
+    std::vector<int> sv_length;
     
     auto globalTable = std::make_unique<nanoaod::FlatTable>(ntags, "global", false, false);
     std::vector<float> pt;
@@ -150,6 +156,9 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          ncpf_total += ncpf;
          nnpf_total += nnpf;
          nsv_total += nsv;
+         cpf_length.push_back(ncpf);
+         npf_length.push_back(nnpf);
+         sv_length.push_back(nsv);
 
          pt.push_back(features.jet_features.pt);
          eta.push_back(features.jet_features.eta);
@@ -282,6 +291,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     svTable->addColumn<float>("sv_d3dsig", sv_d3dsig, "doc", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("sv_costhetasvpv", sv_costhetasvpv, "doc", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("sv_enratio", sv_enratio, "doc", nanoaod::FlatTable::FloatColumn);
+    
+    lengthTable->addColumn<int>("cpf", cpf_length, "cpf offset", nanoaod::FlatTable::IntColumn);
+    lengthTable->addColumn<int>("npf", npf_length, "npf offset", nanoaod::FlatTable::IntColumn);
+    lengthTable->addColumn<int>("sv", sv_length, "sv offset", nanoaod::FlatTable::IntColumn);
 
 
     iEvent.put(std::move(globalTable), "global");
@@ -289,6 +302,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     iEvent.put(std::move(cpfTable), "cpf");
     iEvent.put(std::move(npfTable), "npf");
     iEvent.put(std::move(svTable), "sv");
+    iEvent.put(std::move(lengthTable), "length");
 }
 
 void
