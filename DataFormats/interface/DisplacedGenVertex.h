@@ -51,7 +51,6 @@ struct DisplacedGenVertex
     double dy() const;
     double dz() const;
     double dxy() const;
-
 };
 
 typedef std::vector<DisplacedGenVertex> DisplacedGenVertexCollection;

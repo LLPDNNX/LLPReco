@@ -3,6 +3,8 @@
 #include "LLPReco/DataFormats/interface/XTagInfo.h"
 #include "LLPReco/DataFormats/interface/DisplacedGenVertex.h"
 #include "LLPReco/DataFormats/interface/LLPLabel.h"
+#include "LLPReco/DataFormats/interface/LLPGenDecayInfo.h"
+#include "LLPReco/DataFormats/interface/LLPGhostFlavourInfo.h"
 
 namespace {
 
@@ -40,6 +42,16 @@ namespace {
         reco::FeaturesTagInfo<llpdnnx::LLPLabel> dummy20;
         std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>> dummy21;
         edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::LLPLabel>>> dummy22;
+        
+        llpdnnx::LLPGenDecayInfo dummy23;
+        std::vector<llpdnnx::LLPGenDecayInfo> dummy24;
+        edm::Wrapper<std::vector<llpdnnx::LLPGenDecayInfo>> dummy25;
+        
+        llpdnnx::LLPGhostFlavourInfo dummy26;
+        std::vector<llpdnnx::LLPGhostFlavourInfo> dummy27;
+        edm::Wrapper<std::vector<llpdnnx::LLPGhostFlavourInfo>> dummy28;
+        edm::ValueMap<llpdnnx::LLPGhostFlavourInfo> dummy29;
+        edm::Wrapper<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>> dummy30;
 
     };
 
