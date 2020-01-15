@@ -12,7 +12,7 @@ class ChargedCandidateFeatures {
     float cpf_trackPPar;
     float cpf_trackDeltaR;
     float cpf_trackPParRatio;
-    //float cpf_trackPtRatio;
+    float cpf_trackPtRatio;
     float cpf_trackSip2dVal;
     float cpf_trackSip2dSig;
     float cpf_trackSip3dVal;
