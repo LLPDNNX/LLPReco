@@ -21,6 +21,10 @@ class ElectronCandidateFeatures {
   float elec_isEE ; 
   float elec_ecalEnergy ; 
   float elec_isPassConversionVeto ;
+  float elec_convDist ; 
+  int   elec_convFlags ; 
+  float elec_convRadius ; 
+
   float elec_hadronicOverEm ;
   float elec_ecalDrivenSeed;
  
@@ -51,16 +55,17 @@ class ElectronCandidateFeatures {
   float eTop; 
  
   float elec_deltaEtaEleClusterTrackAtCalo ; 
-  float elec_deltaEtaSeedClusterTrackAtCalo ; 
-  float elec_deltaEtaSeedClusterTrackAtVtx ; 
-  float elec_deltaEtaSuperClusterTrackAtVtx ; 
-  float elec_deltaPhiEleClusterTrackAtCalo ; 
+  float elec_deltaEtaSeedClusterTrackAtCalo ;
   float elec_deltaPhiSeedClusterTrackAtCalo ; 
+  float elec_deltaEtaSeedClusterTrackAtVtx ; 
+  float elec_deltaEtaSuperClusterTrackAtVtx ;
+  float elec_deltaPhiEleClusterTrackAtCalo ; 
   float elec_deltaPhiSuperClusterTrackAtVtx ;
   float elec_sCseedEta ;  
 
 // electron gsf variables. 
-//
+
+  float elec_EtaRel ; 
   float elec_dxy ; 
   float elec_dz ;
   float elec_nbOfMissingHits ; 
@@ -104,21 +109,40 @@ float elec_full5x5_r9 ;
   float elec_photonIso ;
   float elec_puChargedHadronIso ; 
   float elec_trackIso ;  
+  float elec_hcalDepth1OverEcal ; 
+  float elec_hcalDepth2OverEcal ; 
   float elec_ecalPFClusterIso ;
   float elec_hcalPFClusterIso ;  
   float elec_dr03TkSumPt ; 
-  float elec_hcalDepth1OverEcal ; 
-  float elec_hcalDepth2OverEcal ; 
   float elec_dr03HcalDepth2TowerSumEt ; 
-  float elec_hcalDepth2TowerSumEtNoVeto ; 
-  float elec_hcalDepth1TowerSumEtNoVeto ; 
   float elec_dr03EcalRecHitSumEt ; 
   float elec_dr03HcalDepth1TowerSumEt ;  
   float elec_dr03HcalDepth1TowerSumEtBc ; 
   float elec_pfSumPhotonEt ; 
   float elec_pfSumChargedHadronPt ; 
   float elec_pfSumNeutralHadronEt ; 
-  float elec_pfSumPUPt ; 
+  float elec_pfSumPUPt ;
+
+
+
+// cone 0.4 
+//
+
+float elec_dr04EcalRecHitSumEt ;  
+ 
+float elec_dr04HcalDepth1TowerSumEt ;  
+ 
+float elec_dr04HcalDepth1TowerSumEtBc ;
+ 
+float elec_dr04HcalDepth2TowerSumEt ; 
+ 
+float elec_dr04HcalDepth2TowerSumEtBc  ;
+ 
+float elec_dr04HcalTowerSumEt  ;
+float elec_dr04HcalTowerSumEtBc  ;
+
+
+ 
  
 };
 
