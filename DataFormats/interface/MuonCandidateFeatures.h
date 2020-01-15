@@ -64,10 +64,10 @@ class MuonCandidateFeatures {
   float mu_sumPhotonEt ; 
 
   
-  float mu_sumChHadronPt03 ; 
+/*  float mu_sumChHadronPt03 ; 
   float mu_sumNeuHadronEt03 ; 
   float mu_pileup03 ; 
-  float mu_sumPhotonEt03 ; 
+  float mu_sumPhotonEt03 ; */
 
  
 };

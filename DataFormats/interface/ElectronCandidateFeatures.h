@@ -46,10 +46,10 @@ class ElectronCandidateFeatures {
   float elec_2dIPSig ;
   float elec_3dIP ; 
   float elec_3dIPSig ; 
-  float eSeedClusterOverP ;
-  float eSeedClusterOverPout;
-  float eSuperClusterOverP;
-  float eTop; 
+  float elec_eSeedClusterOverP;
+  float elec_eSeedClusterOverPout;
+  float elec_eSuperClusterOverP;
+  float elec_eTop; 
  
   float elec_deltaEtaEleClusterTrackAtCalo ; 
   float elec_deltaEtaSeedClusterTrackAtCalo ;

@@ -62,6 +62,11 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig)
     produces<nanoaod::FlatTable>("cpf");
     produces<nanoaod::FlatTable>("npf");
     produces<nanoaod::FlatTable>("sv");
+
+// New : 
+    produces<nanoaod::FlatTable>("muon") ;
+    produces<nanoaod::FlatTable>("electron") ; 
+
 }
 
 
@@ -137,6 +142,181 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> sv_enratio;
 
 
+
+
+    std::vector<bool>  mu_isGlobal ; 
+    std::vector<bool>  mu_isTight ; 
+    std::vector<bool>  mu_isMedium ; 
+    std::vector<bool>  mu_isLoose ; 
+    std::vector<bool>  mu_isStandAlone ;
+
+    std::vector<float> mu_pt ;
+    std::vector<float> mu_p ;
+    std::vector<float> mu_jetPtRel ;
+    std::vector<float> mu_EtaRel; 
+    std::vector<float> mu_jetPtRel2 ; 
+    std::vector<float> mu_eta;
+    std::vector<float> mu_phi;
+    std::vector<float> mu_charge ; 
+    std::vector<float> mu_energy;
+    std::vector<float> mu_et ;
+    std::vector<float> mu_jetDeltaR ; 
+    std::vector<float> mu_numberOfMatchedStations ;
+  
+    std::vector<float> mu_2dIp ; 
+    std::vector<float> mu_2dIpSig ;
+    std::vector<float> mu_3dIp ; 
+    std::vector<float> mu_3dIpSig ; 
+
+    std::vector<float> mu_absdxy ; 
+    std::vector<float> mu_absdxyError ; 
+    std::vector<float> mu_absdxySig ; 
+    std::vector<float> mu_absdz ; 
+    std::vector<float> mu_absdzError ; 
+    std::vector<float> mu_numberOfValidPixelHits; 
+    std::vector<float> mu_numberOfpixelLayersWithMeasurement ; 
+    std::vector<float> mu_numberOfstripLayersWithMeasurement ; 
+
+    std::vector<float> mu_chi2 ; 
+    std::vector<float> mu_ndof ; 
+    
+    std::vector<float> mu_caloIso ; 
+    std::vector<float> mu_ecalIso ; 
+    std::vector<float> mu_hcalIso ;
+  
+    std::vector<float> mu_sumPfChHadronPt ; 
+    std::vector<float> mu_sumPfNeuHadronEt ; 
+    std::vector<float> mu_Pfpileup ; 
+    std::vector<float> mu_sumPfPhotonEt ; 
+  
+    std::vector<float> mu_sumPfChHadronPt03 ; 
+    std::vector<float> mu_sumPfNeuHadronEt03 ; 
+    std::vector<float> mu_Pfpileup03 ; 
+    std::vector<float> mu_sumPfPhotonEt03 ; 
+ 
+    std::vector<float> mu_sumChHadronPt ; 
+    std::vector<float> mu_sumNeuHadronEt ; 
+    std::vector<float> mu_pileup ; 
+    std::vector<float> mu_sumPhotonEt ; 
+  
+    std::vector<float> mu_sumChHadronPt03 ; 
+    std::vector<float> mu_sumNeuHadronEt03 ; 
+    std::vector<float> mu_pileup03 ; 
+    std::vector<float> mu_sumPhotonEt03 ; 
+
+// Electron Block 
+  
+    std::vector<float> elec_pt ;
+    std::vector<float> elec_jetPtRatio ;
+    std::vector<float> elec_jetDeltaR ; 
+    std::vector<float> elec_p ;
+    std::vector<float> elec_eta;
+    std::vector<float> elec_phi;
+    std::vector<float> elec_charge ; 
+    std::vector<float> elec_energy;
+    std::vector<float> elec_EtFromCaloEn ;
+    std::vector<float> elec_isEB ; 
+    std::vector<float> elec_isEE ; 
+    std::vector<float> elec_ecalEnergy ; 
+    std::vector<float> elec_isPassConversionVeto ;
+    std::vector<float> elec_convDist ;
+    std::vector<int>   elec_convFlags ;
+
+    std::vector<float> elec_convRadius ; 
+    std::vector<float> elec_hadronicOverEm ;
+    std::vector<float> elec_ecalDrivenSeed;
+	
+     
+   std::vector<float> elecSC_energy ; 
+   std::vector<float> elecSC_eta ; 
+   std::vector<float> elecSC_phi ;
+   std::vector<float> elecSC_et ;
+   std::vector<float> elecSC_eSuperClusterOverP ; 
+   std::vector<float> elec_scE1x5 ; 
+   std::vector<float> elec_scE2x5Max ; 
+   std::vector<float> elec_scE5x5 ; 
+   std::vector<float> elec_scPixCharge ; 
+   std::vector<float> elec_scSigmaEtaEta ;
+   std::vector<float> elec_scSigmaIEtaIEta ;  
+   std::vector<float> elec_superClusterFbrem ; 
+
+   std::vector<float> elec_2dIP ; 
+   std::vector<float> elec_2dIPSig ;
+   std::vector<float> elec_3dIP ; 
+   std::vector<float> elec_3dIPSig ; 
+   std::vector<float> elec_eSeedClusterOverP ;
+   std::vector<float> elec_eSeedClusterOverPout;
+   std::vector<float> elec_eSuperClusterOverP;
+   std::vector<float> elec_eTop; 
+ 
+   std::vector<float> elec_deltaEtaEleClusterTrackAtCalo ; 
+   std::vector<float> elec_deltaEtaSeedClusterTrackAtCalo ;
+   std::vector<float> elec_deltaPhiSeedClusterTrackAtCalo ; 
+   std::vector<float> elec_deltaEtaSeedClusterTrackAtVtx ; 
+   std::vector<float> elec_deltaEtaSuperClusterTrackAtVtx ;
+   std::vector<float> elec_deltaPhiEleClusterTrackAtCalo ; 
+   std::vector<float> elec_deltaPhiSuperClusterTrackAtVtx ;
+   std::vector<float> elec_sCseedEta ;  
+///////
+   std::vector<float> elec_EtaRel ; 
+   std::vector<float> elec_dxy ; 
+   std::vector<float> elec_dz ;
+   std::vector<float> elec_nbOfMissingHits ; 
+   std::vector<float> elec_gsfCharge ;
+
+   std::vector<float> elec_full5x5_sigmaIetaIeta ;
+   std::vector<float> elec_full5x5_e1x5 ;
+   std::vector<float> elec_full5x5_e2x5Bottom ;
+   std::vector<float> elec_full5x5_e2x5Left ;
+   std::vector<float> elec_full5x5_e2x5Max ;
+   std::vector<float> elec_full5x5_e2x5Right ;
+   std::vector<float> elec_full5x5_e2x5Top ;
+   std::vector<float> elec_full5x5_e5x5 ;
+   std::vector<float> elec_full5x5_eBottom ;
+   std::vector<float> elec_full5x5_eLeft;
+   std::vector<float> elec_full5x5_eRight;
+   std::vector<float> elec_full5x5_eTop;
+   std::vector<float> elec_full5x5_hcalDepth1OverEcal ;
+   std::vector<float> elec_full5x5_hcalDepth1OverEcalBc ;
+   std::vector<float> elec_full5x5_hcalDepth2OverEcal;
+   std::vector<float> elec_full5x5_hcalDepth2OverEcalBc ;
+   std::vector<float> elec_full5x5_hcalOverEcal ;
+   std::vector<float> elec_full5x5_hcalOverEcalBc;   
+   std::vector<float> elec_full5x5_r9 ;
+   std::vector<int> elec_numberOfBrems ; 
+   std::vector<float> elec_trackFbrem ; 
+   std::vector<float> elec_fbrem ; 
+   std::vector<float> elec_e2x5Max ; 
+   std::vector<float> elec_e1x5 ; 
+   std::vector<float> elec_e5x5 ;
+   std::vector<float> elec_neutralHadronIso; 
+   std::vector<float> elec_particleIso  ; 
+   std::vector<float> elec_photonIso ;
+   std::vector<float> elec_puChargedHadronIso ; 
+   std::vector<float> elec_trackIso ;  
+   std::vector<float> elec_hcalDepth1OverEcal ; 
+   std::vector<float> elec_hcalDepth2OverEcal ; 
+   std::vector<float> elec_ecalPFClusterIso ;
+   std::vector<float> elec_hcalPFClusterIso ;  
+   std::vector<float> elec_dr03TkSumPt ; 
+   std::vector<float> elec_dr03HcalDepth2TowerSumEt ; 
+   std::vector<float> elec_dr03EcalRecHitSumEt ; 
+   std::vector<float> elec_dr03HcalDepth1TowerSumEt ;  
+   std::vector<float> elec_dr03HcalDepth1TowerSumEtBc ; 
+   std::vector<float> elec_pfSumPhotonEt ; 
+   std::vector<float> elec_pfSumChargedHadronPt ; 
+   std::vector<float> elec_pfSumNeutralHadronEt ; 
+   std::vector<float> elec_pfSumPUPt ;
+   std::vector<float> elec_dr04EcalRecHitSumEt ;  
+   std::vector<float> elec_dr04HcalDepth1TowerSumEt ;  
+   std::vector<float> elec_dr04HcalDepth1TowerSumEtBc ;
+   std::vector<float> elec_dr04HcalDepth2TowerSumEt ; 
+   std::vector<float> elec_dr04HcalDepth2TowerSumEtBc  ;
+   std::vector<float> elec_dr04HcalTowerSumEt  ;
+   std::vector<float> elec_dr04HcalTowerSumEtBc  ;
+
+    unsigned int nmu_total = 0;
+    unsigned int nelec_total = 0;
     unsigned int ncpf_total = 0;
     unsigned int nnpf_total = 0;
     unsigned int nsv_total = 0;
@@ -144,9 +324,14 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     for (unsigned int itag= 0; itag < ntags; itag++) {
          const auto& features = tag_infos->at(itag).features();
          const auto& tag_info_features = features.tag_info_features;
+
+         unsigned int nmu = features.mu_features.size();
+         unsigned int nelec = features.elec_features.size();
          unsigned int ncpf = features.cpf_features.size();
          unsigned int nnpf = features.npf_features.size();
          unsigned int nsv = features.sv_features.size();
+	 nmu_total += nmu; 
+	 nelec_total += nelec;
          ncpf_total += ncpf;
          nnpf_total += nnpf;
          nsv_total += nsv;
@@ -165,15 +350,23 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          vertexCategory.push_back(tag_info_features.csv_vertexCategory);
     }
 
+    auto muonTable = std::make_unique<nanoaod::FlatTable>(ntags, "muon", false, false);
+    auto electronTable = std::make_unique<nanoaod::FlatTable>(ntags, "electron", false, false);
     auto cpfTable = std::make_unique<nanoaod::FlatTable>(ncpf_total, "cpf", false, false);
     auto npfTable = std::make_unique<nanoaod::FlatTable>(nnpf_total, "npf", false, false);
     auto svTable = std::make_unique<nanoaod::FlatTable>(nsv_total, "sv", false, false);
 
     for (unsigned int itag= 0; itag < ntags; itag++) {
          const auto& features = tag_infos->at(itag).features();
+	 auto mu  = features.mu_features ; 
+	 auto elec = features.elec_features ; 
          auto cpf = features.cpf_features;
          auto npf = features.npf_features;
-         auto sv = features.sv_features;
+         auto sv = features.sv_features ;
+
+	 unsigned int nmu = features.mu_features.size();
+         unsigned int nelec = features.elec_features.size();
+
          unsigned int ncpf = features.cpf_features.size();
          unsigned int nnpf = features.npf_features.size();
          unsigned int nsv = features.sv_features.size();
@@ -227,6 +420,193 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             sv_costhetasvpv.push_back(sv_features.sv_costhetasvpv);
             sv_enratio.push_back(sv_features.sv_enratio);
         }
+
+
+
+       for(unsigned int i = 0; i < nmu; i++){
+
+	const auto& mu_features = mu.at(i);
+	
+        mu_isGlobal.push_back(mu_features.mu_isGlobal) ; 
+        mu_isTight.push_back(mu_features.mu_isTight) ; 
+        mu_isMedium.push_back(mu_features.mu_isMedium) ; 
+        mu_isLoose.push_back(mu_features.mu_isLoose) ; 
+        mu_isStandAlone.push_back(mu_features.mu_isStandAlone) ;
+
+
+        mu_pt.push_back(mu_features.mu_pt);
+        mu_p.push_back(mu_features.mu_p);
+        mu_jetPtRel.push_back(mu_features.mu_jetPtRel);
+        mu_EtaRel.push_back(mu_features.mu_EtaRel); 
+        mu_jetPtRel2.push_back(mu_features.mu_jetPtRel2); 
+        mu_eta.push_back(mu_features.mu_eta);
+        mu_phi.push_back(mu_features.mu_phi);
+        mu_charge.push_back(mu_features.mu_charge); 
+        mu_energy.push_back(mu_features.mu_energy);
+        mu_et.push_back(mu_features.mu_et);
+        mu_jetDeltaR.push_back(mu_features.mu_jetDeltaR); 
+        mu_numberOfMatchedStations.push_back(mu_features.mu_numberOfMatchedStations);
+  
+        mu_2dIp.push_back(mu_features.mu_2dIp); 
+        mu_2dIpSig.push_back(mu_features.mu_2dIpSig);
+        mu_3dIp.push_back(mu_features.mu_3dIp); 
+        mu_3dIpSig.push_back(mu_features.mu_3dIpSig); 
+
+        mu_absdxy.push_back(mu_features.mu_absdxy); 
+        mu_absdxyError.push_back(mu_features.mu_absdxyError); 
+        mu_absdxySig.push_back(mu_features.mu_absdxySig); 
+        mu_absdz.push_back(mu_features.mu_absdz); 
+        mu_absdzError.push_back(mu_features.mu_absdzError); 
+        mu_numberOfValidPixelHits.push_back(mu_features.mu_numberOfValidPixelHits); 
+        mu_numberOfpixelLayersWithMeasurement.push_back(mu_features.mu_numberOfpixelLayersWithMeasurement);
+
+     
+        mu_chi2.push_back(mu_features.mu_chi2); 
+        mu_ndof.push_back(mu_features.mu_ndof); 
+    
+        mu_caloIso.push_back(mu_features.mu_caloIso); 
+        mu_ecalIso.push_back(mu_features.mu_ecalIso); 
+        mu_hcalIso.push_back(mu_features.mu_hcalIso);
+  
+        mu_sumPfChHadronPt.push_back(mu_features.mu_sumPfChHadronPt); 
+        mu_sumPfNeuHadronEt.push_back(mu_features.mu_sumPfNeuHadronEt); 
+        mu_Pfpileup.push_back(mu_features.mu_Pfpileup); 
+        mu_sumPfPhotonEt.push_back(mu_features.mu_sumPfPhotonEt); 
+  
+        mu_sumPfChHadronPt03.push_back(mu_features.mu_sumPfChHadronPt03); 
+        mu_sumPfNeuHadronEt03.push_back(mu_features.mu_sumPfNeuHadronEt03); 
+        mu_Pfpileup03.push_back(mu_features.mu_Pfpileup03); 
+        mu_sumPfPhotonEt03.push_back(mu_features.mu_sumPfPhotonEt03); 
+ 
+        mu_sumChHadronPt.push_back(mu_features.mu_sumChHadronPt); 
+        mu_sumNeuHadronEt.push_back(mu_features.mu_sumNeuHadronEt); 
+        mu_pileup.push_back(mu_features.mu_pileup); 
+        mu_sumPhotonEt.push_back(mu_features.mu_sumPhotonEt); 
+
+       }
+
+       for(unsigned int i = 0; i < nelec ; i++){
+
+         const auto& elec_features = elec.at(i);
+
+
+      elec_pt.push_back(elec_features.elec_pt );
+      elec_jetPtRatio.push_back(elec_features.elec_jetPtRatio );
+      elec_jetDeltaR.push_back(elec_features.elec_jetDeltaR ); 
+      elec_p.push_back(elec_features.elec_p );
+      elec_eta.push_back(elec_features.elec_eta );
+      elec_phi.push_back(elec_features.elec_phi );
+      elec_charge.push_back(elec_features.elec_charge );
+ 
+      elec_energy.push_back(elec_features.elec_energy );
+      elec_EtFromCaloEn.push_back(elec_features.elec_EtFromCaloEn );
+      elec_isEB.push_back(elec_features.elec_isEB ); 
+      elec_isEE.push_back(elec_features.elec_isEE ); 
+      elec_ecalEnergy.push_back(elec_features.elec_ecalEnergy ); 
+      elec_isPassConversionVeto.push_back(elec_features.elec_isPassConversionVeto );
+      elec_convDist.push_back(elec_features.elec_convDist );
+      elec_convFlags.push_back(elec_features.elec_convFlags );
+
+      elec_convRadius.push_back(elec_features.elec_convRadius ); 
+      elec_hadronicOverEm.push_back(elec_features.elec_hadronicOverEm );
+      elec_ecalDrivenSeed.push_back(elec_features.elec_ecalDrivenSeed );
+	
+     
+     elecSC_energy.push_back(elec_features.elecSC_energy ); 
+     elecSC_eta.push_back(elec_features.elecSC_eta ); 
+     elecSC_phi.push_back(elec_features.elecSC_phi );
+     elecSC_et.push_back(elec_features.elecSC_et );
+     elecSC_eSuperClusterOverP.push_back(elec_features.elecSC_eSuperClusterOverP ); 
+     elec_scE1x5.push_back(elec_features.elec_scE1x5 ); 
+     elec_scE2x5Max.push_back(elec_features.elec_scE2x5Max ); 
+     elec_scE5x5.push_back(elec_features.elec_scE5x5 ); 
+     elec_scPixCharge.push_back(elec_features.elec_scPixCharge ); 
+     elec_scSigmaEtaEta.push_back(elec_features.elec_scSigmaEtaEta );
+     elec_scSigmaIEtaIEta.push_back(elec_features.elec_scSigmaIEtaIEta );  
+     elec_superClusterFbrem.push_back(elec_features.elec_superClusterFbrem ); 
+
+     elec_2dIP.push_back(elec_features.elec_2dIP ); 
+     elec_2dIPSig.push_back(elec_features.elec_2dIPSig );
+     elec_3dIP.push_back(elec_features.elec_3dIP ); 
+     elec_3dIPSig.push_back(elec_features.elec_3dIPSig ); 
+     elec_eSeedClusterOverP.push_back(elec_features.elec_eSeedClusterOverP );
+     elec_eSeedClusterOverPout.push_back(elec_features.elec_eSeedClusterOverPout );
+     elec_eSuperClusterOverP.push_back(elec_features.elec_eSuperClusterOverP );
+     elec_eTop.push_back(elec_features.elec_eTop ); 
+ 
+     elec_deltaEtaEleClusterTrackAtCalo.push_back(elec_features.elec_deltaEtaEleClusterTrackAtCalo ); 
+     elec_deltaEtaSeedClusterTrackAtCalo.push_back(elec_features.elec_deltaEtaSeedClusterTrackAtCalo );
+     elec_deltaPhiSeedClusterTrackAtCalo.push_back(elec_features.elec_deltaPhiSeedClusterTrackAtCalo ); 
+     elec_deltaEtaSeedClusterTrackAtVtx.push_back(elec_features.elec_deltaEtaSeedClusterTrackAtVtx ); 
+     elec_deltaEtaSuperClusterTrackAtVtx.push_back(elec_features.elec_deltaEtaSuperClusterTrackAtVtx );
+     elec_deltaPhiEleClusterTrackAtCalo.push_back(elec_features.elec_deltaPhiEleClusterTrackAtCalo ); 
+     elec_deltaPhiSuperClusterTrackAtVtx.push_back(elec_features.elec_deltaPhiSuperClusterTrackAtVtx );
+     elec_sCseedEta.push_back(elec_features.elec_sCseedEta );  
+	
+
+    elec_EtaRel.push_back(elec_features.elec_EtaRel ); 
+    elec_dxy.push_back(elec_features.elec_dxy ); 
+    elec_dz.push_back(elec_features.elec_dz );
+    elec_nbOfMissingHits.push_back(elec_features.elec_nbOfMissingHits ); 
+    elec_gsfCharge.push_back(elec_features.elec_gsfCharge );
+
+    elec_full5x5_sigmaIetaIeta.push_back(elec_features.elec_full5x5_sigmaIetaIeta );
+    elec_full5x5_e1x5.push_back(elec_features.elec_full5x5_e1x5 );
+    elec_full5x5_e2x5Bottom.push_back(elec_features.elec_full5x5_e2x5Bottom );
+    elec_full5x5_e2x5Left.push_back(elec_features.elec_full5x5_e2x5Left );
+    elec_full5x5_e2x5Max.push_back(elec_features.elec_full5x5_e2x5Max );
+    elec_full5x5_e2x5Right.push_back(elec_features.elec_full5x5_e2x5Right );
+    elec_full5x5_e2x5Top.push_back(elec_features.elec_full5x5_e2x5Top );
+    elec_full5x5_e5x5.push_back(elec_features.elec_full5x5_e5x5 );
+
+    elec_full5x5_eBottom.push_back(elec_features.elec_full5x5_eBottom );
+    elec_full5x5_eLeft.push_back(elec_features.elec_full5x5_eLeft );
+    elec_full5x5_eRight.push_back(elec_features.elec_full5x5_eRight );
+    elec_full5x5_eTop.push_back(elec_features.elec_full5x5_eTop );
+    elec_full5x5_hcalDepth1OverEcal.push_back(elec_features.elec_full5x5_hcalDepth1OverEcal );
+    elec_full5x5_hcalDepth1OverEcalBc.push_back(elec_features.elec_full5x5_hcalDepth1OverEcalBc );
+    elec_full5x5_hcalDepth2OverEcal.push_back(elec_features.elec_full5x5_hcalDepth2OverEcal );
+    elec_full5x5_hcalDepth2OverEcalBc.push_back(elec_features.elec_full5x5_hcalDepth2OverEcalBc );
+    elec_full5x5_hcalOverEcal.push_back(elec_features.elec_full5x5_hcalOverEcal );
+    elec_full5x5_hcalOverEcalBc.push_back(elec_features.elec_full5x5_hcalOverEcalBc );   
+    elec_full5x5_r9.push_back(elec_features.elec_full5x5_r9 );
+    elec_numberOfBrems.push_back(elec_features.elec_numberOfBrems ); 
+    elec_trackFbrem.push_back(elec_features.elec_trackFbrem ); 
+    elec_fbrem.push_back(elec_features.elec_fbrem ); 
+    elec_e2x5Max.push_back(elec_features.elec_e2x5Max ); 
+    elec_e1x5.push_back(elec_features.elec_e1x5 ); 
+    elec_e5x5.push_back(elec_features.elec_e5x5 );
+    elec_neutralHadronIso.push_back(elec_features.elec_neutralHadronIso ); 
+    elec_particleIso .push_back(elec_features.elec_particleIso ); 
+    elec_photonIso.push_back(elec_features.elec_photonIso );
+    elec_puChargedHadronIso.push_back(elec_features.elec_puChargedHadronIso ); 
+    elec_trackIso.push_back(elec_features.elec_trackIso );  
+    elec_hcalDepth1OverEcal.push_back(elec_features.elec_hcalDepth1OverEcal ); 
+    elec_hcalDepth2OverEcal.push_back(elec_features.elec_hcalDepth2OverEcal ); 
+    elec_ecalPFClusterIso.push_back(elec_features.elec_ecalPFClusterIso );
+    elec_hcalPFClusterIso.push_back(elec_features.elec_hcalPFClusterIso );  
+    elec_dr03TkSumPt.push_back(elec_features.elec_dr03TkSumPt ); 
+    elec_dr03HcalDepth2TowerSumEt.push_back(elec_features.elec_dr03HcalDepth2TowerSumEt ); 
+    elec_dr03EcalRecHitSumEt.push_back(elec_features.elec_dr03EcalRecHitSumEt ); 
+    elec_dr03HcalDepth1TowerSumEt.push_back(elec_features.elec_dr03HcalDepth1TowerSumEt );  
+    elec_dr03HcalDepth1TowerSumEtBc.push_back(elec_features.elec_dr03HcalDepth1TowerSumEtBc ); 
+    elec_pfSumPhotonEt.push_back(elec_features.elec_pfSumPhotonEt ); 
+    elec_pfSumChargedHadronPt.push_back(elec_features.elec_pfSumChargedHadronPt ); 
+    elec_pfSumNeutralHadronEt.push_back(elec_features.elec_pfSumNeutralHadronEt ); 
+    elec_pfSumPUPt.push_back(elec_features.elec_pfSumPUPt );
+    elec_dr04EcalRecHitSumEt.push_back(elec_features.elec_dr04EcalRecHitSumEt );  
+    elec_dr04HcalDepth1TowerSumEt.push_back(elec_features.elec_dr04HcalDepth1TowerSumEt );  
+    elec_dr04HcalDepth1TowerSumEtBc.push_back(elec_features.elec_dr04HcalDepth1TowerSumEtBc );
+    elec_dr04HcalDepth2TowerSumEt.push_back(elec_features.elec_dr04HcalDepth2TowerSumEt ); 
+    elec_dr04HcalDepth2TowerSumEtBc.push_back(elec_features.elec_dr04HcalDepth2TowerSumEtBc );
+    elec_dr04HcalTowerSumEt.push_back(elec_features.elec_dr04HcalTowerSumEt );
+    elec_dr04HcalTowerSumEtBc.push_back(elec_features.elec_dr04HcalTowerSumEtBc );
+
+
+
+
+
+       }
     }
 
     globalTable->addColumn<float>("pt", pt, "global jet pt (log 10, uncorrected)", nanoaod::FlatTable::FloatColumn);
@@ -283,12 +663,196 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     svTable->addColumn<float>("sv_costhetasvpv", sv_costhetasvpv, "doc", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("sv_enratio", sv_enratio, "doc", nanoaod::FlatTable::FloatColumn);
 
+// muon block : 
+//
+
+
+     muonTable->addColumn<bool>("isGlobal",mu_isGlobal,"doc",nanoaod::FlatTable::BoolColumn); 
+     muonTable->addColumn<bool>("isTight",mu_isTight,"doc",nanoaod::FlatTable::BoolColumn); 
+     muonTable->addColumn<bool>("isMedium",mu_isMedium,"doc",nanoaod::FlatTable::BoolColumn); 
+     muonTable->addColumn<bool>("isLoose",mu_isLoose,"doc",nanoaod::FlatTable::BoolColumn); 
+     muonTable->addColumn<bool>("isStandAlone",mu_isStandAlone,"doc", nanoaod::FlatTable::BoolColumn);
+
+     muonTable->addColumn<float>("pt",mu_pt,"doc",nanoaod::FlatTable::FloatColumn);
+     muonTable->addColumn<float>("p",mu_p,"doc",nanoaod::FlatTable::FloatColumn);
+     muonTable->addColumn<float>("jetPtRel",mu_jetPtRel,"doc",nanoaod::FlatTable::FloatColumn);
+     muonTable->addColumn<float>("EtaRel",mu_EtaRel,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("jetPtRel2",mu_jetPtRel2,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("et",mu_et,"doc",nanoaod::FlatTable::FloatColumn);
+     muonTable->addColumn<float>("phi",mu_phi,"doc",nanoaod::FlatTable::FloatColumn);
+     muonTable->addColumn<float>("charge",mu_charge,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("energy",mu_energy,"doc",nanoaod::FlatTable::FloatColumn);
+     muonTable->addColumn<float>("et",mu_et,"doc",nanoaod::FlatTable::FloatColumn);
+     muonTable->addColumn<float>("jetDeltaR",mu_jetDeltaR,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("numberOfMatchedStations",mu_numberOfMatchedStations,"doc",nanoaod::FlatTable::FloatColumn);
+  
+     muonTable->addColumn<float>("2dIp",mu_2dIp,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("2dIpSig",mu_2dIpSig,"doc",nanoaod::FlatTable::FloatColumn);
+     muonTable->addColumn<float>("3dIp",mu_3dIp,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("3dIpSig",mu_3dIpSig,"doc",nanoaod::FlatTable::FloatColumn); 
+
+     muonTable->addColumn<float>("absdxy",mu_absdxy,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("absdxyError",mu_absdxyError,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("absdxySig",mu_absdxySig,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("absdz",mu_absdz,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("absdzError",mu_absdzError,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("numberOfValidPixelHits",mu_numberOfValidPixelHits,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("numberOfpixelLayersWithMeasurement",mu_numberOfpixelLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn); 
+
+     muonTable->addColumn<float>("chi2",mu_chi2,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("ndof",mu_ndof,"doc",nanoaod::FlatTable::FloatColumn); 
+    
+     muonTable->addColumn<float>("caloIso",mu_caloIso,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("ecalIso",mu_ecalIso,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("hcalIso",mu_hcalIso,"doc",nanoaod::FlatTable::FloatColumn);
+  
+     muonTable->addColumn<float>("sumPfChHadronPt",mu_sumPfChHadronPt,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("sumPfNeuHadronEt",mu_sumPfNeuHadronEt,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("Pfpileup",mu_Pfpileup,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("sumPfPhotonEt",mu_sumPfPhotonEt,"doc",nanoaod::FlatTable::FloatColumn); 
+  
+     muonTable->addColumn<float>("sumPfChHadronPt03",mu_sumPfChHadronPt03,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("sumPfNeuHadronEt03",mu_sumPfNeuHadronEt03,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("Pfpileup03",mu_Pfpileup03,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("sumPfPhotonEt03",mu_sumPfPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn); 
+ 
+     muonTable->addColumn<float>("sumChHadronPt",mu_sumChHadronPt,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("sumNeuHadronEt",mu_sumNeuHadronEt,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("pileup",mu_pileup,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("sumPhotonEt",mu_sumPhotonEt,"doc",nanoaod::FlatTable::FloatColumn); 
+  
+     muonTable->addColumn<float>("sumChHadronPt03",mu_sumChHadronPt03,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("sumNeuHadronEt03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("pileup03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("sumPhotonEt03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn);
+
+// Electron block : 
+
+
+       electronTable->addColumn<float>("pt",elec_pt,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<float>("jetPtRatio",elec_jetPtRatio,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<float>("jetDeltaR",elec_jetDeltaR,"doc",nanoaod::FlatTable::FloatColumn); 
+       electronTable->addColumn<float>("p",elec_p,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<float>("eta",elec_eta,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<float>("phi",elec_phi,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<float>("charge",elec_charge,"doc",nanoaod::FlatTable::FloatColumn); 
+       electronTable->addColumn<float>("energy",elec_energy,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<float>("EtFromCaloEn",elec_EtFromCaloEn,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<float>("isEB",elec_isEB,"doc",nanoaod::FlatTable::FloatColumn); 
+       electronTable->addColumn<float>("isEE",elec_isEE,"doc",nanoaod::FlatTable::FloatColumn); 
+       electronTable->addColumn<float>("ecalEnergy",elec_ecalEnergy,"doc",nanoaod::FlatTable::FloatColumn); 
+       electronTable->addColumn<float>("isPassConversionVeto",elec_isPassConversionVeto,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<float>("convDist",elec_convDist,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<int>("convFlags",elec_convFlags,"doc",nanoaod::FlatTable::IntColumn);
+
+       electronTable->addColumn<float>("convRadius",elec_convRadius,"doc",nanoaod::FlatTable::FloatColumn); 
+       electronTable->addColumn<float>("hadronicOverEm",elec_hadronicOverEm,"doc",nanoaod::FlatTable::FloatColumn);
+       electronTable->addColumn<float>("ecalDrivenSeed",elec_ecalDrivenSeed,"doc",nanoaod::FlatTable::FloatColumn);
+	
+     
+      electronTable->addColumn<float>("SC_energy",elecSC_energy,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("SC_eta",elecSC_eta,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("SC_phi",elecSC_phi,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("SC_et",elecSC_et,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("SC_eSuperClusterOverP",elecSC_eSuperClusterOverP,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("scE1x5",elec_scE1x5,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("scE2x5Max",elec_scE2x5Max,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("scE5x5",elec_scE5x5,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("scPixCharge",elec_scPixCharge,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("scSigmaEtaEta",elec_scSigmaEtaEta,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("scSigmaIEtaIEta",elec_scSigmaIEtaIEta,"doc",nanoaod::FlatTable::FloatColumn);  
+      electronTable->addColumn<float>("superClusterFbrem",elec_superClusterFbrem,"doc",nanoaod::FlatTable::FloatColumn); 
+
+      electronTable->addColumn<float>("2dIP",elec_2dIP,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("2dIPSig",elec_2dIPSig,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("3dIP",elec_3dIP,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("3dIPSig",elec_3dIPSig,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("eSeedClusterOverP",elec_eSeedClusterOverP,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("eSeedClusterOverPout",elec_eSeedClusterOverPout,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("eSuperClusterOverP",elec_eSuperClusterOverP,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("eTop",elec_eTop,"doc",nanoaod::FlatTable::FloatColumn); 
+ 
+      electronTable->addColumn<float>("deltaEtaEleClusterTrackAtCalo",elec_deltaEtaEleClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("deltaEtaSeedClusterTrackAtCalo",elec_deltaEtaSeedClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("deltaPhiSeedClusterTrackAtCalo",elec_deltaPhiSeedClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("deltaEtaSeedClusterTrackAtVtx",elec_deltaEtaSeedClusterTrackAtVtx,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("deltaEtaSuperClusterTrackAtVtx",elec_deltaEtaSuperClusterTrackAtVtx,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("deltaPhiEleClusterTrackAtCalo",elec_deltaPhiEleClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("deltaPhiSuperClusterTrackAtVtx",elec_deltaPhiSuperClusterTrackAtVtx,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("sCseedEta",elec_sCseedEta,"doc",nanoaod::FlatTable::FloatColumn); 
+ 
+      electronTable->addColumn<float>("EtaRel",elec_EtaRel,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("dxy",elec_dxy,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("dz",elec_dz,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("nbOfMissingHits",elec_nbOfMissingHits,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("gsfCharge",elec_gsfCharge,"doc",nanoaod::FlatTable::FloatColumn);
+
+      electronTable->addColumn<float>("full5x5_sigmaIetaIeta",elec_full5x5_sigmaIetaIeta,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e1x5",elec_full5x5_e1x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5Bottom",elec_full5x5_e2x5Bottom,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5Left",elec_full5x5_e2x5Left,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5Max",elec_full5x5_e2x5Max,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5Right",elec_full5x5_e2x5Right,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5Top",elec_full5x5_e2x5Top,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e5x5",elec_full5x5_e5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_eBottom",elec_full5x5_eBottom,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_eLeft",elec_full5x5_eLeft,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_eRight",elec_full5x5_eRight,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_eTop",elec_full5x5_eTop,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_hcalDepth1OverEcal",elec_full5x5_hcalDepth1OverEcal,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_hcalDepth1OverEcalBc",elec_full5x5_hcalDepth1OverEcalBc,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_hcalDepth2OverEcal",elec_full5x5_hcalDepth2OverEcal,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_hcalDepth2OverEcalBc",elec_full5x5_hcalDepth2OverEcalBc,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_hcalOverEcal",elec_full5x5_hcalOverEcal,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_hcalOverEcalBc",elec_full5x5_hcalOverEcalBc,"doc",nanoaod::FlatTable::FloatColumn);   
+      electronTable->addColumn<float>("full5x5_r9",elec_full5x5_r9,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<int>("numberOfBrems",elec_numberOfBrems,"doc",nanoaod::FlatTable::IntColumn); 
+      electronTable->addColumn<float>("trackFbrem",elec_trackFbrem,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("fbrem",elec_fbrem,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("e2x5Max",elec_e2x5Max,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("e1x5",elec_e1x5,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("e5x5",elec_e5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("neutralHadronIso",elec_neutralHadronIso,"doc",nanoaod::FlatTable::FloatColumn); 
+
+
+      electronTable->addColumn<float>("particleIso",elec_particleIso,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("photonIso",elec_photonIso,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("puChargedHadronIso",elec_puChargedHadronIso,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("trackIso",elec_trackIso,"doc",nanoaod::FlatTable::FloatColumn);  
+      electronTable->addColumn<float>("hcalDepth1OverEcal",elec_hcalDepth1OverEcal,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("hcalDepth2OverEcal",elec_hcalDepth2OverEcal,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("ecalPFClusterIso",elec_ecalPFClusterIso,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("hcalPFClusterIso",elec_hcalPFClusterIso,"doc",nanoaod::FlatTable::FloatColumn);  
+      electronTable->addColumn<float>("dr03TkSumPt",elec_dr03TkSumPt,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("dr03HcalDepth2TowerSumEt",elec_dr03HcalDepth2TowerSumEt,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("dr03EcalRecHitSumEt",elec_dr03EcalRecHitSumEt,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("dr03HcalDepth1TowerSumEt",elec_dr03HcalDepth1TowerSumEt,"doc",nanoaod::FlatTable::FloatColumn);  
+      electronTable->addColumn<float>("dr03HcalDepth1TowerSumEtBc",elec_dr03HcalDepth1TowerSumEtBc,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("pfSumPhotonEt",elec_pfSumPhotonEt,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("pfSumChargedHadronPt",elec_pfSumChargedHadronPt,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("pfSumNeutralHadronEt",elec_pfSumNeutralHadronEt,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("pfSumPUPt",elec_pfSumPUPt,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("dr04EcalRecHitSumEt",elec_dr04EcalRecHitSumEt,"doc",nanoaod::FlatTable::FloatColumn);  
+      electronTable->addColumn<float>("dr04HcalDepth1TowerSumEt",elec_dr04HcalDepth1TowerSumEt,"doc",nanoaod::FlatTable::FloatColumn);  
+      electronTable->addColumn<float>("dr04HcalDepth1TowerSumEtBc",elec_dr04HcalDepth1TowerSumEtBc,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("dr04HcalDepth2TowerSumEt",elec_dr04HcalDepth2TowerSumEt,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("dr04HcalDepth2TowerSumEtBc",elec_dr04HcalDepth2TowerSumEtBc,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("dr04HcalTowerSumEt",elec_dr04HcalTowerSumEt,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("dr04HcalTowerSumEtBc",elec_dr04HcalTowerSumEtBc,"doc",nanoaod::FlatTable::FloatColumn);
+
+
+ 
+
+
 
     iEvent.put(std::move(globalTable), "global");
     iEvent.put(std::move(csvTable), "csv");
     iEvent.put(std::move(cpfTable), "cpf");
     iEvent.put(std::move(npfTable), "npf");
     iEvent.put(std::move(svTable), "sv");
+    iEvent.put(std::move(muonTable), "muon");
+    iEvent.put(std::move(electronTable), "electron");
 }
 
 void

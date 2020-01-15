@@ -446,10 +446,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          elec_features.elec_e1x5 = electron.e1x5() ; 
          elec_features.elec_e2x5Max = electron.e2x5Max() ; 
          elec_features.elec_e5x5 = electron.e5x5() ;
-	 elec_features.eSeedClusterOverP = electron.eSeedClusterOverP() ;
-   	 elec_features.eSeedClusterOverPout = electron.eSeedClusterOverPout() ; 
-	 elec_features.eSuperClusterOverP = electron.eSuperClusterOverP() ; 
-	 elec_features.eTop = electron.eTop() ;  
+	 elec_features.elec_eSeedClusterOverP = electron.eSeedClusterOverP() ;
+   	 elec_features.elec_eSeedClusterOverPout = electron.eSeedClusterOverPout() ; 
+	 elec_features.elec_eSuperClusterOverP = electron.eSuperClusterOverP() ; 
+	 elec_features.elec_eTop = electron.eTop() ;  
 //New : 
          elec_features.elec_hadronicOverEm = electron.hadronicOverEm() ;  
 	 elec_features.elec_full5x5_sigmaIetaIeta = electron.full5x5_sigmaIetaIeta();
