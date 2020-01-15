@@ -24,7 +24,6 @@ class ElectronCandidateFeatures {
   float elec_convDist ; 
   int   elec_convFlags ; 
   float elec_convRadius ; 
-
   float elec_hadronicOverEm ;
   float elec_ecalDrivenSeed;
  
@@ -43,12 +42,10 @@ class ElectronCandidateFeatures {
   float elec_scSigmaIEtaIEta ;  
   float elec_superClusterFbrem ; 
 
-
   float elec_2dIP ; 
   float elec_2dIPSig ;
   float elec_3dIP ; 
   float elec_3dIPSig ; 
-
   float eSeedClusterOverP ;
   float eSeedClusterOverPout;
   float eSuperClusterOverP;
@@ -64,7 +61,6 @@ class ElectronCandidateFeatures {
   float elec_sCseedEta ;  
 
 // electron gsf variables. 
-
   float elec_EtaRel ; 
   float elec_dxy ; 
   float elec_dz ;
@@ -75,28 +71,27 @@ class ElectronCandidateFeatures {
 // 5*5 cells cluster 
 //
 
-float elec_full5x5_sigmaIetaIeta ;
-float elec_full5x5_e1x5 ;
-float elec_full5x5_e2x5Bottom ;
-float elec_full5x5_e2x5Left ;
-float elec_full5x5_e2x5Max ;
-float elec_full5x5_e2x5Right ;
-float elec_full5x5_e2x5Top ;
-float elec_full5x5_e5x5 ;
-float elec_full5x5_eBottom ;
-float elec_full5x5_eLeft;
-float elec_full5x5_eRight;
-float elec_full5x5_eTop;
-float elec_full5x5_hcalDepth1OverEcal ;
-float elec_full5x5_hcalDepth1OverEcalBc ;
-float elec_full5x5_hcalDepth2OverEcal;
-float elec_full5x5_hcalDepth2OverEcalBc ;
-float elec_full5x5_hcalOverEcal ;
-float elec_full5x5_hcalOverEcalBc;   
-float elec_full5x5_r9 ;
-   
+  float elec_full5x5_sigmaIetaIeta ;
+  float elec_full5x5_e1x5 ;
+  float elec_full5x5_e2x5Bottom ;
+  float elec_full5x5_e2x5Left ;
+  float elec_full5x5_e2x5Max ;
+  float elec_full5x5_e2x5Right ;
+  float elec_full5x5_e2x5Top ;
+  float elec_full5x5_e5x5 ;
+  float elec_full5x5_eBottom ;
+  float elec_full5x5_eLeft;
+  float elec_full5x5_eRight;
+  float elec_full5x5_eTop;
+  float elec_full5x5_hcalDepth1OverEcal ;
+  float elec_full5x5_hcalDepth1OverEcalBc ;
+  float elec_full5x5_hcalDepth2OverEcal;
+  float elec_full5x5_hcalDepth2OverEcalBc ;
+  float elec_full5x5_hcalOverEcal ;
+  float elec_full5x5_hcalOverEcalBc;   
+  float elec_full5x5_r9 ;
  
-  int elec_numberOfBrems ;
+  int   elec_numberOfBrems ;
   float elec_trackFbrem ; 
   float elec_fbrem ; 
   float elec_e2x5Max ; 
@@ -129,15 +124,10 @@ float elec_full5x5_r9 ;
 //
 
 float elec_dr04EcalRecHitSumEt ;  
- 
 float elec_dr04HcalDepth1TowerSumEt ;  
- 
 float elec_dr04HcalDepth1TowerSumEtBc ;
- 
 float elec_dr04HcalDepth2TowerSumEt ; 
- 
 float elec_dr04HcalDepth2TowerSumEtBc  ;
- 
 float elec_dr04HcalTowerSumEt  ;
 float elec_dr04HcalTowerSumEtBc  ;
 
