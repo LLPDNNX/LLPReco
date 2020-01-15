@@ -97,6 +97,7 @@ process.plain=cms.Path()
 def addModule(m):
     process.plain+=m
 
+'''
 if not options.isData:
     process.TFileService = cms.Service("TFileService",
         fileName = cms.string("info.root")
@@ -108,6 +109,7 @@ if not options.isData:
     )
     process.plain+=process.eventAndPuInfo
 
+'''
 #Output definition
 process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
     compressionAlgorithm = cms.untracked.string('LZMA'),
@@ -253,22 +255,12 @@ for moduleName in [
         process.nanoSequence.remove(getattr(process,moduleName))
         process.nanoSequenceMC.remove(getattr(process,moduleName))
 
-'''
 process.load('LLPReco.LLPLabelProducer.GenDisplacedVertices_cff')
-process.llpLabels = cms.EDProducer(
-        "LLPLabelProducer",
-        srcVertices = cms.InputTag("displacedGenVertices"),
-        srcJets = cms.InputTag("slimmedJets")
-        )
 
-
-process.llpinfo = cms.PSet(
-            type = cms.string("LLPInfo"),
-            displacedGenVertices = cms.InputTag("displacedGenVertices"),
-            LLPtype = cms.string(options.LLPtype)
-        )
-
-'''
+process.llpLabels = cms.EDProducer("LLPLabelProducer",
+    srcVertices = cms.InputTag("displacedGenVertices"),
+    srcJets = cms.InputTag("slimmedJets")
+)
 
 
 if options.isData:
@@ -285,7 +277,8 @@ else:
         process.updatedPatJets+
         process.pfXTagInfos+
         process.nanoTable+
-        process.nanoSequenceMC+
+        process.nanoSequenceMC
+        #process.llpLabels
     )
     
 process.endjob_step = cms.EndPath(process.endOfProcess)
