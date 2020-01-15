@@ -17,10 +17,6 @@ namespace llpdnnx {
                          std::size_t jet_n,
                          const llpdnnx::XTagFeatures& features);
 
-  void jet4vec_tensor_filler(tensorflow::Tensor& tensor,
-                             std::size_t jet_n,
-                             const llpdnnx::XTagFeatures& features);
-
   void cpf_tensor_filler(tensorflow::Tensor& tensor,
                           std::size_t jet_n,
                           std::size_t cpf_n,

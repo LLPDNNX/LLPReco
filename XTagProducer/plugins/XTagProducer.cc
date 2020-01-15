@@ -47,7 +47,7 @@ XTagProducer::XTagProducer(const edm::ParameterSet& iConfig)
 
     std::vector<double> _ctau_values = iConfig.getParameter<std::vector<double>>("ctau_values");
     std::vector<std::string> _ctau_descriptors = iConfig.getParameter<std::vector<std::string>>("ctau_descriptors");
-     for (unsigned int i; i < _ctau_values.size(); i++){
+     for (unsigned int i = 0; i < _ctau_values.size(); i++){
          _ctau_pairs.emplace_back(std::pair(_ctau_descriptors.at(i), _ctau_values.at(i) ));
      }
     tensorflow::setLogging("3");
@@ -84,7 +84,7 @@ XTagProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     // initialize output collection
     std::vector<std::unique_ptr<reco::JetTagCollection>> output_tags;
-    for (unsigned int ictau; ictau < _ctau_pairs.size(); ictau++){
+    for (unsigned int ictau = 0; ictau < _ctau_pairs.size(); ictau++){
         if (!tag_infos->empty()) {
           auto jet_ref = tag_infos->begin()->jet();
           output_tags.emplace_back(std::make_unique<reco::JetTagCollection>(edm::makeRefToBaseProdFrom(jet_ref, iEvent)));
@@ -181,7 +181,7 @@ XTagProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
     */
 
-    for (unsigned int ictau; ictau < _ctau_pairs.size(); ictau++){
+    for (unsigned int ictau = 0; ictau < _ctau_pairs.size(); ictau++){
         double ctau = _ctau_pairs.at(ictau).second;
         for (unsigned int itag = 0; itag < ntags; itag++) {
              float *ptr = &(_input_tensors.at(4).second).matrix<float>()(itag, 0);

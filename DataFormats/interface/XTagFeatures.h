@@ -19,8 +19,7 @@ class XTagFeatures {
     std::vector<NeutralCandidateFeatures> npf_features;
     std::vector<ChargedCandidateFeatures> cpf_features;
     std::size_t npv; // used by deep flavour
-};    
-
+};
 
 }  
 
