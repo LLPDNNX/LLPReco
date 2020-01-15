@@ -1,5 +1,6 @@
 # LLPReco
-On-the-fly LLPDNNX tagger evaluation in miniAOD
+* On-the-fly LLPDNNX tagger evaluation in miniAOD
+* Production of extended nanoAOD ntuples for analysis and training
 
 ## Checkout instructions
 
@@ -12,7 +13,12 @@ git clone https://github.com/LLPDNNX/LLPReco.git LLPReco
 scram b
 ```
 
-Example configuration file
+Configuration file for full Run 2 extended nanoAOD ntuple production
+```
+cmsRun LLPReco/NANOProducer/test/produceNANO.py 
+```
+
+Example configuration file to run the tagger evaluation
 ```
 cmsRun LLPReco/XTagInfoProducer/test/testXTag.py 
 ```

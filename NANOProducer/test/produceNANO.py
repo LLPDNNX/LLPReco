@@ -228,7 +228,8 @@ process.pfXTags = cms.EDProducer("XTagProducer",
 )
 
 process.nanoTable = cms.EDProducer("NANOProducer",
-    src = cms.InputTag("pfXTagInfos")
+    srcTags = cms.InputTag("pfXTagInfos"),
+    srcLabels = cms.InputTag("llpLabels")
 )
 
 process.options = cms.untracked.PSet(
@@ -257,10 +258,56 @@ for moduleName in [
 
 process.load('LLPReco.LLPLabelProducer.GenDisplacedVertices_cff')
 
-process.llpLabels = cms.EDProducer("LLPLabelProducer",
-    srcVertices = cms.InputTag("displacedGenVertices"),
-    srcJets = cms.InputTag("slimmedJets")
+process.llpGenDecayInfo = cms.EDProducer(
+    "LLPGenDecayInfoProducer",
+    src = cms.InputTag("genParticlesMerged"),
+    decays = cms.PSet(
+        #hnl -> qql
+        hnl = cms.PSet(
+            llpId = cms.int32(9990012),
+            daughterIds = cms.vint32([1,2,3,4,5,11,13])
+        ),
+        #gluino -> qq chi0
+        split = cms.PSet(
+            llpId = cms.int32(1000021),
+            daughterIds = cms.vint32([1,2,3,4,5])
+        ),
+        #gluino -> g gravitino
+        gmsb = cms.PSet(
+            llpId = cms.int32(1000021),
+            daughterIds = cms.vint32([21])
+        ),
+        #stop -> bl
+        rpv = cms.PSet(
+            llpId = cms.int32(1000006),
+            daughterIds = cms.vint32([5,11,13])
+        ),
+        #H->SS->bbbb
+        hss = cms.PSet(
+            llpId = cms.int32(9000006),
+            daughterIds = cms.vint32([5])
+        ),
+    )
 )
+
+process.llpFlavour = cms.EDProducer(
+    "LLPGhostFlavourProducer",
+    srcJets = cms.InputTag("slimmedJets"),
+    srcDecayInfo = cms.InputTag("llpGenDecayInfo"),
+    jetAlgorithm = cms.string("AntiKt"),
+    rParam = cms.double(0.4),
+    ghostRescaling = cms.double(1e-18),
+    relPtTolerance = cms.double(1e-3)
+)
+
+process.llpLabels = cms.EDProducer(
+    "LLPLabelProducer",
+    srcVertices = cms.InputTag("displacedGenVertices"),
+    srcJets = cms.InputTag("slimmedJets"),
+    srcFlavourInfo = cms.InputTag("llpFlavour")
+)
+
+
 
 
 if options.isData:
@@ -276,9 +323,12 @@ else:
         process.patJetCorrFactors+
         process.updatedPatJets+
         process.pfXTagInfos+
+        process.displacedGenVertexSequence+
+        process.llpGenDecayInfo+
+        process.llpFlavour+
+        process.llpLabels+
         process.nanoTable+
         process.nanoSequenceMC
-        #process.llpLabels
     )
     
 process.endjob_step = cms.EndPath(process.endOfProcess)
