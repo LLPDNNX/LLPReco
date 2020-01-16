@@ -289,12 +289,6 @@ process.pfDeepFlavourTagInfos = cms.EDProducer("DeepFlavourTagInfoProducer",
     shallow_tag_infos = cms.InputTag("pfDeepCSVTagInfos"),
     vertex_associator = cms.InputTag("primaryVertexAssociation","original"),
     vertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    muonSrc  = cms.InputTag("slimmedMuons"),
-    electronSrc = cms.InputTag("slimmedElectrons"), 
-    electronsVeto  = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-veto"),
-    electronsLoose = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-loose"),
-    electronsMedium= cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-medium"),
-    electronsTight = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Summer16-80X-V1-tight")
 )
 
 process.XTagInfo  = cms.EDAnalyzer('XTagInfo',
