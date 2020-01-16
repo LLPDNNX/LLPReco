@@ -326,7 +326,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
               const pat::Muon& muon = muons->at(imuon);
               if(muon.isGlobalMuon() == 0) continue ; 
-              if( abs(muon.eta() - constituent->eta()) < 0.01 &&  abs(muon.phi() - constituent->phi()) < 0.01 )	{
+              if( abs(muon.eta() - constituent->eta()) < 0.01 &&  abs(reco::deltaPhi(*constituent,muon) ) < 0.01 )	{
 	  
 
                  mu_features.mu_isGlobal = muon.isGlobalMuon() ;                                   
@@ -367,7 +367,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         	 mu_features.mu_numberOfstripLayersWithMeasurement = muon.bestTrack()->hitPattern().stripLayersWithMeasurement() ;
 
 
-	         mu_features.mu_chi2 = muon.bestTrack()->normalizedChi2() ;  
+	         mu_features.mu_chi2 = muon.bestTrack()->chi2() ;  
 		 mu_features.mu_ndof = muon.bestTrack()->ndof() ;
 
 // Isolation Block :
@@ -409,7 +409,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          const pat::Electron& electron = electrons->at(ielectron);
 
     
-         if( abs(electron.eta() - constituent->eta()) < 0.01 && abs(electron.phi() - constituent->phi()) < 0.01 ){
+         if( abs(constituent->eta() - electron.eta()) < 0.01 && abs(reco::deltaPhi(*constituent,electron) ) < 0.01 ){
 
 
          elec_features.elec_pt = electron.pt() ;
