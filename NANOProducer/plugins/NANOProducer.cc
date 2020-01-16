@@ -201,11 +201,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 
-    std::vector<bool>  mu_isGlobal ; 
-    std::vector<bool>  mu_isTight ; 
-    std::vector<bool>  mu_isMedium ; 
-    std::vector<bool>  mu_isLoose ; 
-    std::vector<bool>  mu_isStandAlone ;
+    std::vector<int>  mu_isGlobal ; 
+    std::vector<int>  mu_isTight ; 
+    std::vector<int>  mu_isMedium ; 
+    std::vector<int>  mu_isLoose ; 
+    std::vector<int>  mu_isStandAlone ;
 
     std::vector<float> mu_pt ;
     std::vector<float> mu_p ;
@@ -517,8 +517,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
  
     }
 
-    auto muonTable = std::make_unique<nanoaod::FlatTable>(ntags, "muon", false, false);
-    auto electronTable = std::make_unique<nanoaod::FlatTable>(ntags, "electron", false, false);
+    auto muonTable = std::make_unique<nanoaod::FlatTable>(nmu_total, "muon", false, false);
+    auto electronTable = std::make_unique<nanoaod::FlatTable>(nelec_total, "electron", false, false);
     auto cpfTable = std::make_unique<nanoaod::FlatTable>(ncpf_total, "cpf", false, false);
     auto npfTable = std::make_unique<nanoaod::FlatTable>(nnpf_total, "npf", false, false);
     auto svTable = std::make_unique<nanoaod::FlatTable>(nsv_total, "sv", false, false);
@@ -879,11 +879,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<float>("betagamma", betagamma, "doc", nanoaod::FlatTable::FloatColumn);
      
 
-     muonTable->addColumn<bool>("isGlobal",mu_isGlobal,"doc",nanoaod::FlatTable::BoolColumn); 
-     muonTable->addColumn<bool>("isTight",mu_isTight,"doc",nanoaod::FlatTable::BoolColumn); 
-     muonTable->addColumn<bool>("isMedium",mu_isMedium,"doc",nanoaod::FlatTable::BoolColumn); 
-     muonTable->addColumn<bool>("isLoose",mu_isLoose,"doc",nanoaod::FlatTable::BoolColumn); 
-     muonTable->addColumn<bool>("isStandAlone",mu_isStandAlone,"doc", nanoaod::FlatTable::BoolColumn);
+     muonTable->addColumn<int>("isGlobal",mu_isGlobal,"doc",nanoaod::FlatTable::IntColumn); 
+     muonTable->addColumn<int>("isTight",mu_isTight,"doc",nanoaod::FlatTable::IntColumn); 
+     muonTable->addColumn<int>("isMedium",mu_isMedium,"doc",nanoaod::FlatTable::IntColumn); 
+     muonTable->addColumn<int>("isLoose",mu_isLoose,"doc",nanoaod::FlatTable::IntColumn); 
+     muonTable->addColumn<int>("isStandAlone",mu_isStandAlone,"doc", nanoaod::FlatTable::IntColumn);
 
      muonTable->addColumn<float>("pt",mu_pt,"doc",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("p",mu_p,"doc",nanoaod::FlatTable::FloatColumn);
@@ -894,7 +894,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      muonTable->addColumn<float>("phi",mu_phi,"doc",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("charge",mu_charge,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("energy",mu_energy,"doc",nanoaod::FlatTable::FloatColumn);
-     muonTable->addColumn<float>("et",mu_et,"doc",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("jetDeltaR",mu_jetDeltaR,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("numberOfMatchedStations",mu_numberOfMatchedStations,"doc",nanoaod::FlatTable::FloatColumn);
   
