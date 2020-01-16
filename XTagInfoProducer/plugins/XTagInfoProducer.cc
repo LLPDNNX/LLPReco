@@ -56,6 +56,7 @@ Implementation:
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 
+#include "LLPReco/XTagInfoProducer/interface/JetSubstructure.h"
 
 #include "TVector3.h"
 
@@ -152,9 +153,27 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.jet_features.eta = jet.eta();
         features.jet_features.mass = jet.mass();
         features.jet_features.energy = jet.energy();
-
+        
         features.npv = vtxs->size();
-
+        
+        llpdnnx::JetSubstructure jetSubstructure(jet);
+        features.jet_features.tau1 = jetSubstructure.nSubjettiness(1);
+        features.jet_features.tau2 = jetSubstructure.nSubjettiness(2);
+        features.jet_features.tau3 = jetSubstructure.nSubjettiness(3);
+        
+        features.jet_features.massDropMassAK = jetSubstructure.massDropMass(llpdnnx::JetSubstructure::ClusterType::AK);
+        features.jet_features.massDropMassCA = jetSubstructure.massDropMass(llpdnnx::JetSubstructure::ClusterType::CA);
+        features.jet_features.softDropMassAK = jetSubstructure.softDropMass(llpdnnx::JetSubstructure::ClusterType::AK);
+        features.jet_features.softDropMassCA = jetSubstructure.softDropMass(llpdnnx::JetSubstructure::ClusterType::CA);
+        
+        auto eventShapes = jetSubstructure.eventShapeVariables();
+        features.jet_features.thrust = jetSubstructure.thrust();
+        features.jet_features.sphericity = eventShapes.sphericity();
+        features.jet_features.circularity = eventShapes.circularity();
+        features.jet_features.isotropy = eventShapes.isotropy();
+        features.jet_features.eventShapeC = eventShapes.C();
+        features.jet_features.eventShapeD = eventShapes.D();
+        
         // Add CSV variables
         const edm::View<reco::ShallowTagInfo>& taginfos = *shallow_tag_infos;
         edm::Ptr<reco::ShallowTagInfo> match;
