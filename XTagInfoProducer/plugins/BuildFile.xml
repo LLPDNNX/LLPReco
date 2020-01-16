@@ -10,7 +10,7 @@
 <use   name="RecoBTag/FeatureTools"/>
 <use   name="RecoBTag/TrackProbability"/>
 <use   name="TrackingTools/IPTools"/>
-
-<export>
-  <lib   name="1"/>
-</export>
+<use   name="LLPReco/XTagInfoProducer"/>
+<library file="XTagInfoProducer.cc" name="XTagInfoProducerPlugin">
+  <flags EDM_PLUGIN="1"/>
+</library>
