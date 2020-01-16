@@ -232,7 +232,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> mu_absdzError ; 
     std::vector<float> mu_numberOfValidPixelHits; 
     std::vector<float> mu_numberOfpixelLayersWithMeasurement ; 
-    std::vector<float> mu_numberOfstripLayersWithMeasurement ; 
+    //std::vector<float> mu_numberOfstripLayersWithMeasurement ; 
 
     std::vector<float> mu_chi2 ; 
     std::vector<float> mu_ndof ; 
@@ -256,10 +256,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> mu_pileup ; 
     std::vector<float> mu_sumPhotonEt ; 
   
-    std::vector<float> mu_sumChHadronPt03 ; 
-    std::vector<float> mu_sumNeuHadronEt03 ; 
-    std::vector<float> mu_pileup03 ; 
-    std::vector<float> mu_sumPhotonEt03 ; 
+    //std::vector<float> mu_sumChHadronPt03 ; 
+    //std::vector<float> mu_sumNeuHadronEt03 ; 
+    //std::vector<float> mu_pileup03 ; 
+    //std::vector<float> mu_sumPhotonEt03 ; 
 
 // Electron Block 
   
@@ -890,7 +890,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      muonTable->addColumn<float>("jetPtRel",mu_jetPtRel,"doc",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("EtaRel",mu_EtaRel,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("jetPtRel2",mu_jetPtRel2,"doc",nanoaod::FlatTable::FloatColumn); 
-     muonTable->addColumn<float>("et",mu_et,"doc",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("phi",mu_phi,"doc",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("charge",mu_charge,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("energy",mu_energy,"doc",nanoaod::FlatTable::FloatColumn);
@@ -909,7 +908,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      muonTable->addColumn<float>("absdzError",mu_absdzError,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("numberOfValidPixelHits",mu_numberOfValidPixelHits,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("numberOfpixelLayersWithMeasurement",mu_numberOfpixelLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn); 
-     muonTable->addColumn<float>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn); 
+     //muonTable->addColumn<float>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn); 
 
      muonTable->addColumn<float>("chi2",mu_chi2,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("ndof",mu_ndof,"doc",nanoaod::FlatTable::FloatColumn); 
@@ -933,10 +932,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      muonTable->addColumn<float>("pileup",mu_pileup,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("sumPhotonEt",mu_sumPhotonEt,"doc",nanoaod::FlatTable::FloatColumn); 
   
-     muonTable->addColumn<float>("sumChHadronPt03",mu_sumChHadronPt03,"doc",nanoaod::FlatTable::FloatColumn); 
-     muonTable->addColumn<float>("sumNeuHadronEt03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn); 
-     muonTable->addColumn<float>("pileup03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn); 
-     muonTable->addColumn<float>("sumPhotonEt03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn);
+     //muonTable->addColumn<float>("sumChHadronPt03",mu_sumChHadronPt03,"doc",nanoaod::FlatTable::FloatColumn); 
+     //muonTable->addColumn<float>("sumNeuHadronEt03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn); 
+     //muonTable->addColumn<float>("pileup03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn); 
+     //muonTable->addColumn<float>("sumPhotonEt03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn);
 
 // Electron block : 
 

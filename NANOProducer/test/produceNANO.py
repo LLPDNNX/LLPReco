@@ -220,7 +220,6 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     jets = cms.InputTag("updatedPatJets"),
     muonSrc  = cms.InputTag("slimmedMuons"),
     electronSrc = cms.InputTag("slimmedElectrons"),
-
     shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfos'),
     vertices = cms.InputTag('offlineSlimmedPrimaryVertices'),
     secondary_vertices = cms.InputTag("slimmedSecondaryVertices")
