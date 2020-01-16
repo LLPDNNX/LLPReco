@@ -14,14 +14,11 @@ namespace {
         edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::XTagFeatures>>> dummy1;
         reco::FeaturesTagInfo<llpdnnx::XTagFeatures> dummy2;
         edm::Wrapper<reco::FeaturesTagInfo<llpdnnx::XTagFeatures>> dummy3;
-
-
         llpdnnx::XTagFeatures dummy4;
         llpdnnx::JetFeatures dummy5;
         llpdnnx::SecondaryVertexFeatures dummy6;
         llpdnnx::ChargedCandidateFeatures dummy7;
         llpdnnx::NeutralCandidateFeatures dummy8;
-        
 
         llpdnnx::DisplacedGenVertexCollection dummy9;
         edm::Wrapper<llpdnnx::DisplacedGenVertexCollection> dummy10;
@@ -52,6 +49,9 @@ namespace {
         edm::Wrapper<std::vector<llpdnnx::LLPGhostFlavourInfo>> dummy28;
         edm::ValueMap<llpdnnx::LLPGhostFlavourInfo> dummy29;
         edm::Wrapper<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>> dummy30;
+
+        llpdnnx::ElectronCandidateFeatures dummy31;
+        llpdnnx::MuonCandidateFeatures dummy32;
 
     };
 
