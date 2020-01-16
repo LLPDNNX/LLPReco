@@ -8,6 +8,7 @@ class ShallowTagInfoFeatures {
   public:
 
     // jet general
+    int csv_jetIdx;
     float csv_trackSumJetEtRatio;      // ratio of track sum transverse energy over jet energy
     float csv_trackSumJetDeltaR;       // pseudoangular distance between jet axis and track fourvector sum
     float csv_vertexCategory;          // category of secondary vertex (Reco, Pseudo, No)

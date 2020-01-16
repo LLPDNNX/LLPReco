@@ -7,6 +7,7 @@ class JetFeatures {
 
   public:
 
+    int jetIdx;
     float pt;
     float eta;
     float mass;

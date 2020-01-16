@@ -8,6 +8,7 @@ class ElectronCandidateFeatures {
 
   public:
 
+  int elec_jetIdx;
   float elec_pt ;
   float elec_jetPtRatio ;
   float elec_jetDeltaR ; 
