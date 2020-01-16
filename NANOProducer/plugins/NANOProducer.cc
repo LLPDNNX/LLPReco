@@ -232,9 +232,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    std::vector<float> elecSC_phi ;
    std::vector<float> elecSC_et ;
    std::vector<float> elecSC_eSuperClusterOverP ; 
-   std::vector<float> elec_scE1x5 ; 
-   std::vector<float> elec_scE2x5Max ; 
+   std::vector<float> elec_scE1x5Overe5x5 ; 
+   std::vector<float> elec_scE2x5MaxOvere5x5 ; 
    std::vector<float> elec_scE5x5 ; 
+   std::vector<float> elec_scE5x5Rel ; 
    std::vector<float> elec_scPixCharge ; 
    std::vector<float> elec_scSigmaEtaEta ;
    std::vector<float> elec_scSigmaIEtaIEta ;  
@@ -247,7 +248,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    std::vector<float> elec_eSeedClusterOverP ;
    std::vector<float> elec_eSeedClusterOverPout;
    std::vector<float> elec_eSuperClusterOverP;
-   std::vector<float> elec_eTop; 
+   std::vector<float> elec_eTopOvere5x5; 
  
    std::vector<float> elec_deltaEtaEleClusterTrackAtCalo ; 
    std::vector<float> elec_deltaEtaSeedClusterTrackAtCalo ;
@@ -264,18 +265,24 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    std::vector<float> elec_nbOfMissingHits ; 
    std::vector<float> elec_gsfCharge ;
 
+   std::vector<float> elec_e2x5MaxOvere5x5 ; 
+   std::vector<float> elec_e1x5Overe5x5 ; 
+   std::vector<float> elec_e5x5 ;
+   std::vector<float> elec_e5x5Rel ;
    std::vector<float> elec_full5x5_sigmaIetaIeta ;
-   std::vector<float> elec_full5x5_e1x5 ;
-   std::vector<float> elec_full5x5_e2x5Bottom ;
-   std::vector<float> elec_full5x5_e2x5Left ;
-   std::vector<float> elec_full5x5_e2x5Max ;
-   std::vector<float> elec_full5x5_e2x5Right ;
-   std::vector<float> elec_full5x5_e2x5Top ;
+   std::vector<float> elec_full5x5_e1x5Overe5x5 ;
+   std::vector<float> elec_full5x5_e2x5BottomOvere5x5 ;
+   std::vector<float> elec_full5x5_e2x5LeftOvere5x5 ;
+   std::vector<float> elec_full5x5_e2x5MaxOvere5x5 ;
+   std::vector<float> elec_full5x5_e2x5RightOvere5x5 ;
+   std::vector<float> elec_full5x5_e2x5TopOvere5x5 ;
    std::vector<float> elec_full5x5_e5x5 ;
-   std::vector<float> elec_full5x5_eBottom ;
-   std::vector<float> elec_full5x5_eLeft;
-   std::vector<float> elec_full5x5_eRight;
-   std::vector<float> elec_full5x5_eTop;
+   std::vector<float> elec_full5x5_e5x5Rel ;
+   std::vector<float> elec_full5x5_eBottomOvere5x5 ;
+   std::vector<float> elec_full5x5_eLeftOvere5x5;
+   std::vector<float> elec_full5x5_eRightOvere5x5;
+   std::vector<float> elec_full5x5_eTopOvere5x5;
+
    std::vector<float> elec_full5x5_hcalDepth1OverEcal ;
    std::vector<float> elec_full5x5_hcalDepth1OverEcalBc ;
    std::vector<float> elec_full5x5_hcalDepth2OverEcal;
@@ -286,9 +293,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    std::vector<int> elec_numberOfBrems ; 
    std::vector<float> elec_trackFbrem ; 
    std::vector<float> elec_fbrem ; 
-   std::vector<float> elec_e2x5Max ; 
-   std::vector<float> elec_e1x5 ; 
-   std::vector<float> elec_e5x5 ;
    std::vector<float> elec_neutralHadronIso; 
    std::vector<float> elec_particleIso  ; 
    std::vector<float> elec_photonIso ;
@@ -516,10 +520,13 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      elecSC_eta.push_back(elec_features.elecSC_eta ); 
      elecSC_phi.push_back(elec_features.elecSC_phi );
      elecSC_et.push_back(elec_features.elecSC_et );
-     elecSC_eSuperClusterOverP.push_back(elec_features.elecSC_eSuperClusterOverP ); 
-     elec_scE1x5.push_back(elec_features.elec_scE1x5 ); 
-     elec_scE2x5Max.push_back(elec_features.elec_scE2x5Max ); 
+     elecSC_eSuperClusterOverP.push_back(elec_features.elecSC_eSuperClusterOverP );
+ 
+     elec_scE1x5Overe5x5.push_back(elec_features.elec_scE1x5Overe5x5 ); 
+     elec_scE2x5MaxOvere5x5.push_back(elec_features.elec_scE2x5MaxOvere5x5 ); 
      elec_scE5x5.push_back(elec_features.elec_scE5x5 ); 
+     elec_scE5x5Rel.push_back(elec_features.elec_scE5x5Rel ); 
+
      elec_scPixCharge.push_back(elec_features.elec_scPixCharge ); 
      elec_scSigmaEtaEta.push_back(elec_features.elec_scSigmaEtaEta );
      elec_scSigmaIEtaIEta.push_back(elec_features.elec_scSigmaIEtaIEta );  
@@ -532,7 +539,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      elec_eSeedClusterOverP.push_back(elec_features.elec_eSeedClusterOverP );
      elec_eSeedClusterOverPout.push_back(elec_features.elec_eSeedClusterOverPout );
      elec_eSuperClusterOverP.push_back(elec_features.elec_eSuperClusterOverP );
-     elec_eTop.push_back(elec_features.elec_eTop ); 
+     elec_eTopOvere5x5.push_back(elec_features.elec_eTopOvere5x5 ); 
  
      elec_deltaEtaEleClusterTrackAtCalo.push_back(elec_features.elec_deltaEtaEleClusterTrackAtCalo ); 
      elec_deltaEtaSeedClusterTrackAtCalo.push_back(elec_features.elec_deltaEtaSeedClusterTrackAtCalo );
@@ -551,18 +558,19 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     elec_gsfCharge.push_back(elec_features.elec_gsfCharge );
 
     elec_full5x5_sigmaIetaIeta.push_back(elec_features.elec_full5x5_sigmaIetaIeta );
-    elec_full5x5_e1x5.push_back(elec_features.elec_full5x5_e1x5 );
-    elec_full5x5_e2x5Bottom.push_back(elec_features.elec_full5x5_e2x5Bottom );
-    elec_full5x5_e2x5Left.push_back(elec_features.elec_full5x5_e2x5Left );
-    elec_full5x5_e2x5Max.push_back(elec_features.elec_full5x5_e2x5Max );
-    elec_full5x5_e2x5Right.push_back(elec_features.elec_full5x5_e2x5Right );
-    elec_full5x5_e2x5Top.push_back(elec_features.elec_full5x5_e2x5Top );
+    elec_full5x5_e1x5Overe5x5.push_back(elec_features.elec_full5x5_e1x5Overe5x5 );
+    elec_full5x5_e2x5BottomOvere5x5.push_back(elec_features.elec_full5x5_e2x5BottomOvere5x5 );
+    elec_full5x5_e2x5LeftOvere5x5.push_back(elec_features.elec_full5x5_e2x5LeftOvere5x5 );
+    elec_full5x5_e2x5MaxOvere5x5.push_back(elec_features.elec_full5x5_e2x5MaxOvere5x5 );
+    elec_full5x5_e2x5RightOvere5x5.push_back(elec_features.elec_full5x5_e2x5RightOvere5x5 );
+    elec_full5x5_e2x5TopOvere5x5.push_back(elec_features.elec_full5x5_e2x5TopOvere5x5 );
     elec_full5x5_e5x5.push_back(elec_features.elec_full5x5_e5x5 );
+    elec_full5x5_e5x5Rel.push_back(elec_features.elec_full5x5_e5x5Rel );
 
-    elec_full5x5_eBottom.push_back(elec_features.elec_full5x5_eBottom );
-    elec_full5x5_eLeft.push_back(elec_features.elec_full5x5_eLeft );
-    elec_full5x5_eRight.push_back(elec_features.elec_full5x5_eRight );
-    elec_full5x5_eTop.push_back(elec_features.elec_full5x5_eTop );
+    elec_full5x5_eBottomOvere5x5.push_back(elec_features.elec_full5x5_eBottomOvere5x5 );
+    elec_full5x5_eLeftOvere5x5.push_back(elec_features.elec_full5x5_eLeftOvere5x5 );
+    elec_full5x5_eRightOvere5x5.push_back(elec_features.elec_full5x5_eRightOvere5x5 );
+    elec_full5x5_eTopOvere5x5.push_back(elec_features.elec_full5x5_eTopOvere5x5 );
     elec_full5x5_hcalDepth1OverEcal.push_back(elec_features.elec_full5x5_hcalDepth1OverEcal );
     elec_full5x5_hcalDepth1OverEcalBc.push_back(elec_features.elec_full5x5_hcalDepth1OverEcalBc );
     elec_full5x5_hcalDepth2OverEcal.push_back(elec_features.elec_full5x5_hcalDepth2OverEcal );
@@ -573,9 +581,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     elec_numberOfBrems.push_back(elec_features.elec_numberOfBrems ); 
     elec_trackFbrem.push_back(elec_features.elec_trackFbrem ); 
     elec_fbrem.push_back(elec_features.elec_fbrem ); 
-    elec_e2x5Max.push_back(elec_features.elec_e2x5Max ); 
-    elec_e1x5.push_back(elec_features.elec_e1x5 ); 
+    elec_e2x5MaxOvere5x5.push_back(elec_features.elec_e2x5MaxOvere5x5 ); 
+    elec_e1x5Overe5x5.push_back(elec_features.elec_e1x5Overe5x5 ); 
     elec_e5x5.push_back(elec_features.elec_e5x5 );
+    elec_e5x5Rel.push_back(elec_features.elec_e5x5Rel );
     elec_neutralHadronIso.push_back(elec_features.elec_neutralHadronIso ); 
     elec_particleIso .push_back(elec_features.elec_particleIso ); 
     elec_photonIso.push_back(elec_features.elec_photonIso );
@@ -756,9 +765,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       electronTable->addColumn<float>("SC_phi",elecSC_phi,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("SC_et",elecSC_et,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("SC_eSuperClusterOverP",elecSC_eSuperClusterOverP,"doc",nanoaod::FlatTable::FloatColumn); 
-      electronTable->addColumn<float>("scE1x5",elec_scE1x5,"doc",nanoaod::FlatTable::FloatColumn); 
-      electronTable->addColumn<float>("scE2x5Max",elec_scE2x5Max,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("scE1x5Overe5x5",elec_scE1x5Overe5x5,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("scE2x5MaxOvere5x5",elec_scE2x5MaxOvere5x5,"doc",nanoaod::FlatTable::FloatColumn); 
       electronTable->addColumn<float>("scE5x5",elec_scE5x5,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("scE5x5Rel",elec_scE5x5Rel,"doc",nanoaod::FlatTable::FloatColumn); 
       electronTable->addColumn<float>("scPixCharge",elec_scPixCharge,"doc",nanoaod::FlatTable::FloatColumn); 
       electronTable->addColumn<float>("scSigmaEtaEta",elec_scSigmaEtaEta,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("scSigmaIEtaIEta",elec_scSigmaIEtaIEta,"doc",nanoaod::FlatTable::FloatColumn);  
@@ -771,7 +781,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       electronTable->addColumn<float>("eSeedClusterOverP",elec_eSeedClusterOverP,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("eSeedClusterOverPout",elec_eSeedClusterOverPout,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("eSuperClusterOverP",elec_eSuperClusterOverP,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("eTop",elec_eTop,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("eTopOvere5x5",elec_eTopOvere5x5,"doc",nanoaod::FlatTable::FloatColumn); 
  
       electronTable->addColumn<float>("deltaEtaEleClusterTrackAtCalo",elec_deltaEtaEleClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn); 
       electronTable->addColumn<float>("deltaEtaSeedClusterTrackAtCalo",elec_deltaEtaSeedClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
@@ -788,18 +798,27 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       electronTable->addColumn<float>("nbOfMissingHits",elec_nbOfMissingHits,"doc",nanoaod::FlatTable::FloatColumn); 
       electronTable->addColumn<float>("gsfCharge",elec_gsfCharge,"doc",nanoaod::FlatTable::FloatColumn);
 
+      electronTable->addColumn<int>("numberOfBrems",elec_numberOfBrems,"doc",nanoaod::FlatTable::IntColumn); 
+      electronTable->addColumn<float>("trackFbrem",elec_trackFbrem,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("fbrem",elec_fbrem,"doc",nanoaod::FlatTable::FloatColumn); 
+
+      electronTable->addColumn<float>("e5x5",elec_e5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("e5x5Rel",elec_e5x5Rel,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("e2x5MaxOvere5x5",elec_e2x5MaxOvere5x5,"doc",nanoaod::FlatTable::FloatColumn); 
+      electronTable->addColumn<float>("e1x5Overe5x5",elec_e1x5Overe5x5,"doc",nanoaod::FlatTable::FloatColumn); 
       electronTable->addColumn<float>("full5x5_sigmaIetaIeta",elec_full5x5_sigmaIetaIeta,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_e1x5",elec_full5x5_e1x5,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_e2x5Bottom",elec_full5x5_e2x5Bottom,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_e2x5Left",elec_full5x5_e2x5Left,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_e2x5Max",elec_full5x5_e2x5Max,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_e2x5Right",elec_full5x5_e2x5Right,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_e2x5Top",elec_full5x5_e2x5Top,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e1x5Overe5x5",elec_full5x5_e1x5Overe5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5BottomOvere5x5",elec_full5x5_e2x5BottomOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5LeftOvere5x5",elec_full5x5_e2x5LeftOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5MaxOvere5x5",elec_full5x5_e2x5MaxOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5RightOvere5x5",elec_full5x5_e2x5RightOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e2x5TopOvere5x5",elec_full5x5_e2x5TopOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("full5x5_e5x5",elec_full5x5_e5x5,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_eBottom",elec_full5x5_eBottom,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_eLeft",elec_full5x5_eLeft,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_eRight",elec_full5x5_eRight,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("full5x5_eTop",elec_full5x5_eTop,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_e5x5Rel",elec_full5x5_e5x5Rel,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_eBottomOvere5x5",elec_full5x5_eBottomOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_eLeftOvere5x5",elec_full5x5_eLeftOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_eRightOvere5x5",elec_full5x5_eRightOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
+      electronTable->addColumn<float>("full5x5_eTopOvere5x5",elec_full5x5_eTopOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("full5x5_hcalDepth1OverEcal",elec_full5x5_hcalDepth1OverEcal,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("full5x5_hcalDepth1OverEcalBc",elec_full5x5_hcalDepth1OverEcalBc,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("full5x5_hcalDepth2OverEcal",elec_full5x5_hcalDepth2OverEcal,"doc",nanoaod::FlatTable::FloatColumn);
@@ -807,15 +826,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
       electronTable->addColumn<float>("full5x5_hcalOverEcal",elec_full5x5_hcalOverEcal,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("full5x5_hcalOverEcalBc",elec_full5x5_hcalOverEcalBc,"doc",nanoaod::FlatTable::FloatColumn);   
       electronTable->addColumn<float>("full5x5_r9",elec_full5x5_r9,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<int>("numberOfBrems",elec_numberOfBrems,"doc",nanoaod::FlatTable::IntColumn); 
-      electronTable->addColumn<float>("trackFbrem",elec_trackFbrem,"doc",nanoaod::FlatTable::FloatColumn); 
-      electronTable->addColumn<float>("fbrem",elec_fbrem,"doc",nanoaod::FlatTable::FloatColumn); 
-      electronTable->addColumn<float>("e2x5Max",elec_e2x5Max,"doc",nanoaod::FlatTable::FloatColumn); 
-      electronTable->addColumn<float>("e1x5",elec_e1x5,"doc",nanoaod::FlatTable::FloatColumn); 
-      electronTable->addColumn<float>("e5x5",elec_e5x5,"doc",nanoaod::FlatTable::FloatColumn);
-      electronTable->addColumn<float>("neutralHadronIso",elec_neutralHadronIso,"doc",nanoaod::FlatTable::FloatColumn); 
 
-
+      electronTable->addColumn<float>("neutralHadronIso",elec_neutralHadronIso,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("particleIso",elec_particleIso,"doc",nanoaod::FlatTable::FloatColumn); 
       electronTable->addColumn<float>("photonIso",elec_photonIso,"doc",nanoaod::FlatTable::FloatColumn);
       electronTable->addColumn<float>("puChargedHadronIso",elec_puChargedHadronIso,"doc",nanoaod::FlatTable::FloatColumn); 

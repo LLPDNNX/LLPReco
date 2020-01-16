@@ -213,6 +213,9 @@ process.updatedPatJets.addTagInfos = cms.bool(True)
 
 process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     jets = cms.InputTag("updatedPatJets"),
+    muonSrc  = cms.InputTag("slimmedMuons"),
+    electronSrc = cms.InputTag("slimmedElectrons"),
+
     shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfos'),
     vertices = cms.InputTag('offlineSlimmedPrimaryVertices'),
     secondary_vertices = cms.InputTag("slimmedSecondaryVertices")
@@ -285,7 +288,7 @@ else:
         process.updatedPatJets+
         process.pfXTagInfos+
         process.nanoTable+
-        process.nanoSequenceMC+
+        process.nanoSequenceMC
     )
     
 process.endjob_step = cms.EndPath(process.endOfProcess)
