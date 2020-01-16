@@ -21,6 +21,12 @@ Implementation:
 
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
+//========= NEW ==============
+#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/PatCandidates/interface/Electron.h"
+#include "RecoEgamma/EgammaIsolationAlgos/interface/EgammaHcalIsolation.h"
+
+//============================
 
 #include "DataFormats/BTauReco/interface/ShallowTagInfo.h"
 
@@ -50,6 +56,7 @@ Implementation:
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 
+
 #include "TVector3.h"
 
 
@@ -72,14 +79,22 @@ private:
     edm::EDGetTokenT<edm::View<reco::Candidate>> candidateToken_;
     typedef std::vector<reco::XTagInfo> XTagInfoCollection;
 
+    edm::EDGetTokenT< pat::MuonCollection > muonsMiniAODToken_;
+    edm::EDGetTokenT< pat::ElectronCollection > electronsMiniAODToken_;
+
+
 };
 
 XTagInfoProducer::XTagInfoProducer(const edm::ParameterSet& iConfig) :
 jet_token_(consumes<edm::View<reco::Jet>>(iConfig.getParameter<edm::InputTag>("jets"))),
 vtx_token_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
 sv_token_(consumes<reco::VertexCompositePtrCandidateCollection>(iConfig.getParameter<edm::InputTag>("secondary_vertices"))),
-shallow_tag_info_token_(
-    consumes<edm::View<reco::ShallowTagInfo>>(iConfig.getParameter<edm::InputTag>("shallow_tag_infos")))
+shallow_tag_info_token_(consumes<edm::View<reco::ShallowTagInfo>>(iConfig.getParameter<edm::InputTag>("shallow_tag_infos"))),
+//===== NEW ======
+muonsMiniAODToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muonSrc"))),
+electronsMiniAODToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electronSrc")))
+
+//================
 {
     produces<XTagInfoCollection>();
 }
@@ -113,6 +128,17 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     edm::Handle<reco::VertexCompositePtrCandidateCollection> svs;
     iEvent.getByToken(sv_token_, svs);
 
+
+//============ NEW =========== 
+
+    edm::Handle< pat::MuonCollection > muons;
+    iEvent.getByToken(muonsMiniAODToken_, muons);
+
+    edm::Handle<pat::ElectronCollection > electrons;
+    iEvent.getByToken(electronsMiniAODToken_, electrons);
+
+//===========================
+
     for (std::size_t ijet = 0; ijet < jets->size(); ijet++) {
         // create data containing structure
         llpdnnx::XTagFeatures features;
@@ -140,7 +166,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         for (auto itTI = taginfos.begin(), edTI = taginfos.end(); itTI != edTI; ++itTI) {
             if (itTI->jet() == jet_ref) {
             match = taginfos.ptrAt(itTI - taginfos.begin());
-            break;
+            //break;
                 }
             }
         }
@@ -285,6 +311,253 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             //cpf_features.cpf_isLepton = pdgId==11 or pdgId==13;
         
             features.cpf_features.emplace_back(cpf_features);
+
+
+// Add your code for muons and electrons here. 
+//
+
+          
+              
+            for(std::size_t imuon = 0 ; imuon < muons->size(); imuon++){
+
+       //      if(jet.muonMultiplicity() == 0  ) continue ;
+ 
+              llpdnnx::MuonCandidateFeatures mu_features ; 
+
+              const pat::Muon& muon = muons->at(imuon);
+              if(muon.isGlobalMuon() == 0) continue ; 
+              if( abs(muon.eta() - constituent->eta()) < 0.01 &&  abs(reco::deltaPhi(*constituent,muon) ) < 0.01 )	{
+	  
+
+                 mu_features.mu_isGlobal = muon.isGlobalMuon() ;                                   
+        	 mu_features.mu_isTight = muon.isTightMuon(pv);                                     
+         	 mu_features.mu_isMedium = muon.isMediumMuon();       
+         	 mu_features.mu_isLoose = muon.isLooseMuon() ; 
+         	 mu_features.mu_isStandAlone = muon.isStandAloneMuon() ; 
+
+                 mu_features.mu_pt = std::log10(muon.pt());                                       
+         	 mu_features.mu_p = std::log10(muon.p());  
+                 mu_features.mu_jetPtRel = muon.pt()/jet.pt() ; 
+         	 mu_features.mu_jetPtRel2  = muon.jetPtRatio() ; 
+	         mu_features.mu_eta = muon.eta();                                                 
+        	 mu_features.mu_phi = muon.phi();                                                 
+	         mu_features.mu_charge = muon.charge();        
+        	 mu_features.mu_energy = muon.energy();                                           
+	         mu_features.mu_et = muon.et();   
+                 mu_features.mu_jetDeltaR = reco::deltaR(muon ,jet) ; 
+		 mu_features.mu_numberOfMatchedStations = muon.numberOfMatchedStations();
+
+		 mu_features.mu_2dIp = muon.dB() ; 
+		 mu_features.mu_2dIpSig = muon.dB()/muon.edB() ; 
+		 mu_features.mu_3dIp = muon.dB(pat::Muon::PV3D) ; 
+		 mu_features.mu_3dIpSig = muon.dB(pat::Muon::PV3D)/muon.edB(pat::Muon::PV3D) ;
+
+// BestTrack Info Block 
+ 
+                 reco::Candidate::Vector muonMom = muon.bestTrack()->momentum();
+
+                 mu_features.mu_EtaRel =reco::btau::etaRel(jetDir, muonMom);
+	         mu_features.mu_absdxy = muon.bestTrack()->dxy(pv.position());
+        	 mu_features.mu_absdxyError = fabs(muon.bestTrack()->dxyError()) ; 
+       		 mu_features.mu_absdxySig = muon.bestTrack()->dxy(pv.position())/fabs(muon.bestTrack()->dxyError()); 
+		 mu_features.mu_absdz = fabs(muon.bestTrack()->dz(pv.position())) ; 
+		 mu_features.mu_absdzError = fabs(muon.bestTrack()->dzError()) ;
+		 mu_features.mu_numberOfValidPixelHits = muon.bestTrack()->hitPattern().numberOfValidPixelHits();
+	         mu_features.mu_numberOfpixelLayersWithMeasurement = muon.bestTrack()->hitPattern().pixelLayersWithMeasurement() ;
+        	 mu_features.mu_numberOfstripLayersWithMeasurement = muon.bestTrack()->hitPattern().stripLayersWithMeasurement() ;
+
+
+	         mu_features.mu_chi2 = muon.bestTrack()->chi2() ;  
+		 mu_features.mu_ndof = muon.bestTrack()->ndof() ;
+
+// Isolation Block :
+//
+         	mu_features.mu_caloIso =  muon.caloIso() ; 
+         	mu_features.mu_ecalIso =  muon.ecalIso() ; 
+         	mu_features.mu_hcalIso =  muon.hcalIso() ;     
+ 
+// Pf isolation : 
+
+// Cone 0.4
+
+	        mu_features.mu_sumPfChHadronPt  = muon.pfIsolationR04().sumChargedHadronPt;
+        	mu_features.mu_sumPfNeuHadronEt  = muon.pfIsolationR04().sumNeutralHadronEt;
+	        mu_features.mu_Pfpileup  = muon.pfIsolationR04().sumPUPt;
+                mu_features.mu_sumPfPhotonEt = muon.pfIsolationR04().sumPhotonEt ;
+          
+// Cone of 0.3 
+
+         	mu_features.mu_sumPfChHadronPt03  = muon.pfIsolationR03().sumChargedHadronPt;
+         	mu_features.mu_sumPfNeuHadronEt03  = muon.pfIsolationR03().sumNeutralHadronEt;
+         	mu_features.mu_Pfpileup03  = muon.pfIsolationR03().sumPUPt;
+         	mu_features.mu_sumPfPhotonEt03 = muon.pfIsolationR03().sumPhotonEt ;        
+         
+			
+		features.mu_features.emplace_back(mu_features);
+  
+               }
+
+            }
+
+
+    for(std::size_t ielectron = 0 ; ielectron < electrons->size(); ielectron++){
+     
+ //        if(jet.electronMultiplicity ()  == 0  ) continue ;
+
+         llpdnnx::ElectronCandidateFeatures elec_features ;
+     
+         const pat::Electron& electron = electrons->at(ielectron);
+
+    
+         if( abs(constituent->eta() - electron.eta()) < 0.01 && abs(reco::deltaPhi(*constituent,electron) ) < 0.01 ){
+
+
+         elec_features.elec_pt = electron.pt() ;
+	 elec_features.elec_jetPtRatio = electron.pt()/jet.pt() ; 
+         elec_features.elec_p = electron.p() ; 
+         elec_features.elec_eta = electron.eta() ; 
+         elec_features.elec_phi = electron.phi() ; 
+         elec_features.elec_charge = electron.charge() ; 
+         elec_features.elec_energy = electron.energy() ; 
+	 elec_features.elec_jetDeltaR = reco::deltaR(electron , jet) ; 
+	 elec_features.elec_EtFromCaloEn = electron.caloEnergy() * sin(electron.p4().theta());
+	 elec_features.elec_ecalDrivenSeed = electron.ecalDrivenSeed() ;
+
+         elec_features.elec_isEB = electron.isEB() ;  
+         elec_features.elec_isEE  = electron.isEE();
+         elec_features.elec_ecalEnergy  = electron.ecalEnergy();
+         elec_features.elec_isPassConversionVeto = electron.passConversionVeto();
+
+	 elec_features.elec_convDist = electron.convDist() ; 
+	 elec_features.elec_convFlags = electron.convFlags() ; 
+	 elec_features.elec_convRadius = electron.convRadius() ; 
+	
+	
+ 	 elec_features.elec_3dIP = electron.dB(pat::Electron::PV3D) ; 
+	 elec_features.elec_3dIPSig = electron.dB(pat::Electron::PV3D); 
+         elec_features.elec_2dIP = electron.dB() ; 
+	 elec_features.elec_2dIPSig = electron.dB()/electron.edB() ; 
+         elec_features.elec_sCseedEta = electron.superCluster()->seed()->eta();
+
+
+	 elec_features.elec_numberOfBrems  = electron.numberOfBrems () ;
+	 elec_features.elec_trackFbrem  = electron.trackFbrem() ; 
+         elec_features.elec_fbrem = electron.fbrem() ; 
+
+
+         elec_features.elec_e5x5 = electron.e5x5() ;
+         elec_features.elec_e5x5Rel = electron.e5x5()/jet.pt() ;
+         elec_features.elec_e1x5Overe5x5 = electron.e1x5()/electron.e5x5() ; 
+         elec_features.elec_e2x5MaxOvere5x5 = electron.e2x5Max()/electron.e5x5() ; 
+
+	 elec_features.elec_eSeedClusterOverP = electron.eSeedClusterOverP() ;
+   	 elec_features.elec_eSeedClusterOverPout = electron.eSeedClusterOverPout() ; 
+	 elec_features.elec_eSuperClusterOverP = electron.eSuperClusterOverP() ; 
+	 elec_features.elec_eTopOvere5x5 = electron.eTop()/electron.e5x5() ;  
+//New : 
+         elec_features.elec_hadronicOverEm = electron.hadronicOverEm() ;  
+	 elec_features.elec_full5x5_sigmaIetaIeta = electron.full5x5_sigmaIetaIeta();
+
+	  elec_features.elec_full5x5_e5x5  = electron.full5x5_e5x5() ;
+	  elec_features.elec_full5x5_e5x5Rel  = electron.full5x5_e5x5()/jet.pt() ;
+
+	  elec_features.elec_full5x5_e1x5Overe5x5  = electron.full5x5_e1x5()/electron.full5x5_e5x5() ;
+	  elec_features.elec_full5x5_e2x5BottomOvere5x5  = electron.full5x5_e2x5Bottom()/ electron.full5x5_e5x5();
+	  elec_features.elec_full5x5_e2x5LeftOvere5x5  = electron.full5x5_e2x5Left()/ electron.full5x5_e5x5();
+	  elec_features.elec_full5x5_e2x5MaxOvere5x5  = electron.full5x5_e2x5Max()/ electron.full5x5_e5x5();
+	  elec_features.elec_full5x5_e2x5RightOvere5x5  = electron.full5x5_e2x5Right()/ electron.full5x5_e5x5();
+	  elec_features.elec_full5x5_e2x5TopOvere5x5  = electron.full5x5_e2x5Top()/ electron.full5x5_e5x5();
+	  elec_features.elec_full5x5_eBottomOvere5x5  = electron.full5x5_eBottom()/ electron.full5x5_e5x5();
+	  elec_features.elec_full5x5_eLeftOvere5x5 = electron.full5x5_eLeft()/ electron.full5x5_e5x5();
+	  elec_features.elec_full5x5_eRightOvere5x5 = electron.full5x5_eRight()/ electron.full5x5_e5x5();
+	  elec_features.elec_full5x5_eTopOvere5x5 = electron.full5x5_eTop()/ electron.full5x5_e5x5();
+	  elec_features.elec_full5x5_hcalDepth1OverEcal  = electron.full5x5_hcalDepth1OverEcal() ;
+	  elec_features.elec_full5x5_hcalDepth1OverEcalBc  = electron.full5x5_hcalDepth1OverEcalBc() ;
+	  elec_features.elec_full5x5_hcalDepth2OverEcal = electron.full5x5_hcalDepth2OverEcal() ;
+	  elec_features.elec_full5x5_hcalDepth2OverEcalBc  = electron.full5x5_hcalDepth2OverEcalBc() ;
+	  elec_features.elec_full5x5_hcalOverEcal  = electron.full5x5_hcalOverEcal() ;
+	  elec_features.elec_full5x5_hcalOverEcalBc = electron.full5x5_hcalOverEcalBc() ;   
+	  elec_features.elec_full5x5_r9  = electron.full5x5_r9() ;
+	  
+
+ 	 elec_features.elec_deltaEtaEleClusterTrackAtCalo  = electron.deltaEtaEleClusterTrackAtCalo();
+	 elec_features.elec_deltaPhiEleClusterTrackAtCalo = electron.deltaPhiEleClusterTrackAtCalo() ;
+
+	 elec_features.elec_deltaEtaSeedClusterTrackAtCalo = electron.deltaEtaSeedClusterTrackAtCalo () ; 
+	 elec_features.elec_deltaPhiSeedClusterTrackAtCalo = electron.deltaPhiSeedClusterTrackAtCalo() ; 
+
+	 elec_features.elec_deltaEtaSeedClusterTrackAtVtx = electron.deltaEtaSeedClusterTrackAtVtx(); 
+	 elec_features.elec_deltaEtaSuperClusterTrackAtVtx = electron.deltaEtaSuperClusterTrackAtVtx() ;  
+	 elec_features.elec_deltaPhiSuperClusterTrackAtVtx = electron.deltaPhiSuperClusterTrackAtVtx ()  ;
+
+//GSF -> Gaussian Sum Filter
+ 
+	 reco::Candidate::Vector electronMom = electron.gsfTrack()->momentum();
+
+         elec_features.elec_EtaRel =reco::btau::etaRel(jetDir, electronMom); 
+	 elec_features.elec_dxy = electron.gsfTrack()->dxy(pv.position()) ; 
+	 elec_features.elec_dz = electron.gsfTrack()->dz(pv.position()) ;
+	 elec_features.elec_nbOfMissingHits = electron.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS) ; 
+         elec_features.elec_gsfCharge = electron.gsfTrack()->charge() ;
+// Super Cluster variables.
+//
+  	 elec_features.elecSC_energy = electron.superCluster()->energy() ; 
+	 elec_features.elecSC_eta = electron.superCluster()->eta();
+ 	 elec_features.elecSC_phi = electron.superCluster()->phi();
+         elec_features.elecSC_et = electron.superCluster()->energy() * sin(electron.p4().theta());
+	 elec_features.elec_scPixCharge = electron.scPixCharge() ; 
+	 elec_features.elec_scSigmaEtaEta = electron.scSigmaEtaEta() ; 
+	 elec_features.elec_scSigmaIEtaIEta = electron.scSigmaIEtaIEta() ;
+	 elec_features.elec_superClusterFbrem = electron.superClusterFbrem() ; 
+
+	 elec_features.elec_scE5x5 = electron.scE5x5 () ; 
+	 elec_features.elec_scE5x5Rel = electron.scE5x5()/jet.pt() ; 
+	 elec_features.elec_scE1x5Overe5x5 = electron.scE1x5 ()/electron.scE5x5 () ; 
+	 elec_features.elec_scE2x5MaxOvere5x5  = electron.scE2x5Max()/electron.scE5x5 () ; 
+         elec_features.elecSC_eSuperClusterOverP  = electron.eSuperClusterOverP();
+// electron Isolation 
+//
+	elec_features.elec_particleIso  = electron.particleIso() ; 
+	elec_features.elec_neutralHadronIso  = electron.neutralHadronIso() ;
+	elec_features.elec_photonIso = electron.photonIso() ; 
+	elec_features.elec_puChargedHadronIso = electron.puChargedHadronIso () ; 
+
+	elec_features.elec_trackIso = electron.trackIso() ;
+        elec_features.elec_hcalDepth1OverEcal = electron.hcalDepth1OverEcal() ; 
+	elec_features.elec_hcalDepth2OverEcal = electron.hcalDepth2OverEcal() ;  
+	elec_features.elec_ecalPFClusterIso = electron.ecalPFClusterIso() ; 
+	elec_features.elec_hcalPFClusterIso = electron.hcalPFClusterIso() ; 
+
+        elec_features.elec_dr03TkSumPt = electron.dr03TkSumPt() ;
+	elec_features.elec_dr03HcalDepth2TowerSumEt = electron.dr03HcalDepth2TowerSumEt() ; 
+        elec_features.elec_dr03EcalRecHitSumEt = electron.dr03EcalRecHitSumEt() ; 
+	elec_features.elec_dr03HcalDepth1TowerSumEt = electron.dr03HcalDepth1TowerSumEt() ; 
+	elec_features.elec_dr03HcalDepth1TowerSumEtBc = electron.dr03HcalDepth1TowerSumEtBc();
+ 
+
+        elec_features.elec_pfSumPhotonEt = electron.pfIsolationVariables().sumPhotonEt ; 
+	elec_features.elec_pfSumChargedHadronPt = electron.pfIsolationVariables().sumChargedHadronPt; 
+        elec_features.elec_pfSumNeutralHadronEt = electron.pfIsolationVariables().sumNeutralHadronEt ; 
+        elec_features.elec_pfSumPUPt = electron.pfIsolationVariables().sumPUPt ; 
+
+
+ 	elec_features.elec_dr04EcalRecHitSumEt = electron.dr04EcalRecHitSumEt() ; 
+	elec_features.elec_dr04HcalDepth1TowerSumEt = electron.dr04HcalDepth1TowerSumEt() ; 
+	elec_features.elec_dr04HcalDepth1TowerSumEtBc = electron.dr04HcalDepth1TowerSumEtBc() ; 
+	elec_features.elec_dr04HcalDepth2TowerSumEt = electron.dr04HcalDepth2TowerSumEt() ; 
+	elec_features.elec_dr04HcalDepth2TowerSumEtBc = electron.dr04HcalDepth2TowerSumEtBc() ;
+        
+
+
+ 	elec_features.elec_dr04HcalTowerSumEt = electron.dr04HcalTowerSumEt();
+ 	elec_features.elec_dr04HcalTowerSumEtBc = electron.dr04HcalTowerSumEtBc() ;
+ 
+	features.elec_features.emplace_back(elec_features);
+        }
+
+   }
+
+ 
         }
         std::stable_sort(features.cpf_features.begin(),features.cpf_features.end(),[](const auto& d1, const auto& d2)
             {
