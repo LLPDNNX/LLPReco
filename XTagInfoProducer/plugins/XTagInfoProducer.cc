@@ -365,6 +365,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 		 mu_features.mu_numberOfValidPixelHits = muon.bestTrack()->hitPattern().numberOfValidPixelHits();
 	         mu_features.mu_numberOfpixelLayersWithMeasurement = muon.bestTrack()->hitPattern().pixelLayersWithMeasurement() ;
         	 mu_features.mu_numberOfstripLayersWithMeasurement = muon.bestTrack()->hitPattern().stripLayersWithMeasurement() ;
+		 std::cout<< "numberOfstripLayersWithMeasurement is : "<< muon.bestTrack()->hitPattern().stripLayersWithMeasurement() << std::endl ;
 
 
 	         mu_features.mu_chi2 = muon.bestTrack()->chi2() ;  
