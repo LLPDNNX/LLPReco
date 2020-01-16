@@ -82,9 +82,12 @@ process.maxEvents = cms.untracked.PSet(
 
 ## Input files
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring('root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-20_V-1.22474487139e-05_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_56.root')
+    fileNames = cms.untracked.vstring(
+        #'root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-1_V-0.13416407865_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_91.root',
+        #'root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.000415932686862_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_140.root',
+        'root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-20_V-1.22474487139e-05_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_56.root'
+    )
 )
-
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
     annotation = cms.untracked.string('test102X nevts:1000'),
@@ -97,6 +100,7 @@ process.plain=cms.Path()
 def addModule(m):
     process.plain+=m
 
+'''
 if not options.isData:
     process.TFileService = cms.Service("TFileService",
         fileName = cms.string("info.root")
@@ -108,6 +112,7 @@ if not options.isData:
     )
     process.plain+=process.eventAndPuInfo
 
+'''
 #Output definition
 process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
     compressionAlgorithm = cms.untracked.string('LZMA'),
@@ -229,7 +234,8 @@ process.pfXTags = cms.EDProducer("XTagProducer",
 )
 
 process.nanoTable = cms.EDProducer("NANOProducer",
-    src = cms.InputTag("pfXTagInfos")
+    srcTags = cms.InputTag("pfXTagInfos"),
+    srcLabels = cms.InputTag("llpLabels")
 )
 
 process.options = cms.untracked.PSet(
@@ -256,22 +262,58 @@ for moduleName in [
         process.nanoSequence.remove(getattr(process,moduleName))
         process.nanoSequenceMC.remove(getattr(process,moduleName))
 
-'''
 process.load('LLPReco.LLPLabelProducer.GenDisplacedVertices_cff')
+
+process.llpGenDecayInfo = cms.EDProducer(
+    "LLPGenDecayInfoProducer",
+    src = cms.InputTag("genParticlesMerged"),
+    decays = cms.PSet(
+        #hnl -> qql
+        hnl = cms.PSet(
+            llpId = cms.int32(9990012),
+            daughterIds = cms.vint32([1,2,3,4,5,11,13])
+        ),
+        #gluino -> qq chi0
+        split = cms.PSet(
+            llpId = cms.int32(1000021),
+            daughterIds = cms.vint32([1,2,3,4,5])
+        ),
+        #gluino -> g gravitino
+        gmsb = cms.PSet(
+            llpId = cms.int32(1000021),
+            daughterIds = cms.vint32([21])
+        ),
+        #stop -> bl
+        rpv = cms.PSet(
+            llpId = cms.int32(1000006),
+            daughterIds = cms.vint32([5,11,13])
+        ),
+        #H->SS->bbbb
+        hss = cms.PSet(
+            llpId = cms.int32(9000006),
+            daughterIds = cms.vint32([5])
+        ),
+    )
+)
+
+process.llpFlavour = cms.EDProducer(
+    "LLPGhostFlavourProducer",
+    srcJets = cms.InputTag("slimmedJets"),
+    srcDecayInfo = cms.InputTag("llpGenDecayInfo"),
+    jetAlgorithm = cms.string("AntiKt"),
+    rParam = cms.double(0.4),
+    ghostRescaling = cms.double(1e-18),
+    relPtTolerance = cms.double(1e-3)
+)
+
 process.llpLabels = cms.EDProducer(
-        "LLPLabelProducer",
-        srcVertices = cms.InputTag("displacedGenVertices"),
-        srcJets = cms.InputTag("slimmedJets")
-        )
+    "LLPLabelProducer",
+    srcVertices = cms.InputTag("displacedGenVertices"),
+    srcJets = cms.InputTag("slimmedJets"),
+    srcFlavourInfo = cms.InputTag("llpFlavour")
+)
 
 
-process.llpinfo = cms.PSet(
-            type = cms.string("LLPInfo"),
-            displacedGenVertices = cms.InputTag("displacedGenVertices"),
-            LLPtype = cms.string(options.LLPtype)
-        )
-
-'''
 
 
 if options.isData:
@@ -287,6 +329,10 @@ else:
         process.patJetCorrFactors+
         process.updatedPatJets+
         process.pfXTagInfos+
+        process.displacedGenVertexSequence+
+        process.llpGenDecayInfo+
+        process.llpFlavour+
+        process.llpLabels+
         process.nanoTable+
         process.nanoSequenceMC
     )

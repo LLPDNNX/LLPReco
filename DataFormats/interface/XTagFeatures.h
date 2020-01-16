@@ -22,8 +22,7 @@ class XTagFeatures {
     std::vector<MuonCandidateFeatures>   mu_features;
     std::vector<ElectronCandidateFeatures>   elec_features;
     std::size_t npv; // used by deep flavour
-};    
-
+};
 
 }  
 

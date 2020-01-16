@@ -1,10 +1,14 @@
 #include "DataFormats/Common/interface/Wrapper.h"
 #include "LLPReco/DataFormats/interface/XTagFeatures.h"
 #include "LLPReco/DataFormats/interface/XTagInfo.h"
+#include "LLPReco/DataFormats/interface/DisplacedGenVertex.h"
+#include "LLPReco/DataFormats/interface/LLPLabel.h"
+#include "LLPReco/DataFormats/interface/LLPGenDecayInfo.h"
+#include "LLPReco/DataFormats/interface/LLPGhostFlavourInfo.h"
 
 namespace {
 
-    struct disctionary_xtag
+    struct dictionary
     {
         std::vector<reco::FeaturesTagInfo<llpdnnx::XTagFeatures>> dummy0;
         edm::Wrapper<std::vector<reco::FeaturesTagInfo<llpdnnx::XTagFeatures>>> dummy1;
@@ -15,11 +19,10 @@ namespace {
         llpdnnx::SecondaryVertexFeatures dummy6;
         llpdnnx::ChargedCandidateFeatures dummy7;
         llpdnnx::NeutralCandidateFeatures dummy8;
-	
+
         llpdnnx::DisplacedGenVertexCollection dummy9;
         edm::Wrapper<llpdnnx::DisplacedGenVertexCollection> dummy10;
         
-
         edm::Ptr<llpdnnx::DisplacedGenVertex> dummy11;
         edm::Wrapper<edm::Ptr<llpdnnx::DisplacedGenVertex>> dummy12;
         

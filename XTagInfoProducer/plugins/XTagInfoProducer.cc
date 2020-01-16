@@ -96,7 +96,7 @@ electronsMiniAODToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<ed
 
 //================
 {
-produces<XTagInfoCollection>();
+    produces<XTagInfoCollection>();
 }
 
 
