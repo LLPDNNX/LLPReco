@@ -352,6 +352,8 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         outputLLPLabelInfo->emplace_back(label,jet_ref);
     }
+
+        iEvent.put(std::move(outputLLPLabelInfo));
 }
 
 
