@@ -97,6 +97,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     if (ntags != ntruth) throw cms::Exception("NANOProducer:: number of jet tags is not equal to the number of labelled jets!");
     auto jetOriginTable = std::make_unique<nanoaod::FlatTable>(ntags, "jetorigin", false, false);
 
+    std::vector<int> label_jetIdx;
     std::vector<int> isPU;
     std::vector<int> isB;
     std::vector<int> isBB;
@@ -141,6 +142,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> cpf_length;
     std::vector<int> npf_length;
     std::vector<int> sv_length;
+    std::vector<int> elec_length;
+    std::vector<int> mu_length;
     
     auto globalTable = std::make_unique<nanoaod::FlatTable>(ntags, "global", false, false);
     std::vector<float> pt;
@@ -205,6 +208,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 
+    std::vector<int>  mu_jetIdx ; 
     std::vector<int>  mu_isGlobal ; 
     std::vector<int>  mu_isTight ; 
     std::vector<int>  mu_isMedium ; 
@@ -267,6 +271,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 // Electron Block 
   
+    std::vector<int>  elec_jetIdx ; 
     std::vector<float> elec_pt ;
     std::vector<float> elec_jetPtRatio ;
     std::vector<float> elec_jetDeltaR ; 
@@ -403,6 +408,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          cpf_length.push_back(ncpf);
          npf_length.push_back(nnpf);
          sv_length.push_back(nsv);
+         elec_length.push_back(nelec);
+         mu_length.push_back(nmu);
 
          pt.push_back(features.jet_features.pt);
          eta.push_back(features.jet_features.eta);
@@ -482,6 +489,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 
+         label_jetIdx.push_back(labels.jetIdx);
          isPU.push_back(_isPU);
          isB.push_back(_isB);
          isBB.push_back(_isBB);
@@ -602,6 +610,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 	const auto& mu_features = mu.at(i);
 	
+        mu_jetIdx.push_back(mu_features.mu_jetIdx);
         mu_isGlobal.push_back(mu_features.mu_isGlobal) ; 
         mu_isTight.push_back(mu_features.mu_isTight) ; 
         mu_isMedium.push_back(mu_features.mu_isMedium) ; 
@@ -665,6 +674,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          const auto& elec_features = elec.at(i);
 
 
+      elec_jetIdx.push_back(elec_features.elec_jetIdx );
       elec_pt.push_back(elec_features.elec_pt );
       elec_jetPtRatio.push_back(elec_features.elec_jetPtRatio );
       elec_jetDeltaR.push_back(elec_features.elec_jetDeltaR ); 
@@ -850,7 +860,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     lengthTable->addColumn<int>("cpf", cpf_length, "cpf offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("npf", npf_length, "npf offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("sv", sv_length, "sv offset", nanoaod::FlatTable::IntColumn);
+    lengthTable->addColumn<int>("mu", mu_length, "mu offset", nanoaod::FlatTable::IntColumn);
+    lengthTable->addColumn<int>("ele", elec_length, "ele offset", nanoaod::FlatTable::IntColumn);
 
+    jetOriginTable->addColumn<int>("jetIdx", label_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isPU", isPU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isB", isB, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isBB", isBB, "doc", nanoaod::FlatTable::IntColumn);
@@ -891,6 +904,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<float>("betagamma", betagamma, "doc", nanoaod::FlatTable::FloatColumn);
      
 
+     muonTable->addColumn<int>("jetIdx", mu_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
      muonTable->addColumn<int>("isGlobal",mu_isGlobal,"doc",nanoaod::FlatTable::IntColumn); 
      muonTable->addColumn<int>("isTight",mu_isTight,"doc",nanoaod::FlatTable::IntColumn); 
      muonTable->addColumn<int>("isMedium",mu_isMedium,"doc",nanoaod::FlatTable::IntColumn); 
@@ -953,6 +967,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 // Electron block : 
 
 
+       electronTable->addColumn<int>("jetIdx", elec_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
        electronTable->addColumn<float>("pt",elec_pt,"doc",nanoaod::FlatTable::FloatColumn);
        electronTable->addColumn<float>("jetPtRatio",elec_jetPtRatio,"doc",nanoaod::FlatTable::FloatColumn);
        electronTable->addColumn<float>("jetDeltaR",elec_jetDeltaR,"doc",nanoaod::FlatTable::FloatColumn); 

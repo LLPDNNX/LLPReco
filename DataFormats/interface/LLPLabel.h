@@ -43,6 +43,7 @@ class LLPLabel {
         
         Type type;
         
+        int jetIdx;
         int partonFlavor;
         int hadronFlavor;
         int llpId;
