@@ -308,8 +308,8 @@ process.llpFlavour = cms.EDProducer(
 process.llpLabels = cms.EDProducer(
     "LLPLabelProducer",
     srcVertices = cms.InputTag("displacedGenVertices"),
-    srcFlavourInfo = cms.InputTag("llpFlavour")
     srcJets = cms.InputTag("updatedPatJets"),
+    srcFlavourInfo = cms.InputTag("llpFlavour"),
     quarkPtThreshold = cms.double(1.),
     bPtThreshold = cms.double(1.),
     muonPtThreshold = cms.double(1.),
