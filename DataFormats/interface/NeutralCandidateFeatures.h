@@ -7,6 +7,7 @@ class NeutralCandidateFeatures {
 
   public:
 
+    int npf_jetIdx;
     float npf_ptrel;
     float npf_deltaR;
     float npf_isGamma;
