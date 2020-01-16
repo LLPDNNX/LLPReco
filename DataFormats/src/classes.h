@@ -19,6 +19,7 @@ namespace {
         llpdnnx::DisplacedGenVertexCollection dummy9;
         edm::Wrapper<llpdnnx::DisplacedGenVertexCollection> dummy10;
         
+
         edm::Ptr<llpdnnx::DisplacedGenVertex> dummy11;
         edm::Wrapper<edm::Ptr<llpdnnx::DisplacedGenVertex>> dummy12;
         
