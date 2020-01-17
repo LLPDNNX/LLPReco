@@ -225,11 +225,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> mu_3dIp ; 
     std::vector<float> mu_3dIpSig ; 
 
-    std::vector<float> mu_absdxy ; 
-    std::vector<float> mu_absdxyError ; 
-    std::vector<float> mu_absdxySig ; 
-    std::vector<float> mu_absdz ; 
-    std::vector<float> mu_absdzError ; 
+    std::vector<float> mu_dxy ; 
+    std::vector<float> mu_dxyError ; 
+    std::vector<float> mu_dxySig ; 
+    std::vector<float> mu_dz ; 
+    std::vector<float> mu_dzError ; 
     std::vector<float> mu_numberOfValidPixelHits; 
     std::vector<float> mu_numberOfpixelLayersWithMeasurement ; 
     //std::vector<float> mu_numberOfstripLayersWithMeasurement ; 
@@ -259,10 +259,16 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     //std::vector<float> mu_sumChHadronPt03 ; 
     //std::vector<float> mu_sumNeuHadronEt03 ; 
     //std::vector<float> mu_pileup03 ; 
-    //std::vector<float> mu_sumPhotonEt03 ; 
+    //std::vector<float> mu_sumPhotonEt03 ;
+    
+   std::vector<float>  mu_timeAtIpInOut ; 
+   std::vector<float>  mu_timeAtIpInOutErr ; 
+   std::vector<float>  mu_timeAtIpOutIn ; 
+ 
 
 // Electron Block 
   
+    std::vector<float> elec_CanDr ;
     std::vector<float> elec_pt ;
     std::vector<float> elec_jetPtRatio ;
     std::vector<float> elec_jetDeltaR ; 
@@ -347,7 +353,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    std::vector<float> elec_full5x5_hcalOverEcal ;
    std::vector<float> elec_full5x5_hcalOverEcalBc;   
    std::vector<float> elec_full5x5_r9 ;
-   std::vector<int> elec_numberOfBrems ; 
+   std::vector<int>   elec_numberOfBrems ; 
    std::vector<float> elec_trackFbrem ; 
    std::vector<float> elec_fbrem ; 
    std::vector<float> elec_neutralHadronIso; 
@@ -619,11 +625,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         mu_3dIp.push_back(mu_features.mu_3dIp); 
         mu_3dIpSig.push_back(mu_features.mu_3dIpSig); 
 
-        mu_absdxy.push_back(mu_features.mu_absdxy); 
-        mu_absdxyError.push_back(mu_features.mu_absdxyError); 
-        mu_absdxySig.push_back(mu_features.mu_absdxySig); 
-        mu_absdz.push_back(mu_features.mu_absdz); 
-        mu_absdzError.push_back(mu_features.mu_absdzError); 
+        mu_dxy.push_back(mu_features.mu_dxy); 
+        mu_dxyError.push_back(mu_features.mu_dxyError); 
+        mu_dxySig.push_back(mu_features.mu_dxySig); 
+        mu_dz.push_back(mu_features.mu_dz); 
+        mu_dzError.push_back(mu_features.mu_dzError); 
         mu_numberOfValidPixelHits.push_back(mu_features.mu_numberOfValidPixelHits); 
         mu_numberOfpixelLayersWithMeasurement.push_back(mu_features.mu_numberOfpixelLayersWithMeasurement);
 
@@ -648,7 +654,12 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         mu_sumChHadronPt.push_back(mu_features.mu_sumChHadronPt); 
         mu_sumNeuHadronEt.push_back(mu_features.mu_sumNeuHadronEt); 
         mu_pileup.push_back(mu_features.mu_pileup); 
-        mu_sumPhotonEt.push_back(mu_features.mu_sumPhotonEt); 
+        mu_sumPhotonEt.push_back(mu_features.mu_sumPhotonEt);
+	 
+	mu_timeAtIpInOut.push_back(mu_features.mu_timeAtIpInOut) ; 
+        mu_timeAtIpInOutErr.push_back(mu_features.mu_timeAtIpInOutErr) ;  
+        mu_timeAtIpOutIn.push_back(mu_features.mu_timeAtIpOutIn) ; 
+ 
 
        }
 
@@ -657,6 +668,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          const auto& elec_features = elec.at(i);
 
 
+      elec_CanDr.push_back(elec_features.elec_CanDr );
       elec_pt.push_back(elec_features.elec_pt );
       elec_jetPtRatio.push_back(elec_features.elec_jetPtRatio );
       elec_jetDeltaR.push_back(elec_features.elec_jetDeltaR ); 
@@ -901,11 +913,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      muonTable->addColumn<float>("3dIp",mu_3dIp,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("3dIpSig",mu_3dIpSig,"doc",nanoaod::FlatTable::FloatColumn); 
 
-     muonTable->addColumn<float>("absdxy",mu_absdxy,"doc",nanoaod::FlatTable::FloatColumn); 
-     muonTable->addColumn<float>("absdxyError",mu_absdxyError,"doc",nanoaod::FlatTable::FloatColumn); 
-     muonTable->addColumn<float>("absdxySig",mu_absdxySig,"doc",nanoaod::FlatTable::FloatColumn); 
-     muonTable->addColumn<float>("absdz",mu_absdz,"doc",nanoaod::FlatTable::FloatColumn); 
-     muonTable->addColumn<float>("absdzError",mu_absdzError,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("dxy",mu_dxy,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("dxyError",mu_dxyError,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("dxySig",mu_dxySig,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("dz",mu_dz,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("dzError",mu_dzError,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("numberOfValidPixelHits",mu_numberOfValidPixelHits,"doc",nanoaod::FlatTable::FloatColumn); 
      muonTable->addColumn<float>("numberOfpixelLayersWithMeasurement",mu_numberOfpixelLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn); 
      //muonTable->addColumn<float>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn); 
@@ -936,10 +948,17 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      //muonTable->addColumn<float>("sumNeuHadronEt03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn); 
      //muonTable->addColumn<float>("pileup03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn); 
      //muonTable->addColumn<float>("sumPhotonEt03",mu_sumPhotonEt03,"doc",nanoaod::FlatTable::FloatColumn);
+     //
+
+     muonTable->addColumn<float>("timeAtIpInOut",mu_timeAtIpInOut,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("timeAtIpInOutErr",mu_timeAtIpInOutErr,"doc",nanoaod::FlatTable::FloatColumn); 
+     muonTable->addColumn<float>("timeAtIpOutIn",mu_timeAtIpOutIn,"doc",nanoaod::FlatTable::FloatColumn); 
+ 
 
 // Electron block : 
 
 
+       electronTable->addColumn<float>("CanDr",elec_CanDr,"doc",nanoaod::FlatTable::FloatColumn);
        electronTable->addColumn<float>("pt",elec_pt,"doc",nanoaod::FlatTable::FloatColumn);
        electronTable->addColumn<float>("jetPtRatio",elec_jetPtRatio,"doc",nanoaod::FlatTable::FloatColumn);
        electronTable->addColumn<float>("jetDeltaR",elec_jetDeltaR,"doc",nanoaod::FlatTable::FloatColumn); 

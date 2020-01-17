@@ -8,6 +8,7 @@ class ElectronCandidateFeatures {
 
   public:
 
+  float elec_CanDr ; 
   float elec_pt ;
   float elec_jetPtRatio ;
   float elec_jetDeltaR ; 
@@ -138,7 +139,6 @@ float elec_dr04HcalDepth2TowerSumEt ;
 float elec_dr04HcalDepth2TowerSumEtBc  ;
 float elec_dr04HcalTowerSumEt  ;
 float elec_dr04HcalTowerSumEtBc  ;
-
 
  
  

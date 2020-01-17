@@ -65,6 +65,15 @@ public:
     explicit XTagInfoProducer(const edm::ParameterSet&);
     ~XTagInfoProducer();
     static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+    struct candidateHash{
+
+      long operator() (const reco::CandidatePtr& cand) const {
+
+         return cand.id().id() * 10000 + cand.key() ;
+
+      }
+
+    };
 
 private:
     virtual void beginStream(edm::StreamID) override;
@@ -136,6 +145,23 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     edm::Handle<pat::ElectronCollection > electrons;
     iEvent.getByToken(electronsMiniAODToken_, electrons);
+
+
+    std::unordered_map< reco::CandidatePtr , const  pat::Muon * , candidateHash > muonMap ;
+    std::unordered_map< reco::CandidatePtr , const  pat::Electron * , candidateHash > electronMap ;
+
+
+    for (const pat::Muon &mu : *muons) {
+    for (unsigned int i = 0 ; i < mu.numberOfSourceCandidatePtrs(); ++i )
+        muonMap[mu.sourceCandidatePtr(i)] = &mu;
+    }
+
+
+    for (const pat::Electron &el : *electrons) {
+    for (unsigned int i = 0 ; i < el.numberOfSourceCandidatePtrs(); ++i )
+        electronMap[el.sourceCandidatePtr(i)] = &el;
+    }
+//
 
 //===========================
 
@@ -314,20 +340,17 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
 // Add your code for muons and electrons here. 
-//
 
-          
-              
-            for(std::size_t imuon = 0 ; imuon < muons->size(); imuon++){
-
-       //      if(jet.muonMultiplicity() == 0  ) continue ;
- 
               llpdnnx::MuonCandidateFeatures mu_features ; 
+	      auto findMuon = muonMap.find(jet.daughterPtr(idaughter)) ;  
+              if(findMuon!=muonMap.end() ){
+	      const pat::Muon & muon = *findMuon->second;
+		
+              if(muon.isGlobalMuon() == 0) continue ;
 
-              const pat::Muon& muon = muons->at(imuon);
-              if(muon.isGlobalMuon() == 0) continue ; 
-              if( abs(muon.eta() - constituent->eta()) < 0.01 &&  abs(reco::deltaPhi(*constituent,muon) ) < 0.01 )	{
-	  
+ 		 std::cout << "muon pt is :  "<< muon.pt() << "constituent pt is : " << constituent->pt() << std::endl ;
+ 		 std::cout << "muon eta is :  "<< muon.eta() << "constituent eta is : " << constituent->eta() << std::endl ;
+ 		 std::cout << "muon phi  is :  "<< muon.phi() << "constituent phi is : " << constituent->phi() << std::endl ;
 
                  mu_features.mu_isGlobal = muon.isGlobalMuon() ;                                   
         	 mu_features.mu_isTight = muon.isTightMuon(pv);                                     
@@ -335,8 +358,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          	 mu_features.mu_isLoose = muon.isLooseMuon() ; 
          	 mu_features.mu_isStandAlone = muon.isStandAloneMuon() ; 
 
-                 mu_features.mu_pt = std::log10(muon.pt());                                       
-         	 mu_features.mu_p = std::log10(muon.p());  
+                 mu_features.mu_pt = muon.pt();                                       
+         	 mu_features.mu_p =  muon.p();  
                  mu_features.mu_jetPtRel = muon.pt()/jet.pt() ; 
          	 mu_features.mu_jetPtRel2  = muon.jetPtRatio() ; 
 	         mu_features.mu_eta = muon.eta();                                                 
@@ -357,15 +380,14 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                  reco::Candidate::Vector muonMom = muon.bestTrack()->momentum();
 
                  mu_features.mu_EtaRel =reco::btau::etaRel(jetDir, muonMom);
-	         mu_features.mu_absdxy = muon.bestTrack()->dxy(pv.position());
-        	 mu_features.mu_absdxyError = fabs(muon.bestTrack()->dxyError()) ; 
-       		 mu_features.mu_absdxySig = muon.bestTrack()->dxy(pv.position())/fabs(muon.bestTrack()->dxyError()); 
-		 mu_features.mu_absdz = fabs(muon.bestTrack()->dz(pv.position())) ; 
-		 mu_features.mu_absdzError = fabs(muon.bestTrack()->dzError()) ;
+	         mu_features.mu_dxy = muon.bestTrack()->dxy(pv.position());
+        	 mu_features.mu_dxyError = muon.bestTrack()->dxyError() ; 
+       		 mu_features.mu_dxySig = muon.bestTrack()->dxy(pv.position())/muon.bestTrack()->dxyError(); 
+		 mu_features.mu_dz = muon.bestTrack()->dz(pv.position()) ; 
+		 mu_features.mu_dzError = muon.bestTrack()->dzError() ;
 		 mu_features.mu_numberOfValidPixelHits = muon.bestTrack()->hitPattern().numberOfValidPixelHits();
 	         mu_features.mu_numberOfpixelLayersWithMeasurement = muon.bestTrack()->hitPattern().pixelLayersWithMeasurement() ;
         	 mu_features.mu_numberOfstripLayersWithMeasurement = muon.bestTrack()->hitPattern().stripLayersWithMeasurement() ;
-		 std::cout<< "numberOfstripLayersWithMeasurement is : "<< muon.bestTrack()->hitPattern().stripLayersWithMeasurement() << std::endl ;
 
 
 	         mu_features.mu_chi2 = muon.bestTrack()->chi2() ;  
@@ -391,27 +413,26 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
          	mu_features.mu_sumPfChHadronPt03  = muon.pfIsolationR03().sumChargedHadronPt;
          	mu_features.mu_sumPfNeuHadronEt03  = muon.pfIsolationR03().sumNeutralHadronEt;
          	mu_features.mu_Pfpileup03  = muon.pfIsolationR03().sumPUPt;
-         	mu_features.mu_sumPfPhotonEt03 = muon.pfIsolationR03().sumPhotonEt ;        
-         
+         	mu_features.mu_sumPfPhotonEt03 = muon.pfIsolationR03().sumPhotonEt ;       
+
+//Muon timing : 
+//
+		mu_features.mu_timeAtIpInOut = muon.time().timeAtIpInOut ;  
+	        mu_features.mu_timeAtIpInOutErr = muon.time().timeAtIpInOutErr ; 
+		mu_features.mu_timeAtIpOutIn = muon.time().timeAtIpOutIn ;  
 			
 		features.mu_features.emplace_back(mu_features);
   
                }
 
-            }
 
-
-    for(std::size_t ielectron = 0 ; ielectron < electrons->size(); ielectron++){
-     
- //        if(jet.electronMultiplicity ()  == 0  ) continue ;
 
          llpdnnx::ElectronCandidateFeatures elec_features ;
      
-         const pat::Electron& electron = electrons->at(ielectron);
-
-    
-         if( abs(constituent->eta() - electron.eta()) < 0.01 && abs(reco::deltaPhi(*constituent,electron) ) < 0.01 ){
-
+	
+	 auto findElectron = electronMap.find(jet.daughterPtr(idaughter)) ;  
+         if(findElectron!=electronMap.end() ){
+	 const pat::Electron & electron = *findElectron->second;
 
          elec_features.elec_pt = electron.pt() ;
 	 elec_features.elec_jetPtRatio = electron.pt()/jet.pt() ; 
@@ -554,9 +575,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
  	elec_features.elec_dr04HcalTowerSumEtBc = electron.dr04HcalTowerSumEtBc() ;
  
 	features.elec_features.emplace_back(elec_features);
-        }
 
-   }
+    }
 
  
         }
