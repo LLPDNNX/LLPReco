@@ -151,15 +151,17 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> jetIdx;
     std::vector<float> pt;
     std::vector<float> eta;
+    std::vector<float> mass;
+
     
     std::vector<float> tau1;
     std::vector<float> tau2;
     std::vector<float> tau3;
     
-    std::vector<float> massDropMassAK;
-    std::vector<float> massDropMassCA;
-    std::vector<float> softDropMassAK;
-    std::vector<float> softDropMassCA;
+    std::vector<float> relMassDropMassAK;
+    std::vector<float> relMassDropMassCA;
+    std::vector<float> relSoftDropMassAK;
+    std::vector<float> relSoftDropMassCA;
     
     std::vector<float> thrust;
     std::vector<float> sphericity;
@@ -428,21 +430,25 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         cpf_length.push_back(ncpf);
         npf_length.push_back(nnpf);
         sv_length.push_back(nsv);
+
+        pt.push_back(features.jet_features.pt);
+        eta.push_back(features.jet_features.eta);
+        mass.push_back(features.jet_features.mass);
+        
         elec_length.push_back(nelec);
         mu_length.push_back(nmu);
 
         jetIdx.push_back(features.jet_features.jetIdx);
-        pt.push_back(features.jet_features.pt);
-        eta.push_back(features.jet_features.eta);
         
         tau1.push_back(features.jet_features.tau1);
         tau2.push_back(features.jet_features.tau2);
         tau3.push_back(features.jet_features.tau3);
         
-        massDropMassAK.push_back(features.jet_features.massDropMassAK);
-        massDropMassCA.push_back(features.jet_features.massDropMassCA);
-        softDropMassAK.push_back(features.jet_features.softDropMassAK);
-        softDropMassCA.push_back(features.jet_features.softDropMassCA);
+        relMassDropMassAK.push_back(features.jet_features.relMassDropMassAK);
+        relMassDropMassCA.push_back(features.jet_features.relMassDropMassCA);
+        relSoftDropMassAK.push_back(features.jet_features.relSoftDropMassAK);
+        relSoftDropMassCA.push_back(features.jet_features.relSoftDropMassCA);
+
         
         thrust.push_back(features.jet_features.thrust);
         sphericity.push_back(features.jet_features.sphericity);
@@ -450,8 +456,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         isotropy.push_back(features.jet_features.isotropy);
         eventShapeC.push_back(features.jet_features.eventShapeC);
         eventShapeD.push_back(features.jet_features.eventShapeD);
+
         
         csv_jetIdx.push_back(tag_info_features.csv_jetIdx);
+
         trackSumJetEtRatio.push_back(tag_info_features.csv_trackSumJetEtRatio);
         trackSumJetDeltaR.push_back(tag_info_features.csv_trackSumJetDeltaR);
         trackSip2dValAboveCharm.push_back(tag_info_features.csv_trackSip2dValAboveCharm);
@@ -522,6 +530,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         if (labels.type == llpdnnx::LLPLabel::Type::isLLP_BBMU) _isLLP_BBMU = 1;
         if (labels.type == llpdnnx::LLPLabel::Type::isLLP_BBE) _isLLP_BBE = 1;
         if (labels.type == llpdnnx::LLPLabel::Type::isUndefined) _isUndefined = 1;
+
 
         label_jetIdx.push_back(labels.jetIdx);
         isPU.push_back(_isPU);
@@ -838,15 +847,17 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("pt", pt, "global jet pt (log 10, uncorrected)", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<int>("jetIdx", jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     globalTable->addColumn<float>("eta", eta, "global jet eta", nanoaod::FlatTable::FloatColumn);
+    globalTable->addColumn<float>("mass", mass, "global jet mass", nanoaod::FlatTable::FloatColumn);
+
     
     globalTable->addColumn<float>("tau1", tau1, "nsubjettiness 1", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("tau2", tau2, "nsubjettiness 2", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("tau3", tau3, "nsubjettiness 3", nanoaod::FlatTable::FloatColumn);
     
-    globalTable->addColumn<float>("massDropMassAK", massDropMassAK, "mass drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("massDropMassCA", massDropMassCA, "mass drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("softDropMassAK", softDropMassAK, "soft drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("softDropMassCA", softDropMassCA, "soft drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
+    globalTable->addColumn<float>("relMassDropMassAK", relMassDropMassAK, "mass drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
+    globalTable->addColumn<float>("relMassDropMassCA", relMassDropMassCA, "mass drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
+    globalTable->addColumn<float>("relSoftDropMassAK", relSoftDropMassAK, "soft drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
+    globalTable->addColumn<float>("relSoftDropMassCA", relSoftDropMassCA, "soft drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
     
     globalTable->addColumn<float>("thrust", thrust, "thrust", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("sphericity", sphericity, "sphericity", nanoaod::FlatTable::FloatColumn);
@@ -854,6 +865,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("isotropy", isotropy, "isotropy", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("eventShapeC", eventShapeC, "eventShapeC", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("eventShapeD", eventShapeD, "eventShapeD", nanoaod::FlatTable::FloatColumn);
+
 
     csvTable->addColumn<int>("jetIdx", csv_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     csvTable->addColumn<float>("trackSumJetEtRatio", trackSumJetEtRatio, "doc", nanoaod::FlatTable::FloatColumn);
