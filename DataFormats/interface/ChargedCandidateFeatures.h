@@ -27,7 +27,7 @@ class ChargedCandidateFeatures {
     float cpf_puppi_weight;
     float cpf_track_chi2;
     float cpf_track_quality;
-    float cpf_track_ndof;
+    int cpf_track_ndof;
 };
 
 }

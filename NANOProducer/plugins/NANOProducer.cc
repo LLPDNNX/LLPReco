@@ -179,8 +179,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> trackSip2dSigAboveCharm;
     std::vector<float> trackSip3dValAboveCharm;
     std::vector<float> trackSip3dSigAboveCharm;
-    std::vector<float> jetNSelectedTracks;
-    std::vector<float> jetNTracksEtaRel;
+    std::vector<int> jetNSelectedTracks;
+    std::vector<int> jetNTracksEtaRel;
 
     std::vector<int> cpf_jetIdx;
     std::vector<float> cpf_trackEtaRel;
@@ -202,7 +202,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> cpf_puppi_weight;
     std::vector<float> cpf_track_chi2;
     std::vector<float> cpf_track_quality;
-    std::vector<float> cpf_track_ndof;
+    std::vector<int> cpf_track_ndof;
 
     std::vector<int> npf_jetIdx;
     std::vector<float> npf_ptrel;
@@ -218,7 +218,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> sv_mass;
     std::vector<float> sv_ntracks;
     std::vector<float> sv_chi2;
-    std::vector<float> sv_ndof;
+    std::vector<int> sv_ndof;
     std::vector<float> sv_dxy;
     std::vector<float> sv_dxysig;
     std::vector<float> sv_d3d;
@@ -855,7 +855,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("eventShapeC", eventShapeC, "eventShapeC", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("eventShapeD", eventShapeD, "eventShapeD", nanoaod::FlatTable::FloatColumn);
 
-    csvTable->addColumn<int>("jetIdx", csv_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     csvTable->addColumn<float>("trackSumJetEtRatio", trackSumJetEtRatio, "ratio of track sum transverse energy over jet energy", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("trackSumJetDeltaR", trackSumJetDeltaR, "pseudoangular distance between jet axis and track fourvector sum", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("vertexCategory", vertexCategory, "category of secondary vertex (Reco, Pseudo, No)", nanoaod::FlatTable::FloatColumn);
@@ -863,10 +862,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     csvTable->addColumn<float>("trackSip2dSigAboveCharm", trackSip2dSigAboveCharm, "track 2D signed impact parameter significance of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("trackSip3dValAboveCharm", trackSip3dValAboveCharm, "track 3D signed impact parameter of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("trackSip3dSigAboveCharm", trackSip3dSigAboveCharm, "track 3D signed impact parameter significance of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("jetNSelectedTracks", jetNSelectedTracks, "tracks associated to jet", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("jetNTracksEtaRel", jetNTracksEtaRel, "number of tracks for which etaRel is computed", nanoaod::FlatTable::FloatColumn);
+    csvTable->addColumn<int>("jetNSelectedTracks", jetNSelectedTracks, "tracks associated to jet", nanoaod::FlatTable::IntColumn);
+    csvTable->addColumn<int>("jetNTracksEtaRel", jetNTracksEtaRel, "number of tracks for which etaRel is computed", nanoaod::FlatTable::IntColumn);
 
-    cpfTable->addColumn<int>("jetIdx", cpf_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
+    cpfTable->addColumn<int>("jetIdx", cpf_jetIdx, "shows which jet the charged PF candidate belongs to", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<float>("trackEtaRel", cpf_trackEtaRel, "track pseudorapidity, relative to the jet axis", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("trackPtRel", cpf_trackPtRel, "track transverse momentum, relative to the jet axis", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("trackPPar", cpf_trackPPar, "track parallel momentum, along the jet axis", nanoaod::FlatTable::FloatColumn);
@@ -886,9 +885,9 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     cpfTable->addColumn<float>("puppi_weight", cpf_puppi_weight, "weight assigned by the PUPPI algorithm to neutral PF candidate track", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("track_chi2", cpf_track_chi2, "chi^2 of a charged PF candidate track", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("track_quality", cpf_track_quality, "Indicates charged particle track reconstruction quality", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("track_ndof", cpf_track_ndof, "Track fit number of degrees of freedom of charged PF candidate track", nanoaod::FlatTable::FloatColumn);
+    cpfTable->addColumn<int>("track_ndof", cpf_track_ndof, "Track fit number of degrees of freedom of charged PF candidate track", nanoaod::FlatTable::IntColumn);
 
-    npfTable->addColumn<int>("jetIdx", npf_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
+    npfTable->addColumn<int>("jetIdx", npf_jetIdx, "shows which jet the neutral PF candidate belongs to", nanoaod::FlatTable::IntColumn);
     npfTable->addColumn<float>("ptrel", npf_ptrel, "neutral PF candidate track transverse momentum over jet transverse momentum (uncorrelated)", nanoaod::FlatTable::FloatColumn);
     npfTable->addColumn<float>("deltaR", npf_deltaR, "neutral PF candidate track pseudoangular distance (Delta R) from the jet axis", nanoaod::FlatTable::FloatColumn);
     npfTable->addColumn<float>("isGamma", npf_isGamma, "flag for passing loose photon identification requirements", nanoaod::FlatTable::FloatColumn);
@@ -896,13 +895,13 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     npfTable->addColumn<float>("drminsv", npf_drminsv, "pseudoangular distance (Delta R) between neutral PF candidate track and closest secondary vertex (SV) within the jet", nanoaod::FlatTable::FloatColumn);
     npfTable->addColumn<float>("puppi_weight", npf_puppi_weight, "weight assigned by the PUPPI algorithm to neutral PF candidate track", nanoaod::FlatTable::FloatColumn);
 
-    svTable->addColumn<int>("jetIdx", sv_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
+    svTable->addColumn<int>("jetIdx", sv_jetIdx, "shows which jet a secondary vertex belongs to", nanoaod::FlatTable::IntColumn);
     svTable->addColumn<float>("sv_pt", sv_pt, "secondary vertex (SV) transverse momentum", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("sv_deltaR", sv_deltaR, "pseudoangular distance (Delta R) between jet axis and SV flight direction", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("sv_mass", sv_mass, "invariant mass of reconstructed secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("sv_ntracks", sv_ntracks, "number of tracks associated to the secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("sv_chi2", sv_chi2,  "chi^2 of secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("sv_ndof", sv_ndof, "number of degrees of freedom of secondary vertex (SV) fit", nanoaod::FlatTable::FloatColumn);
+    svTable->addColumn<int>("sv_ndof", sv_ndof, "number of degrees of freedom of secondary vertex (SV) fit", nanoaod::FlatTable::IntColumn);
     svTable->addColumn<float>("sv_dxy", sv_dxy, "transverse impact parameter of the secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("sv_dxysig", sv_dxysig, "transverse impact parameter significance of the secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("sv_d3d", sv_d3d, "3D impact parameter of secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
@@ -960,12 +959,12 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<float>("decay_angle", decay_angle, "doc", nanoaod::FlatTable::FloatColumn);
     jetOriginTable->addColumn<float>("betagamma", betagamma, "doc", nanoaod::FlatTable::FloatColumn);
 
-     muonTable->addColumn<int>("jetIdx", mu_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
-     muonTable->addColumn<int>("isGlobal",mu_isGlobal,"muon fitted from the tracker and muon stations",nanoaod::FlatTable::BoolColumn);
-     muonTable->addColumn<int>("isTight",mu_isTight,"Global muon with additional muon-quality requirements.Tight Muon ID selects a subset of the Particle-Flow muons",nanoaod::FlatTable::BoolColumn);
-     muonTable->addColumn<int>("isMedium",mu_isMedium,"Loose muon (i.e. PF muon that is either a global or an arbitrated tracker muon) with additional track-quality and muon-quality requirements.",nanoaod::FlatTable::BoolColumn);
-     muonTable->addColumn<int>("isLoose",mu_isLoose,"Particle identified as a muon by the Particle-Flow event reconstruction, and that is also reconstructed either as a global-muon or as an arbitrated tracker-muon.",nanoaod::FlatTable::BoolColumn);
-     muonTable->addColumn<int>("isStandAlone",mu_isStandAlone,"doc", nanoaod::FlatTable::BoolColumn);
+     muonTable->addColumn<int>("jetIdx", mu_jetIdx, "shows which jet a muon belongs to", nanoaod::FlatTable::IntColumn);
+     muonTable->addColumn<int>("isGlobal",mu_isGlobal,"muon fitted from the tracker and muon stations",nanoaod::FlatTable::IntColumn);
+     muonTable->addColumn<int>("isTight",mu_isTight,"Global muon with additional muon-quality requirements.Tight Muon ID selects a subset of the Particle-Flow muons",nanoaod::FlatTable::IntColumn);
+     muonTable->addColumn<int>("isMedium",mu_isMedium,"Loose muon (i.e. PF muon that is either a global or an arbitrated tracker muon) with additional track-quality and muon-quality requirements.",nanoaod::FlatTable::IntColumn);
+     muonTable->addColumn<int>("isLoose",mu_isLoose,"Particle identified as a muon by the Particle-Flow event reconstruction, and that is also reconstructed either as a global-muon or as an arbitrated tracker-muon.",nanoaod::FlatTable::IntColumn);
+     muonTable->addColumn<int>("isStandAlone",mu_isStandAlone,"doc", nanoaod::FlatTable::IntColumn);
 
      muonTable->addColumn<float>("pt",mu_pt,"muon candidate transverese momentum",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("p",mu_p,"muon candidate 3-momentum (magnitude of momentum vector)",nanoaod::FlatTable::FloatColumn);
@@ -976,9 +975,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      muonTable->addColumn<float>("phi",mu_phi,"muon candidate momentum azimuthal angle",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("charge",mu_charge,"muon candidate charge (-1 or +1)",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("energy",mu_energy,"muon candidate energy",nanoaod::FlatTable::FloatColumn);
-     muonTable->addColumn<float>("et",mu_et,"muon candidate transverse energy",nanoaod::FlatTable::FloatColumn);//this has already appeared in line 893?
      muonTable->addColumn<float>("jetDeltaR",mu_jetDeltaR,"pseudoangular distance between jet axis and muon track fourvector",nanoaod::FlatTable::FloatColumn);
-     muonTable->addColumn<float>("numberOfMatchedStations",mu_numberOfMatchedStations,"number of activated muon stations",nanoaod::FlatTable::FloatColumn);//check if correct
+     muonTable->addColumn<int>("numberOfMatchedStations",mu_numberOfMatchedStations,"number of activated muon stations",nanoaod::FlatTable::IntColumn);//check if correct
 
      muonTable->addColumn<float>("2dIp",mu_2dIp,"muon inner track transverse impact parameter relative to the primary vertex in transverse plane (2D), absolute value",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("2dIpSig",mu_2dIpSig,"muon inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in transverse plane (2D)",nanoaod::FlatTable::FloatColumn);
@@ -995,7 +993,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
      //muonTable->addColumn<float>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn);
 
      muonTable->addColumn<float>("chi2",mu_chi2,"doc",nanoaod::FlatTable::FloatColumn);
-     muonTable->addColumn<float>("ndof",mu_ndof,"doc",nanoaod::FlatTable::FloatColumn);
+     muonTable->addColumn<int>("ndof",mu_ndof,"doc",nanoaod::FlatTable::IntColumn);
 
      muonTable->addColumn<float>("caloIso",mu_caloIso,"doc",nanoaod::FlatTable::FloatColumn);
      muonTable->addColumn<float>("ecalIso",mu_ecalIso,"doc",nanoaod::FlatTable::FloatColumn);
