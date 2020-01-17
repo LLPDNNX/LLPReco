@@ -43,9 +43,12 @@ class LLPLabel {
         
         Type type;
         
+        int jetIdx;
         int partonFlavor;
         int hadronFlavor;
         int llpId;
+        float llp_mass;
+        float llp_pt;
 
         float displacement;
         float displacement_xy;

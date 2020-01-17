@@ -4,7 +4,9 @@
 <use name="LLPReco/DataFormats"/>
 <use name="DataFormats/NanoAOD"/>
 
-<flags EDM_PLUGIN="1"/>
-<library file="NANOProducer.cc" name="NANOProducer">
-      <flags EDM_PLUGIN="1"/>
-  </library>
+<library file="NANOProducer.cc" name="NANOProducerPlugin">
+    <flags EDM_PLUGIN="1"/>
+</library>
+<library file="NANOGenProducer.cc" name="NANOGenProducerPlugin">
+    <flags EDM_PLUGIN="1"/>
+</library>

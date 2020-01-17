@@ -247,11 +247,7 @@ LLPGhostFlavourProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                 edm::LogError("JetPtMismatch") 
                     << "The reclustered and original jet " << ijet << " have different Pt's (" 
                     << reclusteredJet.pt() << " vs " 
-                    << recoJet.correctedP4("Uncorrected").pt() << " GeV, respectively).\n"
-                    << "Please check that the jet algorithm and jet size match those used for the original jet collection "
-                    << "and also make sure the original jets are uncorrected. In addition, make sure you are not using CaloJets which are presently not supported.\n"
-                    << "\nIn extremely rare instances the mismatch could be caused by a difference in the machine precision "
-                    << "in which case make sure the original jet collection is produced and reclustering is performed in the same job.";
+                    << recoJet.correctedP4("Uncorrected").pt() << " GeV, respectively)";
             }
 
             // loop over jet constituents and try to find "ghosts"

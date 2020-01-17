@@ -64,6 +64,11 @@ class LLPLabelProducer:
             int n   = (absPdgId/1000000)%10;
             return std::max({nq1,nq2,nq3})+n*10000+(n>0 and nL==9)*100;
         }
+        
+        double quarkPtThreshold_;
+        double bPtThreshold_;
+        double muonPtThreshold_;
+        double electronPtThreshold_;
     
         edm::EDGetTokenT<edm::View<pat::Jet>> jetToken_;
         edm::EDGetTokenT<edm::View<llpdnnx::DisplacedGenVertex>> displacedGenVertexToken_;
@@ -80,6 +85,10 @@ class LLPLabelProducer:
 };
 
 LLPLabelProducer::LLPLabelProducer(const edm::ParameterSet& iConfig):
+    quarkPtThreshold_(iConfig.getParameter<double>("quarkPtThreshold")),
+    bPtThreshold_(iConfig.getParameter<double>("bPtThreshold")),
+    muonPtThreshold_(iConfig.getParameter<double>("muonPtThreshold")),
+    electronPtThreshold_(iConfig.getParameter<double>("electronPtThreshold")),
     jetToken_(consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("srcJets"))),
     displacedGenVertexToken_(consumes<edm::View<llpdnnx::DisplacedGenVertex>>(iConfig.getParameter<edm::InputTag>("srcVertices"))),
     llpFlavourInfoToken_(consumes<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>>(iConfig.getParameter<edm::InputTag>("srcFlavourInfo")))
@@ -114,7 +123,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     {
         const pat::Jet& jet = jetCollection->at(ijet);
         edm::RefToBase<reco::Jet> jet_ref(jetCollection->refAt(ijet));
-        
         llpdnnx::LLPLabel label;
         
         if (not jet.genJet())
@@ -278,9 +286,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (maxFlavor<getHadronFlavor(mother))
                             {
                                 maxFlavor = getHadronFlavor(mother);
-                                label.llpId = mother.pdgId();
-                                label.decay_angle = angle(matchedGenJet->p4(),mother.p4());
-                                label.betagamma = mother.p()/std::max(mother.mass(),1e-10);
                                 llpVertex = parentVertex;
                             }
                         }
@@ -290,6 +295,13 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     {
                         const std::vector<llpdnnx::LLPGhostFlavour>& llpGhostFlavours = (*llpGhostFlavourInfoMap)[jet_ref].llpFlavours;
                         
+                        const auto &mother = *(llpVertex->motherLongLivedParticle);
+                        label.llpId = mother.pdgId();
+                        label.decay_angle = angle(matchedGenJet->p4(),mother.p4());
+                        label.betagamma = mother.p()/std::max(mother.mass(),1e-10);
+                        label.llp_mass = mother.mass();
+                        label.llp_pt = mother.pt();
+
                         int nQ = 0;
                         int nMU = 0;
                         int nE = 0;
@@ -307,11 +319,13 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             }
                             
                             
+                            double pt = ghost->pt(); //ignore soft ghosts that wont be reconstructed
+                            
                             int absId = abs(ghost->pdgId());
-                            if (absId==13) nMU+=1;
-                            if (absId==11) nE+=1;
-                            if (absId==5) nB+=1;
-                            if (absId<5 or absId==21) nQ+=1;
+                            if (absId==13 and pt>muonPtThreshold_) nMU+=1;
+                            if (absId==11 and pt>electronPtThreshold_) nE+=1;
+                            if (absId==5 and pt>bPtThreshold_) nB+=1;
+                            if ((absId<5 or absId==21) and pt>quarkPtThreshold_) nQ+=1;
                                 
                         }
                         label.type = llpdnnx::LLPLabel::Type::isLLP_RAD; //default

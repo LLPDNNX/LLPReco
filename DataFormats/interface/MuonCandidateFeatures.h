@@ -8,6 +8,7 @@ class MuonCandidateFeatures {
 
   public:
 
+  int  mu_jetIdx ; 
   bool  mu_isGlobal ; 
   bool  mu_isTight ; 
   bool  mu_isMedium ; 

@@ -3,7 +3,7 @@
 Description: Produces and fill in LLPDNNX features
 
 Implementation:
-    [Notes on implementation]
+[Notes on implementation]
 */
 //
 // Original Author:  Vilius Cepaitis, Matthias Komm
@@ -21,12 +21,10 @@ Implementation:
 
 #include "DataFormats/PatCandidates/interface/Jet.h"
 #include "DataFormats/PatCandidates/interface/PackedCandidate.h"
-//========= NEW ==============
 #include "DataFormats/PatCandidates/interface/Muon.h"
 #include "DataFormats/PatCandidates/interface/Electron.h"
-#include "RecoEgamma/EgammaIsolationAlgos/interface/EgammaHcalIsolation.h"
 
-//============================
+#include "RecoEgamma/EgammaIsolationAlgos/interface/EgammaHcalIsolation.h"
 
 #include "DataFormats/BTauReco/interface/ShallowTagInfo.h"
 
@@ -56,6 +54,7 @@ Implementation:
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Framework/interface/EventSetup.h"
 
+#include "LLPReco/XTagInfoProducer/interface/JetSubstructure.h"
 
 #include "TVector3.h"
 
@@ -74,36 +73,35 @@ public:
       }
 
     };
+    private:
+        virtual void beginStream(edm::StreamID) override;
+        virtual void produce(edm::Event&, const edm::EventSetup&) override;
+        virtual void endStream() override;
 
-private:
-    virtual void beginStream(edm::StreamID) override;
-    virtual void produce(edm::Event&, const edm::EventSetup&) override;
-    virtual void endStream() override;
+        // ----------member data ---------------------------
+        edm::EDGetTokenT<edm::View<pat::Jet>> jet_token_;
+        edm::EDGetTokenT<reco::VertexCollection> vtx_token_;
+        edm::EDGetTokenT<reco::VertexCompositePtrCandidateCollection> sv_token_;
+        edm::EDGetTokenT<edm::View<reco::ShallowTagInfo>> shallow_tag_info_token_;
+        edm::EDGetTokenT<edm::View<reco::Candidate>> candidateToken_;
+        typedef std::vector<reco::XTagInfo> XTagInfoCollection;
 
-    // ----------member data ---------------------------
-    edm::EDGetTokenT<edm::View<reco::Jet>> jet_token_;
-    edm::EDGetTokenT<reco::VertexCollection> vtx_token_;
-    edm::EDGetTokenT<reco::VertexCompositePtrCandidateCollection> sv_token_;
-    edm::EDGetTokenT<edm::View<reco::ShallowTagInfo>> shallow_tag_info_token_;
-    edm::EDGetTokenT<edm::View<reco::Candidate>> candidateToken_;
-    typedef std::vector<reco::XTagInfo> XTagInfoCollection;
-
-    edm::EDGetTokenT< pat::MuonCollection > muonsMiniAODToken_;
-    edm::EDGetTokenT< pat::ElectronCollection > electronsMiniAODToken_;
+        edm::EDGetTokenT< pat::MuonCollection > muonsMiniAODToken_;
+        edm::EDGetTokenT< pat::ElectronCollection > electronsMiniAODToken_;
 
 
 };
 
 XTagInfoProducer::XTagInfoProducer(const edm::ParameterSet& iConfig) :
-jet_token_(consumes<edm::View<reco::Jet>>(iConfig.getParameter<edm::InputTag>("jets"))),
-vtx_token_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
-sv_token_(consumes<reco::VertexCompositePtrCandidateCollection>(iConfig.getParameter<edm::InputTag>("secondary_vertices"))),
-shallow_tag_info_token_(consumes<edm::View<reco::ShallowTagInfo>>(iConfig.getParameter<edm::InputTag>("shallow_tag_infos"))),
-//===== NEW ======
-muonsMiniAODToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muonSrc"))),
-electronsMiniAODToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electronSrc")))
+    jet_token_(consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("jets"))),
+    vtx_token_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
+    sv_token_(consumes<reco::VertexCompositePtrCandidateCollection>(iConfig.getParameter<edm::InputTag>("secondary_vertices"))),
+    shallow_tag_info_token_(consumes<edm::View<reco::ShallowTagInfo>>(iConfig.getParameter<edm::InputTag>("shallow_tag_infos"))),
+    //===== NEW ======
+    muonsMiniAODToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muonSrc"))),
+    electronsMiniAODToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electronSrc")))
 
-//================
+    //================
 {
     produces<XTagInfoCollection>();
 }
@@ -112,20 +110,20 @@ electronsMiniAODToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<ed
 XTagInfoProducer::~XTagInfoProducer(){ }
 void XTagInfoProducer::beginStream(edm::StreamID) { }
 // ------------ method called to produce the data  ------------
-void
+    void
 XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
     auto output_tag_infos = std::make_unique<XTagInfoCollection>();
-    edm::Handle<edm::View<reco::Jet>> jets;
+    edm::Handle<edm::View<pat::Jet>> jets;
     iEvent.getByToken(jet_token_, jets);
 
     edm::Handle<reco::VertexCollection> vtxs;
     iEvent.getByToken(vtx_token_, vtxs);
 
     if (vtxs->empty()) {
-    // produce empty TagInfos in case no primary vertex
-    iEvent.put(std::move(output_tag_infos));
-    return;  // exit event
+        // produce empty TagInfos in case no primary vertex
+        iEvent.put(std::move(output_tag_infos));
+        return;  // exit event
     }
     const auto& pv = vtxs->at(0);
     edm::ESHandle<TransientTrackBuilder> builder;
@@ -138,7 +136,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     iEvent.getByToken(sv_token_, svs);
 
 
-//============ NEW =========== 
+    //============ NEW =========== 
 
     edm::Handle< pat::MuonCollection > muons;
     iEvent.getByToken(muonsMiniAODToken_, muons);
@@ -146,9 +144,9 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     edm::Handle<pat::ElectronCollection > electrons;
     iEvent.getByToken(electronsMiniAODToken_, electrons);
 
-
     std::unordered_map< reco::CandidatePtr , const  pat::Muon * , candidateHash > muonMap ;
     std::unordered_map< reco::CandidatePtr , const  pat::Electron * , candidateHash > electronMap ;
+
 
 
     for (const pat::Muon &mu : *muons) {
@@ -161,38 +159,67 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     for (unsigned int i = 0 ; i < el.numberOfSourceCandidatePtrs(); ++i )
         electronMap[el.sourceCandidatePtr(i)] = &el;
     }
-//
-
-//===========================
 
     for (std::size_t ijet = 0; ijet < jets->size(); ijet++) {
         // create data containing structure
         llpdnnx::XTagFeatures features;
         const pat::Jet& jet = jets->at(ijet); 
-        edm::RefToBase<reco::Jet> jet_ref(jets, ijet);
-
+        //edm::RefToBase<pat::Jet> jet_ref(jets, ijet);
+        edm::RefToBase<reco::Jet> jet_ref(jets->refAt(ijet));
 
 
         // Start with global jet features
-        features.jet_features.pt = std::log10(jet.pt());  // uncorrected
+        features.jet_features.pt = jet.pt();  // uncorrected
         features.jet_features.eta = jet.eta();
         features.jet_features.mass = jet.mass();
         features.jet_features.energy = jet.energy();
+        
+        features.jet_features.n60 = jet.n60();
+        features.jet_features.n90 = jet.n90();
+        
+        features.jet_features.chargedEmEnergyFraction = jet.chargedEmEnergyFraction();
+        features.jet_features.chargedHadronEnergyFraction = jet.chargedHadronEnergyFraction();
+        features.jet_features.chargedMuEnergyFraction = jet.chargedMuEnergyFraction();
+        features.jet_features.electronEnergyFraction = jet.electronEnergyFraction();
+
+
+        features.jet_features.jetIdx = jet_ref.key();
 
         features.npv = vtxs->size();
+        
+        llpdnnx::JetSubstructure jetSubstructure(jet);
+
+        features.jet_features.tau1 = jetSubstructure.nSubjettiness(1);
+        features.jet_features.tau2 = jetSubstructure.nSubjettiness(2);
+        features.jet_features.tau3 = jetSubstructure.nSubjettiness(3);
+        
+
+        features.jet_features.relMassDropMassAK = jetSubstructure.massDropMass(llpdnnx::JetSubstructure::ClusterType::AK)/features.jet_features.mass;
+        features.jet_features.relMassDropMassCA = jetSubstructure.massDropMass(llpdnnx::JetSubstructure::ClusterType::CA)/features.jet_features.mass;
+        features.jet_features.relSoftDropMassAK = jetSubstructure.softDropMass(llpdnnx::JetSubstructure::ClusterType::AK)/features.jet_features.mass;
+        features.jet_features.relSoftDropMassCA = jetSubstructure.softDropMass(llpdnnx::JetSubstructure::ClusterType::CA)/features.jet_features.mass;
+       
+        auto eventShapes = jetSubstructure.eventShapeVariables();
+        features.jet_features.thrust = jetSubstructure.thrust();
+        features.jet_features.sphericity = eventShapes.sphericity();
+        features.jet_features.circularity = eventShapes.circularity();
+        features.jet_features.isotropy = eventShapes.isotropy();
+        features.jet_features.eventShapeC = eventShapes.C();
+        features.jet_features.eventShapeD = eventShapes.D();
+        
 
         // Add CSV variables
         const edm::View<reco::ShallowTagInfo>& taginfos = *shallow_tag_infos;
         edm::Ptr<reco::ShallowTagInfo> match;
         // Try first by 'same index'
         if ((ijet < taginfos.size()) && (taginfos[ijet].jet() == jet_ref)) {
-        match = taginfos.ptrAt(ijet);
+            match = taginfos.ptrAt(ijet);
         } else {
-        // otherwise fail back to a simple search
-        for (auto itTI = taginfos.begin(), edTI = taginfos.end(); itTI != edTI; ++itTI) {
-            if (itTI->jet() == jet_ref) {
-            match = taginfos.ptrAt(itTI - taginfos.begin());
-            //break;
+            // otherwise fail back to a simple search
+            for (auto itTI = taginfos.begin(), edTI = taginfos.end(); itTI != edTI; ++itTI) {
+                if (itTI->jet() == jet_ref) {
+                    match = taginfos.ptrAt(itTI - taginfos.begin());
+                    //break;
                 }
             }
         }
@@ -202,6 +229,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         }  // will be default values otherwise
 
         reco::TaggingVariableList vars = tag_info.taggingVariables();
+        features.tag_info_features.csv_jetIdx = jet_ref.key();
         features.tag_info_features.csv_trackSumJetEtRatio = vars.get(reco::btau::trackSumJetEtRatio, -1);
         features.tag_info_features.csv_trackSumJetDeltaR = vars.get(reco::btau::trackSumJetDeltaR, -1);
         features.tag_info_features.csv_vertexCategory = vars.get(reco::btau::vertexCategory, -1);
@@ -211,7 +239,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.tag_info_features.csv_trackSip3dSigAboveCharm = vars.get(reco::btau::trackSip3dSigAboveCharm, -1);
         features.tag_info_features.csv_jetNTracksEtaRel = vars.get(reco::btau::jetNTracksEtaRel, -1);
         features.tag_info_features.csv_jetNSelectedTracks = vars.get(reco::btau::jetNSelectedTracks, -1);
-                
+
 
         // fill features from secondary vertices
         for (unsigned int isv = 0; isv < svs->size(); ++isv)
@@ -222,62 +250,64 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 continue;
             }
             llpdnnx::SecondaryVertexFeatures sv_features;
-        
-            sv_features.sv_pt = std::log10(sv.pt()); 
+
+            sv_features.sv_jetIdx = jet_ref.key();
+            sv_features.sv_pt = sv.pt(); 
             sv_features.sv_deltaR = reco::deltaR(sv,jet);
             sv_features.sv_mass = sv.mass();
             sv_features.sv_ntracks = sv.numberOfDaughters();
             sv_features.sv_chi2 = sv.vertexChi2();
             sv_features.sv_ndof = sv.vertexNdof();
 
-            
+
             reco::Vertex::CovarianceMatrix covsv; 
             sv.fillVertexCovariance(covsv);
             reco::Vertex svtx(sv.vertex(), covsv);
-        
+
             VertexDistanceXY distXY;
             Measurement1D distanceXY = distXY.distance(svtx, pv);
             sv_features.sv_dxy = distanceXY.value();
             sv_features.sv_dxysig = distanceXY.value()/distanceXY.error();
-        
+
             VertexDistance3D dist3D;
             Measurement1D distance3D = dist3D.distance(svtx, pv);
             sv_features.sv_d3d = distance3D.value();
             sv_features.sv_d3dsig = distance3D.value()/distance3D.error();
-            
+
             reco::Candidate::Vector distance(sv.vx() - pv.x(), sv.vy() - pv.y(), sv.vz() - pv.z());
             sv_features.sv_costhetasvpv = sv.momentum().Unit().Dot(distance.Unit());
             sv_features.sv_enratio = sv.energy()/jet.pt();
-            
+
 
             features.sv_features.emplace_back(sv_features);
         }
 
         std::stable_sort(features.sv_features.begin(),features.sv_features.end(),[&pv](const auto& d1, const auto& d2)
-        {
-            return d1.sv_dxysig>d2.sv_dxysig; //sort decreasing
-        });
+                {
+                return d1.sv_dxysig>d2.sv_dxysig; //sort decreasing
+                });
 
 
         // Fill track info
         for (unsigned int idaughter = 0; idaughter < jet.numberOfDaughters(); ++idaughter){
             const pat::PackedCandidate* constituent = dynamic_cast<const pat::PackedCandidate*>(jet.daughter(idaughter));
             if ((not constituent) or constituent->charge()==0 or (not constituent->hasTrackDetails()))
-                {
-                    continue;
-                }
+            {
+                continue;
+            }
 
             llpdnnx::ChargedCandidateFeatures cpf_features;
-                
+
             cpf_features.cpf_ptrel = constituent->pt()/jet.pt();
-                
+
             cpf_features.cpf_drminsv = 0.4;
             for (const auto& sv: *svs.product())
             {
                 float dR = reco::deltaR(sv,*constituent);
                 cpf_features.cpf_drminsv = std::min(cpf_features.cpf_drminsv,dR);
             }
-                
+
+            cpf_features.cpf_jetIdx = jet_ref.key();
             cpf_features.cpf_vertex_association = constituent->pvAssociationQuality();
             cpf_features.cpf_fromPV = constituent->fromPV();
             cpf_features.cpf_puppi_weight = constituent->puppiWeight();
@@ -287,7 +317,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             //if (jet.mass()<1e-10) cpf_features.cpf_jetmassdroprel = 0;
             //else cpf_features.jetmassdroprel = (jet.p4()-constituent->p4()).mass()/jet.mass();
-            
+
             reco::TransientTrack transientTrack = builder->build(constituent->pseudoTrack());
             reco::Candidate::Vector jetDir = jet.momentum().Unit();
             GlobalVector jetRefTrackDir(jet.px(),jet.py(),jet.pz());
@@ -306,7 +336,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_features.cpf_trackDeltaR=reco::deltaR(trackMom, jetDir);
             //cpf_features.cpf_trackPtRatio=cpf_features.cpf_trackPtRel / trackMag;
             cpf_features.cpf_trackPParRatio=cpf_features.cpf_trackPPar / trackMag;
-            
+
             cpf_features.cpf_trackSip2dVal=std::abs(meas_ip2d.value());
             cpf_features.cpf_trackSip2dSig=std::abs(meas_ip2d.significance());
             cpf_features.cpf_trackSip3dVal=std::abs(meas_ip3d.value());
@@ -316,10 +346,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 cpf_features.cpf_trackSip2dSig=-1.;
                 cpf_features.cpf_trackSip3dSig=-1.;
             }
-                
+
             cpf_features.cpf_trackJetDistVal = jetdist.value();
             cpf_features.cpf_trackJetDistSig = jetdist.significance();
-                
+
             float sumPt = 0.;
             for (unsigned int jdaughter = 0; jdaughter < jet.numberOfDaughters(); ++jdaughter)
             {
@@ -330,12 +360,12 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 }
             }
             //cpf_features.cpf_relIso01 = sumPt/constituent->pt();
-            
+
             //cpf_features.cpf_lostInnerHits = constituent->lostInnerHits(); //http://cmsdoxygen.web.cern.ch/cmsdoxygen/CMSSW_9_4_4/doc/html/d8/d79/classpat_1_1PackedCandidate.html#ab9ef9a12f92e02fa61653ba77ee34274
 
             //int pdgId = std::abs(constituent->pdgId());
             //cpf_features.cpf_isLepton = pdgId==11 or pdgId==13;
-        
+
             features.cpf_features.emplace_back(cpf_features);
 
 
@@ -424,6 +454,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 		features.mu_features.emplace_back(mu_features);
   
                }
+
 
 
 
@@ -569,8 +600,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 	elec_features.elec_dr04HcalDepth2TowerSumEt = electron.dr04HcalDepth2TowerSumEt() ; 
 	elec_features.elec_dr04HcalDepth2TowerSumEtBc = electron.dr04HcalDepth2TowerSumEtBc() ;
         
-
-
  	elec_features.elec_dr04HcalTowerSumEt = electron.dr04HcalTowerSumEt();
  	elec_features.elec_dr04HcalTowerSumEtBc = electron.dr04HcalTowerSumEtBc() ;
  
@@ -578,27 +607,26 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     }
 
- 
         }
         std::stable_sort(features.cpf_features.begin(),features.cpf_features.end(),[](const auto& d1, const auto& d2)
-            {
+                {
                 if (!std::isnan(d1.cpf_trackSip2dSig) and !std::isinf(d1.cpf_trackSip2dSig))
                 {
-                    if (!std::isnan(d2.cpf_trackSip2dSig) and !std::isinf(d2.cpf_trackSip2dSig))
-                    {
-                        if (std::fabs(d1.cpf_drminsv-d2.cpf_drminsv)>std::numeric_limits<float>::epsilon())
-                        {
-                            return std::fabs(d1.cpf_trackSip2dSig)>std::fabs(d2.cpf_trackSip2dSig); //sort decreasing
-                        }
-                    }
-                    else
-                    {
-                        return true;
-                    }
+                if (!std::isnan(d2.cpf_trackSip2dSig) and !std::isinf(d2.cpf_trackSip2dSig))
+                {
+                if (std::fabs(d1.cpf_drminsv-d2.cpf_drminsv)>std::numeric_limits<float>::epsilon())
+                {
+                return std::fabs(d1.cpf_trackSip2dSig)>std::fabs(d2.cpf_trackSip2dSig); //sort decreasing
+                }
+                }
+                else
+                {
+                return true;
+                }
                 }
                 else if (!std::isnan(d2.cpf_trackSip2dSig) and !std::isinf(d2.cpf_trackSip2dSig))
                 {
-                    return false;
+                return false;
                 }
                 if (!std::isnan(d1.cpf_drminsv) and !std::isinf(d1.cpf_drminsv))
                 {
@@ -618,7 +646,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 {
                     return true;
                 }
-                
+
                 if (!std::isnan(d1.cpf_ptrel) and !std::isinf(d1.cpf_ptrel))
                 {
                     if (!std::isnan(d2.cpf_ptrel) and !std::isinf(d2.cpf_ptrel))
@@ -635,7 +663,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     return false;
                 }
                 return false;
-            });
+                });
         // Fill neutral hadron info
         for (unsigned int idaughter = 0; idaughter < jet.numberOfDaughters(); ++idaughter){
             const pat::PackedCandidate* constituent = dynamic_cast<const pat::PackedCandidate*>(jet.daughter(idaughter));
@@ -644,60 +672,61 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 continue;
             }
             llpdnnx::NeutralCandidateFeatures npf_features;
-        
+
             npf_features.npf_ptrel = constituent->pt()/jet.pt();
+            npf_features.npf_jetIdx = jet_ref.key();
             npf_features.npf_puppi_weight = constituent->puppiWeight();
             npf_features.npf_deltaR = reco::deltaR(*constituent,jet);
             npf_features.npf_isGamma = fabs(constituent->pdgId())==22;
             npf_features.npf_hcal_fraction = constituent->hcalFraction();
-            
+
             npf_features.npf_drminsv = 0.4;
             for (const auto& sv: *svs.product())
             {
                 float dR = reco::deltaR(sv,*constituent);
                 npf_features.npf_drminsv = std::min(npf_features.npf_drminsv,dR);
             }
-            
+
             //if (jet.mass()<1e-10) npf_features.npf._etmassdroprel = -9;
             //else npf_features.npf_jetmassdroprel = (jet.p4()- constituent->p4()).mass()/jet.mass();
 
             /*
-            float sumPt = 0.;
-            for (unsigned int jdaughter = 0; jdaughter < jet.numberOfDaughters(); ++jdaughter)
-            {
-                const pat::PackedCandidate* other = dynamic_cast<const pat::PackedCandidate*>(jet.daughter(jdaughter));
-                if (other and other!=constituent and reco::deltaR(*other,*constituent)<0.1)
-                {
-                    sumPt += other->pt();
-                }
-            }
-            npf_features.npf_relIso01 = sumPt/constituent->pt();
-            */
+               float sumPt = 0.;
+               for (unsigned int jdaughter = 0; jdaughter < jet.numberOfDaughters(); ++jdaughter)
+               {
+               const pat::PackedCandidate* other = dynamic_cast<const pat::PackedCandidate*>(jet.daughter(jdaughter));
+               if (other and other!=constituent and reco::deltaR(*other,*constituent)<0.1)
+               {
+               sumPt += other->pt();
+               }
+               }
+               npf_features.npf_relIso01 = sumPt/constituent->pt();
+               */
             features.npf_features.emplace_back(npf_features);
         }
         std::stable_sort(features.npf_features.begin(),features.npf_features.end(),[](const auto& d1, const auto& d2)
-            {
+                {
                 if (!std::isnan(d1.npf_drminsv) and !std::isinf(d1.npf_drminsv))
                 {
-                    if (!std::isnan(d2.npf_drminsv) and !std::isinf(d2.npf_drminsv))
-                    {
-                        if (std::fabs(d1.npf_drminsv-d2.npf_drminsv)>std::numeric_limits<float>::epsilon())
-                        {
-                            return d1.npf_drminsv<d2.npf_drminsv; //sort increasing
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                if (!std::isnan(d2.npf_drminsv) and !std::isinf(d2.npf_drminsv))
+                {
+                if (std::fabs(d1.npf_drminsv-d2.npf_drminsv)>std::numeric_limits<float>::epsilon())
+                {
+                return d1.npf_drminsv<d2.npf_drminsv; //sort increasing
+                }
+                }
+                else
+                {
+                return false;
+                }
                 }
                 else if (!std::isnan(d2.npf_drminsv) and !std::isinf(d2.npf_drminsv))
                 {
-                    return true;
+                return true;
                 }
-                    
+
                 if (!std::isnan(d1.npf_ptrel) and !std::isinf(d1.npf_ptrel))
-                    {
+                {
                     if (!std::isnan(d2.npf_ptrel) and !std::isinf(d2.npf_ptrel))
                     {
                         return d1.npf_ptrel>d2.npf_ptrel; //sort decreasing
@@ -712,20 +741,20 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     return false;
                 }
                 return false;
-            });
-    output_tag_infos->emplace_back(features, jet_ref);
-  }
+                });
+        output_tag_infos->emplace_back(features, jet_ref);
+    }
 
-  iEvent.put(std::move(output_tag_infos));
+    iEvent.put(std::move(output_tag_infos));
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void XTagInfoProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-edm::ParameterSetDescription desc;
-desc.add<edm::InputTag>("jets", edm::InputTag("ak4PFJetsCHS"));
-desc.add<edm::InputTag>("vertices", edm::InputTag("offlinePrimaryVertices"));
-desc.add<edm::InputTag>("secondary_vertices", edm::InputTag("inclusiveCandidateSecondaryVertices"));
-desc.add<edm::InputTag>("shallow_tag_infos", edm::InputTag("pfDeepCSVTagInfos"));
+    edm::ParameterSetDescription desc;
+    desc.add<edm::InputTag>("jets", edm::InputTag("ak4PFJetsCHS"));
+    desc.add<edm::InputTag>("vertices", edm::InputTag("offlinePrimaryVertices"));
+    desc.add<edm::InputTag>("secondary_vertices", edm::InputTag("inclusiveCandidateSecondaryVertices"));
+    desc.add<edm::InputTag>("shallow_tag_infos", edm::InputTag("pfDeepCSVTagInfos"));
 }
 void XTagInfoProducer::endStream() {};
 

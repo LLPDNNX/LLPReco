@@ -7,6 +7,7 @@ class SecondaryVertexFeatures {
 
   public:
 
+    int sv_jetIdx;
     float sv_pt;
     float sv_deltaR;
     float sv_mass;
