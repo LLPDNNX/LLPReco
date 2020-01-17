@@ -151,6 +151,15 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.jet_features.eta = jet.eta();
         features.jet_features.mass = jet.mass();
         features.jet_features.energy = jet.energy();
+        
+        features.jet_features.n60 = jet.n60();
+        features.jet_features.n90 = jet.n90();
+        
+        features.jet_features.chargedEmEnergyFraction = jet.chargedEmEnergyFraction();
+        features.jet_features.chargedHadronEnergyFraction = jet.chargedHadronEnergyFraction();
+        features.jet_features.chargedMuEnergyFraction = jet.chargedMuEnergyFraction();
+        features.jet_features.electronEnergyFraction = jet.electronEnergyFraction();
+
 
         features.jet_features.jetIdx = jet_ref.key();
 

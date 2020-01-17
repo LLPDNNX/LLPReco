@@ -12,6 +12,14 @@ class JetFeatures {
     float eta;
     float mass;
     float energy;
+    
+    int n60;
+    int n90;
+    
+    float chargedEmEnergyFraction;
+    float chargedHadronEnergyFraction;
+    float chargedMuEnergyFraction;
+    float electronEnergyFraction;
 
     float tau1;
     float tau2;
