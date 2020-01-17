@@ -75,7 +75,7 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(1000)
 )
 
 files = {
@@ -206,14 +206,11 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     secondary_vertices = cms.InputTag("slimmedSecondaryVertices")
 )
 
-process.pfXTags = cms.EDProducer("XTagProducer",
-    graph_path=cms.FileInPath("LLPReco/XTagProducer/data/da.pb"),
-    src=cms.InputTag("pfXTagInfos"),
-    ctau_values=cms.vdouble(-2., 0., 3.), # provide log(ctau/1mm) to be evaluated: i.e. 10 mum, 1 mm and 1 m here
-    ctau_descriptors=cms.vstring("0p01", "1", "1000") # provide log(ctau/1mm) to be evaluated: i.e. 10 mum, 1 mm and 1 m here
+process.nanoTable = cms.EDProducer("NANOProducer",
+    srcTags = cms.InputTag("pfXTagInfos"),
 )
 
-process.nanoTable = cms.EDProducer("NANOProducer",
+process.nanoGenTable = cms.EDProducer("NANOGenProducer",
     srcTags = cms.InputTag("pfXTagInfos"),
     srcLabels = cms.InputTag("llpLabels")
 )
@@ -297,6 +294,7 @@ else:
         process.llpFlavour+
         process.llpLabels+
         process.nanoTable+
+        process.nanoGenTable+
         process.nanoSequenceMC
     )
     
