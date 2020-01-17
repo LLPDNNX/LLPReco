@@ -139,8 +139,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> trackSip2dSigAboveCharm;
     std::vector<float> trackSip3dValAboveCharm;
     std::vector<float> trackSip3dSigAboveCharm;
-    std::vector<float> jetNSelectedTracks;
-    std::vector<float> jetNTracksEtaRel;
+    std::vector<int> jetNSelectedTracks;
+    std::vector<int> jetNTracksEtaRel;
 
 
     std::vector<int> cpf_jetIdx;
@@ -190,7 +190,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> sv_mass;
     std::vector<float> sv_ntracks;
     std::vector<float> sv_chi2;
-    std::vector<float> sv_ndof;
+    std::vector<int> sv_ndof;
     std::vector<float> sv_dxy;
     std::vector<float> sv_dxysig;
     std::vector<float> sv_d3d;
@@ -771,6 +771,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("eventShapeC", eventShapeC, "eventShapeC", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("eventShapeD", eventShapeD, "eventShapeD", nanoaod::FlatTable::FloatColumn);
 
+
     csvTable->addColumn<int>("jetIdx", csv_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
     csvTable->addColumn<float>("trackSumJetEtRatio", trackSumJetEtRatio, "ratio of track sum transverse energy over jet energy", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("trackSumJetDeltaR", trackSumJetDeltaR, "pseudoangular distance between jet axis and track fourvector sum", nanoaod::FlatTable::FloatColumn);
@@ -779,8 +780,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     csvTable->addColumn<float>("trackSip2dSigAboveCharm", trackSip2dSigAboveCharm, "track 2D signed impact parameter significance of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("trackSip3dValAboveCharm", trackSip3dValAboveCharm, "track 3D signed impact parameter of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("trackSip3dSigAboveCharm", trackSip3dSigAboveCharm, "track 3D signed impact parameter significance of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("jetNSelectedTracks", jetNSelectedTracks, "tracks associated to jet", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("jetNTracksEtaRel", jetNTracksEtaRel, "number of tracks for which etaRel is computed", nanoaod::FlatTable::FloatColumn);
+    csvTable->addColumn<int>("jetNSelectedTracks", jetNSelectedTracks, "tracks associated to jet", nanoaod::FlatTable::IntColumn);
+    csvTable->addColumn<int>("jetNTracksEtaRel", jetNTracksEtaRel, "number of tracks for which etaRel is computed", nanoaod::FlatTable::IntColumn);
 
     cpfTable->addColumn<int>("jetIdx", cpf_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<float>("trackEtaRel", cpf_trackEtaRel, "track pseudorapidity, relative to the jet axis", nanoaod::FlatTable::FloatColumn);
@@ -802,8 +803,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     cpfTable->addColumn<float>("puppi_weight", cpf_puppi_weight, "weight assigned by the PUPPI algorithm to neutral PF candidate track", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("track_chi2", cpf_track_chi2, "chi^2 of a charged PF candidate track", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("track_quality", cpf_track_quality, "Indicates charged particle track reconstruction quality", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("track_ndof", cpf_track_ndof, "Track fit number of degrees of freedom of charged PF candidate track", nanoaod::FlatTable::FloatColumn);
-
+    cpfTable->addColumn<int>("track_ndof", cpf_track_ndof, "Track fit number of degrees of freedom of charged PF candidate track", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<int>("matchedMuon", cpf_matchedMuon, "flag to specify whether the track is matched to a PF muon", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<int>("matchedElectron", cpf_matchedElectron, "flag to specify whether the track is matched to a PF electron", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<int>("matchedSV", cpf_matchedSV, "flag to specify whether the track is matched to a PF secondary vertex", nanoaod::FlatTable::IntColumn);
