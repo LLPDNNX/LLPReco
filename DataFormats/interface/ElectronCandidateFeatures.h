@@ -140,7 +140,6 @@ float elec_dr04HcalDepth2TowerSumEtBc  ;
 float elec_dr04HcalTowerSumEt  ;
 float elec_dr04HcalTowerSumEtBc  ;
 
-
  
  
 };

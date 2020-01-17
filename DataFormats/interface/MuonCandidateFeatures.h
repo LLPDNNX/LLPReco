@@ -33,11 +33,11 @@ class MuonCandidateFeatures {
   float mu_3dIp ; 
   float mu_3dIpSig ; 
 
-  float mu_absdxy ; 
-  float mu_absdxyError ; 
-  float mu_absdxySig ; 
-  float mu_absdz ; 
-  float mu_absdzError ; 
+  float mu_dxy ; 
+  float mu_dxyError ; 
+  float mu_dxySig ; 
+  float mu_dz ; 
+  float mu_dzError ; 
   float mu_numberOfValidPixelHits; 
   float mu_numberOfpixelLayersWithMeasurement ; 
   float mu_numberOfstripLayersWithMeasurement ; //that does not help. needs to be discussed.
@@ -70,6 +70,9 @@ class MuonCandidateFeatures {
   float mu_pileup03 ; 
   float mu_sumPhotonEt03 ; */
 
+  float mu_timeAtIpInOut ; 
+  float mu_timeAtIpInOutErr ; 
+  float mu_timeAtIpOutIn ; 
  
 };
 
