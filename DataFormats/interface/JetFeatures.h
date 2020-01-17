@@ -16,10 +16,10 @@ class JetFeatures {
     float tau2;
     float tau3;
     
-    float massDropMassAK;
-    float massDropMassCA;
-    float softDropMassAK;
-    float softDropMassCA;
+    float relMassDropMassAK;
+    float relMassDropMassCA;
+    float relSoftDropMassAK;
+    float relSoftDropMassCA;
     
     float thrust;
     float sphericity;
