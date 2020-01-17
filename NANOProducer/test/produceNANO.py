@@ -33,23 +33,21 @@ options.register(
 )
 options.register(
     'year',
-    2017,
+    '2017',
     VarParsing.multiplicity.singleton,
-    VarParsing.varType.int,
+    VarParsing.varType.string,
     "add year file"
 )
 options.parseArguments() 
 
-if options.year == 2016:
-    print "2016"
+if options.year == '2016':
     process = cms.Process('NANO',eras.Run2_2016,eras.run2_nanoAOD_94X2016)
-elif options.year == 2017:
-    print "2017"
+elif options.year == '2017':
     process = cms.Process('NANO',eras.Run2_2017,eras.run2_nanoAOD_94XMiniAODv2)
-elif options.year == 2018 or options.year == 2019:
-    print "2018"
+elif options.year == '2018' or options.year == '2018D':
     process = cms.Process('NANO',eras.Run2_2018,eras.run2_nanoAOD_102Xv1)
 
+print "Selected year: ",options.year
 
 # import of standard configurations
 process.load('Configuration.StandardSequences.Services_cff')
@@ -81,15 +79,15 @@ process.maxEvents = cms.untracked.PSet(
 )
 
 files = {
-    2016: {
+    '2016': {
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.000415932686862_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_140.root",
         "data": "/store/data/Run2016G/SingleMuon/MINIAOD/17Jul2018-v1/50000/FEE97C3E-6490-E811-AEF5-7CD30AD09004.root",
     },
-    2017: {
+    '2017': {
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Fall17/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
         "data": "/store/data/Run2017E/SingleMuon/MINIAOD/31Mar2018-v1/00000/A6325FCE-1C39-E811-BB22-0CC47A745298.root"
     },
-    2018: {
+    '2018': {
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Autumn18/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
         "data": "/store/data/Run2018B/SingleMuon/MINIAOD/17Sep2018-v1/60000/FF47BB90-FC1A-CC44-A635-2B8B8C64AA39.root"
     }
@@ -162,22 +160,22 @@ process.OUT = cms.OutputModule("PoolOutputModule",
 )
 
 if options.isData:
-    if options.year == 2016:
+    if options.year == '2016':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v11', '')
-    if options.year == 2017:
+    if options.year == '2017':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v11', '')
-    if options.year == 2018:
+    if options.year == '2018':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
-    if options.year == 2019:
+    if options.year == '2018D':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v15', '')
 
     jetCorrectionsAK4PFchs = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'], 'None')
 else:
-    if options.year == 2016:
+    if options.year == '2016':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_mcRun2_asymptotic_v7', '')
-    if options.year == 2017:
+    if options.year == '2017':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_mc2017_realistic_v7', '')
-    if options.year == 2018 or options.year == 2019:
+    if options.year == '2018' or options.year == '2018D':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v20', '')
 
     jetCorrectionsAK4PFchs = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], 'None')
