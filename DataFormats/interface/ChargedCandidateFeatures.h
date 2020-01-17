@@ -7,6 +7,7 @@ class ChargedCandidateFeatures {
 
   public:
 
+    int cpf_jetIdx;
     float cpf_trackEtaRel;
     float cpf_trackPtRel;
     float cpf_trackPPar;

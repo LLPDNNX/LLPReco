@@ -262,7 +262,7 @@ process.llpGenDecayInfo = cms.EDProducer(
 
 process.llpFlavour = cms.EDProducer(
     "LLPGhostFlavourProducer",
-    srcJets = cms.InputTag("slimmedJets"),
+    srcJets = cms.InputTag("updatedPatJets"),
     srcDecayInfo = cms.InputTag("llpGenDecayInfo"),
     jetAlgorithm = cms.string("AntiKt"),
     rParam = cms.double(0.4),
@@ -273,7 +273,7 @@ process.llpFlavour = cms.EDProducer(
 process.llpLabels = cms.EDProducer(
     "LLPLabelProducer",
     srcVertices = cms.InputTag("displacedGenVertices"),
-    srcJets = cms.InputTag("slimmedJets"),
+    srcJets = cms.InputTag("updatedPatJets"),
     srcFlavourInfo = cms.InputTag("llpFlavour"),
     quarkPtThreshold = cms.double(1.),
     bPtThreshold = cms.double(1.),
