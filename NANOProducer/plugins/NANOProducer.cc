@@ -131,6 +131,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> partonFlavor;
     std::vector<int> hadronFlavor;
     std::vector<int> llpId;
+    std::vector<float> llp_pt;
+    std::vector<float> llp_mass;
 
     std::vector<float> displacement;
     std::vector<float> displacement_xy;
@@ -147,6 +149,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> mu_length;
 
     auto globalTable = std::make_unique<nanoaod::FlatTable>(ntags, "global", false, false);
+    std::vector<int> jetIdx;
     std::vector<float> pt;
     std::vector<float> eta;
 
@@ -168,7 +171,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
     auto csvTable = std::make_unique<nanoaod::FlatTable>(ntags, "csv", false, false);
-    std::vector<int> jetIdx;
+    std::vector<int> csv_jetIdx;
     std::vector<float> trackSumJetEtRatio;
     std::vector<float> trackSumJetDeltaR;
     std::vector<float> vertexCategory;
@@ -427,6 +430,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         elec_length.push_back(nelec);
         mu_length.push_back(nmu);
 
+        jetIdx.push_back(features.jet_features.jetIdx);
         pt.push_back(features.jet_features.pt);
         eta.push_back(features.jet_features.eta);
 
@@ -446,7 +450,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         eventShapeC.push_back(features.jet_features.eventShapeC);
         eventShapeD.push_back(features.jet_features.eventShapeD);
 
-        jetIdx.push_back(tag_info_features.csv_jetIdx);
+        csv_jetIdx.push_back(tag_info_features.csv_jetIdx);
+
         trackSumJetEtRatio.push_back(tag_info_features.csv_trackSumJetEtRatio);
         trackSumJetDeltaR.push_back(tag_info_features.csv_trackSumJetDeltaR);
         trackSip2dValAboveCharm.push_back(tag_info_features.csv_trackSip2dValAboveCharm);
@@ -551,6 +556,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         partonFlavor.push_back(labels.partonFlavor);
         hadronFlavor.push_back(labels.hadronFlavor);
         llpId.push_back(labels.llpId);
+        llp_pt.push_back(labels.llp_pt);
+        llp_mass.push_back(labels.llp_mass);
         displacement.push_back(labels.displacement);
         displacement_xy.push_back(labels.displacement_xy);
         displacement_z.push_back(labels.displacement_z);
@@ -829,6 +836,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
     globalTable->addColumn<float>("pt", pt, "global jet pt (uncorrected)", nanoaod::FlatTable::FloatColumn);
+    globalTable->addColumn<int>("jetIdx", jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     globalTable->addColumn<float>("eta", eta, "global jet eta", nanoaod::FlatTable::FloatColumn);
 
     globalTable->addColumn<float>("tau1", tau1, "nsubjettiness 1", nanoaod::FlatTable::FloatColumn);
@@ -846,9 +854,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("isotropy", isotropy, "isotropy", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("eventShapeC", eventShapeC, "eventShapeC", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("eventShapeD", eventShapeD, "eventShapeD", nanoaod::FlatTable::FloatColumn);
-<<<<<<< HEAD
 
-    csvTable->addColumn<int>("jetIdx", jetIdx, "doc", nanoaod::FlatTable::IntColumn);
+    csvTable->addColumn<int>("jetIdx", csv_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     csvTable->addColumn<float>("trackSumJetEtRatio", trackSumJetEtRatio, "ratio of track sum transverse energy over jet energy", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("trackSumJetDeltaR", trackSumJetDeltaR, "pseudoangular distance between jet axis and track fourvector sum", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("vertexCategory", vertexCategory, "category of secondary vertex (Reco, Pseudo, No)", nanoaod::FlatTable::FloatColumn);
@@ -943,6 +950,9 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<int>("partonFlavor", partonFlavor, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("hadronFlavor", partonFlavor, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("llpId", partonFlavor, "doc", nanoaod::FlatTable::IntColumn);
+
+    jetOriginTable->addColumn<float>("llp_pt", llp_pt, "doc", nanoaod::FlatTable::FloatColumn);
+    jetOriginTable->addColumn<float>("llp_mass", llp_mass, "doc", nanoaod::FlatTable::FloatColumn);
 
     jetOriginTable->addColumn<float>("displacement", displacement, "doc", nanoaod::FlatTable::FloatColumn);
     jetOriginTable->addColumn<float>("displacement_xy", displacement_xy, "doc", nanoaod::FlatTable::FloatColumn);

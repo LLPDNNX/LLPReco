@@ -123,7 +123,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     {
         const pat::Jet& jet = jetCollection->at(ijet);
         edm::RefToBase<reco::Jet> jet_ref(jetCollection->refAt(ijet));
-        
         llpdnnx::LLPLabel label;
         
         if (not jet.genJet())
@@ -287,9 +286,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (maxFlavor<getHadronFlavor(mother))
                             {
                                 maxFlavor = getHadronFlavor(mother);
-                                label.llpId = mother.pdgId();
-                                label.decay_angle = angle(matchedGenJet->p4(),mother.p4());
-                                label.betagamma = mother.p()/std::max(mother.mass(),1e-10);
                                 llpVertex = parentVertex;
                             }
                         }
@@ -299,6 +295,13 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     {
                         const std::vector<llpdnnx::LLPGhostFlavour>& llpGhostFlavours = (*llpGhostFlavourInfoMap)[jet_ref].llpFlavours;
                         
+                        const auto &mother = *(llpVertex->motherLongLivedParticle);
+                        label.llpId = mother.pdgId();
+                        label.decay_angle = angle(matchedGenJet->p4(),mother.p4());
+                        label.betagamma = mother.p()/std::max(mother.mass(),1e-10);
+                        label.llp_mass = mother.mass();
+                        label.llp_pt = mother.pt();
+
                         int nQ = 0;
                         int nMU = 0;
                         int nE = 0;
