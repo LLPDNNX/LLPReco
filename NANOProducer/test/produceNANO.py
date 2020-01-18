@@ -64,7 +64,7 @@ process.load('FWCore.MessageLogger.MessageLogger_cfi')
 process.load('TrackingTools/TransientTrack/TransientTrackBuilder_cfi')
 
 ## Events to process
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
 
 if options.isData:
     process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
@@ -148,7 +148,9 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         'drop *_simpleCleanerTable_taus_*',
         
         'drop *_rivetMetTable_*_*',
-        'drop *_rivetProducerHTXS_*_*'
+        'drop *_rivetProducerHTXS_*_*',
+        
+        #'drop *_rivetMetTable_*_*',
     )
 )
 
@@ -350,7 +352,9 @@ modulesToRemove = [
     "slimmedTausUpdated",
     
     "tauTable",
-    "tauMCTable"
+    "tauMCTable",
+    
+    "l1bits",
 ]
 
 #override final taus so that ID evaluation is not needed
