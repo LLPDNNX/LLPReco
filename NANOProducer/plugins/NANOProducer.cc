@@ -824,7 +824,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     lengthTable->addColumn<int>("ele", elec_length, "ele offset", nanoaod::FlatTable::IntColumn);
 
 
-
     muonTable->addColumn<int>("jetIdx", mu_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
     muonTable->addColumn<int>("isGlobal",mu_isGlobal,"doc",nanoaod::FlatTable::IntColumn); 
     muonTable->addColumn<int>("isTight",mu_isTight,"doc",nanoaod::FlatTable::IntColumn); 
@@ -994,7 +993,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("dr04HcalDepth2TowerSumEtBc",elec_dr04HcalDepth2TowerSumEtBc,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("dr04HcalTowerSumEt",elec_dr04HcalTowerSumEt,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("dr04HcalTowerSumEtBc",elec_dr04HcalTowerSumEtBc,"doc",nanoaod::FlatTable::FloatColumn);
-
 
 
     iEvent.put(std::move(globalTable), "global");

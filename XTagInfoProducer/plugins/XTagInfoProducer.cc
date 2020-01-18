@@ -185,6 +185,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.jet_features.chargedMuEnergyFraction = jet.chargedMuEnergyFraction();
         features.jet_features.electronEnergyFraction = jet.electronEnergyFraction();
 
+
         features.jet_features.jetIdx = jet_ref.key();
 
         features.npv = vtxs->size();
