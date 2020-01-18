@@ -4,12 +4,31 @@ import copy
 import math
 import urllib, json
 from CRABClient.UserUtilities import getUsernameFromSiteDB, getLumiListInValidFiles
-
+'''
 url = "https://raw.githubusercontent.com/LLPDNNX/misc/master/miniAOD_102X_HNL_2016.json"
 response = urllib.urlopen(url)
 myJobs = json.loads(response.read())
+'''
 
-requestName = "NANOX_09Oct19"
+myJobs = {
+   "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
+        "inputDataset":"/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 1
+    },
+    "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
+        "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 1
+    },
+    "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
+        "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 1
+    },
+}
+
+requestName = "NANOX_200118"
 userName = getUsernameFromSiteDB() 
 configTmpl = Configuration()
 
@@ -18,11 +37,11 @@ configTmpl.General.transferOutputs = True
 configTmpl.General.transferLogs = False
 
 configTmpl.section_('JobType')
-configTmpl.JobType.psetName = "NANOX/LLPSpecific/test/produce_102X_NANOX.py"
+configTmpl.JobType.psetName = "LLPReco/NANOProducer/test/produceNANO.py"
 configTmpl.JobType.pluginName = 'Analysis'
 configTmpl.JobType.outputFiles = ['nano.root']
 configTmpl.JobType.allowUndistributedCMSSW = True
-configTmpl.JobType.maxJobRuntimeMin= 24*60
+configTmpl.JobType.maxJobRuntimeMin= 20*60
 configTmpl.JobType.pyCfgParams = []
 configTmpl.JobType.inputFiles = []
 configTmpl.JobType.maxMemoryMB = 3000
