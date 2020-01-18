@@ -3,9 +3,8 @@
 
 namespace llpdnnx {
 
-class JetFeatures {
-
-  public:
+struct JetFeatures 
+{
 
     int jetIdx;
     float pt;

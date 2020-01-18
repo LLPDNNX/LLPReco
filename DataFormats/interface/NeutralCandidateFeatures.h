@@ -3,10 +3,8 @@
 
 namespace llpdnnx {
 
-class NeutralCandidateFeatures {
-
-  public:
-
+struct NeutralCandidateFeatures 
+{
     int npf_jetIdx;
     float npf_ptrel;
     float npf_deltaR;
@@ -14,7 +12,7 @@ class NeutralCandidateFeatures {
     float npf_hcal_fraction;
     float npf_drminsv;
     float npf_puppi_weight;
-
+    float npf_relmassdrop;
 };
 
 }

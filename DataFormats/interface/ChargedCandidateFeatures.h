@@ -3,9 +3,8 @@
 
 namespace llpdnnx {
 
-class ChargedCandidateFeatures {
-
-  public:
+struct ChargedCandidateFeatures 
+{
 
     int cpf_jetIdx;
     float cpf_trackEtaRel;
@@ -27,7 +26,12 @@ class ChargedCandidateFeatures {
     float cpf_puppi_weight;
     float cpf_track_chi2;
     float cpf_track_quality;
+    float cpf_relmassdrop;
     float cpf_track_ndof;
+    
+    int cpf_matchedMuon;
+    int cpf_matchedElectron;
+    int cpf_matchedSV;
 };
 
 }

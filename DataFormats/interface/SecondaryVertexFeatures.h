@@ -3,9 +3,8 @@
 
 namespace llpdnnx {
 
-class SecondaryVertexFeatures {
-
-  public:
+struct SecondaryVertexFeatures
+{
 
     int sv_jetIdx;
     float sv_pt;
