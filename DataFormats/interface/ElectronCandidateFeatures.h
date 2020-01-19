@@ -1,12 +1,23 @@
 #ifndef LLPReco_DataFormats_ElectronCandidateFeatures_h
 #define LLPReco_DataFormats_ElectronCandidateFeatures_h
 
- 
+#include "DataFormats/PatCandidates/interface/Electron.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
 namespace llpdnnx {
  
 class ElectronCandidateFeatures { 
 
   public:
+
+  struct candidateHash{
+
+      long operator() (const reco::CandidatePtr& cand) const {
+
+         return cand.id().id() * 10000 + cand.key() ;
+
+      }
+  };
 
   int elec_jetIdx;
   float elec_pt ;
@@ -140,7 +151,7 @@ float elec_dr04HcalDepth2TowerSumEtBc  ;
 float elec_dr04HcalTowerSumEt  ;
 float elec_dr04HcalTowerSumEtBc  ;
 
- 
+void electronFeatures(const pat::Electron& electron , const pat::Jet& jet , const reco::Vertex& pv ) ;  
  
 };
 
