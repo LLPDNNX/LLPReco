@@ -3,10 +3,8 @@
 
 namespace llpdnnx {
 
-class ShallowTagInfoFeatures {
-
-  public:
-
+struct ShallowTagInfoFeatures 
+{
     // jet general
     int csv_jetIdx;
     float csv_trackSumJetEtRatio;      // ratio of track sum transverse energy over jet energy
