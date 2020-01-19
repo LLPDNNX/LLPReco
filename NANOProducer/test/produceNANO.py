@@ -339,7 +339,74 @@ for name in allModules:
         moduleDict[name] = queryInputs(m)
 '''
 
+
+
 modulesToRemove = [
+    'jetCorrFactorsAK8',
+    'updatedJetsAK8',
+    'tightJetIdAK8',
+    'looseJetIdAK8',
+    'tightJetIdLepVetoAK8',
+    'updatedJetsAK8WithUserData',
+    'chsForSATkJets',
+    'softActivityJets',
+    'softActivityJets2',
+    'softActivityJets5',
+    'softActivityJets10',
+    'finalJetsAK8',
+    'patTauDiscriminationByIsolationMVArun2v1DBoldDMwLTraw',
+    'patTauDiscriminationByVVLooseIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByVLooseIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByLooseIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByMediumIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByVVTightIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByIsolationMVArun2v1DBnewDMwLTraw',
+    'patTauDiscriminationByVVLooseIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByVLooseIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByLooseIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByMediumIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByVTightIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByVVTightIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByIsolationMVArun2v1DBoldDMdR0p3wLTraw',
+    'patTauDiscriminationByVVLooseIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByVLooseIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByLooseIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByMediumIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByVVTightIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByElectronRejectionMVA62018Raw',
+    'patTauDiscriminationByVLooseElectronRejectionMVA62018',
+    'patTauDiscriminationByLooseElectronRejectionMVA62018',
+    'patTauDiscriminationByMediumElectronRejectionMVA62018',
+    'patTauDiscriminationByTightElectronRejectionMVA62018',
+    'patTauDiscriminationByVTightElectronRejectionMVA62018',
+    'patTauDiscriminationByIsolationMVArun2v1DBoldDMwLTraw2015',
+    'patTauDiscriminationByVLooseIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByLooseIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByMediumIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByVVTightIsolationMVArun2v1DBoldDMwLT2015',
+    'bitmapVIDForPho',
+    'isoForPho',
+    'seedGainPho',
+    'slimmedPhotonsWithUserData',
+    'egmPhotonIsolation',
+    'photonIDValueMapProducer',
+    'photonMVAValueMapProducer',
+    'egmPhotonIDs',
+    'photonRegressionValueMapProducer',
+    'fatJetTable',
+    'subJetTable',
+    'saJetTable',
+    'saTable',
+    'photonTable',
+
+
     "genJetAK8Table",
     "genJetAK8FlavourAssociation",
     "genJetAK8FlavourTable",
@@ -357,11 +424,7 @@ modulesToRemove = [
     "l1bits",
 ]
 
-#override final taus so that ID evaluation is not needed
-process.finalTaus = cms.EDFilter("PATTauRefSelector",
-    cut = cms.string("pt > 18"),
-    src = cms.InputTag("slimmedTaus")
-)
+
 
 #remove unneeded modules
 for moduleName in modulesToRemove:
@@ -372,6 +435,13 @@ for moduleName in modulesToRemove:
     else:
         print "module for removal not found: ",moduleName
 
+#override final taus (required by object linker) so that ID evaluation is not needed
+process.finalTaus.cut = cms.string("pt > 18")
+process.finalTaus.src = cms.InputTag("slimmedTaus")
+
+#override final photons (required by object linker) so that ID evaluation is not needed
+process.finalPhotons.cut = cms.string("pt > 5")
+process.finalPhotons.src = cms.InputTag("slimmedPhotons")
 
 
 '''
