@@ -1,6 +1,9 @@
 #ifndef LLPReco_DataFormats_MuonCandidateFeatures_h
 #define LLPReco_DataFormats_MuonCandidateFeatures_h
 
+#include "DataFormats/PatCandidates/interface/Muon.h"
+#include "DataFormats/VertexReco/interface/VertexFwd.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
  
 namespace llpdnnx {
  
@@ -64,6 +67,8 @@ struct MuonCandidateFeatures
     float mu_timeAtIpInOut ; 
     float mu_timeAtIpInOutErr ; 
     float mu_timeAtIpOutIn ; 
+
+void muonFeatures(const pat::Muon& muon , const pat::Jet& jet , const reco::Vertex& pv ) ;
 
 };
 

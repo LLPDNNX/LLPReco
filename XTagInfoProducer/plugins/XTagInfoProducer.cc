@@ -399,66 +399,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 if (not muon.isGlobalMuon()) continue ;
                 cpf_features.cpf_matchedMuon = 1;
 
-                mu_features.mu_isGlobal = muon.isGlobalMuon() ;                                   
-                mu_features.mu_isTight = muon.isTightMuon(pv);                                     
-                mu_features.mu_isMedium = muon.isMediumMuon();       
-                mu_features.mu_isLoose = muon.isLooseMuon() ; 
-                mu_features.mu_isStandAlone = muon.isStandAloneMuon() ; 
-
-                mu_features.mu_ptrel = muon.pt()/jet.pt() ; 
-                mu_features.mu_eta = muon.eta();                                                 
-                mu_features.mu_phi = muon.phi();                                                 
-                mu_features.mu_charge = muon.charge();        
-                mu_features.mu_energy = muon.energy()/muon.pt();                                           
-                mu_features.mu_et = muon.et();   
-                mu_features.mu_jetDeltaR = reco::deltaR(muon ,jet) ; 
-                mu_features.mu_numberOfMatchedStations = muon.numberOfMatchedStations();
-
-                mu_features.mu_2dIp = muon.dB() ; 
-                mu_features.mu_2dIpSig = muon.dB()/muon.edB() ; 
-                mu_features.mu_3dIp = muon.dB(pat::Muon::PV3D) ; 
-                mu_features.mu_3dIpSig = muon.dB(pat::Muon::PV3D)/muon.edB(pat::Muon::PV3D) ;
-
-
-                reco::Candidate::Vector muonMom = muon.bestTrack()->momentum();
-
-                mu_features.mu_EtaRel =reco::btau::etaRel(jetDir, muonMom);
-                mu_features.mu_dxy = muon.bestTrack()->dxy(pv.position());
-                mu_features.mu_dxyError = muon.bestTrack()->dxyError() ; 
-                mu_features.mu_dxySig = muon.bestTrack()->dxy(pv.position())/muon.bestTrack()->dxyError(); 
-                mu_features.mu_dz = muon.bestTrack()->dz(pv.position()) ; 
-                mu_features.mu_dzError = muon.bestTrack()->dzError() ;
-                mu_features.mu_numberOfValidPixelHits = muon.bestTrack()->hitPattern().numberOfValidPixelHits();
-                mu_features.mu_numberOfpixelLayersWithMeasurement = muon.bestTrack()->hitPattern().pixelLayersWithMeasurement() ;
-                mu_features.mu_numberOfstripLayersWithMeasurement = muon.bestTrack()->hitPattern().stripLayersWithMeasurement() ;
-
-
-                mu_features.mu_chi2 = muon.bestTrack()->chi2() ;  
-                mu_features.mu_ndof = muon.bestTrack()->ndof() ;
-
-
-                mu_features.mu_caloIso =  muon.caloIso()/muon.pt() ; 
-                mu_features.mu_ecalIso =  muon.ecalIso()/muon.pt() ; 
-                mu_features.mu_hcalIso =  muon.hcalIso()/muon.pt() ;     
-
-
-                mu_features.mu_sumPfChHadronPt  = muon.pfIsolationR04().sumChargedHadronPt/muon.pt();
-                mu_features.mu_sumPfNeuHadronEt  = muon.pfIsolationR04().sumNeutralHadronEt/muon.pt();
-                mu_features.mu_Pfpileup  = muon.pfIsolationR04().sumPUPt/muon.pt();
-                mu_features.mu_sumPfPhotonEt = muon.pfIsolationR04().sumPhotonEt/muon.pt();
-
-
-
-                mu_features.mu_sumPfChHadronPt03  = muon.pfIsolationR03().sumChargedHadronPt/muon.pt();
-                mu_features.mu_sumPfNeuHadronEt03  = muon.pfIsolationR03().sumNeutralHadronEt/muon.pt();
-                mu_features.mu_Pfpileup03  = muon.pfIsolationR03().sumPUPt/muon.pt();
-                mu_features.mu_sumPfPhotonEt03 = muon.pfIsolationR03().sumPhotonEt/muon.pt();       
-
-
-                mu_features.mu_timeAtIpInOut = muon.time().timeAtIpInOut ;  
-                mu_features.mu_timeAtIpInOutErr = muon.time().timeAtIpInOutErr ; 
-                mu_features.mu_timeAtIpOutIn = muon.time().timeAtIpOutIn ;  
-
                 features.mu_features.emplace_back(mu_features);
             }
 
