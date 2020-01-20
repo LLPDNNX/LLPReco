@@ -9,7 +9,7 @@ url = "https://raw.githubusercontent.com/LLPDNNX/misc/master/miniAOD_102X_HNL_20
 response = urllib.urlopen(url)
 myJobs = json.loads(response.read())
 '''
-
+'''
 myJobs = {
    "TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-2016":{
         "inputDataset":"/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
@@ -33,26 +33,59 @@ myJobs = {
     },
     
     
-    "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-2016":{
-        "inputDataset":"/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM",
+    "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-2016":{
+        "inputDataset":"/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+    "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-ext1-2016":{
+        "inputDataset":"/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
         "year": 2016,
         "unitsPerJob": 2
     },
 
+
+    "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-ext2-2016":{
+        "inputDataset":"/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+    
     "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
         "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
         "unitsPerJob": 2
     },
-
+    
+    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-ext1-2017":{
+        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+    
     "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
         "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
         "unitsPerJob": 2
     },
+    
+    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-ext2-2018":{
+        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext2-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+}
 
-    "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-2016":{
-        "inputDataset":"/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+
+'''
+myJobs = {
+    "WToLNu_0J_13TeV-amcatnloFXFX-pythia8-2016":{
+        "inputDataset":"/WToLNu_0J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_backup_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+    "WToLNu_0J_13TeV-amcatnloFXFX-pythia8-ext1-2016":{
+        "inputDataset":"/WToLNu_0J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
         "year": 2016,
         "unitsPerJob": 2
     },
@@ -62,10 +95,18 @@ myJobs = {
         "year": 2017,
         "unitsPerJob": 2
     },
-
-    "WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
-        "inputDataset":"/WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "year": 2017,
+    
+    "WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
+        "inputDataset":"/WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+    
+    
+    
+    "WToLNu_1J_13TeV-amcatnloFXFX-pythia8-2016":{
+        "inputDataset":"/WToLNu_1J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_backup_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
         "unitsPerJob": 2
     },
 
@@ -74,28 +115,24 @@ myJobs = {
         "year": 2017,
         "unitsPerJob": 2
     },
-
-    "WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
-        "inputDataset":"/WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
-    },
-
-    "WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8-ext1-2017":{
-        "inputDataset":"/WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
-    },
-
-    "WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
-        "inputDataset":"/WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
-        "year": 2018,
-        "unitsPerJob": 2
-    },
-
+    
     "WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
         "inputDataset":"/WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
+        "unitsPerJob": 2
+    },
+    
+    
+    
+    "WToLNu_2J_13TeV-amcatnloFXFX-pythia8-ext4-2016":{
+        "inputDataset":"/WToLNu_2J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext4-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+    
+    "WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
+        "inputDataset":"/WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
         "unitsPerJob": 2
     },
 
@@ -105,6 +142,7 @@ myJobs = {
         "unitsPerJob": 2
     },
 }
+
 
 requestName = "NANOX_200118"
 userName = getUsernameFromSiteDB() 
@@ -179,7 +217,7 @@ if __name__ == '__main__':
         if isData:
             config.JobType.pyCfgParams.append("isData=True")
             config.Data.splitting = 'LumiBased'
-            config.Data.unitsPerJob = myJob.get('unitsPerJob', 50)
+            config.Data.unitsPerJob = myJob.get('unitsPerJob', 80)
             if year == 2016:
                 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification//Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
             if year == 2017:

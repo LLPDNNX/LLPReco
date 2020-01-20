@@ -80,7 +80,8 @@ process.maxEvents = cms.untracked.PSet(
 
 files = {
     '2016': {
-        "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.000415932686862_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_140.root",
+        "mc": "/store/mc/RunIISummer16MiniAODv2/WToLNu_1J_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v3/00000/0C571E32-E716-E811-904C-0242AC130002.root",
+        #"root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.000415932686862_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_140.root",
         "data": "/store/data/Run2016G/SingleMuon/MINIAOD/17Jul2018-v1/50000/FEE97C3E-6490-E811-AEF5-7CD30AD09004.root",
     },
     '2017': {
