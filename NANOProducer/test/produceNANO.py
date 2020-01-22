@@ -82,7 +82,7 @@ files = {
     '2016': {
         "mc": "/store/mc/RunIISummer16MiniAODv2/WToLNu_1J_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v3/00000/0C571E32-E716-E811-904C-0242AC130002.root",
         #"root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.000415932686862_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_140.root",
-        "data": "/store/data/Run2016G/SingleMuon/MINIAOD/17Jul2018-v1/50000/FEE97C3E-6490-E811-AEF5-7CD30AD09004.root",
+        "data": "/store/data/Run2016B/SingleMuon/MINIAOD/17Jul2018_ver2-v1/30000/14F647C4-6C92-E811-9571-90E2BACBAD64.root",
     },
     '2017': {
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Fall17/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
@@ -92,7 +92,6 @@ files = {
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Autumn18/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
         "data": "/store/data/Run2018B/SingleMuon/MINIAOD/17Sep2018-v1/60000/FF47BB90-FC1A-CC44-A635-2B8B8C64AA39.root"
     }
-
 }
 
 process.source = cms.Source("PoolSource",
@@ -116,6 +115,9 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         dataTier = dataTier,
         filterName = cms.untracked.string('')
     ),
+    SelectEvents = cms.untracked.PSet(
+        SelectEvents = cms.vstring('llpnanoAOD_step') #only events passing this path will be saved
+    ),
     fileName = cms.untracked.string('nano.root'),
     #outputCommands = process.NANOAODSIMEventContent.outputCommands+cms.untracked.vstring(
     outputCommands = cms.untracked.vstring(
@@ -126,6 +128,7 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         'keep nanoaodUniqueString_nanoMetadata_*_*',
         
         'drop *_caloMetTable_*_*',
+        
         'drop *_fatJetTable_*_*',
         'drop *_genJetAK8FlavourTable_*_*',
         'drop *_genJetAK8Table_*_*',
@@ -279,8 +282,23 @@ process.llpLabels = cms.EDProducer(
     electronPtThreshold = cms.double(1.),
 )
 
+process.selectedMuonsForFilter = cms.EDFilter("CandViewSelector",
+    src = cms.InputTag("slimmedMuons"),
+    cut = cms.string("pt>26 && isGlobalMuon()")
+)
+process.selectedMuonsMinFilter = cms.EDFilter("CandViewCountFilter",
+    src = cms.InputTag("selectedMuonsForFilter"),
+    minNumber = cms.uint32(1)
+)
+    
+process.muonFilterSequence = cms.Sequence(
+    process.selectedMuonsForFilter+process.selectedMuonsMinFilter
+)
+    
+
 if options.isData:
     process.llpnanoAOD_step = cms.Path(
+        process.muonFilterSequence+
         process.patJetCorrFactors+
         process.updatedPatJets+
         process.pfXTagInfos+
