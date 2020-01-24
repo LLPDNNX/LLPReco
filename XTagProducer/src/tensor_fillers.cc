@@ -83,7 +83,7 @@ namespace llpdnnx {
                         const llpdnnx::SecondaryVertexFeatures& sv_features) {
     float* ptr = &tensor.tensor<float, 3>()(jet_n, sv_n, 0);
 
-    *ptr = sv_features.sv_pt;
+    *ptr = sv_features.sv_ptrel;
     *(++ptr) = sv_features.sv_deltaR;
     *(++ptr) = sv_features.sv_mass;
     *(++ptr) = sv_features.sv_ntracks;

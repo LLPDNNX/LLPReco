@@ -7,6 +7,8 @@ struct NeutralCandidateFeatures
 {
     int npf_jetIdx;
     float npf_ptrel;
+    float npf_deta;
+    float npf_dphi;
     float npf_deltaR;
     float npf_isGamma;
     float npf_hcal_fraction;

@@ -7,6 +7,10 @@ struct ChargedCandidateFeatures
 {
 
     int cpf_jetIdx;
+    float cpf_ptrel;
+    float cpf_deta;
+    float cpf_dphi;
+    
     float cpf_trackEtaRel;
     float cpf_trackPtRel;
     float cpf_trackPPar;
@@ -19,7 +23,6 @@ struct ChargedCandidateFeatures
     float cpf_trackSip3dSig;
     float cpf_trackJetDistVal;
     float cpf_trackJetDistSig;
-    float cpf_ptrel;
     float cpf_drminsv;
     float cpf_vertex_association;
     float cpf_fromPV;
