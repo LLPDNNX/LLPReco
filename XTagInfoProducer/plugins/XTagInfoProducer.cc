@@ -172,10 +172,14 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         
 
         // Start with global jet features
-        features.jet_features.pt = jet.pt();  // uncorrected
+        float uncorrectedPt = jet.correctedP4("Uncorrected").pt();
+        
+        features.jet_features.pt = uncorrectedPt;  // uncorrected
         features.jet_features.eta = jet.eta();
+        features.jet_features.phi = jet.phi();
         features.jet_features.mass = jet.mass();
         features.jet_features.energy = jet.energy();
+        features.jet_features.area = jet.jetArea();
         
         features.jet_features.n60 = jet.n60();
         features.jet_features.n90 = jet.n90();
@@ -215,16 +219,17 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         const edm::View<reco::ShallowTagInfo>& taginfos = *shallow_tag_infos;
         edm::Ptr<reco::ShallowTagInfo> match;
         // Try first by 'same index'
-        if ((ijet < taginfos.size()) && (taginfos[ijet].jet() == jet_ref))
+
+        if (reco::deltaR(taginfos[ijet].jet()->p4(),jet.p4())<0.01)
         {
             match = taginfos.ptrAt(ijet);
         } else {
-            // otherwise fail back to a simple search
             for (auto itTI = taginfos.begin(), edTI = taginfos.end(); itTI != edTI; ++itTI)
             {
-                if (itTI->jet() == jet_ref) {
+                float dR = reco::deltaR(itTI->jet()->p4(),jet.p4());
+                if (dR<0.01) {
                     match = taginfos.ptrAt(itTI - taginfos.begin());
-                    //break;
+                    break;
                 }
             }
         }
@@ -270,7 +275,9 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             llpdnnx::SecondaryVertexFeatures sv_features;
 
             sv_features.sv_jetIdx = jet_ref.key();
-            sv_features.sv_pt = sv.pt(); 
+            sv_features.sv_ptrel = sv.pt()/uncorrectedPt;
+            sv_features.sv_deta = std::fabs(sv.eta()-jet.eta());
+            sv_features.sv_dphi = std::fabs(reco::deltaPhi(sv.phi(),jet.phi()));
             sv_features.sv_deltaR = reco::deltaR(sv,jet);
             sv_features.sv_mass = sv.mass();
             sv_features.sv_ntracks = sv.numberOfDaughters();
@@ -317,7 +324,9 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             llpdnnx::ChargedCandidateFeatures cpf_features;
 
-            cpf_features.cpf_ptrel = constituent->pt()/jet.pt();
+            cpf_features.cpf_ptrel = constituent->pt()/uncorrectedPt;
+            cpf_features.cpf_deta = std::fabs(constituent->eta()-jet.eta());
+            cpf_features.cpf_dphi = std::fabs(reco::deltaPhi(constituent->phi(),jet.phi()));
 
             cpf_features.cpf_drminsv = 0.4;
             for (const auto& sv: *svs.product())
@@ -405,9 +414,9 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 mu_features.mu_isLoose = muon.isLooseMuon() ; 
                 mu_features.mu_isStandAlone = muon.isStandAloneMuon() ; 
 
-                mu_features.mu_ptrel = muon.pt()/jet.pt() ; 
-                mu_features.mu_eta = muon.eta();                                                 
-                mu_features.mu_phi = muon.phi();                                                 
+                mu_features.mu_ptrel = muon.pt()/uncorrectedPt ; 
+                mu_features.mu_deta = std::fabs(muon.eta()-jet.eta());                                                 
+                mu_features.mu_dphi = std::fabs(reco::deltaPhi(muon.phi(),jet.phi()));                                                 
                 mu_features.mu_charge = muon.charge();        
                 mu_features.mu_energy = muon.energy()/muon.pt();                                           
                 mu_features.mu_et = muon.et();   
@@ -484,9 +493,9 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 cpf_features.cpf_matchedElectron = 1;
 
-                elec_features.elec_ptrel = electron.pt()/jet.pt() ; 
-                elec_features.elec_eta = electron.eta() ; 
-                elec_features.elec_phi = electron.phi() ; 
+                elec_features.elec_ptrel = electron.pt()/uncorrectedPt ; 
+                elec_features.elec_deta = std::fabs(electron.eta()-jet.eta()) ; 
+                elec_features.elec_dphi = std::fabs(reco::deltaPhi(electron.phi(),jet.phi())); 
                 elec_features.elec_charge = electron.charge() ; 
                 elec_features.elec_energy = electron.energy()/electron.pt(); 
                 elec_features.elec_jetDeltaR = reco::deltaR(electron , jet) ; 
@@ -571,7 +580,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 elec_features.elecSC_energy = electron.superCluster()->energy()/electron.pt(); 
                 elec_features.elecSC_deta = std::fabs(electron.superCluster()->eta()-electron.gsfTrack()->eta());
-                elec_features.elecSC_dphi = reco::deltaPhi(electron.superCluster()->phi(),electron.gsfTrack()->phi());
+                elec_features.elecSC_dphi = std::fabs(reco::deltaPhi(electron.superCluster()->phi(),electron.gsfTrack()->phi()));
                 elec_features.elecSC_et = electron.superCluster()->energy() * sin(electron.p4().theta())/electron.pt();
                 elec_features.elec_scPixCharge = electron.scPixCharge() ; 
                 elec_features.elec_scSigmaEtaEta = electron.scSigmaEtaEta() ; 
@@ -677,11 +686,13 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
             llpdnnx::NeutralCandidateFeatures npf_features;
 
-            npf_features.npf_ptrel = constituent->pt()/jet.pt();
+            npf_features.npf_ptrel = constituent->pt()/uncorrectedPt;
+            npf_features.npf_deta = std::fabs(constituent->eta()-jet.eta());
+            npf_features.npf_dphi = std::fabs(reco::deltaPhi(constituent->phi(),jet.phi()));
             npf_features.npf_jetIdx = jet_ref.key();
             npf_features.npf_puppi_weight = constituent->puppiWeight();
             npf_features.npf_deltaR = reco::deltaR(*constituent,jet);
-            npf_features.npf_isGamma = fabs(constituent->pdgId())==22;
+            npf_features.npf_isGamma = abs(constituent->pdgId())==22;
             npf_features.npf_hcal_fraction = constituent->hcalFraction();
 
             npf_features.npf_drminsv = 0.4;

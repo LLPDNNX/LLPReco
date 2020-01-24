@@ -9,8 +9,11 @@ struct JetFeatures
     int jetIdx;
     float pt;
     float eta;
+    float phi;
     float mass;
     float energy;
+    
+    float area;
     
     int n60;
     int n90;

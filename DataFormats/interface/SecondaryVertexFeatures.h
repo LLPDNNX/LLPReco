@@ -7,7 +7,9 @@ struct SecondaryVertexFeatures
 {
 
     int sv_jetIdx;
-    float sv_pt;
+    float sv_ptrel;
+    float sv_deta;
+    float sv_dphi;
     float sv_deltaR;
     float sv_mass;
     float sv_ntracks;
