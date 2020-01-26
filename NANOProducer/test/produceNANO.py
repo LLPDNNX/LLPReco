@@ -75,13 +75,13 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000)
+    input = cms.untracked.int32(100)
 )
 
 files = {
     '2016': {
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.000415932686862_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_140.root",
-        "data": "/store/data/Run2016G/SingleMuon/MINIAOD/17Jul2018-v1/50000/FEE97C3E-6490-E811-AEF5-7CD30AD09004.root",
+        "data": "/store/data/Run2016B/SingleMuon/MINIAOD/17Jul2018_ver2-v1/30000/14F647C4-6C92-E811-9571-90E2BACBAD64.root",
     },
     '2017': {
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Fall17/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
@@ -90,8 +90,10 @@ files = {
     '2018': {
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Autumn18/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
         "data": "/store/data/Run2018B/SingleMuon/MINIAOD/17Sep2018-v1/60000/FF47BB90-FC1A-CC44-A635-2B8B8C64AA39.root"
+    },
+    '2018D': {
+        "data": "/store/data/Run2018B/SingleMuon/MINIAOD/17Sep2018-v1/60000/FF47BB90-FC1A-CC44-A635-2B8B8C64AA39.root"
     }
-
 }
 
 process.source = cms.Source("PoolSource",
@@ -115,6 +117,9 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         dataTier = dataTier,
         filterName = cms.untracked.string('')
     ),
+    SelectEvents = cms.untracked.PSet(
+        SelectEvents = cms.vstring('llpnanoAOD_step') #only events passing this path will be saved
+    ),
     fileName = cms.untracked.string('nano.root'),
     #outputCommands = process.NANOAODSIMEventContent.outputCommands+cms.untracked.vstring(
     outputCommands = cms.untracked.vstring(
@@ -125,6 +130,7 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         'keep nanoaodUniqueString_nanoMetadata_*_*',
         
         'drop *_caloMetTable_*_*',
+        
         'drop *_fatJetTable_*_*',
         'drop *_genJetAK8FlavourTable_*_*',
         'drop *_genJetAK8Table_*_*',
@@ -170,7 +176,6 @@ if options.isData:
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
     if options.year == '2018D':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v15', '')
-
     jetCorrectionsAK4PFchs = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'], 'None')
 else:
     if options.year == '2016':
@@ -179,31 +184,36 @@ else:
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_mc2017_realistic_v7', '')
     if options.year == '2018' or options.year == '2018D':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v20', '')
-
     jetCorrectionsAK4PFchs = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], 'None')
-    
 
-from PhysicsTools.PatAlgos.tools.jetTools import *
+
 from PhysicsTools.NanoAOD.common_cff import *
+from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 
 updateJetCollection(
     process,
-    jetSource=cms.InputTag("slimmedJets"),
-    jetCorrections=jetCorrectionsAK4PFchs,
-    btagInfos = ['pfImpactParameterTagInfos', 'pfInclusiveSecondaryVertexFinderTagInfos', 'pfDeepCSVTagInfos']
+    labelName = "XTag",
+    jetSource = cms.InputTag('updatedJets'),#'ak4Jets'
+    jetCorrections = jetCorrectionsAK4PFchs,
+    pfCandidates = cms.InputTag('packedPFCandidates'),
+    pvSource = cms.InputTag("offlineSlimmedPrimaryVertices"),
+    svSource = cms.InputTag('slimmedSecondaryVertices'),
+    muSource = cms.InputTag('slimmedMuons'),
+    elSource = cms.InputTag('slimmedElectrons'),
+    btagInfos = [
+        'pfImpactParameterTagInfos',
+        'pfInclusiveSecondaryVertexFinderTagInfos',
+        'pfDeepCSVTagInfos',
+    ],
+    btagDiscriminators = ['pfCombinedInclusiveSecondaryVertexV2BJetTags'],
+    explicitJTA = False,
 )
 
-process.updatedPatJets.addBTagInfo = cms.bool(True)
-process.updatedPatJets.addDiscriminators = cms.bool(True)
-process.updatedPatJets.addJetCorrFactors = cms.bool(True)
-process.updatedPatJets.addTagInfos = cms.bool(True)
-
-
 process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
-    jets = cms.InputTag("updatedPatJets"),
+    jets = cms.InputTag("updatedJets"),
     muonSrc  = cms.InputTag("slimmedMuons"),
     electronSrc = cms.InputTag("slimmedElectrons"),
-    shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfos'),
+    shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfosXTag'),
     vertices = cms.InputTag('offlineSlimmedPrimaryVertices'),
     secondary_vertices = cms.InputTag("slimmedSecondaryVertices")
 )
@@ -220,6 +230,7 @@ process.nanoGenTable = cms.EDProducer("NANOGenProducer",
 process.options = cms.untracked.PSet(
     wantSummary = cms.untracked.bool(True)
 )
+
 
 
 
@@ -259,7 +270,7 @@ process.llpGenDecayInfo = cms.EDProducer(
 
 process.llpFlavour = cms.EDProducer(
     "LLPGhostFlavourProducer",
-    srcJets = cms.InputTag("updatedPatJets"),
+    srcJets = cms.InputTag("updatedJets"),
     srcDecayInfo = cms.InputTag("llpGenDecayInfo"),
     jetAlgorithm = cms.string("AntiKt"),
     rParam = cms.double(0.4),
@@ -270,7 +281,7 @@ process.llpFlavour = cms.EDProducer(
 process.llpLabels = cms.EDProducer(
     "LLPLabelProducer",
     srcVertices = cms.InputTag("displacedGenVertices"),
-    srcJets = cms.InputTag("updatedPatJets"),
+    srcJets = cms.InputTag("updatedJets"),
     srcFlavourInfo = cms.InputTag("llpFlavour"),
     quarkPtThreshold = cms.double(1.),
     bPtThreshold = cms.double(1.),
@@ -278,26 +289,47 @@ process.llpLabels = cms.EDProducer(
     electronPtThreshold = cms.double(1.),
 )
 
+process.selectedMuonsForFilter = cms.EDFilter("CandViewSelector",
+    src = cms.InputTag("slimmedMuons"),
+    cut = cms.string("pt>25 && isGlobalMuon()")
+)
+process.selectedMuonsMinFilter = cms.EDFilter("CandViewCountFilter",
+    src = cms.InputTag("selectedMuonsForFilter"),
+    minNumber = cms.uint32(1)
+)
+    
+process.muonFilterSequence = cms.Sequence(
+    process.selectedMuonsForFilter+process.selectedMuonsMinFilter
+)
+
+# Automatic addition of the customisation function from PhysicsTools.NanoAOD.nano_cff
+from PhysicsTools.NanoAOD.nano_cff import nanoAOD_customizeData,nanoAOD_customizeMC
+
+#call to customisation function nanoAOD_customizeMC imported from PhysicsTools.NanoAOD.nano_cff
+if options.isData:
+    process = nanoAOD_customizeData(process)
+else:
+    process = nanoAOD_customizeMC(process)
+    
+
+
 if options.isData:
     process.llpnanoAOD_step = cms.Path(
-        process.patJetCorrFactors+
-        process.updatedPatJets+
+        process.muonFilterSequence+
+        process.nanoSequence+
         process.pfXTagInfos+
-        process.nanoTable+
-        process.nanoSequence
+        process.nanoTable
     )
 else:
     process.llpnanoAOD_step = cms.Path(
-        process.patJetCorrFactors+
-        process.updatedPatJets+
+        process.nanoSequenceMC+
         process.pfXTagInfos+
         process.displacedGenVertexSequence+
         process.llpGenDecayInfo+
         process.llpFlavour+
         process.llpLabels+
         process.nanoTable+
-        process.nanoGenTable+
-        process.nanoSequenceMC
+        process.nanoGenTable
     )
     
 process.endjob_step = cms.EndPath(process.endOfProcess)
@@ -309,37 +341,74 @@ process.schedule = cms.Schedule(process.llpnanoAOD_step,process.endjob_step,proc
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
 
-# Automatic addition of the customisation function from PhysicsTools.NanoAOD.nano_cff
-from PhysicsTools.NanoAOD.nano_cff import nanoAOD_customizeData,nanoAOD_customizeMC
 
-#call to customisation function nanoAOD_customizeMC imported from PhysicsTools.NanoAOD.nano_cff
-if options.isData:
-    process = nanoAOD_customizeData(process)
-else:
-    process = nanoAOD_customizeMC(process)
-    
-    
-'''
-def queryInputs(config):
-    inputs = []
-    for name in config._Parameterizable__parameterNames:
-        t = getattr(config,name)
-        if type(t)==type(cms.InputTag('')):
-            inputs.append(t._InputTag__moduleLabel)
-        elif type(t)==type(cms.PSet()):
-            inputs+=queryInputs(t)
-    return inputs
-    
-
-allModules = process.__dict__.keys()
-moduleDict = {}
-for name in allModules:
-    m = getattr(process,name)
-    if type(m)==type(cms.EDProducer('')) or type(m)==type(cms.EDFilter('')):
-        moduleDict[name] = queryInputs(m)
-'''
 
 modulesToRemove = [
+    'jetCorrFactorsAK8',
+    'updatedJetsAK8',
+    'tightJetIdAK8',
+    'looseJetIdAK8',
+    'tightJetIdLepVetoAK8',
+    'updatedJetsAK8WithUserData',
+    'chsForSATkJets',
+    'softActivityJets',
+    'softActivityJets2',
+    'softActivityJets5',
+    'softActivityJets10',
+    'finalJetsAK8',
+    'patTauDiscriminationByIsolationMVArun2v1DBoldDMwLTraw',
+    'patTauDiscriminationByVVLooseIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByVLooseIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByLooseIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByMediumIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByVVTightIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByIsolationMVArun2v1DBnewDMwLTraw',
+    'patTauDiscriminationByVVLooseIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByVLooseIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByLooseIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByMediumIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByVTightIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByVVTightIsolationMVArun2v1DBnewDMwLT',
+    'patTauDiscriminationByIsolationMVArun2v1DBoldDMdR0p3wLTraw',
+    'patTauDiscriminationByVVLooseIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByVLooseIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByLooseIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByMediumIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByVVTightIsolationMVArun2v1DBoldDMdR0p3wLT',
+    'patTauDiscriminationByElectronRejectionMVA62018Raw',
+    'patTauDiscriminationByVLooseElectronRejectionMVA62018',
+    'patTauDiscriminationByLooseElectronRejectionMVA62018',
+    'patTauDiscriminationByMediumElectronRejectionMVA62018',
+    'patTauDiscriminationByTightElectronRejectionMVA62018',
+    'patTauDiscriminationByVTightElectronRejectionMVA62018',
+    'patTauDiscriminationByIsolationMVArun2v1DBoldDMwLTraw2015',
+    'patTauDiscriminationByVLooseIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByLooseIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByMediumIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMwLT2015',
+    'patTauDiscriminationByVVTightIsolationMVArun2v1DBoldDMwLT2015',
+    'bitmapVIDForPho',
+    'isoForPho',
+    'seedGainPho',
+    'slimmedPhotonsWithUserData',
+    'egmPhotonIsolation',
+    'photonIDValueMapProducer',
+    'photonMVAValueMapProducer',
+    'egmPhotonIDs',
+    'photonRegressionValueMapProducer',
+    'fatJetTable',
+    'subJetTable',
+    'saJetTable',
+    'saTable',
+    'photonTable',
+
+
     "genJetAK8Table",
     "genJetAK8FlavourAssociation",
     "genJetAK8FlavourTable",
@@ -357,21 +426,29 @@ modulesToRemove = [
     "l1bits",
 ]
 
-#override final taus so that ID evaluation is not needed
-process.finalTaus = cms.EDFilter("PATTauRefSelector",
-    cut = cms.string("pt > 18"),
-    src = cms.InputTag("slimmedTaus")
-)
+
 
 #remove unneeded modules
 for moduleName in modulesToRemove:
     if hasattr(process,moduleName):
         print "removing module: ",moduleName
-        process.nanoSequence.remove(getattr(process,moduleName))
-        process.nanoSequenceMC.remove(getattr(process,moduleName))
+        if options.isData:
+            process.nanoSequence.remove(getattr(process,moduleName))
+        else:
+            process.nanoSequenceMC.remove(getattr(process,moduleName))
     else:
         print "module for removal not found: ",moduleName
 
+#override final taus (required by object linker) so that ID evaluation is not needed
+process.finalTaus.cut = cms.string("pt > 18")
+process.finalTaus.src = cms.InputTag("slimmedTaus")
+
+#override final photons (required by object linker) so that ID evaluation is not needed
+process.finalPhotons.cut = cms.string("pt > 5")
+process.finalPhotons.src = cms.InputTag("slimmedPhotons")
+
+#override final jets
+process.finalJets.cut = cms.string('pt > 0')
 
 
 '''

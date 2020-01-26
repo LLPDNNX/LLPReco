@@ -19,8 +19,8 @@ struct MuonCandidateFeatures
 
     
     float mu_ptrel ;
-    float mu_eta;
-    float mu_phi;
+    float mu_deta;
+    float mu_dphi;
     float mu_charge ; 
     float mu_energy;
     float mu_et ;

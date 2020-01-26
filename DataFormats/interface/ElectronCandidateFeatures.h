@@ -15,8 +15,8 @@ class ElectronCandidateFeatures {
     int elec_jetIdx;
     float elec_ptrel;
     float elec_jetDeltaR ; 
-    float elec_eta;
-    float elec_phi;
+    float elec_deta;
+    float elec_dphi;
     float elec_charge ; 
     float elec_energy;
     float elec_EtFromCaloEn ;

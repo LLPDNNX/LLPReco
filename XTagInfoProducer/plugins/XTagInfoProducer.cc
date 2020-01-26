@@ -172,10 +172,14 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         
 
         // Start with global jet features
-        features.jet_features.pt = jet.pt();  // uncorrected
+        float uncorrectedPt = jet.correctedP4("Uncorrected").pt();
+        
+        features.jet_features.pt = uncorrectedPt;  // uncorrected
         features.jet_features.eta = jet.eta();
+        features.jet_features.phi = jet.phi();
         features.jet_features.mass = jet.mass();
         features.jet_features.energy = jet.energy();
+        features.jet_features.area = jet.jetArea();
         
         features.jet_features.n60 = jet.n60();
         features.jet_features.n90 = jet.n90();
@@ -215,16 +219,17 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         const edm::View<reco::ShallowTagInfo>& taginfos = *shallow_tag_infos;
         edm::Ptr<reco::ShallowTagInfo> match;
         // Try first by 'same index'
-        if ((ijet < taginfos.size()) && (taginfos[ijet].jet() == jet_ref))
+
+        if (reco::deltaR(taginfos[ijet].jet()->p4(),jet.p4())<0.01)
         {
             match = taginfos.ptrAt(ijet);
         } else {
-            // otherwise fail back to a simple search
             for (auto itTI = taginfos.begin(), edTI = taginfos.end(); itTI != edTI; ++itTI)
             {
-                if (itTI->jet() == jet_ref) {
+                float dR = reco::deltaR(itTI->jet()->p4(),jet.p4());
+                if (dR<0.01) {
                     match = taginfos.ptrAt(itTI - taginfos.begin());
-                    //break;
+                    break;
                 }
             }
         }
@@ -270,7 +275,9 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             llpdnnx::SecondaryVertexFeatures sv_features;
 
             sv_features.sv_jetIdx = jet_ref.key();
-            sv_features.sv_pt = sv.pt(); 
+            sv_features.sv_ptrel = sv.pt()/uncorrectedPt;
+            sv_features.sv_deta = std::fabs(sv.eta()-jet.eta());
+            sv_features.sv_dphi = std::fabs(reco::deltaPhi(sv.phi(),jet.phi()));
             sv_features.sv_deltaR = reco::deltaR(sv,jet);
             sv_features.sv_mass = sv.mass();
             sv_features.sv_ntracks = sv.numberOfDaughters();
@@ -317,7 +324,9 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             llpdnnx::ChargedCandidateFeatures cpf_features;
 
-            cpf_features.cpf_ptrel = constituent->pt()/jet.pt();
+            cpf_features.cpf_ptrel = constituent->pt()/uncorrectedPt;
+            cpf_features.cpf_deta = std::fabs(constituent->eta()-jet.eta());
+            cpf_features.cpf_dphi = std::fabs(reco::deltaPhi(constituent->phi(),jet.phi()));
 
             cpf_features.cpf_drminsv = 0.4;
             for (const auto& sv: *svs.product())
@@ -399,6 +408,66 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 if (not muon.isGlobalMuon()) continue ;
                 cpf_features.cpf_matchedMuon = 1;
 
+                mu_features.mu_isGlobal = muon.isGlobalMuon() ;                                   
+                mu_features.mu_isTight = muon.isTightMuon(pv);                                     
+                mu_features.mu_isMedium = muon.isMediumMuon();       
+                mu_features.mu_isLoose = muon.isLooseMuon() ; 
+                mu_features.mu_isStandAlone = muon.isStandAloneMuon() ; 
+
+                mu_features.mu_ptrel = muon.pt()/uncorrectedPt ; 
+                mu_features.mu_deta = std::fabs(muon.eta()-jet.eta());                                                 
+                mu_features.mu_dphi = std::fabs(reco::deltaPhi(muon.phi(),jet.phi()));                                                 
+                mu_features.mu_charge = muon.charge();        
+                mu_features.mu_energy = muon.energy()/muon.pt();                                           
+                mu_features.mu_et = muon.et();   
+                mu_features.mu_jetDeltaR = reco::deltaR(muon ,jet) ; 
+                mu_features.mu_numberOfMatchedStations = muon.numberOfMatchedStations();
+
+                mu_features.mu_2dIp = muon.dB() ; 
+                mu_features.mu_2dIpSig = muon.dB()/muon.edB() ; 
+                mu_features.mu_3dIp = muon.dB(pat::Muon::PV3D) ; 
+                mu_features.mu_3dIpSig = muon.dB(pat::Muon::PV3D)/muon.edB(pat::Muon::PV3D) ;
+
+
+                reco::Candidate::Vector muonMom = muon.bestTrack()->momentum();
+
+                mu_features.mu_EtaRel =reco::btau::etaRel(jetDir, muonMom);
+                mu_features.mu_dxy = muon.bestTrack()->dxy(pv.position());
+                mu_features.mu_dxyError = muon.bestTrack()->dxyError() ; 
+                mu_features.mu_dxySig = muon.bestTrack()->dxy(pv.position())/muon.bestTrack()->dxyError(); 
+                mu_features.mu_dz = muon.bestTrack()->dz(pv.position()) ; 
+                mu_features.mu_dzError = muon.bestTrack()->dzError() ;
+                mu_features.mu_numberOfValidPixelHits = muon.bestTrack()->hitPattern().numberOfValidPixelHits();
+                mu_features.mu_numberOfpixelLayersWithMeasurement = muon.bestTrack()->hitPattern().pixelLayersWithMeasurement() ;
+                mu_features.mu_numberOfstripLayersWithMeasurement = muon.bestTrack()->hitPattern().stripLayersWithMeasurement() ;
+
+
+                mu_features.mu_chi2 = muon.bestTrack()->chi2() ;  
+                mu_features.mu_ndof = muon.bestTrack()->ndof() ;
+
+
+                mu_features.mu_caloIso =  muon.caloIso()/muon.pt() ; 
+                mu_features.mu_ecalIso =  muon.ecalIso()/muon.pt() ; 
+                mu_features.mu_hcalIso =  muon.hcalIso()/muon.pt() ;     
+
+
+                mu_features.mu_sumPfChHadronPt  = muon.pfIsolationR04().sumChargedHadronPt/muon.pt();
+                mu_features.mu_sumPfNeuHadronEt  = muon.pfIsolationR04().sumNeutralHadronEt/muon.pt();
+                mu_features.mu_Pfpileup  = muon.pfIsolationR04().sumPUPt/muon.pt();
+                mu_features.mu_sumPfPhotonEt = muon.pfIsolationR04().sumPhotonEt/muon.pt();
+
+
+
+                mu_features.mu_sumPfChHadronPt03  = muon.pfIsolationR03().sumChargedHadronPt/muon.pt();
+                mu_features.mu_sumPfNeuHadronEt03  = muon.pfIsolationR03().sumNeutralHadronEt/muon.pt();
+                mu_features.mu_Pfpileup03  = muon.pfIsolationR03().sumPUPt/muon.pt();
+                mu_features.mu_sumPfPhotonEt03 = muon.pfIsolationR03().sumPhotonEt/muon.pt();       
+
+
+                mu_features.mu_timeAtIpInOut = muon.time().timeAtIpInOut ;  
+                mu_features.mu_timeAtIpInOutErr = muon.time().timeAtIpInOutErr ; 
+                mu_features.mu_timeAtIpOutIn = muon.time().timeAtIpOutIn ;  
+
                 features.mu_features.emplace_back(mu_features);
             }
 
@@ -423,7 +492,141 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 const pat::Electron & electron = *findElectron->second;
 
                 cpf_features.cpf_matchedElectron = 1;
-		elec_features.electronFeatures(electron , jet , pv );
+
+                elec_features.elec_ptrel = electron.pt()/uncorrectedPt ; 
+                elec_features.elec_deta = std::fabs(electron.eta()-jet.eta()) ; 
+                elec_features.elec_dphi = std::fabs(reco::deltaPhi(electron.phi(),jet.phi())); 
+                elec_features.elec_charge = electron.charge() ; 
+                elec_features.elec_energy = electron.energy()/electron.pt(); 
+                elec_features.elec_jetDeltaR = reco::deltaR(electron , jet) ; 
+                elec_features.elec_EtFromCaloEn = electron.caloEnergy() * sin(electron.p4().theta());
+                elec_features.elec_ecalDrivenSeed = electron.ecalDrivenSeed() ;
+
+                elec_features.elec_isEB = electron.isEB() ;  
+                elec_features.elec_isEE  = electron.isEE();
+                elec_features.elec_ecalEnergy  = electron.ecalEnergy()/electron.pt();
+                elec_features.elec_isPassConversionVeto = electron.passConversionVeto();
+
+                elec_features.elec_convDist = electron.convDist() ; 
+                elec_features.elec_convFlags = electron.convFlags() ; 
+                elec_features.elec_convRadius = electron.convRadius() ; 
+
+
+                elec_features.elec_3dIP = electron.dB(pat::Electron::PV3D) ; 
+                elec_features.elec_3dIPSig = electron.dB(pat::Electron::PV3D); 
+                elec_features.elec_2dIP = electron.dB() ; 
+                elec_features.elec_2dIPSig = electron.dB()/electron.edB() ; 
+                elec_features.elec_sCseedEta = electron.superCluster()->seed()->eta();
+
+
+                elec_features.elec_numberOfBrems  = electron.numberOfBrems () ;
+                elec_features.elec_trackFbrem  = electron.trackFbrem() ; 
+                elec_features.elec_fbrem = electron.fbrem() ; 
+
+
+                elec_features.elec_e5x5 = electron.e5x5() ;
+                elec_features.elec_e5x5Rel = electron.e5x5()/jet.pt() ;
+                elec_features.elec_e1x5Overe5x5 = electron.e1x5()/electron.e5x5() ; 
+                elec_features.elec_e2x5MaxOvere5x5 = electron.e2x5Max()/electron.e5x5() ; 
+
+                elec_features.elec_eSeedClusterOverP = electron.eSeedClusterOverP() ;
+                elec_features.elec_eSeedClusterOverPout = electron.eSeedClusterOverPout() ; 
+                elec_features.elec_eSuperClusterOverP = electron.eSuperClusterOverP() ; 
+                elec_features.elec_eTopOvere5x5 = electron.eTop()/electron.e5x5() ;  
+
+                elec_features.elec_hadronicOverEm = electron.hadronicOverEm() ;  
+                elec_features.elec_full5x5_sigmaIetaIeta = electron.full5x5_sigmaIetaIeta();
+
+                elec_features.elec_full5x5_e5x5  = electron.full5x5_e5x5() ;
+                elec_features.elec_full5x5_e5x5Rel  = electron.full5x5_e5x5()/jet.pt() ;
+
+                elec_features.elec_full5x5_e1x5Overe5x5  = electron.full5x5_e1x5()/electron.full5x5_e5x5() ;
+                elec_features.elec_full5x5_e2x5BottomOvere5x5  = electron.full5x5_e2x5Bottom()/ electron.full5x5_e5x5();
+                elec_features.elec_full5x5_e2x5LeftOvere5x5  = electron.full5x5_e2x5Left()/ electron.full5x5_e5x5();
+                elec_features.elec_full5x5_e2x5MaxOvere5x5  = electron.full5x5_e2x5Max()/ electron.full5x5_e5x5();
+                elec_features.elec_full5x5_e2x5RightOvere5x5  = electron.full5x5_e2x5Right()/ electron.full5x5_e5x5();
+                elec_features.elec_full5x5_e2x5TopOvere5x5  = electron.full5x5_e2x5Top()/ electron.full5x5_e5x5();
+                elec_features.elec_full5x5_eBottomOvere5x5  = electron.full5x5_eBottom()/ electron.full5x5_e5x5();
+                elec_features.elec_full5x5_eLeftOvere5x5 = electron.full5x5_eLeft()/ electron.full5x5_e5x5();
+                elec_features.elec_full5x5_eRightOvere5x5 = electron.full5x5_eRight()/ electron.full5x5_e5x5();
+                elec_features.elec_full5x5_eTopOvere5x5 = electron.full5x5_eTop()/ electron.full5x5_e5x5();
+                elec_features.elec_full5x5_hcalDepth1OverEcal  = electron.full5x5_hcalDepth1OverEcal() ;
+                elec_features.elec_full5x5_hcalDepth1OverEcalBc  = electron.full5x5_hcalDepth1OverEcalBc() ;
+                elec_features.elec_full5x5_hcalDepth2OverEcal = electron.full5x5_hcalDepth2OverEcal() ;
+                elec_features.elec_full5x5_hcalDepth2OverEcalBc  = electron.full5x5_hcalDepth2OverEcalBc() ;
+                elec_features.elec_full5x5_hcalOverEcal  = electron.full5x5_hcalOverEcal() ;
+                elec_features.elec_full5x5_hcalOverEcalBc = electron.full5x5_hcalOverEcalBc() ;   
+                elec_features.elec_full5x5_r9  = electron.full5x5_r9() ;
+
+
+                elec_features.elec_deltaEtaEleClusterTrackAtCalo  = electron.deltaEtaEleClusterTrackAtCalo();
+                elec_features.elec_deltaPhiEleClusterTrackAtCalo = electron.deltaPhiEleClusterTrackAtCalo() ;
+
+                elec_features.elec_deltaEtaSeedClusterTrackAtCalo = electron.deltaEtaSeedClusterTrackAtCalo () ; 
+                elec_features.elec_deltaPhiSeedClusterTrackAtCalo = electron.deltaPhiSeedClusterTrackAtCalo() ; 
+
+                elec_features.elec_deltaEtaSeedClusterTrackAtVtx = electron.deltaEtaSeedClusterTrackAtVtx(); 
+                elec_features.elec_deltaEtaSuperClusterTrackAtVtx = electron.deltaEtaSuperClusterTrackAtVtx() ;  
+                elec_features.elec_deltaPhiSuperClusterTrackAtVtx = electron.deltaPhiSuperClusterTrackAtVtx ()  ;
+
+
+                reco::Candidate::Vector electronMom = electron.gsfTrack()->momentum();
+
+                elec_features.elec_EtaRel =reco::btau::etaRel(jetDir, electronMom); 
+                elec_features.elec_dxy = electron.gsfTrack()->dxy(pv.position()) ; 
+                elec_features.elec_dz = electron.gsfTrack()->dz(pv.position()) ;
+                elec_features.elec_nbOfMissingHits = electron.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS) ; 
+                elec_features.elec_gsfCharge = electron.gsfTrack()->charge() ;
+
+                elec_features.elecSC_energy = electron.superCluster()->energy()/electron.pt(); 
+                elec_features.elecSC_deta = std::fabs(electron.superCluster()->eta()-electron.gsfTrack()->eta());
+                elec_features.elecSC_dphi = std::fabs(reco::deltaPhi(electron.superCluster()->phi(),electron.gsfTrack()->phi()));
+                elec_features.elecSC_et = electron.superCluster()->energy() * sin(electron.p4().theta())/electron.pt();
+                elec_features.elec_scPixCharge = electron.scPixCharge() ; 
+                elec_features.elec_scSigmaEtaEta = electron.scSigmaEtaEta() ; 
+                elec_features.elec_scSigmaIEtaIEta = electron.scSigmaIEtaIEta() ;
+                elec_features.elec_superClusterFbrem = electron.superClusterFbrem() ; 
+
+                elec_features.elec_scE5x5 = electron.scE5x5 () ; 
+                elec_features.elec_scE5x5Rel = electron.scE5x5()/jet.pt() ; 
+                elec_features.elec_scE1x5Overe5x5 = electron.scE1x5 ()/electron.scE5x5 () ; 
+                elec_features.elec_scE2x5MaxOvere5x5  = electron.scE2x5Max()/electron.scE5x5 () ; 
+                elec_features.elecSC_eSuperClusterOverP  = electron.eSuperClusterOverP();
+                
+                elec_features.elec_particleIso  = electron.particleIso()/electron.pt(); 
+                elec_features.elec_neutralHadronIso  = electron.neutralHadronIso()/electron.pt();
+                elec_features.elec_photonIso = electron.photonIso()/electron.pt(); 
+                elec_features.elec_puChargedHadronIso = electron.puChargedHadronIso()/electron.pt(); 
+
+                elec_features.elec_trackIso = electron.trackIso()/electron.pt();
+                elec_features.elec_hcalDepth1OverEcal = electron.hcalDepth1OverEcal() ; 
+                elec_features.elec_hcalDepth2OverEcal = electron.hcalDepth2OverEcal() ;  
+                elec_features.elec_ecalPFClusterIso = electron.ecalPFClusterIso()/electron.pt(); 
+                elec_features.elec_hcalPFClusterIso = electron.hcalPFClusterIso()/electron.pt(); 
+
+                elec_features.elec_dr03TkSumPt = electron.dr03TkSumPt()/electron.pt();
+                
+                elec_features.elec_dr03EcalRecHitSumEt = electron.dr03EcalRecHitSumEt()/electron.pt(); 
+                
+                elec_features.elec_dr03HcalDepth1TowerSumEt = electron.dr03HcalDepth1TowerSumEt()/electron.pt(); 
+                elec_features.elec_dr03HcalDepth1TowerSumEtBc = electron.dr03HcalDepth1TowerSumEtBc()/electron.pt();
+                elec_features.elec_dr03HcalDepth2TowerSumEt = electron.dr03HcalDepth2TowerSumEt()/electron.pt(); 
+                elec_features.elec_dr03HcalDepth2TowerSumEtBc = electron.dr03HcalDepth2TowerSumEtBc()/electron.pt(); 
+
+                elec_features.elec_pfSumPhotonEt = electron.pfIsolationVariables().sumPhotonEt/electron.pt(); 
+                elec_features.elec_pfSumChargedHadronPt = electron.pfIsolationVariables().sumChargedHadronPt/electron.pt(); 
+                elec_features.elec_pfSumNeutralHadronEt = electron.pfIsolationVariables().sumNeutralHadronEt/electron.pt(); 
+                elec_features.elec_pfSumPUPt = electron.pfIsolationVariables().sumPUPt/electron.pt(); 
+
+
+                elec_features.elec_dr04EcalRecHitSumEt = electron.dr04EcalRecHitSumEt()/electron.pt(); 
+                elec_features.elec_dr04HcalDepth1TowerSumEt = electron.dr04HcalDepth1TowerSumEt()/electron.pt(); 
+                elec_features.elec_dr04HcalDepth1TowerSumEtBc = electron.dr04HcalDepth1TowerSumEtBc()/electron.pt(); 
+                elec_features.elec_dr04HcalDepth2TowerSumEt = electron.dr04HcalDepth2TowerSumEt()/electron.pt(); 
+                elec_features.elec_dr04HcalDepth2TowerSumEtBc = electron.dr04HcalDepth2TowerSumEtBc()/electron.pt();
+
+                elec_features.elec_dr04HcalTowerSumEt = electron.dr04HcalTowerSumEt()/electron.pt();
+                elec_features.elec_dr04HcalTowerSumEtBc = electron.dr04HcalTowerSumEtBc()/electron.pt();
 
                 features.elec_features.emplace_back(elec_features);
             }
@@ -485,11 +688,13 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
             llpdnnx::NeutralCandidateFeatures npf_features;
 
-            npf_features.npf_ptrel = constituent->pt()/jet.pt();
+            npf_features.npf_ptrel = constituent->pt()/uncorrectedPt;
+            npf_features.npf_deta = std::fabs(constituent->eta()-jet.eta());
+            npf_features.npf_dphi = std::fabs(reco::deltaPhi(constituent->phi(),jet.phi()));
             npf_features.npf_jetIdx = jet_ref.key();
             npf_features.npf_puppi_weight = constituent->puppiWeight();
             npf_features.npf_deltaR = reco::deltaR(*constituent,jet);
-            npf_features.npf_isGamma = fabs(constituent->pdgId())==22;
+            npf_features.npf_isGamma = abs(constituent->pdgId())==22;
             npf_features.npf_hcal_fraction = constituent->hcalFraction();
 
             npf_features.npf_drminsv = 0.4;

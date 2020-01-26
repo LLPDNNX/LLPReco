@@ -99,7 +99,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> jetIdx;
     std::vector<float> pt;
     std::vector<float> eta;
+    std::vector<float> phi;
     std::vector<float> mass;
+
+    std::vector<float> area;
 
     std::vector<int> n60;
     std::vector<int> n90;
@@ -153,6 +156,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> cpf_trackJetDistVal;
     std::vector<float> cpf_trackJetDistSig;
     std::vector<float> cpf_ptrel;
+    std::vector<float> cpf_deta;
+    std::vector<float> cpf_dphi;
     std::vector<float> cpf_drminsv;
     std::vector<float> cpf_vertex_association;
     std::vector<float> cpf_fromPV;
@@ -168,6 +173,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     std::vector<int> npf_jetIdx;
     std::vector<float> npf_ptrel;
+    std::vector<float> npf_deta;
+    std::vector<float> npf_dphi;
     std::vector<float> npf_deltaR;
     std::vector<float> npf_isGamma;
     std::vector<float> npf_hcal_fraction;
@@ -176,7 +183,9 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> npf_relmassdrop;
 
     std::vector<int> sv_jetIdx;
-    std::vector<float> sv_pt;
+    std::vector<float> sv_ptrel;
+    std::vector<float> sv_deta;
+    std::vector<float> sv_dphi;
     std::vector<float> sv_deltaR;
     std::vector<float> sv_mass;
     std::vector<float> sv_ntracks;
@@ -199,8 +208,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     std::vector<float> mu_ptrel ;
     std::vector<float> mu_EtaRel; 
-    std::vector<float> mu_eta;
-    std::vector<float> mu_phi;
+    std::vector<float> mu_deta;
+    std::vector<float> mu_dphi;
     std::vector<float> mu_charge ; 
     std::vector<float> mu_energy;
     std::vector<float> mu_et ;
@@ -258,8 +267,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int>  elec_jetIdx ; 
     std::vector<float> elec_ptrel ;
     std::vector<float> elec_jetDeltaR ; 
-    std::vector<float> elec_eta;
-    std::vector<float> elec_phi;
+    std::vector<float> elec_deta;
+    std::vector<float> elec_dphi;
     std::vector<float> elec_charge ; 
     std::vector<float> elec_energy;
     std::vector<float> elec_EtFromCaloEn ;
@@ -395,7 +404,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         pt.push_back(features.jet_features.pt);
         eta.push_back(features.jet_features.eta);
+        phi.push_back(features.jet_features.phi);
         mass.push_back(features.jet_features.mass);
+        
+        area.push_back(features.jet_features.area);
         
         n60.push_back(features.jet_features.n60);
         n90.push_back(features.jet_features.n90);
@@ -483,6 +495,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_trackJetDistVal.push_back(cpf_features.cpf_trackJetDistVal);
             cpf_trackJetDistSig.push_back(cpf_features.cpf_trackJetDistSig);
             cpf_ptrel.push_back(cpf_features.cpf_ptrel);
+            cpf_deta.push_back(cpf_features.cpf_deta);
+            cpf_dphi.push_back(cpf_features.cpf_dphi);            
             cpf_drminsv.push_back(cpf_features.cpf_drminsv);
             cpf_vertex_association.push_back(cpf_features.cpf_vertex_association);
             cpf_fromPV.push_back(cpf_features.cpf_fromPV);
@@ -501,6 +515,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             const auto& npf_features = npf.at(i);
             npf_jetIdx.push_back(npf_features.npf_jetIdx);
             npf_ptrel.push_back(npf_features.npf_ptrel);
+            npf_deta.push_back(npf_features.npf_deta);
+            npf_dphi.push_back(npf_features.npf_dphi);
             npf_deltaR.push_back(npf_features.npf_deltaR);
             npf_isGamma.push_back(npf_features.npf_isGamma);
             npf_hcal_fraction.push_back(npf_features.npf_hcal_fraction);
@@ -513,7 +529,9 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         {
             const auto& sv_features = sv.at(i);
             sv_jetIdx.push_back(sv_features.sv_jetIdx);
-            sv_pt.push_back(sv_features.sv_pt);
+            sv_ptrel.push_back(sv_features.sv_ptrel);
+            sv_deta.push_back(sv_features.sv_deta);
+            sv_dphi.push_back(sv_features.sv_dphi);
             sv_deltaR.push_back(sv_features.sv_deltaR);
             sv_mass.push_back(sv_features.sv_mass);
             sv_ntracks.push_back(sv_features.sv_ntracks);
@@ -544,8 +562,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             mu_ptrel.push_back(mu_features.mu_ptrel);
             mu_EtaRel.push_back(mu_features.mu_EtaRel); 
-            mu_eta.push_back(mu_features.mu_eta);
-            mu_phi.push_back(mu_features.mu_phi);
+            mu_deta.push_back(mu_features.mu_deta);
+            mu_dphi.push_back(mu_features.mu_dphi);
             mu_charge.push_back(mu_features.mu_charge); 
             mu_energy.push_back(mu_features.mu_energy);
             mu_et.push_back(mu_features.mu_et);
@@ -604,8 +622,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             elec_jetIdx.push_back(elec_features.elec_jetIdx );
             elec_ptrel.push_back(elec_features.elec_ptrel );
             elec_jetDeltaR.push_back(elec_features.elec_jetDeltaR ); 
-            elec_eta.push_back(elec_features.elec_eta );
-            elec_phi.push_back(elec_features.elec_phi );
+            elec_deta.push_back(elec_features.elec_deta );
+            elec_dphi.push_back(elec_features.elec_dphi );
             elec_charge.push_back(elec_features.elec_charge );
 
             elec_energy.push_back(elec_features.elec_energy );
@@ -728,7 +746,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("pt", pt, "global jet pt (log 10, uncorrected)", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<int>("jetIdx", jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     globalTable->addColumn<float>("eta", eta, "global jet eta", nanoaod::FlatTable::FloatColumn);
+    globalTable->addColumn<float>("phi", phi, "global jet phi", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("mass", mass, "global jet mass", nanoaod::FlatTable::FloatColumn);
+    
+    globalTable->addColumn<float>("area", area, "global jet area", nanoaod::FlatTable::FloatColumn);
     
     globalTable->addColumn<int>("n60", n60, "n60", nanoaod::FlatTable::IntColumn);
     globalTable->addColumn<int>("n90", n90, "n90", nanoaod::FlatTable::IntColumn);
@@ -780,6 +801,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     cpfTable->addColumn<float>("trackJetDistVal", cpf_trackJetDistVal, "doc", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("trackJetDistSig", cpf_trackJetDistSig, "doc", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("ptrel", cpf_ptrel, "doc", nanoaod::FlatTable::FloatColumn);
+    cpfTable->addColumn<float>("deta", cpf_deta, "doc", nanoaod::FlatTable::FloatColumn);
+    cpfTable->addColumn<float>("dphi", cpf_dphi, "doc", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("drminsv", cpf_drminsv, "doc", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("vertex_association", cpf_vertex_association, "doc", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<int>("fromPV", cpf_fromPV, "doc", nanoaod::FlatTable::IntColumn);
@@ -796,6 +819,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     
     npfTable->addColumn<int>("jetIdx", npf_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
     npfTable->addColumn<float>("ptrel", npf_ptrel, "doc", nanoaod::FlatTable::FloatColumn);
+    npfTable->addColumn<float>("deta", npf_deta, "doc", nanoaod::FlatTable::FloatColumn);
+    npfTable->addColumn<float>("dphi", npf_dphi, "doc", nanoaod::FlatTable::FloatColumn);
     npfTable->addColumn<float>("deltaR", npf_deltaR, "doc", nanoaod::FlatTable::FloatColumn);
     npfTable->addColumn<float>("isGamma", npf_isGamma, "doc", nanoaod::FlatTable::FloatColumn);
     npfTable->addColumn<float>("hcal_fraction", npf_hcal_fraction, "doc", nanoaod::FlatTable::FloatColumn);
@@ -804,7 +829,9 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     npfTable->addColumn<float>("relmassdrop", npf_relmassdrop, "doc", nanoaod::FlatTable::FloatColumn);
     
     svTable->addColumn<int>("jetIdx", sv_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
-    svTable->addColumn<float>("pt", sv_pt, "doc", nanoaod::FlatTable::FloatColumn);
+    svTable->addColumn<float>("ptrel", sv_ptrel, "doc", nanoaod::FlatTable::FloatColumn);
+    svTable->addColumn<float>("deta", sv_deta, "doc", nanoaod::FlatTable::FloatColumn);
+    svTable->addColumn<float>("dphi", sv_dphi, "doc", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("deltaR", sv_deltaR, "doc", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("mass", sv_mass, "doc", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("ntracks", sv_ntracks, "doc", nanoaod::FlatTable::FloatColumn);
@@ -833,7 +860,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     muonTable->addColumn<float>("ptrel",mu_ptrel,"doc",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("EtaRel",mu_EtaRel,"doc",nanoaod::FlatTable::FloatColumn); 
-    muonTable->addColumn<float>("phi",mu_phi,"doc",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("dphi",mu_dphi,"doc",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("deta",mu_deta,"doc",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("charge",mu_charge,"doc",nanoaod::FlatTable::FloatColumn); 
     muonTable->addColumn<float>("energy",mu_energy,"doc",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("jetDeltaR",mu_jetDeltaR,"doc",nanoaod::FlatTable::FloatColumn); 
@@ -883,8 +911,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<int>("jetIdx", elec_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
     electronTable->addColumn<float>("ptrel",elec_ptrel,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("jetDeltaR",elec_jetDeltaR,"doc",nanoaod::FlatTable::FloatColumn); 
-    electronTable->addColumn<float>("eta",elec_eta,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("phi",elec_phi,"doc",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("deta",elec_deta,"doc",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("dphi",elec_dphi,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("charge",elec_charge,"doc",nanoaod::FlatTable::FloatColumn); 
     electronTable->addColumn<float>("energy",elec_energy,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("EtFromCaloEn",elec_EtFromCaloEn,"doc",nanoaod::FlatTable::FloatColumn);
