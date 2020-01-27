@@ -169,9 +169,9 @@ process.OUT = cms.OutputModule("PoolOutputModule",
 
 if options.isData:
     if options.year == '2016':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v11', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
     if options.year == '2017':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v11', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
     if options.year == '2018':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
     if options.year == '2018D':

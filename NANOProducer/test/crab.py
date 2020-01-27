@@ -11,31 +11,62 @@ url = "https://raw.githubusercontent.com/LLPDNNX/misc/master/miniAOD_102X_HNL_20
 response = urllib.urlopen(url)
 myJobs = json.loads(response.read())
 '''
+
+
 '''
 myJobs = {
-   "TT_TuneCUETP8M2T4_13TeV-powheg-pythia8-2016":{
-        "inputDataset":"/TT_TuneCUETP8M2T4_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+    "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
+        "inputDataset":"/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
         "unitsPerJob": 2
     },
+    "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
+        "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+    "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
+        "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+
     "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 3
+        "unitsPerJob": 2
+
     },
     "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_ext1-2017":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 3
+        "unitsPerJob": 2
+
     },
     "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8-2018":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 3
+        "unitsPerJob": 2
     },
-    
-'''
 
+    "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
+        "inputDataset":"/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+    "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8-2017":{
+        "inputDataset":"/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+    "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8-2018":{
+        "inputDataset":"/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+}
+'''
 
 '''
 myJobs = {
@@ -49,7 +80,13 @@ myJobs = {
         "year": 2016,
         "unitsPerJob": 2
     },
-    
+
+    "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-ext2-2016":{
+        "inputDataset":"/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
     
     
     "DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
@@ -86,49 +123,11 @@ myJobs = {
     },
 }
 '''
-    
-'''
-
-
-
-    "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-ext2-2016":{
-        "inputDataset":"/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM",
-        "year": 2016,
-        "unitsPerJob": 2
-    },
-    
-    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
-        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
-    },
-    
-    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-ext1-2017":{
-        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
-    },
-    
-    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
-        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
-        "year": 2018,
-        "unitsPerJob": 2
-    },
-    
-    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-ext2-2018":{
-        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext2-v1/MINIAODSIM",
-        "year": 2018,
-        "unitsPerJob": 2
-    },
-
-'''
-
 
 
 
 '''
-
-
+myJobs = {
 
     "WToLNu_0J_13TeV-amcatnloFXFX-pythia8-2016":{
         "inputDataset":"/WToLNu_0J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_backup_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
@@ -388,8 +387,7 @@ myJobs = {
 
 
 
-
-
+'''
 myJobs = {}
 for folder in os.listdir('hnl_mu'):
     name = folder.replace('.txt','')
@@ -431,9 +429,9 @@ for folder in os.listdir('hnl_mu'):
     }
     #break
 
-
 '''
 
+'''
 myJobs = {
     "SingleMuon_Run2016B_ver1":{
         "inputDataset": "/SingleMuon/Run2016B-17Jul2018_ver1-v1/MINIAOD",
@@ -544,7 +542,7 @@ configTmpl.JobType.psetName = "LLPReco/NANOProducer/test/produceNANO.py"
 configTmpl.JobType.pluginName = 'Analysis'
 configTmpl.JobType.outputFiles = ['nano.root']
 configTmpl.JobType.allowUndistributedCMSSW = True
-configTmpl.JobType.maxJobRuntimeMin= 14*60
+configTmpl.JobType.maxJobRuntimeMin= 20*60
 configTmpl.JobType.pyCfgParams = []
 configTmpl.JobType.inputFiles = []
 configTmpl.JobType.maxMemoryMB = 2499
@@ -552,6 +550,14 @@ configTmpl.section_('Data')
 configTmpl.Data.useParent = False
 configTmpl.section_('Site')
 configTmpl.Site.storageSite = 'T2_UK_London_IC'
+
+'''
+configTmpl.Data.ignoreLocality = True
+configTmpl.Site.whitelist = [
+    'T2_BE_IIHE','T2_BE_UCL','T2_CH_CERN','T2_UK_London_IC',
+    'T2_DE_DESY','T2_DE_RWTH',
+]
+'''
 
 if __name__ == '__main__':
 
@@ -653,3 +659,4 @@ if __name__ == '__main__':
         p.join()
         print
         print
+        
