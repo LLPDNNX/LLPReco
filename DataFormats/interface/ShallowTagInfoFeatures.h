@@ -15,11 +15,11 @@ struct ShallowTagInfoFeatures
     float csv_trackSip3dValAboveCharm; // track 3D signed impact parameter of first track lifting mass above charm
     float csv_trackSip3dSigAboveCharm; // track 3D signed impact parameter significance of first track lifting mass above charm
     // track info
-    float csv_jetNTracksEtaRel; // tracks associated to jet for which trackEtaRel is calculated
-    float csv_jetNSelectedTracks;    
+    int csv_jetNTracksEtaRel; // tracks associated to jet for which trackEtaRel is calculated
+    int csv_jetNSelectedTracks;
 
 };
 
 }
 
-#endif 
+#endif
