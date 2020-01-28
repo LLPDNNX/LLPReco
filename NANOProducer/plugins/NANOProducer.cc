@@ -401,6 +401,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         cpf_length.push_back(ncpf);
         npf_length.push_back(nnpf);
         sv_length.push_back(nsv);
+        elec_length.push_back(nelec);
+        mu_length.push_back(nmu);
 
         pt.push_back(features.jet_features.pt);
         eta.push_back(features.jet_features.eta);
@@ -449,7 +451,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         jetNSelectedTracks.push_back(tag_info_features.csv_jetNSelectedTracks);
         jetNTracksEtaRel.push_back(tag_info_features.csv_jetNTracksEtaRel);
         vertexCategory.push_back(tag_info_features.csv_vertexCategory);
-
     }
 
     auto muonTable = std::make_unique<nanoaod::FlatTable>(nmu_total, "muon", false, false);
