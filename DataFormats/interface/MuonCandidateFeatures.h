@@ -6,9 +6,6 @@ namespace llpdnnx {
 
 struct MuonCandidateFeatures
 {
-
-class MuonCandidateFeatures {
-
     int  mu_jetIdx ;
     bool  mu_isGlobal ;
     bool  mu_isTight ;

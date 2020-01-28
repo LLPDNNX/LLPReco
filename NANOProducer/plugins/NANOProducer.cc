@@ -874,19 +874,19 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     muonTable->addColumn<float>("chi2",mu_chi2,"chi^2 of muon track",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("ndof",mu_ndof,"number of degrees of freedom of muon track fit",nanoaod::FlatTable::FloatColumn);
 
-    muonTable->addColumn<float>("caloIso",mu_caloIso,"returns the fraction of the summed transverse energy of the muon track recHits in the ECAL & HCAL in a cone of deltaR<0.3 divided by its transverse momentum",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("ecalIso",mu_ecalIso,"returns the fraction of the transverse energy of the muon track recHits in the ECAL divided by its transverse momentum",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("hcalIso",mu_hcalIso,"returns the fraction of the transverse energy of the muon track recHits in the HCAL divided by its transverse momentum",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("caloIso",mu_caloIso,"returns the fraction of the summed transverse energy of the muon track recHits in the ECAL & HCAL in a cone of deltaR<0.3 normalized against its transverse momentum",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("ecalIso",mu_ecalIso,"returns the fraction of the transverse energy of the muon track recHits in the ECAL normalized against its transverse momentum",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("hcalIso",mu_hcalIso,"returns the fraction of the transverse energy of the muon track recHits in the HCAL normalized against its transverse momentum",nanoaod::FlatTable::FloatColumn);
 
-    muonTable->addColumn<float>("sumPfChHadronPt",mu_sumPfChHadronPt,"summed pt of charged hadron divided by the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPfNeuHadronEt",mu_sumPfNeuHadronEt,"summed pt of neutral hadron divided by the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("Pfpileup",mu_Pfpileup,"summed pt of charged particles not from PV (for PU corrections) divided by the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPfPhotonEt",mu_sumPfPhotonEt,"summed pt of PF photons divided by the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("sumPfChHadronPt",mu_sumPfChHadronPt,"summed pt of charged hadron normalized against the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("sumPfNeuHadronEt",mu_sumPfNeuHadronEt,"summed pt of neutral hadron normalized against the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("Pfpileup",mu_Pfpileup,"summed pt of charged particles not from PV (for PU corrections) normalized against the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("sumPfPhotonEt",mu_sumPfPhotonEt,"summed pt of PF photons normalized against the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
 
-    muonTable->addColumn<float>("sumPfChHadronPt03",mu_sumPfChHadronPt03,"summed pt of charged hadron divided by the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPfNeuHadronEt03",mu_sumPfNeuHadronEt03,"summed pt of neutral hadron divided by the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("Pfpileup03",mu_Pfpileup03,"summed pt of charged particles not from PV (for PU corrections) divided by the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPfPhotonEt03",mu_sumPfPhotonEt03,"summed pt of PF photons divided by the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("sumPfChHadronPt03",mu_sumPfChHadronPt03,"summed pt of charged hadron normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("sumPfNeuHadronEt03",mu_sumPfNeuHadronEt03,"summed pt of neutral hadron normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("Pfpileup03",mu_Pfpileup03,"summed pt of charged particles not from PV (for PU corrections) normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("sumPfPhotonEt03",mu_sumPfPhotonEt03,"summed pt of PF photons normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
 
     muonTable->addColumn<float>("sumChHadronPt",mu_sumChHadronPt,"doc",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("sumNeuHadronEt",mu_sumNeuHadronEt,"doc",nanoaod::FlatTable::FloatColumn);
@@ -906,40 +906,40 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("charge",elec_charge,"electron candidate charge (-1 or +1)",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("energy",elec_energy,"electron candidate energy",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("EtFromCaloEn",elec_EtFromCaloEn,"electron transverse energy from calorimeters",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("isEB",elec_isEB,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("isEE",elec_isEE,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("ecalEnergy",elec_ecalEnergy,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("isPassConversionVeto",elec_isPassConversionVeto,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("convDist",elec_convDist,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<int>("convFlags",elec_convFlags,"doc",nanoaod::FlatTable::IntColumn);
+    electronTable->addColumn<float>("isEB",elec_isEB,"electron energy deposited in the ECAL barrel",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("isEE",elec_isEE,"electron energy deposited in the ECAL endcap",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("ecalEnergy",elec_ecalEnergy,"electron energy deposited in the ECAL normalized against the electron pt",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("isPassConversionVeto",elec_isPassConversionVeto,"vertex fit combined with missing number of hits method",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("convDist",elec_convDist,"minimum distance between conversion tracks",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<int>("convFlags",elec_convFlags,"flag for electron coming from photon conversion",nanoaod::FlatTable::IntColumn);
 
-    electronTable->addColumn<float>("convRadius",elec_convRadius,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("hadronicOverEm",elec_hadronicOverEm,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("ecalDrivenSeed",elec_ecalDrivenSeed,"doc",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("convRadius",elec_convRadius,"electron conversion radius",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("hadronicOverEm",elec_hadronicOverEm,"sum of hcal over ecal seed cluster energy using 1st and 2nd hcal depth (using hcal towers within a cone)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("ecalDrivenSeed",elec_ecalDrivenSeed,"ECAL driven seed",nanoaod::FlatTable::FloatColumn);
 
 
-    electronTable->addColumn<float>("SC_energy",elecSC_energy,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("SC_deta",elecSC_deta,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("SC_dphi",elecSC_dphi,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("SC_et",elecSC_et,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("SC_eSuperClusterOverP",elecSC_eSuperClusterOverP,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scE1x5Overe5x5",elec_scE1x5Overe5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scE2x5MaxOvere5x5",elec_scE2x5MaxOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scE5x5",elec_scE5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scE5x5Rel",elec_scE5x5Rel,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scPixCharge",elec_scPixCharge,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scSigmaEtaEta",elec_scSigmaEtaEta,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scSigmaIEtaIEta",elec_scSigmaIEtaIEta,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("superClusterFbrem",elec_superClusterFbrem,"doc",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("SC_energy",elecSC_energy,"electron supercluster energy normalized against the electron pt",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("SC_deta",elecSC_deta,"absolute difference between the electron supercluster eta and gsfTrack electron eta",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("SC_dphi",elecSC_dphi,"absolute difference between the electron supercluster phi and gsfTrack electron phi",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("SC_et",elecSC_et,"electron supercluster transverse energy normalized against the electron pt",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("SC_eSuperClusterOverP",elecSC_eSuperClusterOverP,"the electron supercluster energy / track momentum at the PCA to the beam spot",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("scE1x5Overe5x5",elec_scE1x5Overe5x5,"electron supercluster energy ratio of highest energy 1x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("scE2x5MaxOvere5x5",elec_scE2x5MaxOvere5x5,"electron supercluster energy ratio of highest energy 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("scE5x5",elec_scE5x5,"electron supercluster energy in 5x5 ECAL block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("scE5x5Rel",elec_scE5x5Rel,"electron supercluster energy in 5x5 ECAL block on seed relative to the jet pt",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("scPixCharge",elec_scPixCharge,"electron supercluster pixel charge",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("scSigmaEtaEta",elec_scSigmaEtaEta,"electron supercluster Sigma Eta Eta variable (quite unintuitive)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("scSigmaIEtaIEta",elec_scSigmaIEtaIEta,"electron supercluster Sigma iEta iEta variable (iproved variable against Sigma Eta Eta to resolv issues in cracks)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("superClusterFbrem",elec_superClusterFbrem,"the brem fraction from supercluster: (supercluster energy - electron cluster energy) / supercluster energy",nanoaod::FlatTable::FloatColumn);
 
-    electronTable->addColumn<float>("2dIP",elec_2dIP,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("2dIPSig",elec_2dIPSig,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("3dIP",elec_3dIP,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("3dIPSig",elec_3dIPSig,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("eSeedClusterOverP",elec_eSeedClusterOverP,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("eSeedClusterOverPout",elec_eSeedClusterOverPout,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("eSuperClusterOverP",elec_eSuperClusterOverP,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("eTopOvere5x5",elec_eTopOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("2dIP",elec_2dIP,"electron inner track transverse impact parameter relative to the primary vertex in transverse plane (2D), absolute value",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("2dIPSig",elec_2dIPSig,"electron inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in transverse plane (2D)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("3dIP",elec_3dIP,"electron inner track transverse impact parameter relative to the primary vertex in 3D",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("3dIPSig",elec_3dIPSig,"electron inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in 3D",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("eSeedClusterOverP",elec_eSeedClusterOverP,"the seed cluster energy / track momentum at the PCA to the beam spot",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("eSeedClusterOverPout",elec_eSeedClusterOverPout,"the seed cluster energy / track momentum at calo extrapolated from the outermost track state",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("eSuperClusterOverP",elec_eSuperClusterOverP,"the supercluster energy / track momentum at the PCA to the beam spot",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("eTopOvere5x5",elec_eTopOvere5x5,"electron.full5x5_eTop()/ electron.full5x5_e5x5()",nanoaod::FlatTable::FloatColumn);
 
     electronTable->addColumn<float>("deltaEtaEleClusterTrackAtCalo",elec_deltaEtaEleClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("deltaEtaSeedClusterTrackAtCalo",elec_deltaEtaSeedClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
@@ -950,33 +950,33 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("deltaPhiSuperClusterTrackAtVtx",elec_deltaPhiSuperClusterTrackAtVtx,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("sCseedEta",elec_sCseedEta,"doc",nanoaod::FlatTable::FloatColumn);
 
-    electronTable->addColumn<float>("EtaRel",elec_EtaRel,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dxy",elec_dxy,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dz",elec_dz,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("nbOfMissingHits",elec_nbOfMissingHits,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("gsfCharge",elec_gsfCharge,"doc",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("EtaRel",elec_EtaRel,"electron pseudorapidity, relative to the jet axis",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("dxy",elec_dxy,"transverse impact parameter of the electron",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("dz",elec_dz,"longitudinal impact parameter of the best reconstructed electron track",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("nbOfMissingHits",elec_nbOfMissingHits,"number of missing electron hits in its hit pattern",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("gsfCharge",elec_gsfCharge,"gsf electron charge",nanoaod::FlatTable::FloatColumn);
 
-    electronTable->addColumn<int>("numberOfBrems",elec_numberOfBrems,"doc",nanoaod::FlatTable::IntColumn);
+    electronTable->addColumn<int>("numberOfBrems",elec_numberOfBrems,"number of Bremsstrahlung electrons in a shower",nanoaod::FlatTable::IntColumn);
     electronTable->addColumn<float>("trackFbrem",elec_trackFbrem,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("fbrem",elec_fbrem,"doc",nanoaod::FlatTable::FloatColumn);
 
-    electronTable->addColumn<float>("e5x5",elec_e5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("e5x5Rel",elec_e5x5Rel,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("e2x5MaxOvere5x5",elec_e2x5MaxOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("e1x5Overe5x5",elec_e1x5Overe5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_sigmaIetaIeta",elec_full5x5_sigmaIetaIeta,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e1x5Overe5x5",elec_full5x5_e1x5Overe5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5BottomOvere5x5",elec_full5x5_e2x5BottomOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5LeftOvere5x5",elec_full5x5_e2x5LeftOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5MaxOvere5x5",elec_full5x5_e2x5MaxOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5RightOvere5x5",elec_full5x5_e2x5RightOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5TopOvere5x5",elec_full5x5_e2x5TopOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e5x5",elec_full5x5_e5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e5x5Rel",elec_full5x5_e5x5Rel,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_eBottomOvere5x5",elec_full5x5_eBottomOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_eLeftOvere5x5",elec_full5x5_eLeftOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_eRightOvere5x5",elec_full5x5_eRightOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_eTopOvere5x5",elec_full5x5_eTopOvere5x5,"doc",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("e5x5",elec_e5x5,"electron energy in 5x5 ECAL block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("e5x5Rel",elec_e5x5Rel,"electron energy in 5x5 ECAL block on seed relative to the jet pt",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("e2x5MaxOvere5x5",elec_e2x5MaxOvere5x5,"electron energy ratio of highest energy 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("e1x5Overe5x5",elec_e1x5Overe5x5,"electron energy ratio of highest energy 1x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_sigmaIetaIeta",elec_full5x5_sigmaIetaIeta,"electron full shower Sigma iEta iEta variable (iproved variable against Sigma Eta Eta to resolv issues in cracks)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e1x5Overe5x5",elec_full5x5_e1x5Overe5x5,"electron full shower energy ratio of highest energy 1x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5BottomOvere5x5",elec_full5x5_e2x5BottomOvere5x5,"electron full shower energy ratio of bottom 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5LeftOvere5x5",elec_full5x5_e2x5LeftOvere5x5,"electron full shower energy ratio of left 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5MaxOvere5x5",elec_full5x5_e2x5MaxOvere5x5,"electron full shower energy ratio of highest energy 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5RightOvere5x5",elec_full5x5_e2x5RightOvere5x5,"electron full shower energy ratio of right 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5TopOvere5x5",elec_full5x5_e2x5TopOvere5x5,"electron full shower energy ratio of top 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e5x5",elec_full5x5_e5x5,"electron full shower energy in 5x5 ECAL block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e5x5Rel",elec_full5x5_e5x5Rel,"electron full shower energy in 5x5 ECAL block on seed relative to the jet pt",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_eBottomOvere5x5",elec_full5x5_eBottomOvere5x5,"electron full shower energy in bottom ECAL blocks ratio of 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_eLeftOvere5x5",elec_full5x5_eLeftOvere5x5,"electron full shower energy in left ECAL blocks ratio of 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_eRightOvere5x5",elec_full5x5_eRightOvere5x5,"electron full shower energy in right ECAL blocks ratio of 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_eTopOvere5x5",elec_full5x5_eTopOvere5x5,"electron full shower energy in top ECAL blocks ratio of 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("full5x5_hcalDepth1OverEcal",elec_full5x5_hcalDepth1OverEcal,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("full5x5_hcalDepth1OverEcalBc",elec_full5x5_hcalDepth1OverEcalBc,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("full5x5_hcalDepth2OverEcal",elec_full5x5_hcalDepth2OverEcal,"doc",nanoaod::FlatTable::FloatColumn);
