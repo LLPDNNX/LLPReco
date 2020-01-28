@@ -3,14 +3,14 @@
 
 namespace llpdnnx {
 
-struct ChargedCandidateFeatures 
+struct ChargedCandidateFeatures
 {
 
     int cpf_jetIdx;
     float cpf_ptrel;
     float cpf_deta;
     float cpf_dphi;
-    
+
     float cpf_trackEtaRel;
     float cpf_trackPtRel;
     float cpf_trackPPar;
@@ -30,7 +30,7 @@ struct ChargedCandidateFeatures
     float cpf_track_chi2;
     float cpf_track_quality;
     float cpf_relmassdrop;
-    
+
     int cpf_matchedMuon;
     int cpf_matchedElectron;
     int cpf_matchedSV;

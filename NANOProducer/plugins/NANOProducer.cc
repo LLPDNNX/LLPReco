@@ -93,6 +93,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> cpf_length;
     std::vector<int> npf_length;
     std::vector<int> sv_length;
+
     std::vector<int> elec_length;
     std::vector<int> mu_length;
 
@@ -141,7 +142,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> trackSip3dSigAboveCharm;
     std::vector<int> jetNSelectedTracks;
     std::vector<int> jetNTracksEtaRel;
-
 
     std::vector<int> cpf_jetIdx;
     std::vector<float> cpf_trackEtaRel;
@@ -283,7 +283,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> elec_hadronicOverEm ;
     std::vector<float> elec_ecalDrivenSeed;
 
-
     std::vector<float> elecSC_energy ;
     std::vector<float> elecSC_deta ;
     std::vector<float> elecSC_dphi ;
@@ -385,6 +384,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     for (unsigned int itag= 0; itag < ntags; itag++)
     {
+
         const auto& features = tag_infos->at(itag).features();
         const auto& tag_info_features = features.tag_info_features;
 
@@ -431,14 +431,12 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         relSoftDropMassAK.push_back(features.jet_features.relSoftDropMassAK);
         relSoftDropMassCA.push_back(features.jet_features.relSoftDropMassCA);
 
-
         thrust.push_back(features.jet_features.thrust);
         sphericity.push_back(features.jet_features.sphericity);
         circularity.push_back(features.jet_features.circularity);
         isotropy.push_back(features.jet_features.isotropy);
         eventShapeC.push_back(features.jet_features.eventShapeC);
         eventShapeD.push_back(features.jet_features.eventShapeD);
-
 
         csv_jetIdx.push_back(tag_info_features.csv_jetIdx);
 
@@ -451,6 +449,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         jetNSelectedTracks.push_back(tag_info_features.csv_jetNSelectedTracks);
         jetNTracksEtaRel.push_back(tag_info_features.csv_jetNTracksEtaRel);
         vertexCategory.push_back(tag_info_features.csv_vertexCategory);
+
     }
 
     auto muonTable = std::make_unique<nanoaod::FlatTable>(nmu_total, "muon", false, false);
@@ -733,13 +732,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             elec_dr04HcalTowerSumEtBc.push_back(elec_features.elec_dr04HcalTowerSumEtBc );
 
 
-
-
-
         }
+
     }
 
-    globalTable->addColumn<float>("pt", pt, "global jet pt (log 10, uncorrected)", nanoaod::FlatTable::FloatColumn);
+    globalTable->addColumn<float>("pt", pt, "global jet pt (uncorrected)", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<int>("jetIdx", jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     globalTable->addColumn<float>("eta", eta, "global jet eta", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("phi", phi, "global jet phi", nanoaod::FlatTable::FloatColumn);
@@ -759,6 +756,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("tau2", tau2, "nsubjettiness 2", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("tau3", tau3, "nsubjettiness 3", nanoaod::FlatTable::FloatColumn);
 
+
     globalTable->addColumn<float>("relMassDropMassAK", relMassDropMassAK, "mass drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("relMassDropMassCA", relMassDropMassCA, "mass drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("relSoftDropMassAK", relSoftDropMassAK, "soft drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
@@ -770,7 +768,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("isotropy", isotropy, "isotropy", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("eventShapeC", eventShapeC, "eventShapeC", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("eventShapeD", eventShapeD, "eventShapeD", nanoaod::FlatTable::FloatColumn);
-
 
     csvTable->addColumn<int>("jetIdx", csv_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
     csvTable->addColumn<float>("trackSumJetEtRatio", trackSumJetEtRatio, "ratio of track sum transverse energy over jet energy", nanoaod::FlatTable::FloatColumn);

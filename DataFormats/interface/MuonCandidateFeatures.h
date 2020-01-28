@@ -4,7 +4,6 @@
 
 namespace llpdnnx {
 
-
 struct MuonCandidateFeatures
 {
 
