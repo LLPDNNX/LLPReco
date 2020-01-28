@@ -419,9 +419,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         chargedMuEnergyFraction.push_back(features.jet_features.chargedMuEnergyFraction);
         electronEnergyFraction.push_back(features.jet_features.electronEnergyFraction);
 
-        elec_length.push_back(nelec);
-        mu_length.push_back(nmu);
-
         jetIdx.push_back(features.jet_features.jetIdx);
 
         tau1.push_back(features.jet_features.tau1);
@@ -929,7 +926,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("scE5x5Rel",elec_scE5x5Rel,"electron supercluster energy in 5x5 ECAL block on seed relative to the jet pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("scPixCharge",elec_scPixCharge,"electron supercluster pixel charge",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("scSigmaEtaEta",elec_scSigmaEtaEta,"electron supercluster Sigma Eta Eta variable (quite unintuitive)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scSigmaIEtaIEta",elec_scSigmaIEtaIEta,"electron supercluster Sigma iEta iEta variable (iproved variable against Sigma Eta Eta to resolv issues in cracks)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("scSigmaIEtaIEta",elec_scSigmaIEtaIEta,"electron supercluster Sigma iEta iEta variable (improved variable against Sigma Eta Eta to resolv issues in cracks)",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("superClusterFbrem",elec_superClusterFbrem,"the brem fraction from supercluster: (supercluster energy - electron cluster energy) / supercluster energy",nanoaod::FlatTable::FloatColumn);
 
     electronTable->addColumn<float>("2dIP",elec_2dIP,"electron inner track transverse impact parameter relative to the primary vertex in transverse plane (2D), absolute value",nanoaod::FlatTable::FloatColumn);
@@ -964,26 +961,26 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("e5x5Rel",elec_e5x5Rel,"electron energy in 5x5 ECAL block on seed relative to the jet pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("e2x5MaxOvere5x5",elec_e2x5MaxOvere5x5,"electron energy ratio of highest energy 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("e1x5Overe5x5",elec_e1x5Overe5x5,"electron energy ratio of highest energy 1x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_sigmaIetaIeta",elec_full5x5_sigmaIetaIeta,"electron full shower Sigma iEta iEta variable (iproved variable against Sigma Eta Eta to resolv issues in cracks)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e1x5Overe5x5",elec_full5x5_e1x5Overe5x5,"electron full shower energy ratio of highest energy 1x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5BottomOvere5x5",elec_full5x5_e2x5BottomOvere5x5,"electron full shower energy ratio of bottom 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5LeftOvere5x5",elec_full5x5_e2x5LeftOvere5x5,"electron full shower energy ratio of left 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5MaxOvere5x5",elec_full5x5_e2x5MaxOvere5x5,"electron full shower energy ratio of highest energy 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5RightOvere5x5",elec_full5x5_e2x5RightOvere5x5,"electron full shower energy ratio of right 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e2x5TopOvere5x5",elec_full5x5_e2x5TopOvere5x5,"electron full shower energy ratio of top 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e5x5",elec_full5x5_e5x5,"electron full shower energy in 5x5 ECAL block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_e5x5Rel",elec_full5x5_e5x5Rel,"electron full shower energy in 5x5 ECAL block on seed relative to the jet pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_eBottomOvere5x5",elec_full5x5_eBottomOvere5x5,"electron full shower energy in bottom ECAL blocks ratio of 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_eLeftOvere5x5",elec_full5x5_eLeftOvere5x5,"electron full shower energy in left ECAL blocks ratio of 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_eRightOvere5x5",elec_full5x5_eRightOvere5x5,"electron full shower energy in right ECAL blocks ratio of 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_eTopOvere5x5",elec_full5x5_eTopOvere5x5,"electron full shower energy in top ECAL blocks ratio of 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_hcalDepth1OverEcal",elec_full5x5_hcalDepth1OverEcal,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_hcalDepth1OverEcalBc",elec_full5x5_hcalDepth1OverEcalBc,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_hcalDepth2OverEcal",elec_full5x5_hcalDepth2OverEcal,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_hcalDepth2OverEcalBc",elec_full5x5_hcalDepth2OverEcalBc,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_hcalOverEcal",elec_full5x5_hcalOverEcal,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_hcalOverEcalBc",elec_full5x5_hcalOverEcalBc,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("full5x5_r9",elec_full5x5_r9,"doc",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_sigmaIetaIeta",elec_full5x5_sigmaIetaIeta,"electron full shower Sigma iEta iEta variable (improved variable against Sigma Eta Eta to resolv issues in cracks)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e1x5Overe5x5",elec_full5x5_e1x5Overe5x5,"electron full shower energy ratio of highest energy 1x5 ECAL block containing seed over total full shower energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5BottomOvere5x5",elec_full5x5_e2x5BottomOvere5x5,"electron full shower energy ratio of bottom 2x5 ECAL block containing seed over total full shower energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5LeftOvere5x5",elec_full5x5_e2x5LeftOvere5x5,"electron full shower energy ratio of left 2x5 ECAL block containing seed over total full shower energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5MaxOvere5x5",elec_full5x5_e2x5MaxOvere5x5,"electron full shower energy ratio of highest energy 2x5 ECAL block containing seed over total full shower energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5RightOvere5x5",elec_full5x5_e2x5RightOvere5x5,"electron full shower energy ratio of right 2x5 ECAL block containing seed over total full shower energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e2x5TopOvere5x5",elec_full5x5_e2x5TopOvere5x5,"electron full shower energy ratio of top 2x5 ECAL block containing seed over total full shower energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e5x5",elec_full5x5_e5x5,"electron full shower energy in 5x5 full shower ECAL block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_e5x5Rel",elec_full5x5_e5x5Rel,"electron full shower energy in 5x5 full shower ECAL block on seed relative to the jet pt",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_eBottomOvere5x5",elec_full5x5_eBottomOvere5x5,"electron full shower energy in bottom ECAL blocks ratio of 5x5 full shower block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_eLeftOvere5x5",elec_full5x5_eLeftOvere5x5,"electron full shower energy in left ECAL blocks ratio of 5x5 full shower block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_eRightOvere5x5",elec_full5x5_eRightOvere5x5,"electron full shower energy in right ECAL blocks ratio of 5x5 full shower block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_eTopOvere5x5",elec_full5x5_eTopOvere5x5,"electron full shower energy in top ECAL blocks ratio of 5x5 full shower block on seed",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_hcalDepth1OverEcal",elec_full5x5_hcalDepth1OverEcal,"HCAL over ECAL seed cluster energy using 1st HCAL depth (using HCAL towers within a cone)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_hcalDepth1OverEcalBc",elec_full5x5_hcalDepth1OverEcalBc,"HCAL over ECAL seed cluster energy using 1st HCAL depth (using HCAL towers behind clusters)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_hcalDepth2OverEcal",elec_full5x5_hcalDepth2OverEcal,"HCAL over ECAL seed cluster energy using 2nd HCAL depth (using HCAL towers within a cone)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_hcalDepth2OverEcalBc",elec_full5x5_hcalDepth2OverEcalBc,"HCAL over ECAL seed cluster energy using 2nd HCAL depth (using HCAL towers behind clusters)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_hcalOverEcal",elec_full5x5_hcalOverEcal,"HCAL over ECAL seed cluster energy summing the 1st and 2nd HCAL depth (using HCAL towers within a cone)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_hcalOverEcalBc",elec_full5x5_hcalOverEcalBc,"HCAL over ECAL seed cluster energy summing the 1st and 2nd HCAL depth (using HCAL towers behind clusters)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("full5x5_r9",elec_full5x5_r9,"ratio of the 3x3 energy and supercluster energy",nanoaod::FlatTable::FloatColumn);
 
     electronTable->addColumn<float>("neutralHadronIso",elec_neutralHadronIso,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("particleIso",elec_particleIso,"doc",nanoaod::FlatTable::FloatColumn);
