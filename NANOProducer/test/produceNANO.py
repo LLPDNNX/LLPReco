@@ -225,7 +225,7 @@ process.nanoTable = cms.EDProducer("NANOProducer",
 )
 
 process.nanoGenTable = cms.EDProducer("NANOGenProducer",
-    srcTags = cms.InputTag("pfXTagInfos"),
+    srcJets = cms.InputTag("updatedJets"),
     srcLabels = cms.InputTag("llpLabels")
 )
 
