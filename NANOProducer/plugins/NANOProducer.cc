@@ -1,22 +1,3 @@
-// -*- C++ -*-
-//
-// Package:    LLPReco/NANOProducer
-// Class:      NANOProducer
-//
-/**\class NANOProducer NANOProducer.cc LLPReco/NANOProducer/plugins/NANOProducer.cc
-
- Description: [one line class summary]
-
- Implementation:
-     [Notes on implementation]
-*/
-//
-// Original Author:  Vilius Cepaitis
-//         Created:  Fri, 10 Jan 2020 15:20:19 GMT
-//
-//
-
-
 // system include files
 #include <memory>
 
@@ -66,7 +47,6 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
     produces<nanoaod::FlatTable>("npf");
     produces<nanoaod::FlatTable>("sv");
     produces<nanoaod::FlatTable>("length");
-    //produces<nanoaod::FlatTable>("jetorigin");
     produces<nanoaod::FlatTable>("muon") ;
     produces<nanoaod::FlatTable>("electron") ;
 }
@@ -206,60 +186,60 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int>  mu_isStandAlone ;
 
 
-    std::vector<float> mu_ptrel ;
+    std::vector<float> mu_ptrel;
     std::vector<float> mu_EtaRel;
     std::vector<float> mu_deta;
     std::vector<float> mu_dphi;
-    std::vector<float> mu_charge ;
+    std::vector<float> mu_charge;
     std::vector<float> mu_energy;
-    std::vector<float> mu_et ;
-    std::vector<float> mu_jetDeltaR ;
-    std::vector<float> mu_numberOfMatchedStations ;
+    std::vector<float> mu_et;
+    std::vector<float> mu_jetDeltaR;
+    std::vector<float> mu_numberOfMatchedStations;
 
-    std::vector<float> mu_2dIp ;
-    std::vector<float> mu_2dIpSig ;
-    std::vector<float> mu_3dIp ;
-    std::vector<float> mu_3dIpSig ;
+    std::vector<float> mu_2dIp;
+    std::vector<float> mu_2dIpSig;
+    std::vector<float> mu_3dIp;
+    std::vector<float> mu_3dIpSig;
 
-    std::vector<float> mu_dxy ;
-    std::vector<float> mu_dxyError ;
-    std::vector<float> mu_dxySig ;
-    std::vector<float> mu_dz ;
-    std::vector<float> mu_dzError ;
+    std::vector<float> mu_dxy;
+    std::vector<float> mu_dxyError;
+    std::vector<float> mu_dxySig;
+    std::vector<float> mu_dz;
+    std::vector<float> mu_dzError;
     std::vector<float> mu_numberOfValidPixelHits;
-    std::vector<float> mu_numberOfpixelLayersWithMeasurement ;
+    std::vector<float> mu_numberOfpixelLayersWithMeasurement;
     //std::vector<float> mu_numberOfstripLayersWithMeasurement ;
 
-    std::vector<float> mu_chi2 ;
-    std::vector<float> mu_ndof ;
+    std::vector<float> mu_chi2;
+    std::vector<float> mu_ndof;
 
-    std::vector<float> mu_caloIso ;
-    std::vector<float> mu_ecalIso ;
-    std::vector<float> mu_hcalIso ;
+    std::vector<float> mu_caloIso;
+    std::vector<float> mu_ecalIso;
+    std::vector<float> mu_hcalIso;
 
-    std::vector<float> mu_sumPfChHadronPt ;
-    std::vector<float> mu_sumPfNeuHadronEt ;
-    std::vector<float> mu_Pfpileup ;
-    std::vector<float> mu_sumPfPhotonEt ;
+    std::vector<float> mu_sumPfChHadronPt;
+    std::vector<float> mu_sumPfNeuHadronEt;
+    std::vector<float> mu_Pfpileup;
+    std::vector<float> mu_sumPfPhotonEt;
 
-    std::vector<float> mu_sumPfChHadronPt03 ;
-    std::vector<float> mu_sumPfNeuHadronEt03 ;
-    std::vector<float> mu_Pfpileup03 ;
-    std::vector<float> mu_sumPfPhotonEt03 ;
+    std::vector<float> mu_sumPfChHadronPt03;
+    std::vector<float> mu_sumPfNeuHadronEt03;
+    std::vector<float> mu_Pfpileup03;
+    std::vector<float> mu_sumPfPhotonEt03;
 
-    std::vector<float> mu_sumChHadronPt ;
-    std::vector<float> mu_sumNeuHadronEt ;
-    std::vector<float> mu_pileup ;
-    std::vector<float> mu_sumPhotonEt ;
+    std::vector<float> mu_sumChHadronPt;
+    std::vector<float> mu_sumNeuHadronEt;
+    std::vector<float> mu_pileup;
+    std::vector<float> mu_sumPhotonEt;
 
     //std::vector<float> mu_sumChHadronPt03 ;
     //std::vector<float> mu_sumNeuHadronEt03 ;
     //std::vector<float> mu_pileup03 ;
     //std::vector<float> mu_sumPhotonEt03 ;
 
-    std::vector<float>  mu_timeAtIpInOut ;
-    std::vector<float>  mu_timeAtIpInOutErr ;
-    std::vector<float>  mu_timeAtIpOutIn ;
+    std::vector<float>  mu_timeAtIpInOut;
+    std::vector<float>  mu_timeAtIpInOutErr;
+    std::vector<float>  mu_timeAtIpOutIn;
 
 
     // Electron Block
@@ -419,9 +399,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         chargedMuEnergyFraction.push_back(features.jet_features.chargedMuEnergyFraction);
         electronEnergyFraction.push_back(features.jet_features.electronEnergyFraction);
 
-        elec_length.push_back(nelec);
-        mu_length.push_back(nmu);
-
         jetIdx.push_back(features.jet_features.jetIdx);
 
         tau1.push_back(features.jet_features.tau1);
@@ -462,15 +439,14 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     for (unsigned int itag= 0; itag < ntags; itag++)
     {
         const auto& features = tag_infos->at(itag).features();
-        auto mu  = features.mu_features ;
-        auto elec = features.elec_features ;
+        auto mu  = features.mu_features;
+        auto elec = features.elec_features;
         auto cpf = features.cpf_features;
         auto npf = features.npf_features;
-        auto sv = features.sv_features ;
+        auto sv = features.sv_features;
 
         unsigned int nmu = features.mu_features.size();
         unsigned int nelec = features.elec_features.size();
-
         unsigned int ncpf = features.cpf_features.size();
         unsigned int nnpf = features.npf_features.size();
         unsigned int nsv = features.sv_features.size();
@@ -742,27 +718,20 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("eta", eta, "global jet eta", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("phi", phi, "global jet phi", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("mass", mass, "global jet mass", nanoaod::FlatTable::FloatColumn);
-
     globalTable->addColumn<float>("area", area, "global jet area", nanoaod::FlatTable::FloatColumn);
-
     globalTable->addColumn<int>("n60", n60, "n60", nanoaod::FlatTable::IntColumn);
     globalTable->addColumn<int>("n90", n90, "n90", nanoaod::FlatTable::IntColumn);
-
     globalTable->addColumn<float>("chargedEmEnergyFraction", chargedEmEnergyFraction, "chargedEmEnergyFraction", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("chargedHadronEnergyFraction", chargedHadronEnergyFraction, "chargedHadronEnergyFraction", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("chargedMuEnergyFraction", chargedMuEnergyFraction, "chargedMuEnergyFraction", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("electronEnergyFraction", electronEnergyFraction, "electronEnergyFraction", nanoaod::FlatTable::FloatColumn);
-
     globalTable->addColumn<float>("tau1", tau1, "nsubjettiness 1", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("tau2", tau2, "nsubjettiness 2", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("tau3", tau3, "nsubjettiness 3", nanoaod::FlatTable::FloatColumn);
-
-
     globalTable->addColumn<float>("relMassDropMassAK", relMassDropMassAK, "mass drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("relMassDropMassCA", relMassDropMassCA, "mass drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("relSoftDropMassAK", relSoftDropMassAK, "soft drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("relSoftDropMassCA", relSoftDropMassCA, "soft drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
-
     globalTable->addColumn<float>("thrust", thrust, "thrust", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("sphericity", sphericity, "sphericity", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("circularity", circularity, "circularity", nanoaod::FlatTable::FloatColumn);
@@ -840,6 +809,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     lengthTable->addColumn<int>("mu", mu_length, "muon offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("ele", elec_length, "electron offset", nanoaod::FlatTable::IntColumn);
 
+    
     muonTable->addColumn<int>("jetIdx", mu_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
     muonTable->addColumn<int>("isGlobal",mu_isGlobal,"muon fitted from the tracker and muon stations",nanoaod::FlatTable::IntColumn);
     muonTable->addColumn<int>("isTight",mu_isTight,"global muon with additional muon-quality requirements.Tight Muon ID selects a subset of the Particle-Flow muons",nanoaod::FlatTable::IntColumn);
@@ -896,7 +866,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     muonTable->addColumn<float>("timeAtIpInOut",mu_timeAtIpInOut,"the time at the interaction point for muons moving inside-out",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("timeAtIpInOutErr",mu_timeAtIpInOutErr,"error on the time at the interaction point for muons moving inside-out",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("timeAtIpOutIn",mu_timeAtIpOutIn,"The time at the interaction point for muons moving outside-in",nanoaod::FlatTable::FloatColumn);
-
+    
 
     electronTable->addColumn<int>("jetIdx", elec_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
     electronTable->addColumn<float>("ptrel",elec_ptrel,"electron candidate transverse momentum relative to the uncorrected jet energy pt",nanoaod::FlatTable::FloatColumn);

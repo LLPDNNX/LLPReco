@@ -1,22 +1,3 @@
-// -*- C++ -*-
-//
-// Package:    LLPReco/NANOProducer
-// Class:      NANOProducer
-// 
-/**\class NANOProducer NANOProducer.cc LLPReco/NANOProducer/plugins/NANOProducer.cc
-
- Description: [one line class summary]
-
- Implementation:
-     [Notes on implementation]
-*/
-//
-// Original Author:  Vilius Cepaitis
-//         Created:  Fri, 10 Jan 2020 15:20:19 GMT
-//
-//
-
-
 // system include files
 #include <memory>
 
@@ -51,7 +32,7 @@ class NANOGenProducer : public edm::stream::EDProducer<> {
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
    private:
-      const edm::EDGetTokenT<std::vector<reco::XTagInfo>> _tag_src;
+        edm::EDGetTokenT<edm::View<pat::Jet>> _jet_src;
       const edm::EDGetTokenT<std::vector<reco::LLPLabelInfo>> _label_src;
       virtual void beginStream(edm::StreamID) override;
       virtual void produce(edm::Event&, const edm::EventSetup&) override;
@@ -59,7 +40,7 @@ class NANOGenProducer : public edm::stream::EDProducer<> {
 };
 
 NANOGenProducer::NANOGenProducer(const edm::ParameterSet& iConfig) :
-    _tag_src(consumes<std::vector<reco::XTagInfo>>(iConfig.getParameter<edm::InputTag>("srcTags"))),
+    _jet_src(consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("srcJets"))),
     _label_src(consumes<std::vector<reco::LLPLabelInfo>>(iConfig.getParameter<edm::InputTag>("srcLabels")))
 {
     produces<nanoaod::FlatTable>("jetorigin");
@@ -76,19 +57,20 @@ void
 NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
    using namespace edm;
-    
-    edm::Handle<std::vector<reco::XTagInfo>> tag_infos;
-    iEvent.getByToken(_tag_src, tag_infos);
+    edm::Handle<edm::View<pat::Jet>> jets;
+    iEvent.getByToken(_jet_src, jets);
 
     edm::Handle<std::vector<reco::LLPLabelInfo>> label_infos;
     iEvent.getByToken(_label_src, label_infos);
 
-    unsigned int ntags = tag_infos->size();
-    unsigned int ntruth = label_infos->size();
-    if (ntags != ntruth) throw cms::Exception("NANOProducer:: number of jet tags is not equal to the number of labelled jets!");
-    auto jetOriginTable = std::make_unique<nanoaod::FlatTable>(ntags, "jetorigin", false, false);
+    std::size_t njets = jets->size();
+    std::size_t ntruth = label_infos->size();
+    if (njets != ntruth) cms::Exception("number of jets does not match the number of truth labels");
+    auto jetOriginTable = std::make_unique<nanoaod::FlatTable>(njets, "jetorigin", false, false);
 
-    std::vector<int> label_jetIdx;
+
+
+    std::vector<int> jetIdx;
     std::vector<int> isPU;
     std::vector<int> isB;
     std::vector<int> isBB;
@@ -130,13 +112,12 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> displacement_z;
     std::vector<float> decay_angle;
     std::vector<float> betagamma;
-        
-    
-    for (unsigned int itag= 0; itag < ntags; itag++) {
+            
+    for (std::size_t ijet = 0; ijet < njets; ijet++) {
+        edm::RefToBase<reco::Jet> jet_ref(jets->refAt(ijet));
+        const auto& labels = label_infos->at(ijet).features();
 
-        const auto& labels = label_infos->at(itag).features();
-
-        label_jetIdx.push_back(labels.jetIdx);
+        jetIdx.push_back(jet_ref.key());
         isPU.push_back(labels.type == llpdnnx::LLPLabel::Type::isPU ? 1 : 0);
         isB.push_back(labels.type == llpdnnx::LLPLabel::Type::isB ? 1 : 0);
         isBB.push_back(labels.type == llpdnnx::LLPLabel::Type::isBB ? 1 : 0);
@@ -180,7 +161,7 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
     
-    jetOriginTable->addColumn<int>("jetIdx", label_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("jetIdx", jetIdx, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isPU", isPU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isB", isB, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isBB", isBB, "doc", nanoaod::FlatTable::IntColumn);
