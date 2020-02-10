@@ -197,7 +197,8 @@ updateJetCollection(
     jetCorrections = jetCorrectionsAK4PFchs,
     pfCandidates = cms.InputTag('packedPFCandidates'),
     pvSource = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    svSource = cms.InputTag('slimmedSecondaryVertices'),
+    svSource = cms.InputTag('slimmedSecondaryVertices'), 
+    #svSource = cms.InputTag('inclusiveCandidateSecondaryVerticesAdapted'), 
     muSource = cms.InputTag('slimmedMuons'),
     elSource = cms.InputTag('slimmedElectrons'),
     btagInfos = [
@@ -215,7 +216,8 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     electronSrc = cms.InputTag("slimmedElectrons"),
     shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfosXTag'),
     vertices = cms.InputTag('offlineSlimmedPrimaryVertices'),
-    secondary_vertices = cms.InputTag("slimmedSecondaryVertices")
+    secondary_vertices = cms.InputTag("inclusiveCandidateSecondaryVerticesAdapted")
+    #secondary_vertices = cms.InputTag("slimmedSecondaryVertices") CHANGE BACK!!
 )
 
 process.nanoTable = cms.EDProducer("NANOProducer",
@@ -230,7 +232,6 @@ process.nanoGenTable = cms.EDProducer("NANOGenProducer",
 process.options = cms.untracked.PSet(
     wantSummary = cms.untracked.bool(True)
 )
-
 
 
 
@@ -289,6 +290,32 @@ process.llpLabels = cms.EDProducer(
     electronPtThreshold = cms.double(1.),
 )
 
+'''
+process.candidateVertexMergerAdapted = cms.EDProducer("CandidateVertexMerger",
+    primaryVertices=cms.InputTag("offlineSlimmedPrimaryVertices"),
+    secondaryVertices = cms.InputTag("slimmedSecondaryVertices"),
+    maxFraction = cms.double(0.7),
+    minSignificance = cms.double(2)
+)
+process.candidateVertexArbitratorAdapted = cms.EDProducer("CandidateVertexArbitrator",
+    primaryVertices=cms.InputTag("offlineSlimmedPrimaryVertices"),
+    secondaryVertices = cms.InputTag("candidateVertexMergerAdapted")
+)
+'''
+process.inclusiveCandidateSecondaryVerticesAdapted = cms.EDProducer("InclusiveCandidateVertexFinder",
+    tracks=cms.InputTag("packedPFCandidates"),
+    primaryVertices=cms.InputTag("offlineSlimmedPrimaryVertices"),
+    #maximumLongitudinalImpactParameter = cms.double(1000.)
+)
+
+process.inclusiveCandidateVertexingTaskAdapted = cms.Task(
+                                           #process.candidateVertexMergerAdapted,
+                                           #process.candidateVertexArbitratorAdapted,
+                                           process.inclusiveCandidateSecondaryVerticesAdapted
+                                           )
+process.inclusiveCandidateVertexingAdapted = cms.Sequence(process.inclusiveCandidateVertexingTaskAdapted)
+
+
 process.selectedMuonsForFilter = cms.EDFilter("CandViewSelector",
     src = cms.InputTag("slimmedMuons"),
     cut = cms.string("pt>25 && isGlobalMuon()")
@@ -315,14 +342,16 @@ else:
 
 if options.isData:
     process.llpnanoAOD_step = cms.Path(
-        process.muonFilterSequence+
+        process.muonFilterSequence+ #only data?
         process.nanoSequence+
+        process.inclusiveCandidateVertexingAdapted+
         process.pfXTagInfos+
         process.nanoTable
     )
 else:
     process.llpnanoAOD_step = cms.Path(
         process.nanoSequenceMC+
+        process.inclusiveCandidateVertexingAdapted+
         process.pfXTagInfos+
         process.displacedGenVertexSequence+
         process.llpGenDecayInfo+
