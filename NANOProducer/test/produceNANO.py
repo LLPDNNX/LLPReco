@@ -221,12 +221,14 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
 )
 
 process.nanoTable = cms.EDProducer("NANOProducer",
+    srcJets = cms.InputTag("finalJets"),
     srcTags = cms.InputTag("pfXTagInfos"),
 )
 
 process.nanoGenTable = cms.EDProducer("NANOGenProducer",
-    srcJets = cms.InputTag("updatedJets"),
-    srcLabels = cms.InputTag("llpLabels")
+    srcJets = cms.InputTag("finalJets"),
+    srcLabels = cms.InputTag("llpLabels"),
+    srcTags = cms.InputTag("pfXTagInfos")
 )
 
 process.options = cms.untracked.PSet(
@@ -290,18 +292,6 @@ process.llpLabels = cms.EDProducer(
     electronPtThreshold = cms.double(1.),
 )
 
-'''
-process.candidateVertexMergerAdapted = cms.EDProducer("CandidateVertexMerger",
-    primaryVertices=cms.InputTag("offlineSlimmedPrimaryVertices"),
-    secondaryVertices = cms.InputTag("slimmedSecondaryVertices"),
-    maxFraction = cms.double(0.7),
-    minSignificance = cms.double(2)
-)
-process.candidateVertexArbitratorAdapted = cms.EDProducer("CandidateVertexArbitrator",
-    primaryVertices=cms.InputTag("offlineSlimmedPrimaryVertices"),
-    secondaryVertices = cms.InputTag("candidateVertexMergerAdapted")
-)
-'''
 process.inclusiveCandidateSecondaryVerticesAdapted = cms.EDProducer("InclusiveCandidateVertexFinder",
     tracks=cms.InputTag("packedPFCandidates"),
     primaryVertices=cms.InputTag("offlineSlimmedPrimaryVertices"),
@@ -309,12 +299,9 @@ process.inclusiveCandidateSecondaryVerticesAdapted = cms.EDProducer("InclusiveCa
 )
 
 process.inclusiveCandidateVertexingTaskAdapted = cms.Task(
-                                           #process.candidateVertexMergerAdapted,
-                                           #process.candidateVertexArbitratorAdapted,
                                            process.inclusiveCandidateSecondaryVerticesAdapted
                                            )
 process.inclusiveCandidateVertexingAdapted = cms.Sequence(process.inclusiveCandidateVertexingTaskAdapted)
-
 
 process.selectedMuonsForFilter = cms.EDFilter("CandViewSelector",
     src = cms.InputTag("slimmedMuons"),
@@ -342,7 +329,7 @@ else:
 
 if options.isData:
     process.llpnanoAOD_step = cms.Path(
-        process.muonFilterSequence+ #only data?
+        process.muonFilterSequence+
         process.nanoSequence+
         process.inclusiveCandidateVertexingAdapted+
         process.pfXTagInfos+
@@ -390,8 +377,7 @@ modulesToRemove = [
     'patTauDiscriminationByVLooseIsolationMVArun2v1DBoldDMwLT',
     'patTauDiscriminationByLooseIsolationMVArun2v1DBoldDMwLT',
     'patTauDiscriminationByMediumIsolationMVArun2v1DBoldDMwLT',
-    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMwLT',
-    'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMwLT', 'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMwLT',
     'patTauDiscriminationByVVTightIsolationMVArun2v1DBoldDMwLT',
     'patTauDiscriminationByIsolationMVArun2v1DBnewDMwLTraw',
     'patTauDiscriminationByVVLooseIsolationMVArun2v1DBnewDMwLT',
@@ -455,8 +441,16 @@ modulesToRemove = [
     "l1bits",
 ]
 
+#override final jets
 
+print process.nanoSequence
 
+'''
+_nanoSequence = process.nanoSequence.copy()
+_nanoSequenceMC = process.nanoSequenceMC.copy()
+print dir(_nanoSequence)
+
+'''
 #remove unneeded modules
 for moduleName in modulesToRemove:
     if hasattr(process,moduleName):
@@ -475,10 +469,6 @@ process.finalTaus.src = cms.InputTag("slimmedTaus")
 #override final photons (required by object linker) so that ID evaluation is not needed
 process.finalPhotons.cut = cms.string("pt > 5")
 process.finalPhotons.src = cms.InputTag("slimmedPhotons")
-
-#override final jets
-process.finalJets.cut = cms.string('pt > 0')
-
 
 '''
 process.MINIAODoutput = cms.OutputModule("PoolOutputModule",
