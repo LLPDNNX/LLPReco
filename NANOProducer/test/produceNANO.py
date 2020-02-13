@@ -377,7 +377,8 @@ modulesToRemove = [
     'patTauDiscriminationByVLooseIsolationMVArun2v1DBoldDMwLT',
     'patTauDiscriminationByLooseIsolationMVArun2v1DBoldDMwLT',
     'patTauDiscriminationByMediumIsolationMVArun2v1DBoldDMwLT',
-    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMwLT', 'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByTightIsolationMVArun2v1DBoldDMwLT',
+    'patTauDiscriminationByVTightIsolationMVArun2v1DBoldDMwLT',
     'patTauDiscriminationByVVTightIsolationMVArun2v1DBoldDMwLT',
     'patTauDiscriminationByIsolationMVArun2v1DBnewDMwLTraw',
     'patTauDiscriminationByVVLooseIsolationMVArun2v1DBnewDMwLT',
@@ -445,12 +446,6 @@ modulesToRemove = [
 
 print process.nanoSequence
 
-'''
-_nanoSequence = process.nanoSequence.copy()
-_nanoSequenceMC = process.nanoSequenceMC.copy()
-print dir(_nanoSequence)
-
-'''
 #remove unneeded modules
 for moduleName in modulesToRemove:
     if hasattr(process,moduleName):
