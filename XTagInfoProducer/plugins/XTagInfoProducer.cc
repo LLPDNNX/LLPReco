@@ -151,7 +151,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     {
         const pat::Jet& jet = jets->at(ijet);
         edm::RefToBase<reco::Jet> jet_ref(jets->refAt(ijet)); //upcast
-    
+
         std::unordered_set<reco::CandidatePtr, CandidateHash> jetConsituentSet;
         for (unsigned int idaughter = 0; idaughter < jet.numberOfDaughters(); ++idaughter)
         {
@@ -185,8 +185,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.jet_features.chargedMuEnergyFraction = jet.chargedMuEnergyFraction();
         features.jet_features.electronEnergyFraction = jet.electronEnergyFraction();
 
-        features.jet_features.jetIdx = jet_ref.key();
-
         features.npv = vtxs->size();
         
         llpdnnx::JetSubstructure jetSubstructure(jet);
@@ -213,19 +211,13 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         // Add CSV variables
         const edm::View<reco::ShallowTagInfo>& taginfos = *shallow_tag_infos;
         edm::Ptr<reco::ShallowTagInfo> match;
-        // Try first by 'same index'
 
-        if (reco::deltaR(taginfos[ijet].jet()->p4(),jet.p4())<0.01)
-        {
-            match = taginfos.ptrAt(ijet);
-        } else {
-            for (auto itTI = taginfos.begin(), edTI = taginfos.end(); itTI != edTI; ++itTI)
-            {
-                float dR = reco::deltaR(itTI->jet()->p4(),jet.p4());
-                if (dR<0.01) {
-                    match = taginfos.ptrAt(itTI - taginfos.begin());
-                    break;
-                }
+
+        for (auto it = taginfos.begin(); it != taginfos.end(); ++it) {
+            float dR = reco::deltaR(it->jet()->p4(),jet.p4());
+            if (dR<0.01) {
+                match = taginfos.ptrAt(it - taginfos.begin());
+                break;
             }
         }
         reco::ShallowTagInfo tag_info;
@@ -234,7 +226,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         }  // will be default values otherwise
 
         reco::TaggingVariableList vars = tag_info.taggingVariables();
-        features.tag_info_features.csv_jetIdx = jet_ref.key();
         features.tag_info_features.csv_trackSumJetEtRatio = vars.get(reco::btau::trackSumJetEtRatio, -1);
         features.tag_info_features.csv_trackSumJetDeltaR = vars.get(reco::btau::trackSumJetDeltaR, -1);
         features.tag_info_features.csv_vertexCategory = vars.get(reco::btau::vertexCategory, -1);
@@ -269,7 +260,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             
             llpdnnx::SecondaryVertexFeatures sv_features;
 
-            sv_features.sv_jetIdx = jet_ref.key();
             sv_features.sv_ptrel = sv.pt()/uncorrectedPt;
             sv_features.sv_deta = std::fabs(sv.eta()-jet.eta());
             sv_features.sv_dphi = std::fabs(reco::deltaPhi(sv.phi(),jet.phi()));
@@ -330,7 +320,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 cpf_features.cpf_drminsv = std::min(cpf_features.cpf_drminsv,dR);
             }
 
-            cpf_features.cpf_jetIdx = jet_ref.key();
             cpf_features.cpf_vertex_association = constituent->pvAssociationQuality();
             cpf_features.cpf_fromPV = constituent->fromPV();
             cpf_features.cpf_puppi_weight = constituent->puppiWeight();
@@ -401,8 +390,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 if (not muon.isGlobalMuon()) continue ;
                 cpf_features.cpf_matchedMuon = 1;
-                mu_features.mu_jetIdx = jet_ref.key();  
-
                 mu_features.mu_isGlobal = muon.isGlobalMuon();                                   
                 mu_features.mu_isTight = muon.isTightMuon(pv);                                     
                 mu_features.mu_isMedium = muon.isMediumMuon();       
@@ -484,8 +471,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if(findElectron!=electronMap.end())
             {
                 const pat::Electron & electron = *findElectron->second;
-                elec_features.elec_jetIdx = jet_ref.key();
-
                 cpf_features.cpf_matchedElectron = 1;
 
                 elec_features.elec_ptrel = electron.pt()/uncorrectedPt;
@@ -684,7 +669,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             npf_features.npf_ptrel = constituent->pt()/uncorrectedPt;
             npf_features.npf_deta = std::fabs(constituent->eta()-jet.eta());
             npf_features.npf_dphi = std::fabs(reco::deltaPhi(constituent->phi(),jet.phi()));
-            npf_features.npf_jetIdx = jet_ref.key();
             npf_features.npf_puppi_weight = constituent->puppiWeight();
             npf_features.npf_deltaR = reco::deltaR(*constituent,jet);
             npf_features.npf_isGamma = abs(constituent->pdgId())==22;

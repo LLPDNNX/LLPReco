@@ -16,6 +16,7 @@
 #include "LLPReco/DataFormats/interface/LLPLabelInfo.h"
 
 #include "DataFormats/NanoAOD/interface/FlatTable.h"
+#include <Math/Vector4D.h>
 
 
 
@@ -32,7 +33,7 @@ class NANOGenProducer : public edm::stream::EDProducer<> {
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
    private:
-        edm::EDGetTokenT<edm::View<pat::Jet>> _jet_src;
+      const edm::EDGetTokenT<edm::View<pat::Jet>> _jet_src;
       const edm::EDGetTokenT<std::vector<reco::LLPLabelInfo>> _label_src;
       virtual void beginStream(edm::StreamID) override;
       virtual void produce(edm::Event&, const edm::EventSetup&) override;
@@ -42,6 +43,7 @@ class NANOGenProducer : public edm::stream::EDProducer<> {
 NANOGenProducer::NANOGenProducer(const edm::ParameterSet& iConfig) :
     _jet_src(consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("srcJets"))),
     _label_src(consumes<std::vector<reco::LLPLabelInfo>>(iConfig.getParameter<edm::InputTag>("srcLabels")))
+
 {
     produces<nanoaod::FlatTable>("jetorigin");
 }
@@ -56,7 +58,7 @@ NANOGenProducer::~NANOGenProducer()
 void
 NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
-   using namespace edm;
+    using namespace edm;
     edm::Handle<edm::View<pat::Jet>> jets;
     iEvent.getByToken(_jet_src, jets);
 
@@ -65,12 +67,13 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     std::size_t njets = jets->size();
     std::size_t ntruth = label_infos->size();
-    if (njets != ntruth) cms::Exception("number of jets does not match the number of truth labels");
-    auto jetOriginTable = std::make_unique<nanoaod::FlatTable>(njets, "jetorigin", false, false);
+
+
+    auto jetOriginTable = std::make_unique<nanoaod::FlatTable>(ntruth, "jetorigin", false, false);
 
 
 
-    std::vector<int> jetIdx;
+    std::vector<int> truth_jetIdx;
     std::vector<int> isPU;
     std::vector<int> isB;
     std::vector<int> isBB;
@@ -113,11 +116,23 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> decay_angle;
     std::vector<float> betagamma;
             
-    for (std::size_t ijet = 0; ijet < njets; ijet++) {
-        edm::RefToBase<reco::Jet> jet_ref(jets->refAt(ijet));
-        const auto& labels = label_infos->at(ijet).features();
+    for (std::size_t itag = 0; itag < ntruth; itag++) {
+    	const auto& labels = label_infos->at(itag).features();
+        int jetIdx = -1;
+        auto base_jet_ref = label_infos->at(itag).jet();
+        if (base_jet_ref.isAvailable() and base_jet_ref.isNonnull()){
+        	const auto& base_jet = base_jet_ref.get();
+        	for (std::size_t ijet = 0; ijet < njets; ijet++) {
+            	auto jet = jets->at(ijet);
+            	if (reco::deltaR(base_jet->p4(),jet.p4()) < 1e-4){
+                	jetIdx = ijet;
+                	break;
+            	}
+        	}
+        } 
 
-        jetIdx.push_back(jet_ref.key());
+
+        truth_jetIdx.push_back(jetIdx);
         isPU.push_back(labels.type == llpdnnx::LLPLabel::Type::isPU ? 1 : 0);
         isB.push_back(labels.type == llpdnnx::LLPLabel::Type::isB ? 1 : 0);
         isBB.push_back(labels.type == llpdnnx::LLPLabel::Type::isBB ? 1 : 0);
@@ -161,7 +176,7 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     }
 
     
-    jetOriginTable->addColumn<int>("jetIdx", jetIdx, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("jetIdx", truth_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isPU", isPU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isB", isB, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isBB", isBB, "doc", nanoaod::FlatTable::IntColumn);
