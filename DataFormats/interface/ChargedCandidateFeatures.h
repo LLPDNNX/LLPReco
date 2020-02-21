@@ -24,7 +24,7 @@ struct ChargedCandidateFeatures
     float cpf_trackJetDistVal;
     float cpf_trackJetDistSig;
     float cpf_drminsv;
-    float cpf_vertex_association;
+    int cpf_vertex_association;
     float cpf_fromPV;
     float cpf_puppi_weight;
     float cpf_track_chi2;

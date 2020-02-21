@@ -3,7 +3,6 @@
 
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/Common/interface/Ptr.h"
-#include "DataFormats/Common/interface/PtrVector.h"
 
 #include "LLPReco/DataFormats/interface/LLPGenDecayInfo.h"
 
