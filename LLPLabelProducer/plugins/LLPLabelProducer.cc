@@ -306,6 +306,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                         int nMU = 0;
                         int nE = 0;
                         int nB = 0;
+                        int nTau = 0;
                         
                         for (auto const& llpGhostFlavour: llpGhostFlavours)
                         {
@@ -326,11 +327,17 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (absId==11 and pt>electronPtThreshold_) nE+=1;
                             if (absId==5 and pt>bPtThreshold_) nB+=1;
                             if ((absId<5 or absId==21) and pt>quarkPtThreshold_) nQ+=1;
-                                
+                            if ((absId==15) and pt>quarkPtThreshold_) nTau++;
                         }
+                                
                         label.type = llpdnnx::LLPLabel::Type::isLLP_RAD; //default
-                        
-                        if (nMU==0 and nE==0)
+                        if (nTau>=1)
+                        {
+                            if (nQ+nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_TAU;
+                            if (nQ+nB==1) label.type = llpdnnx::LLPLabel::Type::isLLP_QTAU;
+                            if (nQ+nB>1) label.type = llpdnnx::LLPLabel::Type::isLLP_QQTAU;
+                        }
+                        else if (nMU==0 and nE==0 and nTau==0)
                         {
                             if (nQ==1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_Q;
                             if (nQ==0 and nB==1) label.type = llpdnnx::LLPLabel::Type::isLLP_B;
@@ -338,7 +345,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (nQ>1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_QQ;
                             if (nB>1 or (nQ==1 and nB==1)) label.type = llpdnnx::LLPLabel::Type::isLLP_BB;
                         }
-                        else if (nE>=1 and nMU==0)
+                        else if (nE>=1 and nMU==0 and nTau==0)
                         {
                             if (nQ==0 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_E;
                             
@@ -348,7 +355,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (nQ>1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_QQE;
                             if (nB>1 or (nQ==1 and nB==1)) label.type = llpdnnx::LLPLabel::Type::isLLP_BBE;
                         }
-                        else if (nMU>=1) //accept any additional number of electrons
+                        else if (nMU>=1 and nTau==0) //accept any additional number of electrons
                         {
                             if (nQ==0 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_MU;
                             

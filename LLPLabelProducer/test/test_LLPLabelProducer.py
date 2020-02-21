@@ -14,7 +14,7 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
@@ -42,7 +42,7 @@ process.llpGenDecayInfo = cms.EDProducer(
         #hnl -> qql
         hnl = cms.PSet(
             llpId = cms.int32(9990012),
-            daughterIds = cms.vint32([1,2,3,4,5,11,13])
+            daughterIds = cms.vint32([1,2,3,4,5,11,13,15])
         ),
         #gluino -> qq chi0
         split = cms.PSet(
@@ -57,7 +57,7 @@ process.llpGenDecayInfo = cms.EDProducer(
         #stop -> bl
         rpv = cms.PSet(
             llpId = cms.int32(1000006),
-            daughterIds = cms.vint32([5,11,13])
+            daughterIds = cms.vint32([5,11,13,15])
         ),
         #H->SS->bbbb
         hss = cms.PSet(

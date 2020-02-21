@@ -102,6 +102,10 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> isLLP_BB; //double b/c quark
     std::vector<int> isLLP_BBMU; //double b/c quark + prompt lepton
     std::vector<int> isLLP_BBE; //double b/c quark + prompt lepton
+    std::vector<int> isLLP_TAU; // hadronic tau decay
+    std::vector<int> isLLP_QTAU; 
+    std::vector<int> isLLP_QQTAU;
+
     std::vector<int> isUndefined;
         
     std::vector<int> partonFlavor;
@@ -160,6 +164,9 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         isLLP_BB.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_BB ? 1 : 0);
         isLLP_BBMU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_BBMU ? 1 : 0);
         isLLP_BBE.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_BBE ? 1 : 0);
+        isLLP_TAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_TAU ? 1 : 0);
+        isLLP_QTAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_QTAU ? 1 : 0);
+        isLLP_QQTAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_QQTAU ? 1 : 0);
         isUndefined.push_back(labels.type == llpdnnx::LLPLabel::Type::isUndefined ? 1 : 0);
 
         partonFlavor.push_back(labels.partonFlavor);
@@ -204,6 +211,9 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<int>("isLLP_BB", isLLP_BB, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_BBMU", isLLP_BBMU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_BBE", isLLP_BBE, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isLLP_TAU", isLLP_TAU, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isLLP_QTAU", isLLP_QTAU, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isLLP_QQTAU", isLLP_QQTAU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isUndefined", isUndefined, "doc", nanoaod::FlatTable::IntColumn);
 
     jetOriginTable->addColumn<int>("partonFlavor", partonFlavor, "doc", nanoaod::FlatTable::IntColumn);

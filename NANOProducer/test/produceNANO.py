@@ -33,7 +33,7 @@ options.register(
 )
 options.register(
     'year',
-    '2017',
+    '2016',
     VarParsing.multiplicity.singleton,
     VarParsing.varType.string,
     "add year file"
@@ -75,12 +75,13 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(100)
+    input = cms.untracked.int32(1000)
 )
 
 files = {
-    '2016': {
-        "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.000415932686862_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_140.root",
+    '2016': { #mean displacement = 5 cm
+        "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_tau_Dirac_massiveAndCKM_LO/heavyNeutrino_1.root",
+        #"mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-10_V-0.00112249721603_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_76.root",
         "data": "/store/data/Run2016B/SingleMuon/MINIAOD/17Jul2018_ver2-v1/30000/14F647C4-6C92-E811-9571-90E2BACBAD64.root",
     },
     '2017': {
@@ -193,12 +194,11 @@ from PhysicsTools.PatAlgos.tools.jetTools import updateJetCollection
 updateJetCollection(
     process,
     labelName = "XTag",
-    jetSource = cms.InputTag('updatedJets'),#'ak4Jets'
+    jetSource = cms.InputTag('updatedJets'),
     jetCorrections = jetCorrectionsAK4PFchs,
     pfCandidates = cms.InputTag('packedPFCandidates'),
     pvSource = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    svSource = cms.InputTag('slimmedSecondaryVertices'), 
-    #svSource = cms.InputTag('inclusiveCandidateSecondaryVerticesAdapted'), 
+    svSource = cms.InputTag('adaptedSlimmedSecondaryVertices'), 
     muSource = cms.InputTag('slimmedMuons'),
     elSource = cms.InputTag('slimmedElectrons'),
     btagInfos = [
@@ -216,8 +216,7 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     electronSrc = cms.InputTag("slimmedElectrons"),
     shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfosXTag'),
     vertices = cms.InputTag('offlineSlimmedPrimaryVertices'),
-    secondary_vertices = cms.InputTag("inclusiveCandidateSecondaryVerticesAdapted")
-    #secondary_vertices = cms.InputTag("slimmedSecondaryVertices") CHANGE BACK!!
+    secondary_vertices = cms.InputTag("adaptedSlimmedSecondaryVertices")
 )
 
 process.nanoTable = cms.EDProducer("NANOProducer",
@@ -236,7 +235,6 @@ process.options = cms.untracked.PSet(
 )
 
 
-
 process.load('LLPReco.LLPLabelProducer.GenDisplacedVertices_cff')
 
 process.llpGenDecayInfo = cms.EDProducer(
@@ -246,7 +244,7 @@ process.llpGenDecayInfo = cms.EDProducer(
         #hnl -> qql
         hnl = cms.PSet(
             llpId = cms.int32(9990012),
-            daughterIds = cms.vint32([1,2,3,4,5,11,13])
+            daughterIds = cms.vint32([1,2,3,4,5,11,13,15])
         ),
         #gluino -> qq chi0
         split = cms.PSet(
@@ -261,7 +259,7 @@ process.llpGenDecayInfo = cms.EDProducer(
         #stop -> bl
         rpv = cms.PSet(
             llpId = cms.int32(1000006),
-            daughterIds = cms.vint32([5,11,13])
+            daughterIds = cms.vint32([5,11,13,15])
         ),
         #H->SS->bbbb
         hss = cms.PSet(
@@ -291,17 +289,9 @@ process.llpLabels = cms.EDProducer(
     muonPtThreshold = cms.double(1.),
     electronPtThreshold = cms.double(1.),
 )
+#process.load('RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff')
+process.load('LLPReco.NANOProducer.adaptedSV_cff')
 
-process.inclusiveCandidateSecondaryVerticesAdapted = cms.EDProducer("InclusiveCandidateVertexFinder",
-    tracks=cms.InputTag("packedPFCandidates"),
-    primaryVertices=cms.InputTag("offlineSlimmedPrimaryVertices"),
-    #maximumLongitudinalImpactParameter = cms.double(1000.)
-)
-
-process.inclusiveCandidateVertexingTaskAdapted = cms.Task(
-                                           process.inclusiveCandidateSecondaryVerticesAdapted
-                                           )
-process.inclusiveCandidateVertexingAdapted = cms.Sequence(process.inclusiveCandidateVertexingTaskAdapted)
 
 process.selectedMuonsForFilter = cms.EDFilter("CandViewSelector",
     src = cms.InputTag("slimmedMuons"),
@@ -331,14 +321,14 @@ if options.isData:
     process.llpnanoAOD_step = cms.Path(
         process.muonFilterSequence+
         process.nanoSequence+
-        process.inclusiveCandidateVertexingAdapted+
+        process.adaptedVertexing+
         process.pfXTagInfos+
         process.nanoTable
     )
 else:
     process.llpnanoAOD_step = cms.Path(
         process.nanoSequenceMC+
-        process.inclusiveCandidateVertexingAdapted+
+        process.adaptedVertexing+
         process.pfXTagInfos+
         process.displacedGenVertexSequence+
         process.llpGenDecayInfo+

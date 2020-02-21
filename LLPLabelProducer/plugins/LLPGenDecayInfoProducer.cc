@@ -149,6 +149,16 @@ LLPGenDecayInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                             {
                                 throw cms::Exception("GenParticle relations not properly setup!");
                             }
+
+                            // Handle taus
+                            if (abs(daughter->pdgId) == 15){
+                                // check for leptonic decays
+                                for(size_t i = 0; i < daughter->numberOfDaughters(); ++i) {
+                                    if (abs(daughter->daughter(i)->pdgId()) == 11 or abs(daughter->daughter(i)->pdgId()) == 13){
+                                        daughter = daughter->daughter(i);
+                                        break;
+                                    }
+                            }
                             
                             llpGenDecayInfo.decayProducts.push_back(
                                 edm::Ptr<reco::GenParticle>(genParticleCollection,daughter.index())
