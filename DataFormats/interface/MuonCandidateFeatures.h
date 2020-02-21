@@ -6,12 +6,12 @@ namespace llpdnnx {
 
 struct MuonCandidateFeatures {
 
-    int  mu_jetIdx;
-    int  mu_isGlobal;
-    int  mu_isTight;
-    int  mu_isMedium;
-    int  mu_isLoose;
-    int  mu_isStandAlone;
+    int mu_jetIdx;
+    int mu_isGlobal;
+    int mu_isTight;
+    int mu_isMedium;
+    int mu_isLoose;
+    int mu_isStandAlone;
 
     float mu_ptrel;
     float mu_deta;
@@ -20,7 +20,7 @@ struct MuonCandidateFeatures {
     float mu_energy;
     float mu_et;
     float mu_jetDeltaR;
-    float mu_numberOfMatchedStations;
+    int mu_numberOfMatchedStations;
 
     float mu_2dIp;
     float mu_2dIpSig;
@@ -33,9 +33,9 @@ struct MuonCandidateFeatures {
     float mu_dxySig;
     float mu_dz;
     float mu_dzError;
-    float mu_numberOfValidPixelHits;
-    float mu_numberOfpixelLayersWithMeasurement;
-    float mu_numberOfstripLayersWithMeasurement; //that does not help. needs to be discussed.
+    int mu_numberOfValidPixelHits;
+    int mu_numberOfpixelLayersWithMeasurement;
+    int mu_numberOfstripLayersWithMeasurement; //that does not help. needs to be discussed.
 
     float mu_chi2;
     float mu_ndof;

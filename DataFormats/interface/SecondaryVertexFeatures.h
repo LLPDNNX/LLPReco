@@ -12,7 +12,7 @@ struct SecondaryVertexFeatures
     float sv_dphi;
     float sv_deltaR;
     float sv_mass;
-    float sv_ntracks;
+    int sv_ntracks;
     float sv_chi2;
     int sv_ndof;
     float sv_dxy;

@@ -1,17 +1,12 @@
 #ifndef NANOX_DATAFORMATS_DISPLACEDGENVERTEX_H
 #define NANOX_DATAFORMATS_DISPLACEDGENVERTEX_H
 
-#include "DataFormats/Common/interface/RefProd.h"
 
-#include "DataFormats/Common/interface/Ref.h"
 #include "DataFormats/Common/interface/RefVector.h"
-
 #include "DataFormats/Common/interface/Ptr.h"
 #include "DataFormats/Common/interface/PtrVector.h"
 
-#include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-
 #include "DataFormats/JetReco/interface/GenJet.h"
 
 

@@ -15,10 +15,10 @@ struct ElectronCandidateFeatures
     float elec_charge; 
     float elec_energy;
     float elec_EtFromCaloEn;
-    float elec_isEB; 
-    float elec_isEE; 
+    int elec_isEB; 
+    int elec_isEE; 
     float elec_ecalEnergy; 
-    float elec_isPassConversionVeto;
+    int elec_isPassConversionVeto;
     float elec_convDist; 
     int   elec_convFlags; 
     float elec_convRadius; 
@@ -63,7 +63,7 @@ struct ElectronCandidateFeatures
     float elec_EtaRel;
     float elec_dxy;
     float elec_dz;
-    float elec_nbOfMissingHits;
+    int elec_nbOfMissingHits;
     float elec_gsfCharge;
 
 

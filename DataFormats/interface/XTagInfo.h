@@ -6,9 +6,9 @@
 
 namespace reco {
 
-    typedef  FeaturesTagInfo<llpdnnx::XTagFeatures> XTagInfo;
+    typedef FeaturesTagInfo<llpdnnx::XTagFeatures> XTagInfo;
 
-    DECLARE_EDM_REFS( XTagInfo )
+    DECLARE_EDM_REFS(XTagInfo)
 
 }
 
