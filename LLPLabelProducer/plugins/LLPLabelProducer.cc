@@ -136,6 +136,8 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             
             label.partonFlavor = partonFlavor;
             label.hadronFlavor = hadronFlavor;
+            label.matchedGenJetDeltaR = reco::deltaR(jet.p4(),jet.genJet()->p4());
+            label.matchedGenJetPt = jet.genJet()->pt();
             
             unsigned int nbHadrons = jet.jetFlavourInfo().getbHadrons().size();
             unsigned int ncHadrons = jet.jetFlavourInfo().getcHadrons().size();
@@ -267,6 +269,9 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 
                 if (matchedVertex and matchedGenJet)
                 {
+                    label.matchedGenJetDeltaR = dRmin;
+                    label.matchedGenJetPt = matchedGenJet->pt();
+                    
                     int maxFlavor = 0;
                     
                     //take displacement from matched vertex, i.e. end of potential decay chain = largest displacement

@@ -115,6 +115,9 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> displacement_z;
     std::vector<float> decay_angle;
     std::vector<float> betagamma;
+    
+    std::vector<float> matchedGenJetDeltaR;
+    std::vector<float> matchedGenJetPt;
             
     for (std::size_t itag = 0; itag < ntruth; itag++) {
     	const auto& labels = label_infos->at(itag).features();
@@ -172,6 +175,9 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         displacement_z.push_back(labels.displacement_z);
         decay_angle.push_back(labels.decay_angle);
         betagamma.push_back(labels.betagamma);
+        
+        matchedGenJetDeltaR.push_back(labels.matchedGenJetDeltaR);
+        matchedGenJetPt.push_back(labels.matchedGenJetPt);
  
     }
 
@@ -217,6 +223,9 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<float>("displacement_z", displacement_z, "doc", nanoaod::FlatTable::FloatColumn);
     jetOriginTable->addColumn<float>("decay_angle", decay_angle, "doc", nanoaod::FlatTable::FloatColumn);
     jetOriginTable->addColumn<float>("betagamma", betagamma, "doc", nanoaod::FlatTable::FloatColumn);
+    
+    jetOriginTable->addColumn<float>("matchedGenJetDeltaR", matchedGenJetDeltaR, "doc", nanoaod::FlatTable::FloatColumn);
+    jetOriginTable->addColumn<float>("matchedGenJetPt", matchedGenJetPt, "doc", nanoaod::FlatTable::FloatColumn);
      
     iEvent.put(std::move(jetOriginTable), "jetorigin");
 }
