@@ -56,6 +56,8 @@ class LLPLabel {
         float decay_angle;
         float betagamma;
         
+        float matchedGenJetDeltaR;
+        float matchedGenJetPt;
         
         LLPLabel():
             type(Type::isUndefined),
@@ -66,7 +68,9 @@ class LLPLabel {
             displacement_xy(-10), //log10(x/1cm)
             displacement_z(-10), //log10(x/1cm)
             decay_angle(0),
-            betagamma(0)
+            betagamma(0),
+            matchedGenJetDeltaR(-1),
+            matchedGenJetPt(-1)
         {
         }
         
