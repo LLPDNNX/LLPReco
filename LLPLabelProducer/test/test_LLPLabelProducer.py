@@ -14,7 +14,7 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20) )
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
@@ -82,6 +82,7 @@ process.llpLabels = cms.EDProducer(
     srcVertices = cms.InputTag("displacedGenVertices"),
     srcJets = cms.InputTag("slimmedJets"),
     srcFlavourInfo = cms.InputTag("llpFlavour"),
+    tauPtThreshold = cms.double(1.),
     quarkPtThreshold = cms.double(1.),
     bPtThreshold = cms.double(1.),
     muonPtThreshold = cms.double(1.),

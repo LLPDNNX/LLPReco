@@ -64,7 +64,7 @@ class LLPLabelProducer:
             int n   = (absPdgId/1000000)%10;
             return std::max({nq1,nq2,nq3})+n*10000+(n>0 and nL==9)*100;
         }
-        
+        double tauPtThreshold_;
         double quarkPtThreshold_;
         double bPtThreshold_;
         double muonPtThreshold_;
@@ -85,6 +85,7 @@ class LLPLabelProducer:
 };
 
 LLPLabelProducer::LLPLabelProducer(const edm::ParameterSet& iConfig):
+    tauPtThreshold_(iConfig.getParameter<double>("tauPtThreshold")),
     quarkPtThreshold_(iConfig.getParameter<double>("quarkPtThreshold")),
     bPtThreshold_(iConfig.getParameter<double>("bPtThreshold")),
     muonPtThreshold_(iConfig.getParameter<double>("muonPtThreshold")),
@@ -327,15 +328,15 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (absId==11 and pt>electronPtThreshold_) nE+=1;
                             if (absId==5 and pt>bPtThreshold_) nB+=1;
                             if ((absId<5 or absId==21) and pt>quarkPtThreshold_) nQ+=1;
-                            if ((absId==15) and pt>quarkPtThreshold_) nTau++;
+                            if ((absId==15) and pt>tauPtThreshold_) nTau++;
                         }
                                 
                         label.type = llpdnnx::LLPLabel::Type::isLLP_RAD; //default
                         if (nTau>=1)
                         {
-                            if (nQ+nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_TAU;
-                            if (nQ+nB==1) label.type = llpdnnx::LLPLabel::Type::isLLP_QTAU;
-                            if (nQ+nB>1) label.type = llpdnnx::LLPLabel::Type::isLLP_QQTAU;
+                            if ((nQ+nB)==0) label.type = llpdnnx::LLPLabel::Type::isLLP_TAU;
+                            if ((nQ+nB)==1) label.type = llpdnnx::LLPLabel::Type::isLLP_QTAU;
+                            if ((nQ+nB)>1) label.type = llpdnnx::LLPLabel::Type::isLLP_QQTAU;
                         }
                         else if (nMU==0 and nE==0 and nTau==0)
                         {
