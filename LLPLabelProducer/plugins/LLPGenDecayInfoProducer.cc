@@ -12,7 +12,6 @@
 #include "FWCore/Framework/interface/ESHandle.h"
 #include "FWCore/Utilities/interface/Exception.h"
 
-
 #include "SimGeneral/HepPDTRecord/interface/ParticleDataTable.h"
 #include "DataFormats/PatCandidates/interface/PackedGenParticle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
@@ -32,6 +31,21 @@ class LLPGenDecayInfoProducer:
             int llpId;
             std::vector<int> daughterIds;
         };
+        static edm::Ptr<reco::GenParticle> getTauDecayProduct(edm::Ptr<reco::GenParticle> tau, edm::Handle<edm::View<reco::GenParticle>> genParticleCollection)
+        {
+            auto ghostCandidates = tau->daughterRefVector();
+            for (auto const& ghostCandidate: tau->daughterRefVector()){
+                edm::Ptr<reco::GenParticle> daughterPtr(genParticleCollection, ghostCandidate.index());
+                if (std::abs(daughterPtr->pdgId())==15){
+                    return getTauDecayProduct(daughterPtr, genParticleCollection);
+                }
+                if (std::abs(daughterPtr->pdgId()) == 11 or std::abs(daughterPtr->pdgId()) == 13) {
+                    return daughterPtr;
+                }
+            }
+        
+            return tau;
+        }
         
         
         static double distance(const reco::Candidate::Point& p1, const reco::Candidate::Point& p2)
@@ -130,9 +144,10 @@ LLPGenDecayInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                     llpdnnx::LLPGenDecayInfo llpGenDecayInfo;
                     llpGenDecayInfo.name = decayChain.name;
                     llpGenDecayInfo.llp = genParticleCollection->ptrAt(igenParticle);
-            
-                    for (auto const& daughter: genParticle.daughterRefVector())
-                    {
+
+                    for (auto const& daughter: genParticle.daughterRefVector()){
+
+                        //const reco::Candidate* daughter = genParticle.daughter(idaughter);
                         //llp decay products need to be displaced wrt hard interaction
                         if (distance(*hardInteraction,daughter->vertex())<1e-10)
                         {
@@ -145,14 +160,19 @@ LLPGenDecayInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
                             abs(daughter->pdgId())
                         )!=decayChain.daughterIds.cend())
                         {
+                            
                             if (daughter->pdgId()!=genParticleCollection->at(daughter.index()).pdgId())
                             {
                                 throw cms::Exception("GenParticle relations not properly setup!");
                             }
                             
-                            llpGenDecayInfo.decayProducts.push_back(
-                                edm::Ptr<reco::GenParticle>(genParticleCollection,daughter.index())
-                            );
+
+                            // Handle taus
+                            edm::Ptr<reco::GenParticle> daughterPtr(genParticleCollection, daughter.index());
+                            if (abs(daughter->pdgId()) == 15){
+                                daughterPtr = getTauDecayProduct(daughterPtr, genParticleCollection);
+                            }
+                            llpGenDecayInfo.decayProducts.push_back(daughterPtr);
                             
                         }
                     }
