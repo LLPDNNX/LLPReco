@@ -8,7 +8,7 @@ namespace reco {
 
 typedef FeaturesTagInfo<llpdnnx::LLPLabel> LLPLabelInfo;
 
-DECLARE_EDM_REFS( LLPLabelInfo )
+DECLARE_EDM_REFS(LLPLabelInfo)
 
 }
 

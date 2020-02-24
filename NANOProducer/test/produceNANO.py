@@ -169,9 +169,9 @@ process.OUT = cms.OutputModule("PoolOutputModule",
 
 if options.isData:
     if options.year == '2016':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v11', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
     if options.year == '2017':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v11', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
     if options.year == '2018':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
     if options.year == '2018D':
@@ -197,7 +197,8 @@ updateJetCollection(
     jetCorrections = jetCorrectionsAK4PFchs,
     pfCandidates = cms.InputTag('packedPFCandidates'),
     pvSource = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    svSource = cms.InputTag('slimmedSecondaryVertices'),
+    svSource = cms.InputTag('slimmedSecondaryVertices'), 
+    #svSource = cms.InputTag('inclusiveCandidateSecondaryVerticesAdapted'), 
     muSource = cms.InputTag('slimmedMuons'),
     elSource = cms.InputTag('slimmedElectrons'),
     btagInfos = [
@@ -215,22 +216,24 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     electronSrc = cms.InputTag("slimmedElectrons"),
     shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfosXTag'),
     vertices = cms.InputTag('offlineSlimmedPrimaryVertices'),
-    secondary_vertices = cms.InputTag("slimmedSecondaryVertices")
+    secondary_vertices = cms.InputTag("inclusiveCandidateSecondaryVerticesAdapted")
+    #secondary_vertices = cms.InputTag("slimmedSecondaryVertices") CHANGE BACK!!
 )
 
 process.nanoTable = cms.EDProducer("NANOProducer",
+    srcJets = cms.InputTag("finalJets"),
     srcTags = cms.InputTag("pfXTagInfos"),
 )
 
 process.nanoGenTable = cms.EDProducer("NANOGenProducer",
-    srcTags = cms.InputTag("pfXTagInfos"),
-    srcLabels = cms.InputTag("llpLabels")
+    srcJets = cms.InputTag("finalJets"),
+    srcLabels = cms.InputTag("llpLabels"),
+    srcTags = cms.InputTag("pfXTagInfos")
 )
 
 process.options = cms.untracked.PSet(
     wantSummary = cms.untracked.bool(True)
 )
-
 
 
 
@@ -289,6 +292,17 @@ process.llpLabels = cms.EDProducer(
     electronPtThreshold = cms.double(1.),
 )
 
+process.inclusiveCandidateSecondaryVerticesAdapted = cms.EDProducer("InclusiveCandidateVertexFinder",
+    tracks=cms.InputTag("packedPFCandidates"),
+    primaryVertices=cms.InputTag("offlineSlimmedPrimaryVertices"),
+    #maximumLongitudinalImpactParameter = cms.double(1000.)
+)
+
+process.inclusiveCandidateVertexingTaskAdapted = cms.Task(
+                                           process.inclusiveCandidateSecondaryVerticesAdapted
+                                           )
+process.inclusiveCandidateVertexingAdapted = cms.Sequence(process.inclusiveCandidateVertexingTaskAdapted)
+
 process.selectedMuonsForFilter = cms.EDFilter("CandViewSelector",
     src = cms.InputTag("slimmedMuons"),
     cut = cms.string("pt>25 && isGlobalMuon()")
@@ -317,12 +331,14 @@ if options.isData:
     process.llpnanoAOD_step = cms.Path(
         process.muonFilterSequence+
         process.nanoSequence+
+        process.inclusiveCandidateVertexingAdapted+
         process.pfXTagInfos+
         process.nanoTable
     )
 else:
     process.llpnanoAOD_step = cms.Path(
         process.nanoSequenceMC+
+        process.inclusiveCandidateVertexingAdapted+
         process.pfXTagInfos+
         process.displacedGenVertexSequence+
         process.llpGenDecayInfo+
@@ -426,7 +442,9 @@ modulesToRemove = [
     "l1bits",
 ]
 
+#override final jets
 
+print process.nanoSequence
 
 #remove unneeded modules
 for moduleName in modulesToRemove:
@@ -446,10 +464,6 @@ process.finalTaus.src = cms.InputTag("slimmedTaus")
 #override final photons (required by object linker) so that ID evaluation is not needed
 process.finalPhotons.cut = cms.string("pt > 5")
 process.finalPhotons.src = cms.InputTag("slimmedPhotons")
-
-#override final jets
-process.finalJets.cut = cms.string('pt > 0')
-
 
 '''
 process.MINIAODoutput = cms.OutputModule("PoolOutputModule",
