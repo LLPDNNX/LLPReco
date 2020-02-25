@@ -53,16 +53,11 @@ struct MuonCandidateFeatures {
     float mu_Pfpileup03;
     float mu_sumPfPhotonEt03;
 
-    float mu_sumChHadronPt;
-    float mu_sumNeuHadronEt;
-    float mu_pileup;
-    float mu_sumPhotonEt;
 
     float mu_timeAtIpInOut;
     float mu_timeAtIpInOutErr;
     float mu_timeAtIpOutIn;
 
-void muonFeatures(const pat::Muon& muon , const pat::Jet& jet , const reco::Vertex& pv ) ;
 
 };
 

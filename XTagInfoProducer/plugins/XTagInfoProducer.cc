@@ -431,13 +431,14 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 mu_features.mu_ecalIso =  muon.ecalIso()/muon.pt(); 
                 mu_features.mu_hcalIso =  muon.hcalIso()/muon.pt();     
 
+		std::cout<< "isolation 04 hadron pt : "<< muon.pfIsolationR04().sumChargedHadronPt << " neutral hadron pt : "<< muon.pfIsolationR04().sumNeutralHadronEt << std::endl ;
 
                 mu_features.mu_sumPfChHadronPt  = muon.pfIsolationR04().sumChargedHadronPt/muon.pt();
                 mu_features.mu_sumPfNeuHadronEt  = muon.pfIsolationR04().sumNeutralHadronEt/muon.pt();
                 mu_features.mu_Pfpileup  = muon.pfIsolationR04().sumPUPt/muon.pt();
                 mu_features.mu_sumPfPhotonEt = muon.pfIsolationR04().sumPhotonEt/muon.pt();
 
-
+		std::cout<< " pile up 04 :  "<< muon.pfIsolationR04().sumPUPt << " muon pile up 03 :  "<<   muon.pfIsolationR03().sumPUPt << std::endl ; 
 
                 mu_features.mu_sumPfChHadronPt03  = muon.pfIsolationR03().sumChargedHadronPt/muon.pt();
                 mu_features.mu_sumPfNeuHadronEt03  = muon.pfIsolationR03().sumNeutralHadronEt/muon.pt();
@@ -486,10 +487,16 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_isEE  = electron.isEE();
                 elec_features.elec_ecalEnergy  = electron.ecalEnergy()/electron.pt();
                 elec_features.elec_isPassConversionVeto = electron.passConversionVeto();
-
+		if(electron.convDist() != -9999){
                 elec_features.elec_convDist = electron.convDist(); 
                 elec_features.elec_convFlags = electron.convFlags(); 
-                elec_features.elec_convRadius = electron.convRadius(); 
+                elec_features.elec_convRadius = electron.convRadius();
+ 		}
+		if(electron.convDist() == -9999){
+                elec_features.elec_convDist = -1; 
+                elec_features.elec_convFlags = -1; 
+                elec_features.elec_convRadius = -1;
+		}
 
 
                 elec_features.elec_3dIP = electron.dB(pat::Electron::PV3D); 
@@ -498,10 +505,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_2dIPSig = electron.dB()/electron.edB();
                 elec_features.elec_sCseedEta = electron.superCluster()->seed()->eta();
 
-
-                elec_features.elec_numberOfBrems  = electron.numberOfBrems();
-                elec_features.elec_trackFbrem  = electron.trackFbrem(); 
-                elec_features.elec_fbrem = electron.fbrem();
 
 
                 elec_features.elec_e5x5 = electron.e5x5();
@@ -542,7 +545,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_deltaEtaEleClusterTrackAtCalo  = electron.deltaEtaEleClusterTrackAtCalo();
                 elec_features.elec_deltaPhiEleClusterTrackAtCalo = electron.deltaPhiEleClusterTrackAtCalo();
 
-                elec_features.elec_deltaEtaSeedClusterTrackAtCalo = electron.deltaEtaSeedClusterTrackAtCalo (); 
+                elec_features.elec_deltaEtaSeedClusterTrackAtCalo = electron.deltaEtaSeedClusterTrackAtCalo(); 
                 elec_features.elec_deltaPhiSeedClusterTrackAtCalo = electron.deltaPhiSeedClusterTrackAtCalo(); 
 
                 elec_features.elec_deltaEtaSeedClusterTrackAtVtx = electron.deltaEtaSeedClusterTrackAtVtx(); 
@@ -563,17 +566,32 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elecSC_dphi = std::fabs(reco::deltaPhi(electron.superCluster()->phi(),electron.gsfTrack()->phi()));
                 elec_features.elecSC_et = electron.superCluster()->energy() * sin(electron.p4().theta())/electron.pt();
                 elec_features.elec_scPixCharge = electron.scPixCharge();
+
+
+                elec_features.elec_numberOfBrems  = electron.numberOfBrems();
+		if(electron.pt() >= 5. ){
+                elec_features.elec_fbrem = electron.fbrem();
                 elec_features.elec_scSigmaEtaEta = electron.scSigmaEtaEta();
                 elec_features.elec_scSigmaIEtaIEta = electron.scSigmaIEtaIEta();
                 elec_features.elec_superClusterFbrem = electron.superClusterFbrem();
+		}
+		if (electron.pt() < 5.){
+	                elec_features.elec_fbrem = -1.;
+			elec_features.elec_scSigmaEtaEta = -1. ;
+			elec_features.elec_scSigmaIEtaIEta = -1. ;
+			elec_features.elec_superClusterFbrem = -1. ;
+		}
 
-                elec_features.elec_scE5x5 = electron.scE5x5 ();
+	
+		// scSigmaEtaEta and scSigmaIEtaIEta and fbrem and superClusterFbrem 
+                elec_features.elec_scE5x5 = electron.scE5x5();
                 elec_features.elec_scE5x5Rel = electron.scE5x5()/jet.pt(); 
                 elec_features.elec_scE1x5Overe5x5 = electron.scE1x5 ()/electron.scE5x5(); 
                 elec_features.elec_scE2x5MaxOvere5x5  = electron.scE2x5Max()/electron.scE5x5(); 
                 elec_features.elecSC_eSuperClusterOverP  = electron.eSuperClusterOverP();
-                
-                elec_features.elec_particleIso  = electron.particleIso()/electron.pt(); 
+               
+ 
+//                elec_features.elec_particleIso  = electron.particleIso()/electron.pt(); 
                 elec_features.elec_neutralHadronIso  = electron.neutralHadronIso()/electron.pt();
                 elec_features.elec_photonIso = electron.photonIso()/electron.pt(); 
                 elec_features.elec_puChargedHadronIso = electron.puChargedHadronIso()/electron.pt(); 

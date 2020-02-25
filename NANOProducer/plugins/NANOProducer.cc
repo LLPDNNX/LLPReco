@@ -231,10 +231,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> mu_Pfpileup03;
     std::vector<float> mu_sumPfPhotonEt03;
 
-    std::vector<float> mu_sumChHadronPt;
+/*    std::vector<float> mu_sumChHadronPt;
     std::vector<float> mu_sumNeuHadronEt;
     std::vector<float> mu_pileup;
-    std::vector<float> mu_sumPhotonEt;
+    std::vector<float> mu_sumPhotonEt;*/
 
     //std::vector<float> mu_sumChHadronPt03 ;
     //std::vector<float> mu_sumNeuHadronEt03 ;
@@ -584,10 +584,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             mu_Pfpileup03.push_back(mu_features.mu_Pfpileup03);
             mu_sumPfPhotonEt03.push_back(mu_features.mu_sumPfPhotonEt03);
 
-            mu_sumChHadronPt.push_back(mu_features.mu_sumChHadronPt);
+ /*           mu_sumChHadronPt.push_back(mu_features.mu_sumChHadronPt);
             mu_sumNeuHadronEt.push_back(mu_features.mu_sumNeuHadronEt);
             mu_pileup.push_back(mu_features.mu_pileup);
-            mu_sumPhotonEt.push_back(mu_features.mu_sumPhotonEt);
+            mu_sumPhotonEt.push_back(mu_features.mu_sumPhotonEt);*/
 
             mu_timeAtIpInOut.push_back(mu_features.mu_timeAtIpInOut) ;
             mu_timeAtIpInOutErr.push_back(mu_features.mu_timeAtIpInOutErr) ;
@@ -866,10 +866,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     muonTable->addColumn<float>("Pfpileup03",mu_Pfpileup03,"summed pt of charged particles not from PV (for PU corrections) normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("sumPfPhotonEt03",mu_sumPfPhotonEt03,"summed pt of PF photons normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
 
-    muonTable->addColumn<float>("sumChHadronPt",mu_sumChHadronPt,"doc",nanoaod::FlatTable::FloatColumn);
+   /* muonTable->addColumn<float>("sumChHadronPt",mu_sumChHadronPt,"doc",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("sumNeuHadronEt",mu_sumNeuHadronEt,"doc",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("pileup",mu_pileup,"doc",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPhotonEt",mu_sumPhotonEt,"doc",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("sumPhotonEt",mu_sumPhotonEt,"doc",nanoaod::FlatTable::FloatColumn);*/
 
     muonTable->addColumn<float>("timeAtIpInOut",mu_timeAtIpInOut,"the time at the interaction point for muons moving inside-out",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("timeAtIpInOutErr",mu_timeAtIpInOutErr,"error on the time at the interaction point for muons moving inside-out",nanoaod::FlatTable::FloatColumn);
