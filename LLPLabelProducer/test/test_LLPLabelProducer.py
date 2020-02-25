@@ -43,7 +43,7 @@ process.llpGenDecayInfo = cms.EDProducer(
         #hnl -> qql
         hnl = cms.PSet(
             llpId = cms.int32(9990012),
-            daughterIds = cms.vint32([1,2,3,4,5,11,13])
+            daughterIds = cms.vint32([1,2,3,4,5,11,13,15])
         ),
         #gluino -> qq chi0
         split = cms.PSet(
@@ -58,7 +58,7 @@ process.llpGenDecayInfo = cms.EDProducer(
         #stop -> bl
         rpv = cms.PSet(
             llpId = cms.int32(1000006),
-            daughterIds = cms.vint32([5,11,13])
+            daughterIds = cms.vint32([5,11,13,15])
         ),
         #H->SS->bbbb
         hss = cms.PSet(
@@ -83,6 +83,7 @@ process.llpLabels = cms.EDProducer(
     srcVertices = cms.InputTag("displacedGenVertices"),
     srcJets = cms.InputTag("slimmedJets"),
     srcFlavourInfo = cms.InputTag("llpFlavour"),
+    tauPtThreshold = cms.double(1.),
     quarkPtThreshold = cms.double(1.),
     bPtThreshold = cms.double(1.),
     muonPtThreshold = cms.double(1.),
