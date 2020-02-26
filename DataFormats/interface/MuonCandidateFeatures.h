@@ -21,10 +21,10 @@ struct MuonCandidateFeatures {
     float mu_jetDeltaR;
     int mu_numberOfMatchedStations;
 
-    float mu_2dIp;
-    float mu_2dIpSig;
-    float mu_3dIp;
-    float mu_3dIpSig;
+    float mu_2dIP;
+    float mu_2dIPSig;
+    float mu_3dIP;
+    float mu_3dIPSig;
 
     float mu_EtaRel;
     float mu_dxy;

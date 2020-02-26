@@ -388,7 +388,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             {
                 const pat::Muon & muon = *findMuon->second;
 
-                if (not muon.isGlobalMuon()) continue ;
+                if (not muon.isGlobalMuon() || reco::deltaR(muon ,jet) > 0.4) continue ;
                 cpf_features.cpf_matchedMuon = 1;
                 mu_features.mu_isGlobal = muon.isGlobalMuon();                                   
                 mu_features.mu_isTight = muon.isTightMuon(pv);                                     
@@ -405,10 +405,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 mu_features.mu_jetDeltaR = reco::deltaR(muon ,jet); 
                 mu_features.mu_numberOfMatchedStations = muon.numberOfMatchedStations();
 
-                mu_features.mu_2dIp = muon.dB() ; 
-                mu_features.mu_2dIpSig = muon.dB()/muon.edB(); 
-                mu_features.mu_3dIp = muon.dB(pat::Muon::PV3D); 
-                mu_features.mu_3dIpSig = muon.dB(pat::Muon::PV3D)/muon.edB(pat::Muon::PV3D);
+                mu_features.mu_2dIP = muon.dB() ; 
+                mu_features.mu_2dIPSig = muon.dB()/muon.edB(); 
+                mu_features.mu_3dIP = muon.dB(pat::Muon::PV3D); 
+                mu_features.mu_3dIPSig = muon.dB(pat::Muon::PV3D)/muon.edB(pat::Muon::PV3D);
 
 
                 reco::Candidate::Vector muonMom = muon.bestTrack()->momentum();
@@ -422,7 +422,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 mu_features.mu_numberOfValidPixelHits = muon.bestTrack()->hitPattern().numberOfValidPixelHits();
                 mu_features.mu_numberOfpixelLayersWithMeasurement = muon.bestTrack()->hitPattern().pixelLayersWithMeasurement();
                 mu_features.mu_numberOfstripLayersWithMeasurement = muon.bestTrack()->hitPattern().stripLayersWithMeasurement();
-
+	
 
                 mu_features.mu_chi2 = muon.bestTrack()->chi2();
                 mu_features.mu_ndof = muon.bestTrack()->ndof();
@@ -431,14 +431,12 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 mu_features.mu_ecalIso =  muon.ecalIso()/muon.pt(); 
                 mu_features.mu_hcalIso =  muon.hcalIso()/muon.pt();     
 
-		std::cout<< "isolation 04 hadron pt : "<< muon.pfIsolationR04().sumChargedHadronPt << " neutral hadron pt : "<< muon.pfIsolationR04().sumNeutralHadronEt << std::endl ;
 
                 mu_features.mu_sumPfChHadronPt  = muon.pfIsolationR04().sumChargedHadronPt/muon.pt();
                 mu_features.mu_sumPfNeuHadronEt  = muon.pfIsolationR04().sumNeutralHadronEt/muon.pt();
                 mu_features.mu_Pfpileup  = muon.pfIsolationR04().sumPUPt/muon.pt();
                 mu_features.mu_sumPfPhotonEt = muon.pfIsolationR04().sumPhotonEt/muon.pt();
 
-		std::cout<< " pile up 04 :  "<< muon.pfIsolationR04().sumPUPt << " muon pile up 03 :  "<<   muon.pfIsolationR03().sumPUPt << std::endl ; 
 
                 mu_features.mu_sumPfChHadronPt03  = muon.pfIsolationR03().sumChargedHadronPt/muon.pt();
                 mu_features.mu_sumPfNeuHadronEt03  = muon.pfIsolationR03().sumNeutralHadronEt/muon.pt();
@@ -455,11 +453,11 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             std::stable_sort(features.mu_features.begin(),features.mu_features.end(),[](const auto& d1, const auto& d2)
             {
-                if (d1.mu_2dIpSig>0 and d2.mu_2dIpSig>0)
+                if (d1.mu_2dIPSig>0 and d2.mu_2dIPSig>0)
                 {
-                    if (std::fabs(d1.mu_2dIpSig-d2.mu_2dIpSig)>std::numeric_limits<float>::epsilon())
+                    if (std::fabs(d1.mu_2dIPSig-d2.mu_2dIPSig)>std::numeric_limits<float>::epsilon())
                     {
-                        return std::fabs(d1.mu_2dIpSig)>std::fabs(d2.mu_2dIpSig); //sort decreasing
+                        return std::fabs(d1.mu_2dIPSig)>std::fabs(d2.mu_2dIPSig); //sort decreasing
                     }
                 }
                 return d1.mu_ptrel>d2.mu_ptrel; //sort decreasing
@@ -473,13 +471,14 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             {
                 const pat::Electron & electron = *findElectron->second;
                 cpf_features.cpf_matchedElectron = 1;
+		if(reco::deltaR(electron , jet) > 0.4 ) continue ; 
 
                 elec_features.elec_ptrel = electron.pt()/uncorrectedPt;
                 elec_features.elec_deta = std::fabs(electron.eta()-jet.eta());
                 elec_features.elec_dphi = std::fabs(reco::deltaPhi(electron.phi(),jet.phi())); 
                 elec_features.elec_charge = electron.charge(); 
                 elec_features.elec_energy = electron.energy()/electron.pt(); 
-                elec_features.elec_jetDeltaR = reco::deltaR(electron , jet); 
+                elec_features.elec_jetDeltaR = reco::deltaR(electron,jet); 
                 elec_features.elec_EtFromCaloEn = electron.caloEnergy() * sin(electron.p4().theta());
                 elec_features.elec_ecalDrivenSeed = electron.ecalDrivenSeed();
 
@@ -561,6 +560,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_nbOfMissingHits = electron.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
                 elec_features.elec_gsfCharge = electron.gsfTrack()->charge();
 
+
                 elec_features.elecSC_energy = electron.superCluster()->energy()/electron.pt(); 
                 elec_features.elecSC_deta = std::fabs(electron.superCluster()->eta()-electron.gsfTrack()->eta());
                 elec_features.elecSC_dphi = std::fabs(reco::deltaPhi(electron.superCluster()->phi(),electron.gsfTrack()->phi()));
@@ -591,7 +591,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elecSC_eSuperClusterOverP  = electron.eSuperClusterOverP();
                
  
-//                elec_features.elec_particleIso  = electron.particleIso()/electron.pt(); 
                 elec_features.elec_neutralHadronIso  = electron.neutralHadronIso()/electron.pt();
                 elec_features.elec_photonIso = electron.photonIso()/electron.pt(); 
                 elec_features.elec_puChargedHadronIso = electron.puChargedHadronIso()/electron.pt(); 
