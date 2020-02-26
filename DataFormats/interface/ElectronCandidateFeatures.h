@@ -1,11 +1,13 @@
 #ifndef LLPReco_DataFormats_ElectronCandidateFeatures_h
 #define LLPReco_DataFormats_ElectronCandidateFeatures_h
 
- 
 namespace llpdnnx {
  
-struct ElectronCandidateFeatures 
-{ 
+class ElectronCandidateFeatures { 
+
+  public:
+
+ 
 
     int elec_jetIdx;
     float elec_ptrel;
@@ -65,6 +67,9 @@ struct ElectronCandidateFeatures
     float elec_dz;
     int elec_nbOfMissingHits;
     float elec_gsfCharge;
+    int   elec_ndof ; 
+    float elec_chi2 ;
+   
 
 
     int   elec_numberOfBrems;
@@ -134,6 +139,7 @@ struct ElectronCandidateFeatures
     float elec_dr04HcalTowerSumEt;
     float elec_dr04HcalTowerSumEtBc;
 
+ 
 };
 
 }

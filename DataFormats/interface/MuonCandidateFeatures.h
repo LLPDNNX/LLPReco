@@ -1,7 +1,6 @@
 #ifndef LLPReco_DataFormats_MuonCandidateFeatures_h
 #define LLPReco_DataFormats_MuonCandidateFeatures_h
 
-
 namespace llpdnnx {
 
 struct MuonCandidateFeatures {
@@ -22,10 +21,10 @@ struct MuonCandidateFeatures {
     float mu_jetDeltaR;
     int mu_numberOfMatchedStations;
 
-    float mu_2dIp;
-    float mu_2dIpSig;
-    float mu_3dIp;
-    float mu_3dIpSig;
+    float mu_2dIP;
+    float mu_2dIPSig;
+    float mu_3dIP;
+    float mu_3dIPSig;
 
     float mu_EtaRel;
     float mu_dxy;
@@ -38,7 +37,7 @@ struct MuonCandidateFeatures {
     int mu_numberOfstripLayersWithMeasurement; //that does not help. needs to be discussed.
 
     float mu_chi2;
-    float mu_ndof;
+    int    mu_ndof;
 
     float mu_caloIso;
     float mu_ecalIso;
@@ -54,14 +53,11 @@ struct MuonCandidateFeatures {
     float mu_Pfpileup03;
     float mu_sumPfPhotonEt03;
 
-    float mu_sumChHadronPt;
-    float mu_sumNeuHadronEt;
-    float mu_pileup;
-    float mu_sumPhotonEt;
 
     float mu_timeAtIpInOut;
     float mu_timeAtIpInOutErr;
     float mu_timeAtIpOutIn;
+
 
 };
 
