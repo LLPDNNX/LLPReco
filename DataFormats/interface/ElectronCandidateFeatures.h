@@ -67,6 +67,8 @@ class ElectronCandidateFeatures {
     float elec_dz;
     int elec_nbOfMissingHits;
     float elec_gsfCharge;
+    float elec_ndof ; 
+    float elec_chi2 ;
    
 
 

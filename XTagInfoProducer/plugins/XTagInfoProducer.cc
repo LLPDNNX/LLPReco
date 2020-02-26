@@ -559,6 +559,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_dz = electron.gsfTrack()->dz(pv.position());
                 elec_features.elec_nbOfMissingHits = electron.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
                 elec_features.elec_gsfCharge = electron.gsfTrack()->charge();
+		elec_features.elec_ndof = electron.gsfTrack()->ndof() ; 
+		elec_features.elec_chi2 = electron.gsfTrack()->chi2() ;
 
 
                 elec_features.elecSC_energy = electron.superCluster()->energy()/electron.pt(); 
