@@ -486,15 +486,15 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_isEE  = electron.isEE();
                 elec_features.elec_ecalEnergy  = electron.ecalEnergy()/electron.pt();
                 elec_features.elec_isPassConversionVeto = electron.passConversionVeto();
-		if(electron.convDist() != -9999){
+		if(electron.convDist() >= 0. ){
                 elec_features.elec_convDist = electron.convDist(); 
                 elec_features.elec_convFlags = electron.convFlags(); 
                 elec_features.elec_convRadius = electron.convRadius();
  		}
-		if(electron.convDist() == -9999){
-                elec_features.elec_convDist = -1; 
-                elec_features.elec_convFlags = -1; 
-                elec_features.elec_convRadius = -1;
+		else{
+                elec_features.elec_convDist = -1.; 
+                elec_features.elec_convFlags = -1.; 
+                elec_features.elec_convRadius = -1.;
 		}
 
 
@@ -577,7 +577,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_scSigmaIEtaIEta = electron.scSigmaIEtaIEta();
                 elec_features.elec_superClusterFbrem = electron.superClusterFbrem();
 		}
-		if (electron.pt() < 5.){
+		else 
+		{
 	                elec_features.elec_fbrem = -1.;
 			elec_features.elec_scSigmaEtaEta = -1. ;
 			elec_features.elec_scSigmaIEtaIEta = -1. ;

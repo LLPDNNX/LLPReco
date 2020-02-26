@@ -210,9 +210,9 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> mu_dxySig;
     std::vector<float> mu_dz;
     std::vector<float> mu_dzError;
-    std::vector<float> mu_numberOfValidPixelHits;
-    std::vector<float> mu_numberOfpixelLayersWithMeasurement;
-    std::vector<float> mu_numberOfstripLayersWithMeasurement ;
+    std::vector<int> mu_numberOfValidPixelHits;
+    std::vector<int> mu_numberOfpixelLayersWithMeasurement;
+    std::vector<int> mu_numberOfstripLayersWithMeasurement ;
 
     std::vector<float> mu_chi2;
     std::vector<float> mu_ndof;
@@ -295,6 +295,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> elec_dz ;
     std::vector<float> elec_nbOfMissingHits ;
     std::vector<float> elec_gsfCharge ;
+    std::vector<float> elec_ndof ;
+    std::vector<float> elec_chi2 ;
 
     std::vector<float> elec_e2x5MaxOvere5x5 ;
     std::vector<float> elec_e1x5Overe5x5 ;
@@ -651,6 +653,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             elec_dz.push_back(elec_features.elec_dz );
             elec_nbOfMissingHits.push_back(elec_features.elec_nbOfMissingHits );
             elec_gsfCharge.push_back(elec_features.elec_gsfCharge );
+            elec_ndof.push_back(elec_features.elec_ndof );
+            elec_chi2.push_back(elec_features.elec_chi2 );
 
             elec_full5x5_sigmaIetaIeta.push_back(elec_features.elec_full5x5_sigmaIetaIeta );
             elec_full5x5_e1x5Overe5x5.push_back(elec_features.elec_full5x5_e1x5Overe5x5 );
@@ -832,9 +836,9 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     muonTable->addColumn<float>("dxySig",mu_dxySig,"significance of the transverse impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("dz",mu_dz,"longitudinal impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("dzError",mu_dzError,"error on the longitudinal impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("numberOfValidPixelHits",mu_numberOfValidPixelHits,"number of pixel hits by the muon track to further suppress muons from decays in flight",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("numberOfpixelLayersWithMeasurement",mu_numberOfpixelLayersWithMeasurement,"number of pixel layers with valid hits by the muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<int>("numberOfValidPixelHits",mu_numberOfValidPixelHits,"number of pixel hits by the muon track to further suppress muons from decays in flight",nanoaod::FlatTable::IntColumn);
+    muonTable->addColumn<int>("numberOfpixelLayersWithMeasurement",mu_numberOfpixelLayersWithMeasurement,"number of pixel layers with valid hits by the muon track",nanoaod::FlatTable::IntColumn);
+    muonTable->addColumn<int>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::IntColumn);
 
     muonTable->addColumn<float>("chi2",mu_chi2,"chi^2 of muon track",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("ndof",mu_ndof,"number of degrees of freedom of muon track fit",nanoaod::FlatTable::FloatColumn);
@@ -914,6 +918,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("dz",elec_dz,"longitudinal impact parameter of the best reconstructed electron track",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("nbOfMissingHits",elec_nbOfMissingHits,"number of missing electron hits in its hit pattern",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("gsfCharge",elec_gsfCharge,"gsf electron charge",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("ndof",elec_ndof,"gsf electron number degree of freedom",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("chi2",elec_chi2,"chi2 of the fit ",nanoaod::FlatTable::FloatColumn);
 
     electronTable->addColumn<int>("numberOfBrems",elec_numberOfBrems,"number of Bremsstrahlung electrons in a shower",nanoaod::FlatTable::IntColumn);
     electronTable->addColumn<float>("fbrem",elec_fbrem,"doc",nanoaod::FlatTable::FloatColumn);
