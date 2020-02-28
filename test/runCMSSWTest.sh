@@ -6,6 +6,7 @@ function run_test()
     scramv1 project CMSSW CMSSW_10_2_18 || return 1
     cd CMSSW_10_2_18/src || return 1
     eval `scramv1 runtime -sh` || return 1
+    scp -r /scripts/ . || return 1
     scram b || return 1
 }
 
