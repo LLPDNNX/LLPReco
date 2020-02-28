@@ -4,4 +4,5 @@ sudo: required
 services:
   - docker
 script:
+  - docker pull clelange/slc6-cmssw-cvmfs
   - docker run --rm --privileged -v $PWD/scripts:ro --device /dev/fuse clelange/slc6-cmssw-cvmfs /bin/bash -c test/runCMSSWTest.sh
