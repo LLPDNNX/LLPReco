@@ -6,7 +6,7 @@ function run_test()
     scramv1 project CMSSW CMSSW_10_2_18 || return 1
     cd CMSSW_10_2_18/src || return 1
     eval `scramv1 runtime -sh` || return 1
-    scp -r /scripts/* . || return 1
+    rsync -r /scripts/* LLPReco  || return 1
     scram b || return 1
     cmsRun LLPReco/XTagInfoProducer/test/testXTag.py inputFiles=https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root || return 1
     cmsRun LLPReco/LLPLabelProducer/test/test_LLPLabelProducer.py inputFiles=https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root || return 1
