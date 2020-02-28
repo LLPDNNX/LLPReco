@@ -46,6 +46,8 @@ elif options.year == '2017':
     process = cms.Process('NANO',eras.Run2_2017,eras.run2_nanoAOD_94XMiniAODv2)
 elif options.year == '2018' or options.year == '2018D':
     process = cms.Process('NANO',eras.Run2_2018,eras.run2_nanoAOD_102Xv1)
+else:
+    process = cms.Process('NANO',eras.Run2_2016,eras.run2_nanoAOD_94X2016)
 
 print "Selected year: ",options.year
 
@@ -79,6 +81,9 @@ process.maxEvents = cms.untracked.PSet(
 )
 
 files = {
+    'test': {
+        "mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
+        },
     '2016': { #mean displacement = 5 cm
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_tau_Dirac_massiveAndCKM_LO/heavyNeutrino_1.root",
         #"mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-10_V-0.00112249721603_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_76.root",
@@ -97,6 +102,7 @@ files = {
     }
 }
 
+print files[options.year]['mc']
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(files[options.year]['data'] if options.isData else files[options.year]['mc'])
 )
