@@ -7,4 +7,5 @@ script:
   - docker pull mattkomm/cvmfs-cms
   - echo $PWD
   - ls
-  - docker run -h dev --privileged -v $PWD:/scripts:ro mattkomm/cvmfs-cms /bin/bash -c test/runCMSSWTest.sh
+  - ls test
+  - docker run -h dev --privileged -v $PWD:/travis:ro mattkomm/cvmfs-cms /bin/bash -c $PWD/test/runCMSSWTest.sh
