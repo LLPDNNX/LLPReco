@@ -8,4 +8,4 @@ script:
   - echo $PWD
   - ls
   - ls test
-  - docker run -h dev --privileged -v $PWD:/travis:ro mattkomm/cvmfs-cms /bin/bash -c $PWD/test/runCMSSWTest.sh
+  - docker run -h dev --privileged -v $PWD:/scripts mattkomm/cvmfs-cms /bin/bash -c /scripts/test/runCMSSWTest.sh
