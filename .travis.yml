@@ -3,5 +3,5 @@ sudo: required
 services:
   - docker
 script:
-  - docker pull cmssw/cmssw:CMSSW_10_2_18
+  - docker pull mattkomm/cvmfs-cms
   - docker run -h dev --privileged -v $PWD:/scripts:ro cmssw/cmssw:CMSSW_10_2_18 /bin/bash -c /scripts/test/runCMSSWTest.sh
