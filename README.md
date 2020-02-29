@@ -2,6 +2,9 @@
 * On-the-fly LLPDNNX tagger evaluation in miniAOD
 * Production of extended nanoAOD ntuples for analysis and training
 
+![build tests](https://travis-ci.org/LLPDNNX/LLPReco.svg?branch=master)
+
+
 ## Checkout instructions
 
 Using recent CMSSW release which is shipped with all the required software (especially tensorflow C++ API v1.6).

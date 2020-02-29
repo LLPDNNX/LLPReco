@@ -157,6 +157,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> cpf_matchedMuon;
     std::vector<int> cpf_matchedElectron;
     std::vector<int> cpf_matchedSV;
+    std::vector<int> cpf_track_numberOfValidPixelHits ;
+    std::vector<int> cpf_track_pixelLayersWithMeasurement ;
+    std::vector<int> cpf_track_numberOfValidStripHits ; 
+    std::vector<int> cpf_track_stripLayersWithMeasurement ;
 
     std::vector<float> npf_ptrel;
     std::vector<float> npf_deta;
@@ -487,6 +491,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_matchedMuon.push_back(cpf_features.cpf_matchedMuon);
             cpf_matchedElectron.push_back(cpf_features.cpf_matchedElectron);
             cpf_matchedSV.push_back(cpf_features.cpf_matchedSV);
+	    cpf_track_numberOfValidPixelHits.push_back(cpf_features.cpf_track_numberOfValidPixelHits);
+            cpf_track_pixelLayersWithMeasurement.push_back(cpf_features.cpf_track_pixelLayersWithMeasurement);
+	    cpf_track_numberOfValidStripHits.push_back(cpf_features.cpf_track_numberOfValidStripHits);
+	    cpf_track_stripLayersWithMeasurement.push_back(cpf_features. cpf_track_stripLayersWithMeasurement);
         }
 
         for (unsigned int i = 0; i < nnpf; i++)
@@ -774,6 +782,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     cpfTable->addColumn<int>("matchedMuon", cpf_matchedMuon, "flag to specify whether the track is matched to a PF muon", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<int>("matchedElectron", cpf_matchedElectron, "flag to specify whether the track is matched to a PF electron", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<int>("matchedSV", cpf_matchedSV, "flag to specify whether the track is matched to a PF secondary vertex", nanoaod::FlatTable::IntColumn);
+   cpfTable->addColumn<int>("numberOfValidPixelHits", cpf_track_numberOfValidPixelHits , "number of valid pixel hits " , nanoaod::FlatTable::IntColumn);
+    cpfTable->addColumn<int>("pixelLayersWithMeasurement", cpf_track_pixelLayersWithMeasurement , "pixel layers with measurment ", nanoaod::FlatTable::IntColumn);  
+    cpfTable->addColumn<int>("numberOfValidStripHits" , cpf_track_numberOfValidStripHits , "nb of valid strip hits " , nanoaod::FlatTable::IntColumn);
+   cpfTable->addColumn<int>("stripLayersWithMeasurement" , cpf_track_stripLayersWithMeasurement , "nb of strip layers with measurement ", nanoaod::FlatTable::IntColumn); 
 
     npfTable->addColumn<int>("jetIdx", npf_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     npfTable->addColumn<float>("ptrel", npf_ptrel, "neutral PF candidate transverse momentum over jet transverse momentum (uncorrelated)", nanoaod::FlatTable::FloatColumn);
