@@ -173,7 +173,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.jet_features.eta = jet.eta();
 
         features.jet_features.phi = jet.phi();
-        features.jet_features.mass = jet.mass();
+        
         features.jet_features.energy = jet.energy();
         features.jet_features.area = jet.jetArea();
         
@@ -188,11 +188,13 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.npv = vtxs->size();
         
         llpdnnx::JetSubstructure jetSubstructure(jet);
+        
+        //mass calculated from constituents seems to be different from the stored jet mass (likely due to reduced numerical precision)
+        features.jet_features.mass = jetSubstructure.massFromConstituents();
 
         features.jet_features.tau1 = jetSubstructure.nSubjettiness(1);
         features.jet_features.tau2 = jetSubstructure.nSubjettiness(2);
         features.jet_features.tau3 = jetSubstructure.nSubjettiness(3);
-        
 
         features.jet_features.relMassDropMassAK = jetSubstructure.massDropMass(llpdnnx::JetSubstructure::ClusterType::AK)/features.jet_features.mass;
         features.jet_features.relMassDropMassCA = jetSubstructure.massDropMass(llpdnnx::JetSubstructure::ClusterType::CA)/features.jet_features.mass;
@@ -360,10 +362,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_features.cpf_trackPtRatio=cpf_features.cpf_trackPtRel / trackMag;
             cpf_features.cpf_trackPParRatio=cpf_features.cpf_trackPPar / trackMag;
 
-            cpf_features.cpf_trackSip2dVal=std::abs(meas_ip2d.value()); // does it make sense
-            cpf_features.cpf_trackSip2dSig=std::abs(meas_ip2d.significance());
-            cpf_features.cpf_trackSip3dVal=std::abs(meas_ip3d.value()); // does it make sense
-            cpf_features.cpf_trackSip3dSig=std::abs(meas_ip3d.significance());
+            cpf_features.cpf_trackSip2dVal=std::fabs(meas_ip2d.value()); // does it make sense
+            cpf_features.cpf_trackSip2dSig=std::fabs(meas_ip2d.significance());
+            cpf_features.cpf_trackSip3dVal=std::fabs(meas_ip3d.value()); // does it make sense
+            cpf_features.cpf_trackSip3dSig=std::fabs(meas_ip3d.significance());
             if (std::isnan(cpf_features.cpf_trackSip2dSig) || std::isnan(cpf_features.cpf_trackSip3dSig))
             {
                 cpf_features.cpf_trackSip2dSig=-1.;

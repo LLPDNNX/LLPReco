@@ -6,6 +6,7 @@ namespace llpdnnx
 JetSubstructure::JetSubstructure(const reco::Jet& jet)
 {
     if (jet.numberOfDaughters()==0) throw cms::Exception("Jets has no constituents!");
+    TLorentzVector jetVectorFromConsituents(0,0,0,0);
     for(unsigned int iconstituent = 0; iconstituent < jet.numberOfDaughters(); ++iconstituent)
     {
         const reco::Candidate* constituent = jet.daughter(iconstituent);
@@ -15,13 +16,18 @@ JetSubstructure::JetSubstructure(const reco::Jet& jet)
         }
         consituents_.emplace_back(constituent->px(),constituent->py(),constituent->pz(),constituent->energy());
         lorentzVectors_.emplace_back(constituent->px(),constituent->py(),constituent->pz(),constituent->energy());
+        jetVectorFromConsituents+=lorentzVectors_.back();
     }
+    
+    massFromConstituents_ = jetVectorFromConsituents.M();
+    
     sortLists();
 }
 
 JetSubstructure::JetSubstructure(const fastjet::PseudoJet& jet)
 {
     if (jet.constituents().size()==0) throw cms::Exception("Jets has no constituents!");
+    TLorentzVector jetVectorFromConsituents(0,0,0,0);
     for(auto const& constituent: jet.constituents())
     {
         if(constituent.pt() < 1e-10)
@@ -30,7 +36,11 @@ JetSubstructure::JetSubstructure(const fastjet::PseudoJet& jet)
         }
         consituents_.emplace_back(constituent);
         lorentzVectors_.emplace_back(constituent.px(),constituent.py(),constituent.pz(),constituent.e());
+        jetVectorFromConsituents+=lorentzVectors_.back();
     }
+    
+    massFromConstituents_ = jetVectorFromConsituents.M();
+    
     sortLists();
 }
 
