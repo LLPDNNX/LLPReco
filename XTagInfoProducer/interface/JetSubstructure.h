@@ -34,6 +34,8 @@ class JetSubstructure
         std::vector<fastjet::PseudoJet> consituents_;
         std::vector<TLorentzVector> lorentzVectors_;
         
+        float massFromConstituents_;
+        
         static fastjet::JetDefinition makeJetDefinition(ClusterType type, double r);
         
         void sortLists();
@@ -43,6 +45,11 @@ class JetSubstructure
     public:
         JetSubstructure(const reco::Jet& jet);
         JetSubstructure(const fastjet::PseudoJet& jet);
+        
+        inline float massFromConstituents() const
+        {
+            return massFromConstituents_;
+        }
         
         std::vector<fastjet::PseudoJet> reclusterInclusive(ClusterType type, double r = 0.4, double minPt = 1e-10) const;
         std::vector<fastjet::PseudoJet> reclusterExclusive(ClusterType type, double r, int njets) const;

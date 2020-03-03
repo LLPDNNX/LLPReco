@@ -786,6 +786,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     cpfTable->addColumn<int>("pixelLayersWithMeasurement", cpf_track_pixelLayersWithMeasurement , "pixel layers with measurment ", nanoaod::FlatTable::IntColumn);  
     cpfTable->addColumn<int>("numberOfValidStripHits" , cpf_track_numberOfValidStripHits , "nb of valid strip hits " , nanoaod::FlatTable::IntColumn);
    cpfTable->addColumn<int>("stripLayersWithMeasurement" , cpf_track_stripLayersWithMeasurement , "nb of strip layers with measurement ", nanoaod::FlatTable::IntColumn); 
+    cpfTable->addColumn<float>("relmassdrop", cpf_relmassdrop, "doc", nanoaod::FlatTable::FloatColumn);
+   
 
     npfTable->addColumn<int>("jetIdx", npf_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     npfTable->addColumn<float>("ptrel", npf_ptrel, "neutral PF candidate transverse momentum over jet transverse momentum (uncorrelated)", nanoaod::FlatTable::FloatColumn);
