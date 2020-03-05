@@ -196,18 +196,23 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.jet_features.tau2 = jetSubstructure.nSubjettiness(2);
         features.jet_features.tau3 = jetSubstructure.nSubjettiness(3);
 
-        features.jet_features.relMassDropMassAK = jetSubstructure.massDropMass(llpdnnx::JetSubstructure::ClusterType::AK)/features.jet_features.mass;
-        features.jet_features.relMassDropMassCA = jetSubstructure.massDropMass(llpdnnx::JetSubstructure::ClusterType::CA)/features.jet_features.mass;
-        features.jet_features.relSoftDropMassAK = jetSubstructure.softDropMass(llpdnnx::JetSubstructure::ClusterType::AK)/features.jet_features.mass;
-        features.jet_features.relSoftDropMassCA = jetSubstructure.softDropMass(llpdnnx::JetSubstructure::ClusterType::CA)/features.jet_features.mass;
+        features.jet_features.relMassDropMassAK = jetSubstructure.relMassDropMass(llpdnnx::JetSubstructure::ClusterType::AK);
+        features.jet_features.relMassDropMassCA = jetSubstructure.relMassDropMass(llpdnnx::JetSubstructure::ClusterType::CA);
+        features.jet_features.relSoftDropMassAK = jetSubstructure.relSoftDropMass(llpdnnx::JetSubstructure::ClusterType::AK);
+        features.jet_features.relSoftDropMassCA = jetSubstructure.relSoftDropMass(llpdnnx::JetSubstructure::ClusterType::CA);
        
-        auto eventShapes = jetSubstructure.eventShapeVariables();
-        features.jet_features.thrust = jetSubstructure.thrust();
-        features.jet_features.sphericity = eventShapes.sphericity();
-        features.jet_features.circularity = eventShapes.circularity();
-        features.jet_features.isotropy = eventShapes.isotropy();
-        features.jet_features.eventShapeC = eventShapes.C();
-        features.jet_features.eventShapeD = eventShapes.D();
+        
+       
+        if (jetSubstructure.nConstituents()>3)
+        {
+            auto eventShapes = jetSubstructure.eventShapeVariables();
+            features.jet_features.thrust = jetSubstructure.thrust();
+            features.jet_features.sphericity = eventShapes.sphericity();
+            features.jet_features.circularity = eventShapes.circularity();
+            features.jet_features.isotropy = eventShapes.isotropy();
+            features.jet_features.eventShapeC = eventShapes.C();
+            features.jet_features.eventShapeD = eventShapes.D();
+        }
         
 
         // Add CSV variables
