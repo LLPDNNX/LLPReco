@@ -34,7 +34,7 @@ class JetSubstructure
         std::vector<fastjet::PseudoJet> consituents_;
         std::vector<TLorentzVector> lorentzVectors_;
         
-        float massFromConstituents_;
+        double massFromConstituents_;
         
         static fastjet::JetDefinition makeJetDefinition(ClusterType type, double r);
         
@@ -46,7 +46,7 @@ class JetSubstructure
         JetSubstructure(const reco::Jet& jet);
         JetSubstructure(const fastjet::PseudoJet& jet);
         
-        inline float massFromConstituents() const
+        inline double massFromConstituents() const
         {
             return massFromConstituents_;
         }
@@ -62,13 +62,18 @@ class JetSubstructure
         ) const;
         
         //default values from https://cmssdt.cern.ch/lxr/source/RecoJets/JetProducers/python/ak8PFJets_cfi.py
-        double massDropMass(ClusterType type = ClusterType::AK, double r = 0.4, double muCut = 0.667, double yCut = 0.08) const;
+        double relMassDropMass(ClusterType type = ClusterType::AK, double r = 0.4, double muCut = 0.667, double yCut = 0.08) const;
         
         //default values from https://cmssdt.cern.ch/lxr/source/RecoJets/JetProducers/python/ak8PFJets_cfi.py
-        double softDropMass(ClusterType type = ClusterType::AK, double r = 0.4, double zCut = 0.1, double beta = 0.) const;
+        double relSoftDropMass(ClusterType type = ClusterType::AK, double r = 0.4, double zCut = 0.1, double beta = 0.) const;
         
         
         double thrust(bool boostToCM=true) const;
+        
+        inline size_t nConstituents() const
+        {
+            return consituents_.size();
+        }
         
         EventShapeVariables eventShapeVariables(bool boostToCM=true) const;
 };
