@@ -1,22 +1,3 @@
-// -*- C++ -*-
-//
-// Package:    LLPReco/NANOProducer
-// Class:      NANOProducer
-//
-/**\class NANOProducer NANOProducer.cc LLPReco/NANOProducer/plugins/NANOProducer.cc
-
- Description: [one line class summary]
-
- Implementation:
-     [Notes on implementation]
-*/
-//
-// Original Author:  Vilius Cepaitis
-//         Created:  Fri, 10 Jan 2020 15:20:19 GMT
-//
-//
-
-
 // system include files
 #include <memory>
 
@@ -35,7 +16,7 @@
 #include "LLPReco/DataFormats/interface/LLPLabelInfo.h"
 
 #include "DataFormats/NanoAOD/interface/FlatTable.h"
-
+#include <Math/Vector4D.h>
 
 
 
@@ -51,6 +32,7 @@ class NANOProducer : public edm::stream::EDProducer<> {
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
    private:
+      const edm::EDGetTokenT<edm::View<pat::Jet>> _jet_src;
       const edm::EDGetTokenT<std::vector<reco::XTagInfo>> _tag_src;
       virtual void beginStream(edm::StreamID) override;
       virtual void produce(edm::Event&, const edm::EventSetup&) override;
@@ -58,6 +40,7 @@ class NANOProducer : public edm::stream::EDProducer<> {
 };
 
 NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
+    _jet_src(consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("srcJets"))),
     _tag_src(consumes<std::vector<reco::XTagInfo>>(iConfig.getParameter<edm::InputTag>("srcTags")))
 {
     produces<nanoaod::FlatTable>("global");
@@ -66,7 +49,6 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
     produces<nanoaod::FlatTable>("npf");
     produces<nanoaod::FlatTable>("sv");
     produces<nanoaod::FlatTable>("length");
-    //produces<nanoaod::FlatTable>("jetorigin");
     produces<nanoaod::FlatTable>("muon") ;
     produces<nanoaod::FlatTable>("electron") ;
 }
@@ -83,11 +65,19 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
 
     using namespace edm;
-
+    edm::Handle<edm::View<pat::Jet>> jets;
+    iEvent.getByToken(_jet_src, jets);
     edm::Handle<std::vector<reco::XTagInfo>> tag_infos;
     iEvent.getByToken(_tag_src, tag_infos);
 
     unsigned int ntags = tag_infos->size();
+
+    std::vector<int> global_jetIdx;
+    std::vector<int> cpf_jetIdx;
+    std::vector<int> npf_jetIdx;
+    std::vector<int> sv_jetIdx;
+    std::vector<int> mu_jetIdx;
+    std::vector<int> elec_jetIdx;
 
     auto lengthTable = std::make_unique<nanoaod::FlatTable>(ntags, "length", false, false);
     std::vector<int> cpf_length;
@@ -98,7 +88,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> mu_length;
 
     auto globalTable = std::make_unique<nanoaod::FlatTable>(ntags, "global", false, false);
-    std::vector<int> jetIdx;
     std::vector<float> pt;
     std::vector<float> eta;
     std::vector<float> phi;
@@ -132,7 +121,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
     auto csvTable = std::make_unique<nanoaod::FlatTable>(ntags, "csv", false, false);
-    std::vector<int> csv_jetIdx;
     std::vector<float> trackSumJetEtRatio;
     std::vector<float> trackSumJetDeltaR;
     std::vector<float> vertexCategory;
@@ -143,7 +131,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> jetNSelectedTracks;
     std::vector<int> jetNTracksEtaRel;
 
-    std::vector<int> cpf_jetIdx;
     std::vector<float> cpf_trackEtaRel;
     std::vector<float> cpf_trackPtRel;
     std::vector<float> cpf_trackPPar;
@@ -166,12 +153,15 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> cpf_track_chi2;
     std::vector<float> cpf_track_quality;
     std::vector<float> cpf_relmassdrop;
-    std::vector<float> cpf_track_ndof;
+    std::vector<int> cpf_track_ndof;
     std::vector<int> cpf_matchedMuon;
     std::vector<int> cpf_matchedElectron;
     std::vector<int> cpf_matchedSV;
+    std::vector<int> cpf_track_numberOfValidPixelHits ;
+    std::vector<int> cpf_track_pixelLayersWithMeasurement ;
+    std::vector<int> cpf_track_numberOfValidStripHits ; 
+    std::vector<int> cpf_track_stripLayersWithMeasurement ;
 
-    std::vector<int> npf_jetIdx;
     std::vector<float> npf_ptrel;
     std::vector<float> npf_deta;
     std::vector<float> npf_dphi;
@@ -182,7 +172,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> npf_puppi_weight;
     std::vector<float> npf_relmassdrop;
 
-    std::vector<int> sv_jetIdx;
     std::vector<float> sv_ptrel;
     std::vector<float> sv_deta;
     std::vector<float> sv_dphi;
@@ -198,7 +187,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> sv_costhetasvpv;
     std::vector<float> sv_enratio;
 
-    std::vector<int>  mu_jetIdx ;
     std::vector<int>  mu_isGlobal ;
     std::vector<int>  mu_isTight ;
     std::vector<int>  mu_isMedium ;
@@ -206,65 +194,56 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int>  mu_isStandAlone ;
 
 
-    std::vector<float> mu_ptrel ;
+    std::vector<float> mu_ptrel;
     std::vector<float> mu_EtaRel;
     std::vector<float> mu_deta;
     std::vector<float> mu_dphi;
-    std::vector<float> mu_charge ;
+    std::vector<float> mu_charge;
     std::vector<float> mu_energy;
-    std::vector<float> mu_et ;
-    std::vector<float> mu_jetDeltaR ;
-    std::vector<float> mu_numberOfMatchedStations ;
+    std::vector<float> mu_et;
+    std::vector<float> mu_jetDeltaR;
+    std::vector<float> mu_numberOfMatchedStations;
 
-    std::vector<float> mu_2dIp ;
-    std::vector<float> mu_2dIpSig ;
-    std::vector<float> mu_3dIp ;
-    std::vector<float> mu_3dIpSig ;
+    std::vector<float> mu_2dIP;
+    std::vector<float> mu_2dIPSig;
+    std::vector<float> mu_3dIP;
+    std::vector<float> mu_3dIPSig;
 
-    std::vector<float> mu_dxy ;
-    std::vector<float> mu_dxyError ;
-    std::vector<float> mu_dxySig ;
-    std::vector<float> mu_dz ;
-    std::vector<float> mu_dzError ;
-    std::vector<float> mu_numberOfValidPixelHits;
-    std::vector<float> mu_numberOfpixelLayersWithMeasurement ;
-    //std::vector<float> mu_numberOfstripLayersWithMeasurement ;
+    std::vector<float> mu_dxy;
+    std::vector<float> mu_dxyError;
+    std::vector<float> mu_dxySig;
+    std::vector<float> mu_dz;
+    std::vector<float> mu_dzError;
+    std::vector<int> mu_numberOfValidPixelHits;
+    std::vector<int> mu_numberOfpixelLayersWithMeasurement;
+    std::vector<int> mu_numberOfstripLayersWithMeasurement ;
 
-    std::vector<float> mu_chi2 ;
-    std::vector<float> mu_ndof ;
+    std::vector<float> mu_chi2;
+    std::vector<int> mu_ndof;
 
-    std::vector<float> mu_caloIso ;
-    std::vector<float> mu_ecalIso ;
-    std::vector<float> mu_hcalIso ;
+    std::vector<float> mu_caloIso;
+    std::vector<float> mu_ecalIso;
+    std::vector<float> mu_hcalIso;
 
-    std::vector<float> mu_sumPfChHadronPt ;
-    std::vector<float> mu_sumPfNeuHadronEt ;
-    std::vector<float> mu_Pfpileup ;
-    std::vector<float> mu_sumPfPhotonEt ;
+    std::vector<float> mu_sumPfChHadronPt;
+    std::vector<float> mu_sumPfNeuHadronEt;
+    std::vector<float> mu_Pfpileup;
+    std::vector<float> mu_sumPfPhotonEt;
 
-    std::vector<float> mu_sumPfChHadronPt03 ;
-    std::vector<float> mu_sumPfNeuHadronEt03 ;
-    std::vector<float> mu_Pfpileup03 ;
-    std::vector<float> mu_sumPfPhotonEt03 ;
+    std::vector<float> mu_sumPfChHadronPt03;
+    std::vector<float> mu_sumPfNeuHadronEt03;
+    std::vector<float> mu_Pfpileup03;
+    std::vector<float> mu_sumPfPhotonEt03;
 
-    std::vector<float> mu_sumChHadronPt ;
-    std::vector<float> mu_sumNeuHadronEt ;
-    std::vector<float> mu_pileup ;
-    std::vector<float> mu_sumPhotonEt ;
 
-    //std::vector<float> mu_sumChHadronPt03 ;
-    //std::vector<float> mu_sumNeuHadronEt03 ;
-    //std::vector<float> mu_pileup03 ;
-    //std::vector<float> mu_sumPhotonEt03 ;
 
-    std::vector<float>  mu_timeAtIpInOut ;
-    std::vector<float>  mu_timeAtIpInOutErr ;
-    std::vector<float>  mu_timeAtIpOutIn ;
+    std::vector<float>  mu_timeAtIpInOut;
+    std::vector<float>  mu_timeAtIpInOutErr;
+    std::vector<float>  mu_timeAtIpOutIn;
 
 
     // Electron Block
 
-    std::vector<int>  elec_jetIdx ;
     std::vector<float> elec_ptrel ;
     std::vector<float> elec_jetDeltaR ;
     std::vector<float> elec_deta;
@@ -320,6 +299,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> elec_dz ;
     std::vector<float> elec_nbOfMissingHits ;
     std::vector<float> elec_gsfCharge ;
+    std::vector<int> elec_ndof ;
+    std::vector<float> elec_chi2 ;
 
     std::vector<float> elec_e2x5MaxOvere5x5 ;
     std::vector<float> elec_e1x5Overe5x5 ;
@@ -347,7 +328,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> elec_full5x5_hcalOverEcalBc;
     std::vector<float> elec_full5x5_r9 ;
     std::vector<int>   elec_numberOfBrems ;
-    std::vector<float> elec_trackFbrem ;
     std::vector<float> elec_fbrem ;
     std::vector<float> elec_neutralHadronIso;
     std::vector<float> elec_particleIso  ;
@@ -382,9 +362,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     unsigned int nnpf_total = 0;
     unsigned int nsv_total = 0;
 
-    for (unsigned int itag= 0; itag < ntags; itag++)
-    {
-
+    for (unsigned int itag= 0; itag < ntags; itag++){
         const auto& features = tag_infos->at(itag).features();
         const auto& tag_info_features = features.tag_info_features;
 
@@ -404,6 +382,20 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         elec_length.push_back(nelec);
         mu_length.push_back(nmu);
 
+        int jetIdx = -1;
+        auto base_jet_ref = tag_infos->at(itag).jet();
+        if (base_jet_ref.isAvailable() and base_jet_ref.isNonnull()){
+            const auto& base_jet = base_jet_ref.get();
+            for (std::size_t ijet = 0; ijet < jets->size(); ijet++) {
+                auto jet = jets->at(ijet);
+                if (reco::deltaR(base_jet->p4(),jet.p4()) < 1e-4){
+                    jetIdx = ijet;
+                    break;
+                }
+            }
+        } 
+
+        global_jetIdx.push_back(jetIdx);
         pt.push_back(features.jet_features.pt);
         eta.push_back(features.jet_features.eta);
         phi.push_back(features.jet_features.phi);
@@ -418,8 +410,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         chargedHadronEnergyFraction.push_back(features.jet_features.chargedHadronEnergyFraction);
         chargedMuEnergyFraction.push_back(features.jet_features.chargedMuEnergyFraction);
         electronEnergyFraction.push_back(features.jet_features.electronEnergyFraction);
-
-        jetIdx.push_back(features.jet_features.jetIdx);
 
         tau1.push_back(features.jet_features.tau1);
         tau2.push_back(features.jet_features.tau2);
@@ -436,8 +426,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         isotropy.push_back(features.jet_features.isotropy);
         eventShapeC.push_back(features.jet_features.eventShapeC);
         eventShapeD.push_back(features.jet_features.eventShapeD);
-
-        csv_jetIdx.push_back(tag_info_features.csv_jetIdx);
 
         trackSumJetEtRatio.push_back(tag_info_features.csv_trackSumJetEtRatio);
         trackSumJetDeltaR.push_back(tag_info_features.csv_trackSumJetDeltaR);
@@ -459,24 +447,24 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     for (unsigned int itag= 0; itag < ntags; itag++)
     {
         const auto& features = tag_infos->at(itag).features();
-        auto mu  = features.mu_features ;
-        auto elec = features.elec_features ;
+        auto mu  = features.mu_features;
+        auto elec = features.elec_features;
         auto cpf = features.cpf_features;
         auto npf = features.npf_features;
-        auto sv = features.sv_features ;
+        auto sv = features.sv_features;
 
         unsigned int nmu = features.mu_features.size();
         unsigned int nelec = features.elec_features.size();
-
         unsigned int ncpf = features.cpf_features.size();
         unsigned int nnpf = features.npf_features.size();
         unsigned int nsv = features.sv_features.size();
 
+        int jetIdx = global_jetIdx[itag];
+
         for (unsigned int i = 0; i < ncpf; i++)
         {
             const auto& cpf_features = cpf.at(i);
-
-            cpf_jetIdx.push_back(cpf_features.cpf_jetIdx);
+            cpf_jetIdx.push_back(jetIdx);
             cpf_trackEtaRel.push_back(cpf_features.cpf_trackEtaRel);
             cpf_trackPtRel.push_back(cpf_features.cpf_trackPtRel);
             cpf_trackPPar.push_back(cpf_features.cpf_trackPPar);
@@ -503,12 +491,16 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_matchedMuon.push_back(cpf_features.cpf_matchedMuon);
             cpf_matchedElectron.push_back(cpf_features.cpf_matchedElectron);
             cpf_matchedSV.push_back(cpf_features.cpf_matchedSV);
+	    cpf_track_numberOfValidPixelHits.push_back(cpf_features.cpf_track_numberOfValidPixelHits);
+            cpf_track_pixelLayersWithMeasurement.push_back(cpf_features.cpf_track_pixelLayersWithMeasurement);
+	    cpf_track_numberOfValidStripHits.push_back(cpf_features.cpf_track_numberOfValidStripHits);
+	    cpf_track_stripLayersWithMeasurement.push_back(cpf_features. cpf_track_stripLayersWithMeasurement);
         }
 
         for (unsigned int i = 0; i < nnpf; i++)
         {
             const auto& npf_features = npf.at(i);
-            npf_jetIdx.push_back(npf_features.npf_jetIdx);
+            npf_jetIdx.push_back(jetIdx);
             npf_ptrel.push_back(npf_features.npf_ptrel);
             npf_deta.push_back(npf_features.npf_deta);
             npf_dphi.push_back(npf_features.npf_dphi);
@@ -523,7 +515,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         for (unsigned int i = 0; i < nsv; i++)
         {
             const auto& sv_features = sv.at(i);
-            sv_jetIdx.push_back(sv_features.sv_jetIdx);
+            sv_jetIdx.push_back(jetIdx);
             sv_ptrel.push_back(sv_features.sv_ptrel);
             sv_deta.push_back(sv_features.sv_deta);
             sv_dphi.push_back(sv_features.sv_dphi);
@@ -544,8 +536,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         for(unsigned int i = 0; i < nmu; i++)
         {
             const auto& mu_features = mu.at(i);
-
-            mu_jetIdx.push_back(mu_features.mu_jetIdx);
+            mu_jetIdx.push_back(jetIdx);
             mu_isGlobal.push_back(mu_features.mu_isGlobal) ;
             mu_isTight.push_back(mu_features.mu_isTight) ;
             mu_isMedium.push_back(mu_features.mu_isMedium) ;
@@ -563,10 +554,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             mu_jetDeltaR.push_back(mu_features.mu_jetDeltaR);
             mu_numberOfMatchedStations.push_back(mu_features.mu_numberOfMatchedStations);
 
-            mu_2dIp.push_back(mu_features.mu_2dIp);
-            mu_2dIpSig.push_back(mu_features.mu_2dIpSig);
-            mu_3dIp.push_back(mu_features.mu_3dIp);
-            mu_3dIpSig.push_back(mu_features.mu_3dIpSig);
+            mu_2dIP.push_back(mu_features.mu_2dIP);
+            mu_2dIPSig.push_back(mu_features.mu_2dIPSig);
+            mu_3dIP.push_back(mu_features.mu_3dIP);
+            mu_3dIPSig.push_back(mu_features.mu_3dIPSig);
 
             mu_dxy.push_back(mu_features.mu_dxy);
             mu_dxyError.push_back(mu_features.mu_dxyError);
@@ -575,6 +566,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             mu_dzError.push_back(mu_features.mu_dzError);
             mu_numberOfValidPixelHits.push_back(mu_features.mu_numberOfValidPixelHits);
             mu_numberOfpixelLayersWithMeasurement.push_back(mu_features.mu_numberOfpixelLayersWithMeasurement);
+            mu_numberOfstripLayersWithMeasurement.push_back(mu_features.mu_numberOfstripLayersWithMeasurement);
 
 
             mu_chi2.push_back(mu_features.mu_chi2);
@@ -594,10 +586,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             mu_Pfpileup03.push_back(mu_features.mu_Pfpileup03);
             mu_sumPfPhotonEt03.push_back(mu_features.mu_sumPfPhotonEt03);
 
-            mu_sumChHadronPt.push_back(mu_features.mu_sumChHadronPt);
-            mu_sumNeuHadronEt.push_back(mu_features.mu_sumNeuHadronEt);
-            mu_pileup.push_back(mu_features.mu_pileup);
-            mu_sumPhotonEt.push_back(mu_features.mu_sumPhotonEt);
 
             mu_timeAtIpInOut.push_back(mu_features.mu_timeAtIpInOut) ;
             mu_timeAtIpInOutErr.push_back(mu_features.mu_timeAtIpInOutErr) ;
@@ -611,8 +599,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             const auto& elec_features = elec.at(i);
 
+            elec_jetIdx.push_back(jetIdx);
 
-            elec_jetIdx.push_back(elec_features.elec_jetIdx );
             elec_ptrel.push_back(elec_features.elec_ptrel );
             elec_jetDeltaR.push_back(elec_features.elec_jetDeltaR );
             elec_deta.push_back(elec_features.elec_deta );
@@ -673,6 +661,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             elec_dz.push_back(elec_features.elec_dz );
             elec_nbOfMissingHits.push_back(elec_features.elec_nbOfMissingHits );
             elec_gsfCharge.push_back(elec_features.elec_gsfCharge );
+            elec_ndof.push_back(elec_features.elec_ndof );
+            elec_chi2.push_back(elec_features.elec_chi2 );
 
             elec_full5x5_sigmaIetaIeta.push_back(elec_features.elec_full5x5_sigmaIetaIeta );
             elec_full5x5_e1x5Overe5x5.push_back(elec_features.elec_full5x5_e1x5Overe5x5 );
@@ -696,7 +686,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             elec_full5x5_hcalOverEcalBc.push_back(elec_features.elec_full5x5_hcalOverEcalBc );
             elec_full5x5_r9.push_back(elec_features.elec_full5x5_r9 );
             elec_numberOfBrems.push_back(elec_features.elec_numberOfBrems );
-            elec_trackFbrem.push_back(elec_features.elec_trackFbrem );
             elec_fbrem.push_back(elec_features.elec_fbrem );
             elec_e2x5MaxOvere5x5.push_back(elec_features.elec_e2x5MaxOvere5x5 );
             elec_e1x5Overe5x5.push_back(elec_features.elec_e1x5Overe5x5 );
@@ -733,33 +722,25 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         }
 
     }
-
+    globalTable->addColumn<int>("jetIdx", global_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     globalTable->addColumn<float>("pt", pt, "global jet pt (uncorrected)", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<int>("jetIdx", jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     globalTable->addColumn<float>("eta", eta, "global jet eta", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("phi", phi, "global jet phi", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("mass", mass, "global jet mass", nanoaod::FlatTable::FloatColumn);
-
     globalTable->addColumn<float>("area", area, "global jet area", nanoaod::FlatTable::FloatColumn);
-
     globalTable->addColumn<int>("n60", n60, "n60", nanoaod::FlatTable::IntColumn);
     globalTable->addColumn<int>("n90", n90, "n90", nanoaod::FlatTable::IntColumn);
-
     globalTable->addColumn<float>("chargedEmEnergyFraction", chargedEmEnergyFraction, "chargedEmEnergyFraction", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("chargedHadronEnergyFraction", chargedHadronEnergyFraction, "chargedHadronEnergyFraction", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("chargedMuEnergyFraction", chargedMuEnergyFraction, "chargedMuEnergyFraction", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("electronEnergyFraction", electronEnergyFraction, "electronEnergyFraction", nanoaod::FlatTable::FloatColumn);
-
     globalTable->addColumn<float>("tau1", tau1, "nsubjettiness 1", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("tau2", tau2, "nsubjettiness 2", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("tau3", tau3, "nsubjettiness 3", nanoaod::FlatTable::FloatColumn);
-
-
     globalTable->addColumn<float>("relMassDropMassAK", relMassDropMassAK, "mass drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("relMassDropMassCA", relMassDropMassCA, "mass drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("relSoftDropMassAK", relSoftDropMassAK, "soft drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("relSoftDropMassCA", relSoftDropMassCA, "soft drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
-
     globalTable->addColumn<float>("thrust", thrust, "thrust", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("sphericity", sphericity, "sphericity", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("circularity", circularity, "circularity", nanoaod::FlatTable::FloatColumn);
@@ -767,7 +748,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("eventShapeC", eventShapeC, "eventShapeC", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("eventShapeD", eventShapeD, "eventShapeD", nanoaod::FlatTable::FloatColumn);
 
-    csvTable->addColumn<int>("jetIdx", csv_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
     csvTable->addColumn<float>("trackSumJetEtRatio", trackSumJetEtRatio, "ratio of track sum transverse energy over jet energy", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("trackSumJetDeltaR", trackSumJetDeltaR, "pseudoangular distance between jet axis and track fourvector sum", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("vertexCategory", vertexCategory, "category of secondary vertex (Reco, Pseudo, No)", nanoaod::FlatTable::FloatColumn);
@@ -778,7 +758,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     csvTable->addColumn<int>("jetNSelectedTracks", jetNSelectedTracks, "tracks associated to jet", nanoaod::FlatTable::IntColumn);
     csvTable->addColumn<int>("jetNTracksEtaRel", jetNTracksEtaRel, "number of tracks for which etaRel is computed", nanoaod::FlatTable::IntColumn);
 
-    cpfTable->addColumn<int>("jetIdx", cpf_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
+    cpfTable->addColumn<int>("jetIdx", cpf_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<float>("trackEtaRel", cpf_trackEtaRel, "track pseudorapidity, relative to the jet axis", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("trackPtRel", cpf_trackPtRel, "track transverse momentum, relative to the jet axis", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("trackPPar", cpf_trackPPar, "track parallel momentum, along the jet axis", nanoaod::FlatTable::FloatColumn);
@@ -802,8 +782,14 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     cpfTable->addColumn<int>("matchedMuon", cpf_matchedMuon, "flag to specify whether the track is matched to a PF muon", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<int>("matchedElectron", cpf_matchedElectron, "flag to specify whether the track is matched to a PF electron", nanoaod::FlatTable::IntColumn);
     cpfTable->addColumn<int>("matchedSV", cpf_matchedSV, "flag to specify whether the track is matched to a PF secondary vertex", nanoaod::FlatTable::IntColumn);
+   cpfTable->addColumn<int>("numberOfValidPixelHits", cpf_track_numberOfValidPixelHits , "number of valid pixel hits " , nanoaod::FlatTable::IntColumn);
+    cpfTable->addColumn<int>("pixelLayersWithMeasurement", cpf_track_pixelLayersWithMeasurement , "pixel layers with measurment ", nanoaod::FlatTable::IntColumn);  
+    cpfTable->addColumn<int>("numberOfValidStripHits" , cpf_track_numberOfValidStripHits , "nb of valid strip hits " , nanoaod::FlatTable::IntColumn);
+   cpfTable->addColumn<int>("stripLayersWithMeasurement" , cpf_track_stripLayersWithMeasurement , "nb of strip layers with measurement ", nanoaod::FlatTable::IntColumn); 
+    cpfTable->addColumn<float>("relmassdrop", cpf_relmassdrop, "doc", nanoaod::FlatTable::FloatColumn);
+   
 
-    npfTable->addColumn<int>("jetIdx", npf_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
+    npfTable->addColumn<int>("jetIdx", npf_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     npfTable->addColumn<float>("ptrel", npf_ptrel, "neutral PF candidate transverse momentum over jet transverse momentum (uncorrelated)", nanoaod::FlatTable::FloatColumn);
     npfTable->addColumn<float>("deta", npf_deta, "absolute difference between the neutral PF candidate eta and jet eta", nanoaod::FlatTable::FloatColumn);
     npfTable->addColumn<float>("dphi", npf_dphi, "absolute difference between the neutral PF candidate phi and jet phi", nanoaod::FlatTable::FloatColumn);
@@ -814,8 +800,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     npfTable->addColumn<float>("puppi_weight", npf_puppi_weight, "weight assigned by the PUPPI algorithm to neutral PF candidate", nanoaod::FlatTable::FloatColumn);
     npfTable->addColumn<float>("relmassdrop", npf_relmassdrop, "neutral PF candidate mass drop normalized relative to the jet", nanoaod::FlatTable::FloatColumn);
 
-    svTable->addColumn<int>("jetIdx", sv_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
-    //svTable->addColumn<float>("sv_pt", sv_pt, "secondary vertex (SV) transverse momentum", nanoaod::FlatTable::FloatColumn);
+    svTable->addColumn<int>("jetIdx", sv_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     svTable->addColumn<float>("ptrel", sv_ptrel, "secondary vertex (SV) transverse momentum relative to the uncorrected jet energy pt", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("deta", sv_deta, "absolute difference between the secondary vertex (SV) eta and jet eta", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("dphi", sv_dphi, "absolute difference between the secondary vertex (SV) phi and jet phi", nanoaod::FlatTable::FloatColumn);
@@ -823,7 +808,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     svTable->addColumn<float>("mass", sv_mass, "invariant mass of reconstructed secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("ntracks", sv_ntracks, "number of tracks associated to the secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("chi2", sv_chi2,  "chi^2 of secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("ndof", sv_ndof, "number of degrees of freedom of secondary vertex (SV) fit", nanoaod::FlatTable::FloatColumn);
+    svTable->addColumn<int>("ndof", sv_ndof, "number of degrees of freedom of secondary vertex (SV) fit", nanoaod::FlatTable::IntColumn);
     svTable->addColumn<float>("dxy", sv_dxy, "transverse impact parameter of the secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("dxysig", sv_dxysig, "transverse impact parameter significance of the secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
     svTable->addColumn<float>("d3d", sv_d3d, "3D impact parameter of secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
@@ -837,7 +822,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     lengthTable->addColumn<int>("mu", mu_length, "muon offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("ele", elec_length, "electron offset", nanoaod::FlatTable::IntColumn);
 
-    muonTable->addColumn<int>("jetIdx", mu_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
+    muonTable->addColumn<int>("jetIdx", mu_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
+
     muonTable->addColumn<int>("isGlobal",mu_isGlobal,"muon fitted from the tracker and muon stations",nanoaod::FlatTable::IntColumn);
     muonTable->addColumn<int>("isTight",mu_isTight,"global muon with additional muon-quality requirements.Tight Muon ID selects a subset of the Particle-Flow muons",nanoaod::FlatTable::IntColumn);
     muonTable->addColumn<int>("isMedium",mu_isMedium,"loose muon (i.e. PF muon that is either a global or an arbitrated tracker muon) with additional track-quality and muon-quality requirements.",nanoaod::FlatTable::IntColumn);
@@ -853,10 +839,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     muonTable->addColumn<float>("jetDeltaR",mu_jetDeltaR,"pseudoangular distance between jet axis and muon track fourvector",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("numberOfMatchedStations",mu_numberOfMatchedStations,"number of activated muon stations",nanoaod::FlatTable::FloatColumn);
 
-    muonTable->addColumn<float>("2dIp",mu_2dIp,"muon inner track transverse impact parameter relative to the primary vertex in transverse plane (2D), absolute value",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("2dIpSig",mu_2dIpSig,"muon inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in transverse plane (2D)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("3dIp",mu_3dIp,"muon inner track transverse impact parameter relative to the primary vertex in 3D",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("3dIpSig",mu_3dIpSig,"muon inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in 3D",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("2dIP",mu_2dIP,"muon inner track transverse impact parameter relative to the primary vertex in transverse plane (2D), absolute value",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("2dIPSig",mu_2dIPSig,"muon inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in transverse plane (2D)",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("3dIP",mu_3dIP,"muon inner track transverse impact parameter relative to the primary vertex in 3D",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<float>("3dIPSig",mu_3dIPSig,"muon inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in 3D",nanoaod::FlatTable::FloatColumn);
 
 // Adding new documentation
     muonTable->addColumn<float>("dxy",mu_dxy,"transverse impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
@@ -864,12 +850,12 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     muonTable->addColumn<float>("dxySig",mu_dxySig,"significance of the transverse impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("dz",mu_dz,"longitudinal impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("dzError",mu_dzError,"error on the longitudinal impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("numberOfValidPixelHits",mu_numberOfValidPixelHits,"number of pixel hits by the muon track to further suppress muons from decays in flight",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("numberOfpixelLayersWithMeasurement",mu_numberOfpixelLayersWithMeasurement,"number of pixel layers with valid hits by the muon track",nanoaod::FlatTable::FloatColumn);
-    //muonTable->addColumn<float>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<int>("numberOfValidPixelHits",mu_numberOfValidPixelHits,"number of pixel hits by the muon track to further suppress muons from decays in flight",nanoaod::FlatTable::IntColumn);
+    muonTable->addColumn<int>("numberOfpixelLayersWithMeasurement",mu_numberOfpixelLayersWithMeasurement,"number of pixel layers with valid hits by the muon track",nanoaod::FlatTable::IntColumn);
+    muonTable->addColumn<int>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::IntColumn);
 
     muonTable->addColumn<float>("chi2",mu_chi2,"chi^2 of muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("ndof",mu_ndof,"number of degrees of freedom of muon track fit",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<int>("ndof",mu_ndof,"number of degrees of freedom of muon track fit",nanoaod::FlatTable::IntColumn);
 
     muonTable->addColumn<float>("caloIso",mu_caloIso,"returns the fraction of the summed transverse energy of the muon track recHits in the ECAL & HCAL in a cone of deltaR<0.3 normalized against its transverse momentum",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("ecalIso",mu_ecalIso,"returns the fraction of the transverse energy of the muon track recHits in the ECAL normalized against its transverse momentum",nanoaod::FlatTable::FloatColumn);
@@ -885,17 +871,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     muonTable->addColumn<float>("Pfpileup03",mu_Pfpileup03,"summed pt of charged particles not from PV (for PU corrections) normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("sumPfPhotonEt03",mu_sumPfPhotonEt03,"summed pt of PF photons normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
 
-    muonTable->addColumn<float>("sumChHadronPt",mu_sumChHadronPt,"doc",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumNeuHadronEt",mu_sumNeuHadronEt,"doc",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("pileup",mu_pileup,"doc",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPhotonEt",mu_sumPhotonEt,"doc",nanoaod::FlatTable::FloatColumn);
-
     muonTable->addColumn<float>("timeAtIpInOut",mu_timeAtIpInOut,"the time at the interaction point for muons moving inside-out",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("timeAtIpInOutErr",mu_timeAtIpInOutErr,"error on the time at the interaction point for muons moving inside-out",nanoaod::FlatTable::FloatColumn);
     muonTable->addColumn<float>("timeAtIpOutIn",mu_timeAtIpOutIn,"The time at the interaction point for muons moving outside-in",nanoaod::FlatTable::FloatColumn);
-
-
-    electronTable->addColumn<int>("jetIdx", elec_jetIdx, "linked jet index", nanoaod::FlatTable::IntColumn);
+    
+    electronTable->addColumn<int>("jetIdx", elec_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     electronTable->addColumn<float>("ptrel",elec_ptrel,"electron candidate transverse momentum relative to the uncorrected jet energy pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("jetDeltaR",elec_jetDeltaR,"pseudoangular distance between jet axis and electron track fourvector",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("deta",elec_deta,"absolute difference between the electron candidate eta and jet eta",nanoaod::FlatTable::FloatColumn);
@@ -952,9 +932,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("dz",elec_dz,"longitudinal impact parameter of the best reconstructed electron track",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("nbOfMissingHits",elec_nbOfMissingHits,"number of missing electron hits in its hit pattern",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("gsfCharge",elec_gsfCharge,"gsf electron charge",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<int>("ndof",elec_ndof,"gsf electron number degree of freedom",nanoaod::FlatTable::IntColumn);
+    electronTable->addColumn<float>("chi2",elec_chi2,"chi2 of the fit ",nanoaod::FlatTable::FloatColumn);
 
     electronTable->addColumn<int>("numberOfBrems",elec_numberOfBrems,"number of Bremsstrahlung electrons in a shower",nanoaod::FlatTable::IntColumn);
-    electronTable->addColumn<float>("trackFbrem",elec_trackFbrem,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("fbrem",elec_fbrem,"doc",nanoaod::FlatTable::FloatColumn);
 
     electronTable->addColumn<float>("e5x5",elec_e5x5,"electron energy in 5x5 ECAL block on seed",nanoaod::FlatTable::FloatColumn);

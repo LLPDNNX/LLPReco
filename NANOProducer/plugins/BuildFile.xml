@@ -3,6 +3,8 @@
 <use name="FWCore/ParameterSet"/>
 <use name="LLPReco/DataFormats"/>
 <use name="DataFormats/NanoAOD"/>
+<use name="DataFormats/Common"/>
+<use name="DataFormats/PatCandidates"/>
 
 <library file="NANOProducer.cc" name="NANOProducerPlugin">
     <flags EDM_PLUGIN="1"/>

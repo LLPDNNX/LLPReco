@@ -19,9 +19,9 @@ class XTagFeatures {
     std::vector<SecondaryVertexFeatures> sv_features;
     std::vector<NeutralCandidateFeatures> npf_features;
     std::vector<ChargedCandidateFeatures> cpf_features;
-    std::vector<MuonCandidateFeatures>   mu_features;
-    std::vector<ElectronCandidateFeatures>   elec_features;
-    std::size_t npv; // used by deep flavour
+    std::vector<MuonCandidateFeatures> mu_features;
+    std::vector<ElectronCandidateFeatures> elec_features;
+    std::size_t npv;
 };
 
 }  

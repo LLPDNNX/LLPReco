@@ -37,6 +37,9 @@ class LLPLabel {
             isLLP_BB, //double b/c quark
             isLLP_BBMU, //double b/c quark + prompt lepton
             isLLP_BBE, //double b/c quark + prompt lepton
+            isLLP_TAU,
+            isLLP_QTAU,
+            isLLP_QQTAU,
             isUndefined
             
         };
@@ -56,6 +59,8 @@ class LLPLabel {
         float decay_angle;
         float betagamma;
         
+        float matchedGenJetDeltaR;
+        float matchedGenJetPt;
         
         LLPLabel():
             type(Type::isUndefined),
@@ -66,7 +71,9 @@ class LLPLabel {
             displacement_xy(-10), //log10(x/1cm)
             displacement_z(-10), //log10(x/1cm)
             decay_angle(0),
-            betagamma(0)
+            betagamma(0),
+            matchedGenJetDeltaR(-1),
+            matchedGenJetPt(-1)
         {
         }
         
@@ -138,6 +145,13 @@ class LLPLabel {
                     return "isLLP_BBMU";
                 case Type::isLLP_BBE:
                     return "isLLP_BBE";
+
+                case Type::isLLP_TAU:
+                    return "isLLP_TAU";
+                case Type::isLLP_QTAU:
+                    return "isLLP_QTAU";
+                case Type::isLLP_QQTAU:
+                    return "isLLP_QQTAU";
                     
                 case Type::isUndefined:
                     return "isUndefined";

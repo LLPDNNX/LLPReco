@@ -64,7 +64,7 @@ class LLPLabelProducer:
             int n   = (absPdgId/1000000)%10;
             return std::max({nq1,nq2,nq3})+n*10000+(n>0 and nL==9)*100;
         }
-        
+        double tauPtThreshold_;
         double quarkPtThreshold_;
         double bPtThreshold_;
         double muonPtThreshold_;
@@ -85,6 +85,7 @@ class LLPLabelProducer:
 };
 
 LLPLabelProducer::LLPLabelProducer(const edm::ParameterSet& iConfig):
+    tauPtThreshold_(iConfig.getParameter<double>("tauPtThreshold")),
     quarkPtThreshold_(iConfig.getParameter<double>("quarkPtThreshold")),
     bPtThreshold_(iConfig.getParameter<double>("bPtThreshold")),
     muonPtThreshold_(iConfig.getParameter<double>("muonPtThreshold")),
@@ -136,6 +137,8 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             
             label.partonFlavor = partonFlavor;
             label.hadronFlavor = hadronFlavor;
+            label.matchedGenJetDeltaR = reco::deltaR(jet.p4(),jet.genJet()->p4());
+            label.matchedGenJetPt = jet.genJet()->pt();
             
             unsigned int nbHadrons = jet.jetFlavourInfo().getbHadrons().size();
             unsigned int ncHadrons = jet.jetFlavourInfo().getcHadrons().size();
@@ -267,6 +270,9 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 
                 if (matchedVertex and matchedGenJet)
                 {
+                    label.matchedGenJetDeltaR = dRmin;
+                    label.matchedGenJetPt = matchedGenJet->pt();
+                    
                     int maxFlavor = 0;
                     
                     //take displacement from matched vertex, i.e. end of potential decay chain = largest displacement
@@ -306,6 +312,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                         int nMU = 0;
                         int nE = 0;
                         int nB = 0;
+                        int nTau = 0;
                         
                         for (auto const& llpGhostFlavour: llpGhostFlavours)
                         {
@@ -326,11 +333,17 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (absId==11 and pt>electronPtThreshold_) nE+=1;
                             if (absId==5 and pt>bPtThreshold_) nB+=1;
                             if ((absId<5 or absId==21) and pt>quarkPtThreshold_) nQ+=1;
-                                
+                            if ((absId==15) and pt>tauPtThreshold_) nTau++;
                         }
+                                
                         label.type = llpdnnx::LLPLabel::Type::isLLP_RAD; //default
-                        
-                        if (nMU==0 and nE==0)
+                        if (nTau>=1)
+                        {
+                            if ((nQ+nB)==0) label.type = llpdnnx::LLPLabel::Type::isLLP_TAU;
+                            if ((nQ+nB)==1) label.type = llpdnnx::LLPLabel::Type::isLLP_QTAU;
+                            if ((nQ+nB)>1) label.type = llpdnnx::LLPLabel::Type::isLLP_QQTAU;
+                        }
+                        else if (nMU==0 and nE==0 and nTau==0)
                         {
                             if (nQ==1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_Q;
                             if (nQ==0 and nB==1) label.type = llpdnnx::LLPLabel::Type::isLLP_B;
@@ -338,7 +351,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (nQ>1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_QQ;
                             if (nB>1 or (nQ==1 and nB==1)) label.type = llpdnnx::LLPLabel::Type::isLLP_BB;
                         }
-                        else if (nE>=1 and nMU==0)
+                        else if (nE>=1 and nMU==0 and nTau==0)
                         {
                             if (nQ==0 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_E;
                             
@@ -348,7 +361,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             if (nQ>1 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_QQE;
                             if (nB>1 or (nQ==1 and nB==1)) label.type = llpdnnx::LLPLabel::Type::isLLP_BBE;
                         }
-                        else if (nMU>=1) //accept any additional number of electrons
+                        else if (nMU>=1 and nTau==0) //accept any additional number of electrons
                         {
                             if (nQ==0 and nB==0) label.type = llpdnnx::LLPLabel::Type::isLLP_MU;
                             

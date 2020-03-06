@@ -6,31 +6,41 @@ namespace llpdnnx
 JetSubstructure::JetSubstructure(const reco::Jet& jet)
 {
     if (jet.numberOfDaughters()==0) throw cms::Exception("Jets has no constituents!");
+    TLorentzVector jetVectorFromConsituents(0,0,0,0);
     for(unsigned int iconstituent = 0; iconstituent < jet.numberOfDaughters(); ++iconstituent)
     {
         const reco::Candidate* constituent = jet.daughter(iconstituent);
-        if(constituent->pt() < 1e-10)
+        if((constituent->energy() < 1e-10) or (constituent->mass()<1e-10))
         {
             continue;
         }
         consituents_.emplace_back(constituent->px(),constituent->py(),constituent->pz(),constituent->energy());
         lorentzVectors_.emplace_back(constituent->px(),constituent->py(),constituent->pz(),constituent->energy());
+        jetVectorFromConsituents+=lorentzVectors_.back();
     }
+    
+    massFromConstituents_ = std::max(1e-10,jetVectorFromConsituents.M());
+    
     sortLists();
 }
 
 JetSubstructure::JetSubstructure(const fastjet::PseudoJet& jet)
 {
     if (jet.constituents().size()==0) throw cms::Exception("Jets has no constituents!");
+    TLorentzVector jetVectorFromConsituents(0,0,0,0);
     for(auto const& constituent: jet.constituents())
     {
-        if(constituent.pt() < 1e-10)
+        if((constituent.e()<1e-10) or (constituent.m()<1e-10))
         {
             continue;
         }
         consituents_.emplace_back(constituent);
         lorentzVectors_.emplace_back(constituent.px(),constituent.py(),constituent.pz(),constituent.e());
+        jetVectorFromConsituents+=lorentzVectors_.back();
     }
+    
+    massFromConstituents_ = std::max(1e-10,jetVectorFromConsituents.M());
+    
     sortLists();
 }
 
@@ -204,29 +214,45 @@ double JetSubstructure::thrust(bool boostToCM) const
     return maxThrust;
 }
 
-double JetSubstructure::massDropMass(ClusterType type, double r, double muCut, double yCut) const
+double JetSubstructure::relMassDropMass(ClusterType type, double r, double muCut, double yCut) const
 {
+    if (massFromConstituents_<1e-10) return 0;
+    if (consituents_.size()<2) return 0;
+    
     fastjet::ClusterSequence clusterSequence(consituents_, makeJetDefinition(type,r));
     std::vector<fastjet::PseudoJet> reclusteredJets = fastjet::sorted_by_pt(
         clusterSequence.inclusive_jets(1e-10)
     );
     if (reclusteredJets.size()==0) throw cms::Exception("No jets found after reclustering!");
+    if (reclusteredJets[0].constituents().size()<2) return 0;
     fastjet::MassDropTagger massDropTagger(muCut, yCut);
     fastjet::PseudoJet taggedJet = massDropTagger.result(reclusteredJets[0]);
-    return taggedJet.m();
+    
+    double massDropMass = taggedJet.m();
+    if (massDropMass<1e-10) return 0;
+    
+    return massDropMass/massFromConstituents_;
 }
 
-double JetSubstructure::softDropMass(ClusterType type, double r, double zCut, double beta) const
+double JetSubstructure::relSoftDropMass(ClusterType type, double r, double zCut, double beta) const
 {
+    if (massFromConstituents_<1e-10) return 0;
+    if (consituents_.size()<2) return 0;
+    
     fastjet::ClusterSequence clusterSequence(consituents_, makeJetDefinition(type,r));
     std::vector<fastjet::PseudoJet> reclusteredJets = fastjet::sorted_by_pt(
         clusterSequence.inclusive_jets(1e-10)
     );
     if (reclusteredJets.size()==0) throw cms::Exception("No jets found after reclustering!");
+    if (reclusteredJets[0].constituents ().size()<2) return 0;
     
     fastjet::contrib::SoftDrop softDrop(beta, zCut, r );
     fastjet::PseudoJet softDropJet = softDrop.result(reclusteredJets[0]);
-    return softDropJet.m();
+    
+    double softDropMass = softDropJet.m();
+    if (softDropMass<1e-10) return 0;
+    
+    return softDropMass/massFromConstituents_;
 }
 
 EventShapeVariables JetSubstructure::eventShapeVariables(bool boostToCM) const
