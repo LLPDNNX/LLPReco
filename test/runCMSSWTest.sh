@@ -8,6 +8,7 @@ function run_test()
     eval `scramv1 runtime -sh` || return 1
     rsync -r /scripts/* LLPReco  || return 1
     scram b || return 1
+    pip install -r LLPReco/requirements.txt || return 1
     cmsRun LLPReco/XTagInfoProducer/test/testXTag.py inputFiles=https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root || return 1
     cmsRun LLPReco/LLPLabelProducer/test/test_LLPLabelProducer.py inputFiles=https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root || return 1
     cmsRun LLPReco/NANOProducer/test/produceNANO.py year=test || return 1
