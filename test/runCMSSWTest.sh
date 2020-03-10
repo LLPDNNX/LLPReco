@@ -1,6 +1,6 @@
 function run_test()
 {
-    cd ~ 
+    cd ~
     source /cvmfs/cms.cern.ch/cmsset_default.sh
     export SCRAM_ARCH=slc6_amd64_gcc700 || return 1
     scramv1 project CMSSW CMSSW_10_2_18 || return 1
@@ -11,11 +11,8 @@ function run_test()
     cmsRun LLPReco/XTagInfoProducer/test/testXTag.py inputFiles=https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root || return 1
     cmsRun LLPReco/LLPLabelProducer/test/test_LLPLabelProducer.py inputFiles=https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root || return 1
     cmsRun LLPReco/NANOProducer/test/produceNANO.py year=test || return 1
-<<<<<<< HEAD
     python LLPReco/test/check_nan.py || return 1
 
-=======
->>>>>>> upstream/master
 }
 
 run_test
