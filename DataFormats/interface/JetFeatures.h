@@ -24,12 +24,7 @@ struct JetFeatures
 
     float jetR;
     float jetRchg;
-    float majW;
-    float minW;
 
-    float ptD;
-    float pull;
-    
     int n60;
     int n90;
     
@@ -63,6 +58,16 @@ struct JetFeatures
         energy(0),
         
         area(-1),
+
+        beta(-1),
+        dR2Mean(-1),
+        frac01(-1),
+        frac02(-1),
+        frac03(-1),
+        frac04(-1),
+
+        jetR(-1),
+        jetRchg(-1),
         
         n60(-1),
         n90(-1),

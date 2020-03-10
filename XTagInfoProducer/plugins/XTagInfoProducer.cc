@@ -330,7 +330,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             float dZ0 = std::abs(constituent->dz(pv.position()));
             float dZmin = dZ0;
-            for (unsigned int i = 0; i < vtxs->size(); i++){
+            for (size_t i = 0; i < vtxs->size(); i++){
                 auto vtx = vtxs->at(i);
                 if (vtx.isFake() || vtx.ndof() < 4) {
                     continue;
@@ -750,17 +750,19 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             return false;
         });
 
-        float jetRchg = features.cpf_features.at(0).cpf_ptrel;
-        float jetRntr = features.npf_features.at(0).npf_ptrel;
+        float jetRchg(-1), jetRntr(-1);
+        if (features.cpf_features.size() > 0){
+            jetRchg = features.cpf_features.at(0).cpf_ptrel;
+        }
+        
+        if (features.npf_features.size() > 0){
+            jetRntr = features.npf_features.at(0).npf_ptrel;
+        }
+
         float jetR = std::max(jetRchg, jetRntr);
 
         features.jet_features.jetRchg = jetRchg;
         features.jet_features.jetR = jetR;
-
-        //float majW = 0;
-        //float minW = 0;
-        //float ptD = 0;
-        //float pull = 0;
 
         int beta = 0;
         int frac01 = 0;
@@ -771,7 +773,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         float pt2Sum = 0;
 
 
-        for (unsigned int i = 0; i < features.cpf_features.size(); i++){
+        for (size_t i = 0; i < features.cpf_features.size(); i++){
             llpdnnx::ChargedCandidateFeatures cpf = features.cpf_features.at(i);
             beta += cpf.cpf_fromPV;
             dR2Mean += (cpf.cpf_ptrel*cpf.cpf_trackDeltaR) * (cpf.cpf_ptrel*cpf.cpf_trackDeltaR);
@@ -785,7 +787,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.jet_features.beta = (float)beta/(float)features.cpf_features.size();
 
 
-        for (unsigned int i = 0; i < features.npf_features.size(); i++){
+        for (size_t i = 0; i < features.npf_features.size(); i++){
             llpdnnx::NeutralCandidateFeatures npf = features.npf_features.at(i);
             dR2Mean += (npf.npf_ptrel*npf.npf_deltaR) * (npf.npf_ptrel*npf.npf_deltaR);
             pt2Sum += (npf.npf_ptrel) * (npf.npf_ptrel);
@@ -797,11 +799,13 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         float nCandidates = (float)features.cpf_features.size()+(float)features.npf_features.size();
 
-        features.jet_features.frac01 = (float)frac01/nCandidates;
-        features.jet_features.frac02 = (float)frac02/nCandidates;
-        features.jet_features.frac03 = (float)frac03/nCandidates;
-        features.jet_features.frac04 = (float)frac04/nCandidates;
-        features.jet_features.dR2Mean = dR2Mean/pt2Sum;
+        if (nCandidates > 0.){
+            features.jet_features.frac01 = (float)frac01/nCandidates;
+            features.jet_features.frac02 = (float)frac02/nCandidates;
+            features.jet_features.frac03 = (float)frac03/nCandidates;
+            features.jet_features.frac04 = (float)frac04/nCandidates;
+            features.jet_features.dR2Mean = dR2Mean/pt2Sum;
+        }
 
         output_tag_infos->emplace_back(features, jet_ref);
     }
@@ -811,11 +815,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void XTagInfoProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-    edm::ParameterSetDescription desc;
-    desc.add<edm::InputTag>("jets", edm::InputTag("ak4PFJetsCHS"));
-    desc.add<edm::InputTag>("vertices", edm::InputTag("offlinePrimaryVertices"));
-    desc.add<edm::InputTag>("secondary_vertices", edm::InputTag("inclusiveCandidateSecondaryVertices"));
-    desc.add<edm::InputTag>("shallow_tag_infos", edm::InputTag("pfDeepCSVTagInfos"));
 }
 void XTagInfoProducer::endStream() {};
 
