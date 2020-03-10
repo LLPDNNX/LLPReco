@@ -65,9 +65,6 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('FWCore.MessageLogger.MessageLogger_cfi')
 process.load('TrackingTools/TransientTrack/TransientTrackBuilder_cfi')
 
-## Events to process
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
-
 if options.isData:
     process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
     dataTier = cms.untracked.string('NANOAOD')
@@ -77,7 +74,7 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000)
+    input = cms.untracked.int32(10000)
 )
 
 files = {
@@ -108,7 +105,7 @@ process.source = cms.Source("PoolSource",
 )
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('test102X nevts:1000'),
+    annotation = cms.untracked.string('test102X nevts:10000'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
