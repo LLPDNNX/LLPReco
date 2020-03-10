@@ -42,4 +42,4 @@ for feature in features:
 
 if (nan + inf > 0):
     print("number of NAN + INF: " + str(nan + inf))
-    sys.exit()
+    sys.exit(1)
