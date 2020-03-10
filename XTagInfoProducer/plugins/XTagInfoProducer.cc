@@ -331,14 +331,15 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             float dZ0 = std::abs(constituent->dz(pv.position()));
             float dZmin = dZ0;
             for (size_t i = 0; i < vtxs->size(); i++){
+                if (i == 0) continue;
                 auto vtx = vtxs->at(i);
                 if (vtx.isFake() || vtx.ndof() < 4) {
                     continue;
                 }
                 dZmin = std::min(dZmin, std::abs(constituent->dz(vtx.position())));
             }
+            
             cpf_features.cpf_dZmin = dZmin;
-
             cpf_features.cpf_vertex_association = constituent->pvAssociationQuality();
             cpf_features.cpf_fromPV = constituent->fromPV();
             cpf_features.cpf_puppi_weight = constituent->puppiWeight();
