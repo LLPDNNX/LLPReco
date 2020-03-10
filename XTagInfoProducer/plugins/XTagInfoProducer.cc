@@ -317,8 +317,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             llpdnnx::ChargedCandidateFeatures cpf_features;
 
             cpf_features.cpf_ptrel = constituent->pt()/uncorrectedPt;
-            cpf_features.cpf_deta = std::fabs(constituent->eta()-jet.eta());
-            cpf_features.cpf_dphi = std::fabs(reco::deltaPhi(constituent->phi(),jet.phi()));
+            cpf_features.cpf_deta = constituent->eta()-jet.eta();
+            cpf_features.cpf_dphi = reco::deltaPhi(constituent->phi(),jet.phi());
 
             cpf_features.cpf_drminsv = 0.4;
             for (const auto& sv: *svs.product())
@@ -330,7 +330,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             float dZ0 = std::abs(constituent->dz(pv.position()));
             float dZmin = dZ0;
-            for (unsigned int i = 0; i << vtxs->size(); i++){
+            for (unsigned int i = 0; i < vtxs->size(); i++){
                 auto vtx = vtxs->at(i);
                 if (vtx.isFake() || vtx.ndof() < 4) {
                     continue;
@@ -711,8 +711,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             llpdnnx::NeutralCandidateFeatures npf_features;
 
             npf_features.npf_ptrel = constituent->pt()/uncorrectedPt;
-            npf_features.npf_deta = std::fabs(constituent->eta()-jet.eta());
-            npf_features.npf_dphi = std::fabs(reco::deltaPhi(constituent->phi(),jet.phi()));
+            npf_features.npf_deta = constituent->eta()-jet.eta();
+            npf_features.npf_dphi = reco::deltaPhi(constituent->phi(),jet.phi());
             npf_features.npf_puppi_weight = constituent->puppiWeight();
             npf_features.npf_deltaR = reco::deltaR(*constituent,jet);
             npf_features.npf_isGamma = abs(constituent->pdgId())==22;
@@ -750,8 +750,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             return false;
         });
 
-        float jetRchg = features.cpf_features.at(0).cpf_ptrel/uncorrectedPt;
-        float jetRntr = features.npf_features.at(0).npf_ptrel/uncorrectedPt;
+        float jetRchg = features.cpf_features.at(0).cpf_ptrel;
+        float jetRntr = features.npf_features.at(0).npf_ptrel;
         float jetR = std::max(jetRchg, jetRntr);
 
         features.jet_features.jetRchg = jetRchg;
@@ -770,11 +770,12 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         float dR2Mean = 0;
         float pt2Sum = 0;
 
+
         for (unsigned int i = 0; i < features.cpf_features.size(); i++){
             llpdnnx::ChargedCandidateFeatures cpf = features.cpf_features.at(i);
             beta += cpf.cpf_fromPV;
-            dR2Mean += cpf.cpf_ptrel*cpf.cpf_ptrel*cpf.cpf_trackDeltaR;
-            pt2Sum += cpf.cpf_ptrel*cpf.cpf_ptrel;
+            dR2Mean += (cpf.cpf_ptrel*cpf.cpf_trackDeltaR) * (cpf.cpf_ptrel*cpf.cpf_trackDeltaR);
+            pt2Sum += (cpf.cpf_ptrel) * (cpf.cpf_ptrel);
             if (cpf.cpf_trackDeltaR < 0.1) frac01 ++;
             else if (cpf.cpf_trackDeltaR < 0.2) frac02 ++;
             else if (cpf.cpf_trackDeltaR < 0.3) frac03 ++;
@@ -782,12 +783,25 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         }
 
         features.jet_features.beta = (float)beta/(float)features.cpf_features.size();
-        features.jet_features.frac01 = (float)frac01/(float)features.cpf_features.size();
-        features.jet_features.frac02 = (float)frac02/(float)features.cpf_features.size();
-        features.jet_features.frac03 = (float)frac03/(float)features.cpf_features.size();
-        features.jet_features.frac04 = (float)frac04/(float)features.cpf_features.size();
-        features.jet_features.dR2Mean = dR2Mean/pt2Sum;
 
+
+        for (unsigned int i = 0; i < features.npf_features.size(); i++){
+            llpdnnx::NeutralCandidateFeatures npf = features.npf_features.at(i);
+            dR2Mean += (npf.npf_ptrel*npf.npf_deltaR) * (npf.npf_ptrel*npf.npf_deltaR);
+            pt2Sum += (npf.npf_ptrel) * (npf.npf_ptrel);
+            if (npf.npf_deltaR < 0.1) frac01 ++;
+            else if (npf.npf_deltaR < 0.2) frac02 ++;
+            else if (npf.npf_deltaR < 0.3) frac03 ++;
+            else if (npf.npf_deltaR < 0.4) frac04 ++;
+        }
+
+        float nCandidates = (float)features.cpf_features.size()+(float)features.npf_features.size();
+
+        features.jet_features.frac01 = (float)frac01/nCandidates;
+        features.jet_features.frac02 = (float)frac02/nCandidates;
+        features.jet_features.frac03 = (float)frac03/nCandidates;
+        features.jet_features.frac04 = (float)frac04/nCandidates;
+        features.jet_features.dR2Mean = dR2Mean/pt2Sum;
 
         output_tag_infos->emplace_back(features, jet_ref);
     }
