@@ -11,8 +11,11 @@ function run_test()
     cmsRun LLPReco/XTagInfoProducer/test/testXTag.py inputFiles=https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root || return 1
     cmsRun LLPReco/LLPLabelProducer/test/test_LLPLabelProducer.py inputFiles=https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root || return 1
     cmsRun LLPReco/NANOProducer/test/produceNANO.py year=test || return 1
+<<<<<<< HEAD
     python LLPReco/test/check_nan.py || return 1
 
+=======
+>>>>>>> upstream/master
 }
 
 run_test

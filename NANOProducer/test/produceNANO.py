@@ -170,6 +170,9 @@ process.OUT = cms.OutputModule("PoolOutputModule",
     outputCommands = cms.untracked.vstring(['keep *'])
 )
 
+if options.year == "test":
+    options.year = "2016"
+
 if options.isData:
     if options.year == '2016':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
