@@ -14,7 +14,17 @@ struct JetFeatures
     float energy;
     
     float area;
-    
+
+    float beta;
+    float dR2Mean;
+    float frac01;
+    float frac02;
+    float frac03;
+    float frac04;
+
+    float jetR;
+    float jetRchg;
+
     int n60;
     int n90;
     
@@ -48,6 +58,16 @@ struct JetFeatures
         energy(0),
         
         area(-1),
+
+        beta(-1),
+        dR2Mean(-1),
+        frac01(-1),
+        frac02(-1),
+        frac03(-1),
+        frac04(-1),
+
+        jetR(-1),
+        jetRchg(-1),
         
         n60(-1),
         n90(-1),

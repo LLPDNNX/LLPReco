@@ -152,10 +152,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         const pat::Jet& jet = jets->at(ijet);
         edm::RefToBase<reco::Jet> jet_ref(jets->refAt(ijet)); //upcast
 
-        std::unordered_set<reco::CandidatePtr, CandidateHash> jetConsituentSet;
+        std::unordered_set<reco::CandidatePtr, CandidateHash> jetConstituentSet;
         for (unsigned int idaughter = 0; idaughter < jet.numberOfDaughters(); ++idaughter)
         {
-            jetConsituentSet.insert(jet.daughterPtr(idaughter));
+            jetConstituentSet.insert(jet.daughterPtr(idaughter));
         }
 
         // Cut on eta
@@ -257,7 +257,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             bool matchingTrack = false;
             for (auto const& candidateFromVertex: sv.daughterPtrVector())
             {
-                if (jetConsituentSet.find(candidateFromVertex)!=jetConsituentSet.end())
+                if (jetConstituentSet.find(candidateFromVertex)!=jetConstituentSet.end())
                 {
                     candidatesMatchedToSV.insert(candidateFromVertex);
                     matchingTrack = true;
@@ -317,8 +317,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             llpdnnx::ChargedCandidateFeatures cpf_features;
 
             cpf_features.cpf_ptrel = constituent->pt()/uncorrectedPt;
-            cpf_features.cpf_deta = std::fabs(constituent->eta()-jet.eta());
-            cpf_features.cpf_dphi = std::fabs(reco::deltaPhi(constituent->phi(),jet.phi()));
+            cpf_features.cpf_deta = constituent->eta()-jet.eta();
+            cpf_features.cpf_dphi = reco::deltaPhi(constituent->phi(),jet.phi());
 
             cpf_features.cpf_drminsv = 0.4;
             for (const auto& sv: *svs.product())
@@ -327,16 +327,29 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 cpf_features.cpf_drminsv = std::min(cpf_features.cpf_drminsv,dR);
             }
 
+
+            float dZ0 = std::abs(constituent->dz(pv.position()));
+            float dZmin = dZ0;
+            for (size_t i = 0; i < vtxs->size(); i++){
+                if (i == 0) continue;
+                auto vtx = vtxs->at(i);
+                if (vtx.isFake() || vtx.ndof() < 4) {
+                    continue;
+                }
+                dZmin = std::min(dZmin, std::abs(constituent->dz(vtx.position())));
+            }
+            
+            cpf_features.cpf_dZmin = dZmin;
             cpf_features.cpf_vertex_association = constituent->pvAssociationQuality();
             cpf_features.cpf_fromPV = constituent->fromPV();
             cpf_features.cpf_puppi_weight = constituent->puppiWeight();
             cpf_features.cpf_track_chi2 = constituent->pseudoTrack().chi2();
             cpf_features.cpf_track_ndof = constituent->pseudoTrack().ndof();
             cpf_features.cpf_track_quality = constituent->pseudoTrack().qualityMask();
-	    cpf_features.cpf_track_numberOfValidPixelHits = constituent->pseudoTrack().hitPattern().numberOfValidPixelHits ();
-	    cpf_features.cpf_track_pixelLayersWithMeasurement  = constituent->pseudoTrack().hitPattern().pixelLayersWithMeasurement ();
-	    cpf_features.cpf_track_numberOfValidStripHits = constituent->pseudoTrack().hitPattern().numberOfValidStripHits () ;
-	    cpf_features.cpf_track_stripLayersWithMeasurement = constituent->pseudoTrack().hitPattern().stripLayersWithMeasurement() ;
+    	    cpf_features.cpf_track_numberOfValidPixelHits = constituent->pseudoTrack().hitPattern().numberOfValidPixelHits();
+    	    cpf_features.cpf_track_pixelLayersWithMeasurement  = constituent->pseudoTrack().hitPattern().pixelLayersWithMeasurement();
+    	    cpf_features.cpf_track_numberOfValidStripHits = constituent->pseudoTrack().hitPattern().numberOfValidStripHits();
+    	    cpf_features.cpf_track_stripLayersWithMeasurement = constituent->pseudoTrack().hitPattern().stripLayersWithMeasurement();
 		
 
             if (jet.mass()<1e-10)
@@ -367,10 +380,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_features.cpf_trackPtRatio=cpf_features.cpf_trackPtRel / trackMag;
             cpf_features.cpf_trackPParRatio=cpf_features.cpf_trackPPar / trackMag;
 
-            cpf_features.cpf_trackSip2dVal=std::fabs(meas_ip2d.value()); // does it make sense
-            cpf_features.cpf_trackSip2dSig=std::fabs(meas_ip2d.significance());
-            cpf_features.cpf_trackSip3dVal=std::fabs(meas_ip3d.value()); // does it make sense
-            cpf_features.cpf_trackSip3dSig=std::fabs(meas_ip3d.significance());
+            cpf_features.cpf_trackSip2dVal=meas_ip2d.value(); // does it make sense
+            cpf_features.cpf_trackSip2dSig=meas_ip2d.significance();
+            cpf_features.cpf_trackSip3dVal=meas_ip3d.value(); // does it make sense
+            cpf_features.cpf_trackSip3dSig=meas_ip3d.significance();
             if (std::isnan(cpf_features.cpf_trackSip2dSig) || std::isnan(cpf_features.cpf_trackSip3dSig))
             {
                 cpf_features.cpf_trackSip2dSig=-1.;
@@ -483,7 +496,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             {
                 const pat::Electron & electron = *findElectron->second;
                 cpf_features.cpf_matchedElectron = 1;
-		if(reco::deltaR(electron , jet) > 0.4 ) continue ; 
+		        if (reco::deltaR(electron, jet) > 0.4) continue; 
 
                 elec_features.elec_ptrel = electron.pt()/uncorrectedPt;
                 elec_features.elec_deta = std::fabs(electron.eta()-jet.eta());
@@ -498,16 +511,16 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_isEE  = electron.isEE();
                 elec_features.elec_ecalEnergy  = electron.ecalEnergy()/electron.pt();
                 elec_features.elec_isPassConversionVeto = electron.passConversionVeto();
-		if(electron.convDist() >= 0. ){
-                elec_features.elec_convDist = electron.convDist(); 
-                elec_features.elec_convFlags = electron.convFlags(); 
-                elec_features.elec_convRadius = electron.convRadius();
- 		}
-		else{
-                elec_features.elec_convDist = -1.; 
-                elec_features.elec_convFlags = -1.; 
-                elec_features.elec_convRadius = -1.;
-		}
+        		if(electron.convDist() >= 0.){
+                        elec_features.elec_convDist = electron.convDist(); 
+                        elec_features.elec_convFlags = electron.convFlags(); 
+                        elec_features.elec_convRadius = electron.convRadius();
+         		}
+        		else{
+                        elec_features.elec_convDist = -1.; 
+                        elec_features.elec_convFlags = -1.; 
+                        elec_features.elec_convRadius = -1.;
+        		}
 
 
                 elec_features.elec_3dIP = electron.dB(pat::Electron::PV3D); 
@@ -515,8 +528,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_2dIP = electron.dB();
                 elec_features.elec_2dIPSig = electron.dB()/electron.edB();
                 elec_features.elec_sCseedEta = electron.superCluster()->seed()->eta();
-
-
 
                 elec_features.elec_e5x5 = electron.e5x5();
                 elec_features.elec_e5x5Rel = electron.e5x5()/jet.pt();
@@ -571,8 +582,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_dz = electron.gsfTrack()->dz(pv.position());
                 elec_features.elec_nbOfMissingHits = electron.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
                 elec_features.elec_gsfCharge = electron.gsfTrack()->charge();
-		elec_features.elec_ndof = electron.gsfTrack()->ndof() ; 
-		elec_features.elec_chi2 = electron.gsfTrack()->chi2() ;
+        		elec_features.elec_ndof = electron.gsfTrack()->ndof(); 
+        		elec_features.elec_chi2 = electron.gsfTrack()->chi2();
 
 
                 elec_features.elecSC_energy = electron.superCluster()->energy()/electron.pt(); 
@@ -583,22 +594,22 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
                 elec_features.elec_numberOfBrems  = electron.numberOfBrems();
-		if(electron.pt() >= 5. ){
-                elec_features.elec_fbrem = electron.fbrem();
-                elec_features.elec_scSigmaEtaEta = electron.scSigmaEtaEta();
-                elec_features.elec_scSigmaIEtaIEta = electron.scSigmaIEtaIEta();
-                elec_features.elec_superClusterFbrem = electron.superClusterFbrem();
-		}
-		else 
-		{
-	                elec_features.elec_fbrem = -1.;
-			elec_features.elec_scSigmaEtaEta = -1. ;
-			elec_features.elec_scSigmaIEtaIEta = -1. ;
-			elec_features.elec_superClusterFbrem = -1. ;
-		}
+		        if(electron.pt() >= 5. ){
+                    elec_features.elec_fbrem = electron.fbrem();
+                    elec_features.elec_scSigmaEtaEta = electron.scSigmaEtaEta();
+                    elec_features.elec_scSigmaIEtaIEta = electron.scSigmaIEtaIEta();
+                    elec_features.elec_superClusterFbrem = electron.superClusterFbrem();
+		        }
+        		else 
+        		{
+        	        elec_features.elec_fbrem = -1.;
+        			elec_features.elec_scSigmaEtaEta = -1.;
+        			elec_features.elec_scSigmaIEtaIEta = -1.;
+        			elec_features.elec_superClusterFbrem = -1.;
+        		}
 
 	
-		// scSigmaEtaEta and scSigmaIEtaIEta and fbrem and superClusterFbrem 
+		        // scSigmaEtaEta and scSigmaIEtaIEta and fbrem and superClusterFbrem 
                 elec_features.elec_scE5x5 = electron.scE5x5();
                 elec_features.elec_scE5x5Rel = electron.scE5x5()/jet.pt(); 
                 elec_features.elec_scE1x5Overe5x5 = electron.scE1x5 ()/electron.scE5x5(); 
@@ -701,8 +712,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             llpdnnx::NeutralCandidateFeatures npf_features;
 
             npf_features.npf_ptrel = constituent->pt()/uncorrectedPt;
-            npf_features.npf_deta = std::fabs(constituent->eta()-jet.eta());
-            npf_features.npf_dphi = std::fabs(reco::deltaPhi(constituent->phi(),jet.phi()));
+            npf_features.npf_deta = constituent->eta()-jet.eta();
+            npf_features.npf_dphi = reco::deltaPhi(constituent->phi(),jet.phi());
             npf_features.npf_puppi_weight = constituent->puppiWeight();
             npf_features.npf_deltaR = reco::deltaR(*constituent,jet);
             npf_features.npf_isGamma = abs(constituent->pdgId())==22;
@@ -739,6 +750,64 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
             return false;
         });
+
+        float jetRchg(-1), jetRntr(-1);
+        if (features.cpf_features.size() > 0){
+            jetRchg = features.cpf_features.at(0).cpf_ptrel;
+        }
+        
+        if (features.npf_features.size() > 0){
+            jetRntr = features.npf_features.at(0).npf_ptrel;
+        }
+
+        float jetR = std::max(jetRchg, jetRntr);
+
+        features.jet_features.jetRchg = jetRchg;
+        features.jet_features.jetR = jetR;
+
+        int beta = 0;
+        int frac01 = 0;
+        int frac02 = 0;
+        int frac03 = 0;
+        int frac04 = 0;
+        float dR2Mean = 0;
+        float pt2Sum = 0;
+
+
+        for (size_t i = 0; i < features.cpf_features.size(); i++){
+            llpdnnx::ChargedCandidateFeatures cpf = features.cpf_features.at(i);
+            beta += cpf.cpf_fromPV;
+            dR2Mean += (cpf.cpf_ptrel*cpf.cpf_trackDeltaR) * (cpf.cpf_ptrel*cpf.cpf_trackDeltaR);
+            pt2Sum += (cpf.cpf_ptrel) * (cpf.cpf_ptrel);
+            if (cpf.cpf_trackDeltaR < 0.1) frac01 ++;
+            else if (cpf.cpf_trackDeltaR < 0.2) frac02 ++;
+            else if (cpf.cpf_trackDeltaR < 0.3) frac03 ++;
+            else if (cpf.cpf_trackDeltaR < 0.4) frac04 ++;
+        }
+
+        features.jet_features.beta = (float)beta/(float)features.cpf_features.size();
+
+
+        for (size_t i = 0; i < features.npf_features.size(); i++){
+            llpdnnx::NeutralCandidateFeatures npf = features.npf_features.at(i);
+            dR2Mean += (npf.npf_ptrel*npf.npf_deltaR) * (npf.npf_ptrel*npf.npf_deltaR);
+            pt2Sum += (npf.npf_ptrel) * (npf.npf_ptrel);
+            if (npf.npf_deltaR < 0.1) frac01 ++;
+            else if (npf.npf_deltaR < 0.2) frac02 ++;
+            else if (npf.npf_deltaR < 0.3) frac03 ++;
+            else if (npf.npf_deltaR < 0.4) frac04 ++;
+        }
+
+        float nCandidates = (float)features.cpf_features.size()+(float)features.npf_features.size();
+
+        if (nCandidates > 0.){
+            features.jet_features.frac01 = (float)frac01/nCandidates;
+            features.jet_features.frac02 = (float)frac02/nCandidates;
+            features.jet_features.frac03 = (float)frac03/nCandidates;
+            features.jet_features.frac04 = (float)frac04/nCandidates;
+            features.jet_features.dR2Mean = dR2Mean/pt2Sum;
+        }
+
         output_tag_infos->emplace_back(features, jet_ref);
     }
 
@@ -747,11 +816,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void XTagInfoProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
-    edm::ParameterSetDescription desc;
-    desc.add<edm::InputTag>("jets", edm::InputTag("ak4PFJetsCHS"));
-    desc.add<edm::InputTag>("vertices", edm::InputTag("offlinePrimaryVertices"));
-    desc.add<edm::InputTag>("secondary_vertices", edm::InputTag("inclusiveCandidateSecondaryVertices"));
-    desc.add<edm::InputTag>("shallow_tag_infos", edm::InputTag("pfDeepCSVTagInfos"));
 }
 void XTagInfoProducer::endStream() {};
 
