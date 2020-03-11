@@ -29,9 +29,9 @@ struct ChargedCandidateFeatures
     float cpf_puppi_weight;
     float cpf_track_chi2;
     float cpf_track_quality;
-    int cpf_track_numberOfValidPixelHits ;
-    int cpf_track_pixelLayersWithMeasurement ;
-    int cpf_track_numberOfValidStripHits ;
+    int cpf_track_numberOfValidPixelHits;
+    int cpf_track_pixelLayersWithMeasurement;
+    int cpf_track_numberOfValidStripHits;
     int cpf_track_stripLayersWithMeasurement; 
     float cpf_relmassdrop;
 
