@@ -79,8 +79,7 @@ process.maxEvents = cms.untracked.PSet(
 
 files = {
     'test': {
-        "mc": "https://cernbox.cern.ch/index.php/s/SQjHHNCKjSfFXwU/download",
-        #"mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
+        "mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
         },
     '2016': { #mean displacement = 5 cm
         "mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-2_V-0.0137840487521_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_70.root",

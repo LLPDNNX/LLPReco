@@ -28,15 +28,12 @@ class ElectronCandidateFeatures {
     float elec_3dIP;
     float elec_3dIPSig;
 
-    // superCluster block
     float elecSC_energy;
     float elecSC_deta;
     float elecSC_dphi;
     float elecSC_et;
     float elecSC_eSuperClusterOverP;
     float elec_scPixCharge;
-    float elec_scSigmaEtaEta;
-    float elec_scSigmaIEtaIEta;
     float elec_superClusterFbrem;
 
     float elec_eSeedClusterOverP;
@@ -44,6 +41,20 @@ class ElectronCandidateFeatures {
     float elec_eSuperClusterOverP;
     float elec_eTopOvere5x5;
 
+    // shower shape
+    float elec_sigmaEtaEta;
+    float elec_sigmaIetaIeta;
+    float elec_sigmaIphiIphi;
+    float elec_e5x5;
+    float elec_e5x5Rel;
+    float elec_e1x5Overe5x5;
+    float elec_e2x5MaxOvere5x5;
+    float elec_r9;
+    float elec_hcalOverEcal;
+    float elec_hcalDepth1OverEcal;
+    float elec_hcalDepth2OverEcal;
+
+    // Track-Cluster Matching Attributes
     float elec_deltaEtaEleClusterTrackAtCalo;
     float elec_deltaEtaSeedClusterTrackAtCalo;
     float elec_deltaPhiSeedClusterTrackAtCalo; 
@@ -51,6 +62,7 @@ class ElectronCandidateFeatures {
     float elec_deltaEtaSuperClusterTrackAtVtx;
     float elec_deltaPhiEleClusterTrackAtCalo;
     float elec_deltaPhiSuperClusterTrackAtVtx;
+
     float elec_sCseedEta;
 
     // electron gsf variables. 
@@ -64,10 +76,6 @@ class ElectronCandidateFeatures {
     int   elec_numberOfBrems;
     float elec_trackFbrem;
     float elec_fbrem;
-    float elec_e5x5;
-    float elec_e5x5Rel;
-    float elec_e1x5Overe5x5;
-    float elec_e2x5MaxOvere5x5;
 
     // Isolation block
     float elec_neutralHadronIso;
@@ -75,10 +83,14 @@ class ElectronCandidateFeatures {
     float elec_photonIso;
     float elec_puChargedHadronIso;
     float elec_trackIso;
-    float elec_hcalDepth1OverEcal;
-    float elec_hcalDepth2OverEcal;
     float elec_ecalPFClusterIso;
     float elec_hcalPFClusterIso;
+    
+    float elec_pfSumPhotonEt;
+    float elec_pfSumChargedHadronPt; 
+    float elec_pfSumNeutralHadronEt;
+    float elec_pfSumPUPt;
+
     float elec_dr03TkSumPt;
 
     
@@ -87,13 +99,6 @@ class ElectronCandidateFeatures {
     float elec_dr03HcalDepth1TowerSumEtBc;
     float elec_dr03HcalDepth2TowerSumEt;
     float elec_dr03HcalDepth2TowerSumEtBc; 
-    
-
-    float elec_pfSumPhotonEt;
-    float elec_pfSumChargedHadronPt; 
-    float elec_pfSumNeutralHadronEt;
-    float elec_pfSumPUPt;
-
     float elec_dr04EcalRecHitSumEt;
     float elec_dr04HcalDepth1TowerSumEt;
     float elec_dr04HcalDepth1TowerSumEtBc;

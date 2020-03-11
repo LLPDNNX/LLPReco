@@ -555,10 +555,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 elec_features.elec_sCseedEta = electron.superCluster()->seed()->eta();
 
-                elec_features.elec_e5x5 = electron.e5x5();
-                elec_features.elec_e5x5Rel = electron.e5x5()/jet.pt();
-                elec_features.elec_e1x5Overe5x5 = electron.e1x5()/electron.e5x5();
-                elec_features.elec_e2x5MaxOvere5x5 = electron.e2x5Max()/electron.e5x5();
 
                 elec_features.elec_eSeedClusterOverP = electron.eSeedClusterOverP();
                 elec_features.elec_eSeedClusterOverPout = electron.eSeedClusterOverPout();
@@ -598,20 +594,30 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
                 elec_features.elec_numberOfBrems  = electron.numberOfBrems();
-		        if(electron.pt() >= 5. ){
+		        if(electron.pt() >= 5.){
                     elec_features.elec_fbrem = electron.fbrem();
-                    elec_features.elec_scSigmaEtaEta = electron.scSigmaEtaEta();
-                    elec_features.elec_scSigmaIEtaIEta = electron.scSigmaIEtaIEta();
+                    elec_features.elec_sigmaEtaEta = electron.sigmaEtaEta();
+                    elec_features.elec_sigmaIetaIeta = electron.sigmaIetaIeta();
+                    elec_features.elec_sigmaIphiIphi = electron.sigmaIphiIphi();
+                    elec_features.elec_r9 = electron.r9();
                     elec_features.elec_superClusterFbrem = electron.superClusterFbrem();
+
 		        }
         		else 
         		{
         	        elec_features.elec_fbrem = -1.;
-        			elec_features.elec_scSigmaEtaEta = -1.;
-        			elec_features.elec_scSigmaIEtaIEta = -1.;
+        			elec_features.elec_sigmaEtaEta = -1.;
+        			elec_features.elec_sigmaIetaIeta = -1.;
+                    elec_features.elec_sigmaIphiIphi = -1;
         			elec_features.elec_superClusterFbrem = -1.;
         		}
-
+                elec_features.elec_e5x5 = electron.e5x5();
+                elec_features.elec_e5x5Rel = electron.e5x5()/jet.pt();
+                elec_features.elec_e1x5Overe5x5 = electron.e1x5()/electron.e5x5();
+                elec_features.elec_e2x5MaxOvere5x5 = electron.e2x5Max()/electron.e5x5();
+                elec_features.elec_hcalOverEcal = electron.hcalOverEcal();
+                elec_features.elec_hcalDepth1OverEcal = electron.hcalDepth1OverEcal();
+                elec_features.elec_hcalDepth2OverEcal = electron.hcalDepth2OverEcal();
 	
                 elec_features.elecSC_eSuperClusterOverP  = electron.eSuperClusterOverP();
  

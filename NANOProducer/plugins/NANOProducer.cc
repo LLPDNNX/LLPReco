@@ -279,8 +279,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> elecSC_et;
     std::vector<float> elecSC_eSuperClusterOverP;
     std::vector<float> elec_scPixCharge;
-    std::vector<float> elec_scSigmaEtaEta;
-    std::vector<float> elec_scSigmaIEtaIEta;
+    std::vector<float> elec_sigmaEtaEta;
+    std::vector<float> elec_sigmaIetaIeta;
+    std::vector<float> elec_sigmaIphiIphi;
+    std::vector<float> elec_r9;
     std::vector<float> elec_superClusterFbrem;
 
     std::vector<float> elec_2dIP;
@@ -300,7 +302,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> elec_deltaPhiEleClusterTrackAtCalo;
     std::vector<float> elec_deltaPhiSuperClusterTrackAtVtx;
     std::vector<float> elec_sCseedEta;
-    ///////
+
     std::vector<float> elec_EtaRel;
     std::vector<float> elec_dxy;
     std::vector<float> elec_dz;
@@ -625,8 +627,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             elecSC_eSuperClusterOverP.push_back(elec_features.elecSC_eSuperClusterOverP );
 
             elec_scPixCharge.push_back(elec_features.elec_scPixCharge );
-            elec_scSigmaEtaEta.push_back(elec_features.elec_scSigmaEtaEta );
-            elec_scSigmaIEtaIEta.push_back(elec_features.elec_scSigmaIEtaIEta );
+            elec_sigmaEtaEta.push_back(elec_features.elec_sigmaEtaEta );
+            elec_sigmaIetaIeta.push_back(elec_features.elec_sigmaIetaIeta );
+            elec_sigmaIphiIphi.push_back(elec_features.elec_sigmaIphiIphi );
+            elec_r9.push_back(elec_features.elec_r9 );
             elec_superClusterFbrem.push_back(elec_features.elec_superClusterFbrem );
 
             elec_2dIP.push_back(elec_features.elec_2dIP );
@@ -879,8 +883,10 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("SC_et",elecSC_et,"electron supercluster transverse energy normalized against the electron pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("SC_eSuperClusterOverP",elecSC_eSuperClusterOverP,"the electron supercluster energy / track momentum at the PCA to the beam spot",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("scPixCharge",elec_scPixCharge,"electron supercluster pixel charge",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scSigmaEtaEta",elec_scSigmaEtaEta,"electron supercluster Sigma Eta Eta variable (quite unintuitive)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scSigmaIEtaIEta",elec_scSigmaIEtaIEta,"electron supercluster Sigma iEta iEta variable (improved variable against Sigma Eta Eta to resolv issues in cracks)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("sigmaEtaEta",elec_sigmaEtaEta,"electron supercluster Sigma Eta Eta variable (quite unintuitive)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("sigmaIetaIeta",elec_sigmaIetaIeta,"electron supercluster Sigma iEta iEta variable (improved variable against Sigma Eta Eta to resolv issues in cracks)",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("sigmaIphiIphi",elec_sigmaIphiIphi,"electron supercluster Sigma iphi iphi variable",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("r9",elec_r9,"electron supercluster r9 variable",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("superClusterFbrem",elec_superClusterFbrem,"the brem fraction from supercluster: (supercluster energy - electron cluster energy) / supercluster energy",nanoaod::FlatTable::FloatColumn);
 
     electronTable->addColumn<float>("2dIP",elec_2dIP,"electron inner track transverse impact parameter relative to the primary vertex in transverse plane (2D), absolute value",nanoaod::FlatTable::FloatColumn);
