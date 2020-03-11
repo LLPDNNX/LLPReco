@@ -39,7 +39,6 @@ class ElectronCandidateFeatures {
     float elec_eSeedClusterOverP;
     float elec_eSeedClusterOverPout;
     float elec_eSuperClusterOverP;
-    float elec_eTopOvere5x5;
 
     // shower shape
     float elec_sigmaEtaEta;
@@ -91,14 +90,7 @@ class ElectronCandidateFeatures {
     float elec_pfSumNeutralHadronEt;
     float elec_pfSumPUPt;
 
-    float elec_dr03TkSumPt;
-
-    
-    float elec_dr03EcalRecHitSumEt;
-    float elec_dr03HcalDepth1TowerSumEt;
-    float elec_dr03HcalDepth1TowerSumEtBc;
-    float elec_dr03HcalDepth2TowerSumEt;
-    float elec_dr03HcalDepth2TowerSumEtBc; 
+    float elec_dr04TkSumPt;
     float elec_dr04EcalRecHitSumEt;
     float elec_dr04HcalDepth1TowerSumEt;
     float elec_dr04HcalDepth1TowerSumEtBc;

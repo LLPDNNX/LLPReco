@@ -559,8 +559,6 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_eSeedClusterOverP = electron.eSeedClusterOverP();
                 elec_features.elec_eSeedClusterOverPout = electron.eSeedClusterOverPout();
                 elec_features.elec_eSuperClusterOverP = electron.eSuperClusterOverP();
-                elec_features.elec_eTopOvere5x5 = electron.eTop()/electron.e5x5();
-
                 elec_features.elec_hadronicOverEm = electron.hadronicOverEm();
 
 
@@ -639,20 +637,14 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 
 
-                elec_features.elec_dr03TkSumPt = electron.dr03TkSumPt()/electron.pt();
-                elec_features.elec_dr03EcalRecHitSumEt = electron.dr03EcalRecHitSumEt()/electron.pt(); 
-                
-                elec_features.elec_dr03HcalDepth1TowerSumEt = electron.dr03HcalDepth1TowerSumEt()/electron.pt(); 
-                elec_features.elec_dr03HcalDepth1TowerSumEtBc = electron.dr03HcalDepth1TowerSumEtBc()/electron.pt();
-                elec_features.elec_dr03HcalDepth2TowerSumEt = electron.dr03HcalDepth2TowerSumEt()/electron.pt(); 
-                elec_features.elec_dr03HcalDepth2TowerSumEtBc = electron.dr03HcalDepth2TowerSumEtBc()/electron.pt();
-
 
                 elec_features.elec_pfSumPhotonEt = electron.pfIsolationVariables().sumPhotonEt/electron.pt(); 
                 elec_features.elec_pfSumChargedHadronPt = electron.pfIsolationVariables().sumChargedHadronPt/electron.pt(); 
                 elec_features.elec_pfSumNeutralHadronEt = electron.pfIsolationVariables().sumNeutralHadronEt/electron.pt(); 
                 elec_features.elec_pfSumPUPt = electron.pfIsolationVariables().sumPUPt/electron.pt(); 
 
+                // isolation
+                elec_features.elec_dr04TkSumPt = electron.dr04TkSumPt()/electron.pt();
                 elec_features.elec_dr04EcalRecHitSumEt = electron.dr04EcalRecHitSumEt()/electron.pt(); 
                 elec_features.elec_dr04HcalDepth1TowerSumEt = electron.dr04HcalDepth1TowerSumEt()/electron.pt(); 
                 elec_features.elec_dr04HcalDepth1TowerSumEtBc = electron.dr04HcalDepth1TowerSumEtBc()/electron.pt(); 

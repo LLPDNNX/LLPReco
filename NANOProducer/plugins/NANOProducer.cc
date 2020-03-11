@@ -292,7 +292,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> elec_eSeedClusterOverP;
     std::vector<float> elec_eSeedClusterOverPout;
     std::vector<float> elec_eSuperClusterOverP;
-    std::vector<float> elec_eTopOvere5x5;
 
     std::vector<float> elec_deltaEtaEleClusterTrackAtCalo;
     std::vector<float> elec_deltaEtaSeedClusterTrackAtCalo;
@@ -326,16 +325,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> elec_hcalDepth2OverEcal;
     std::vector<float> elec_ecalPFClusterIso;
     std::vector<float> elec_hcalPFClusterIso;
-    std::vector<float> elec_dr03TkSumPt;
-    std::vector<float> elec_dr03EcalRecHitSumEt;
-    std::vector<float> elec_dr03HcalDepth1TowerSumEt;
-    std::vector<float> elec_dr03HcalDepth1TowerSumEtBc;
-    std::vector<float> elec_dr03HcalDepth2TowerSumEt;
-    std::vector<float> elec_dr03HcalDepth2TowerSumEtBc;
     std::vector<float> elec_pfSumPhotonEt;
     std::vector<float> elec_pfSumChargedHadronPt;
     std::vector<float> elec_pfSumNeutralHadronEt;
     std::vector<float> elec_pfSumPUPt;
+    std::vector<float> elec_dr04TkSumPt;
     std::vector<float> elec_dr04EcalRecHitSumEt;
     std::vector<float> elec_dr04HcalDepth1TowerSumEt;
     std::vector<float> elec_dr04HcalDepth1TowerSumEtBc;
@@ -640,7 +634,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             elec_eSeedClusterOverP.push_back(elec_features.elec_eSeedClusterOverP );
             elec_eSeedClusterOverPout.push_back(elec_features.elec_eSeedClusterOverPout );
             elec_eSuperClusterOverP.push_back(elec_features.elec_eSuperClusterOverP );
-            elec_eTopOvere5x5.push_back(elec_features.elec_eTopOvere5x5 );
 
             elec_deltaEtaEleClusterTrackAtCalo.push_back(elec_features.elec_deltaEtaEleClusterTrackAtCalo );
             elec_deltaEtaSeedClusterTrackAtCalo.push_back(elec_features.elec_deltaEtaSeedClusterTrackAtCalo );
@@ -674,16 +667,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             elec_hcalDepth2OverEcal.push_back(elec_features.elec_hcalDepth2OverEcal );
             elec_ecalPFClusterIso.push_back(elec_features.elec_ecalPFClusterIso );
             elec_hcalPFClusterIso.push_back(elec_features.elec_hcalPFClusterIso );
-            elec_dr03TkSumPt.push_back(elec_features.elec_dr03TkSumPt );
-            elec_dr03EcalRecHitSumEt.push_back(elec_features.elec_dr03EcalRecHitSumEt );
-            elec_dr03HcalDepth1TowerSumEt.push_back(elec_features.elec_dr03HcalDepth1TowerSumEt );
-            elec_dr03HcalDepth1TowerSumEtBc.push_back(elec_features.elec_dr03HcalDepth1TowerSumEtBc );
-            elec_dr03HcalDepth2TowerSumEt.push_back(elec_features.elec_dr03HcalDepth2TowerSumEt );
-            elec_dr03HcalDepth2TowerSumEtBc.push_back(elec_features.elec_dr03HcalDepth2TowerSumEtBc );
             elec_pfSumPhotonEt.push_back(elec_features.elec_pfSumPhotonEt );
             elec_pfSumChargedHadronPt.push_back(elec_features.elec_pfSumChargedHadronPt );
             elec_pfSumNeutralHadronEt.push_back(elec_features.elec_pfSumNeutralHadronEt );
             elec_pfSumPUPt.push_back(elec_features.elec_pfSumPUPt );
+            elec_dr04TkSumPt.push_back(elec_features.elec_dr04TkSumPt );
             elec_dr04EcalRecHitSumEt.push_back(elec_features.elec_dr04EcalRecHitSumEt );
             elec_dr04HcalDepth1TowerSumEt.push_back(elec_features.elec_dr04HcalDepth1TowerSumEt );
             elec_dr04HcalDepth1TowerSumEtBc.push_back(elec_features.elec_dr04HcalDepth1TowerSumEtBc );
@@ -896,7 +884,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("eSeedClusterOverP",elec_eSeedClusterOverP,"the seed cluster energy / track momentum at the PCA to the beam spot",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("eSeedClusterOverPout",elec_eSeedClusterOverPout,"the seed cluster energy / track momentum at calo extrapolated from the outermost track state",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("eSuperClusterOverP",elec_eSuperClusterOverP,"the supercluster energy / track momentum at the PCA to the beam spot",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("eTopOvere5x5",elec_eTopOvere5x5,"electron.full5x5_eTop()/ electron.full5x5_e5x5()",nanoaod::FlatTable::FloatColumn);
 
     electronTable->addColumn<float>("deltaEtaEleClusterTrackAtCalo",elec_deltaEtaEleClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("deltaEtaSeedClusterTrackAtCalo",elec_deltaEtaSeedClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
@@ -932,16 +919,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     electronTable->addColumn<float>("hcalDepth2OverEcal",elec_hcalDepth2OverEcal,"HCAL over ECAL seed cluster energy using 2nd HCAL depth (using HCAL towers within a cone)",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("ecalPFClusterIso",elec_ecalPFClusterIso,"sum pt of isolated ECAL clusters, vetoing clusters part of electron",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("hcalPFClusterIso",elec_hcalPFClusterIso,"sum pt of isolated HCAL clusters, vetoing clusters part of electron",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr03TkSumPt",elec_dr03TkSumPt,"track iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr03EcalRecHitSumEt",elec_dr03EcalRecHitSumEt,"ECAL iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr03HcalDepth1TowerSumEt",elec_dr03HcalDepth1TowerSumEt,"HCAL depth 1 iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr03HcalDepth1TowerSumEtBc",elec_dr03HcalDepth1TowerSumEtBc,"HCAL depth 1 iso deposit without towers behind cluster relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr03HcalDepth2TowerSumEt",elec_dr03HcalDepth2TowerSumEt,"HCAL depth 2 iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr03HcalDepth2TowerSumEtBc",elec_dr03HcalDepth2TowerSumEtBc,"HCAL depth 2 iso deposit without towers behind cluster relative to the electron pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("pfSumPhotonEt",elec_pfSumPhotonEt,"sum pt of PF photons // old float photonIso, relative to the electron pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("pfSumChargedHadronPt",elec_pfSumChargedHadronPt,"sum pt of charged hadron // old float chargedHadronIso, relative to the electron pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("pfSumNeutralHadronEt",elec_pfSumNeutralHadronEt,"sum transverse energy of neutral hadron // old float neutralHadronIso, relative to the electron pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("pfSumPUPt",elec_pfSumPUPt,"sum pt of charged particles not from PV (for PU corrections) ",nanoaod::FlatTable::FloatColumn);
+    electronTable->addColumn<float>("dr04TkSumPt",elec_dr04TkSumPt,"track iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("dr04EcalRecHitSumEt",elec_dr04EcalRecHitSumEt,"ECAL iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("dr04HcalDepth1TowerSumEt",elec_dr04HcalDepth1TowerSumEt,"HCAL depth 1 iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
     electronTable->addColumn<float>("dr04HcalDepth1TowerSumEtBc",elec_dr04HcalDepth1TowerSumEtBc,"HCAL depth 1 iso deposit without towers behind cluster relative to the electron pt",nanoaod::FlatTable::FloatColumn);
