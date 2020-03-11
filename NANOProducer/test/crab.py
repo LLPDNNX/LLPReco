@@ -7,25 +7,6 @@ from CRABClient.UserUtilities import getUsernameFromSiteDB, getLumiListInValidFi
 
 
 myJobs = {
-    "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
-        "inputDataset":"/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
-        "year": 2016,
-        "unitsPerJob": 2
-    },
-    "SingleMuon_Run2016D":{
-        "inputDataset": "/SingleMuon/Run2016D-17Jul2018-v1/MINIAOD",
-        "isData": True,
-        "year": 2016
-    },
-    "GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-100_TuneCUETP8M1_13TeV-powheg-pythia8":{
-        "inputDataset": "/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-100_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/kjpena-RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_MINIAODSIM-bd3e7bcff6c9bcad356ea4ed7e4f08b4/USER",
-        "year": 2016,
-        "LLPtype": "hss"
-    }
-}
-
-
-'''
     "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
         "inputDataset":"/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
@@ -41,6 +22,13 @@ myJobs = {
         "year": 2018,
         "unitsPerJob": 2
     },
+
+    "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
+        "inputDataset":"/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
     "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_ext1-2017":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
         "year": 2017,
@@ -68,10 +56,68 @@ myJobs = {
         "year": 2018,
         "unitsPerJob": 2
     },
-'''
 
-'''
-myJobs = {
+    
+    "ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-2016":{
+        "inputDataset":"/ST_tW_top_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v1/MINIAODSIM",
+        "year": 2016
+    },
+
+    "ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1-2016":{
+        "inputDataset":"/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v1/MINIAODSIM",
+        "year": 2016
+    },
+
+    "ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8-2017":{
+        "inputDataset":"/ST_tW_top_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017
+    },
+    
+    "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8-2017":{
+        "inputDataset":"/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
+        "year": 2017
+    },
+
+    "ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8-2018":{
+        "inputDataset":"/ST_tW_top_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM",
+        "year": 2018
+    },
+
+    "ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8-2018":{
+        "inputDataset":"/ST_tW_antitop_5f_inclusiveDecays_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM",
+        "year": 2018
+    },
+    
+    "ST_t-channel_top_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1-2016":{
+        "inputDataset":"/ST_t-channel_top_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016
+    },
+    
+    "ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1-2016":{
+        "inputDataset":"/ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016
+    },
+       
+    "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8-2017":{
+        "inputDataset":"/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017
+    },
+    
+    "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8-2017":{
+        "inputDataset":"/ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017
+    },
+    
+    "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8-2018":{
+        "inputDataset":"/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018
+    },
+    
+    "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8-2018":{
+        "inputDataset":"/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_13TeV-powheg-madspin-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018
+    },
+
     "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-2016":{
         "inputDataset":"/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3/MINIAODSIM",
         "year": 2016,
@@ -88,9 +134,7 @@ myJobs = {
         "year": 2016,
         "unitsPerJob": 2
     },
-
-    
-    
+   
     "DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
         "inputDataset":"/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
@@ -123,13 +167,6 @@ myJobs = {
         "year": 2018,
         "unitsPerJob": 2
     },
-}
-'''
-
-
-
-'''
-myJobs = {
 
     "WToLNu_0J_13TeV-amcatnloFXFX-pythia8-2016":{
         "inputDataset":"/WToLNu_0J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_backup_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
@@ -155,7 +192,7 @@ myJobs = {
     },
     
     
-    
+  
     "WToLNu_1J_13TeV-amcatnloFXFX-pythia8-2016":{
         "inputDataset":"/WToLNu_1J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_backup_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
@@ -193,10 +230,7 @@ myJobs = {
         "year": 2018,
         "unitsPerJob": 2
     },
-}
-'''
-'''
-myJobs = {
+
     "QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
@@ -257,8 +291,6 @@ myJobs = {
         "year": 2016,
         "unitsPerJob": 2
     },
-
-
 
 
     "QCD_Pt-15to20_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
@@ -322,8 +354,7 @@ myJobs = {
         "unitsPerJob": 2
     },
     
-    
-    
+   
     "QCD_Pt-15to20_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-15to20_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM",
         "year": 2018,
@@ -385,7 +416,6 @@ myJobs = {
         "unitsPerJob": 2
     },
 }
-'''
 
 
 
@@ -433,7 +463,6 @@ for folder in os.listdir('hnl_mu'):
 
 '''
 
-'''
 myJobs = {
     "SingleMuon_Run2016B_ver1":{
         "inputDataset": "/SingleMuon/Run2016B-17Jul2018_ver1-v1/MINIAOD",
