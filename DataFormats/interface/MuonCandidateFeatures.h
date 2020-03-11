@@ -37,7 +37,7 @@ struct MuonCandidateFeatures {
     int mu_numberOfstripLayersWithMeasurement; //that does not help. needs to be discussed.
 
     float mu_chi2;
-    int    mu_ndof;
+    int mu_ndof;
 
     float mu_caloIso;
     float mu_ecalIso;
