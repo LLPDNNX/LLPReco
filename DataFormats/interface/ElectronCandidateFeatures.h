@@ -23,6 +23,10 @@ class ElectronCandidateFeatures {
     float elec_convRadius;
     float elec_hadronicOverEm;
     float elec_ecalDrivenSeed;
+    float elec_2dIP;
+    float elec_2dIPSig;
+    float elec_3dIP;
+    float elec_3dIPSig;
 
     // superCluster block
     float elecSC_energy;
@@ -30,19 +34,11 @@ class ElectronCandidateFeatures {
     float elecSC_dphi;
     float elecSC_et;
     float elecSC_eSuperClusterOverP;
-    float elec_scE1x5Overe5x5;
-    float elec_scE2x5MaxOvere5x5;
-    float elec_scE5x5;
-    float elec_scE5x5Rel;
     float elec_scPixCharge;
     float elec_scSigmaEtaEta;
     float elec_scSigmaIEtaIEta;
     float elec_superClusterFbrem;
 
-    float elec_2dIP;
-    float elec_2dIPSig;
-    float elec_3dIP;
-    float elec_3dIPSig;
     float elec_eSeedClusterOverP;
     float elec_eSeedClusterOverPout;
     float elec_eSuperClusterOverP;
@@ -65,9 +61,6 @@ class ElectronCandidateFeatures {
     float elec_gsfCharge;
     int   elec_ndof;
     float elec_chi2;
-   
-
-
     int   elec_numberOfBrems;
     float elec_trackFbrem;
     float elec_fbrem;
@@ -75,30 +68,6 @@ class ElectronCandidateFeatures {
     float elec_e5x5Rel;
     float elec_e1x5Overe5x5;
     float elec_e2x5MaxOvere5x5;
-
-    // 5*5 cells cluster
-    float elec_full5x5_e5x5;
-    float elec_full5x5_e5x5Rel;
-    float elec_full5x5_sigmaIetaIeta;
-    float elec_full5x5_e1x5Overe5x5;
-    float elec_full5x5_e2x5BottomOvere5x5;
-    float elec_full5x5_e2x5LeftOvere5x5;
-    float elec_full5x5_e2x5MaxOvere5x5;
-    float elec_full5x5_e2x5RightOvere5x5;
-    float elec_full5x5_e2x5TopOvere5x5;
-
-    float elec_full5x5_eBottomOvere5x5;
-    float elec_full5x5_eLeftOvere5x5;
-    float elec_full5x5_eRightOvere5x5;
-    float elec_full5x5_eTopOvere5x5;
-    float elec_full5x5_hcalDepth1OverEcal;
-    float elec_full5x5_hcalDepth1OverEcalBc;
-    float elec_full5x5_hcalDepth2OverEcal;
-    float elec_full5x5_hcalDepth2OverEcalBc;
-    float elec_full5x5_hcalOverEcal;
-    float elec_full5x5_hcalOverEcalBc;  
-    float elec_full5x5_r9;
-
 
     // Isolation block
     float elec_neutralHadronIso;
@@ -112,11 +81,14 @@ class ElectronCandidateFeatures {
     float elec_hcalPFClusterIso;
     float elec_dr03TkSumPt;
 
+    
     float elec_dr03EcalRecHitSumEt;
     float elec_dr03HcalDepth1TowerSumEt;
     float elec_dr03HcalDepth1TowerSumEtBc;
     float elec_dr03HcalDepth2TowerSumEt;
     float elec_dr03HcalDepth2TowerSumEtBc; 
+    
+
     float elec_pfSumPhotonEt;
     float elec_pfSumChargedHadronPt; 
     float elec_pfSumNeutralHadronEt;
