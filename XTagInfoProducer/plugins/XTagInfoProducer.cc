@@ -612,9 +612,15 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         			elec_features.elec_superClusterFbrem = -1.;
         		}
                 elec_features.elec_e5x5 = electron.e5x5();
+
                 elec_features.elec_e5x5Rel = electron.e5x5()/jet.pt();
                 elec_features.elec_e1x5Overe5x5 = electron.e1x5()/electron.e5x5();
                 elec_features.elec_e2x5MaxOvere5x5 = electron.e2x5Max()/electron.e5x5();
+
+                if (electron.e5x5() == 0){
+                    elec_features.elec_e1x5Overe5x5 = -1.;
+                    elec_features.elec_e2x5MaxOvere5x5 = -1.;
+                }
                 elec_features.elec_hcalOverEcal = electron.hcalOverEcal();
                 elec_features.elec_hcalDepth1OverEcal = electron.hcalDepth1OverEcal();
                 elec_features.elec_hcalDepth2OverEcal = electron.hcalDepth2OverEcal();
