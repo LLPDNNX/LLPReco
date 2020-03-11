@@ -291,6 +291,12 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             sv_features.sv_d3d = distance3D.value();
             sv_features.sv_d3dsig = distance3D.value()/distance3D.error();
 
+            if (std::isnan(sv_features.sv_dxysig) || std::isnan(sv_features.sv_d3dsig))
+                {
+                    sv_features.sv_dxysig = 0.;
+                    sv_features.sv_d3dsig = 0.;
+                }
+
             reco::Candidate::Vector distance(sv.vx() - pv.x(), sv.vy() - pv.y(), sv.vz() - pv.z());
             sv_features.sv_costhetasvpv = sv.momentum().Unit().Dot(distance.Unit());
             sv_features.sv_enratio = sv.energy()/jet.pt();
@@ -338,7 +344,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 }
                 dZmin = std::min(dZmin, std::abs(constituent->dz(vtx.position())));
             }
-            
+
             cpf_features.cpf_dZmin = dZmin;
             cpf_features.cpf_vertex_association = constituent->pvAssociationQuality();
             cpf_features.cpf_fromPV = constituent->fromPV();
@@ -380,14 +386,14 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_features.cpf_trackPtRatio=cpf_features.cpf_trackPtRel / trackMag;
             cpf_features.cpf_trackPParRatio=cpf_features.cpf_trackPPar / trackMag;
 
-            cpf_features.cpf_trackSip2dVal=meas_ip2d.value(); // does it make sense
+            cpf_features.cpf_trackSip2dVal=meas_ip2d.value();
             cpf_features.cpf_trackSip2dSig=meas_ip2d.significance();
-            cpf_features.cpf_trackSip3dVal=meas_ip3d.value(); // does it make sense
+            cpf_features.cpf_trackSip3dVal=meas_ip3d.value();
             cpf_features.cpf_trackSip3dSig=meas_ip3d.significance();
             if (std::isnan(cpf_features.cpf_trackSip2dSig) || std::isnan(cpf_features.cpf_trackSip3dSig))
             {
-                cpf_features.cpf_trackSip2dSig=-1.;
-                cpf_features.cpf_trackSip3dSig=-1.;
+                cpf_features.cpf_trackSip2dSig=0.;
+                cpf_features.cpf_trackSip3dSig=0.;
             }
 
             cpf_features.cpf_trackJetDistVal = jetdist.value();
@@ -413,27 +419,40 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             {
                 const pat::Muon & muon = *findMuon->second;
 
-                if (not muon.isGlobalMuon() || reco::deltaR(muon ,jet) > 0.4) continue ;
+                if (not muon.isGlobalMuon() || reco::deltaR(muon, jet) > 0.4) continue;
                 cpf_features.cpf_matchedMuon = 1;
                 mu_features.mu_isGlobal = muon.isGlobalMuon();                                   
                 mu_features.mu_isTight = muon.isTightMuon(pv);                                     
-                mu_features.mu_isMedium = muon.isMediumMuon();       
+                mu_features.mu_isMedium = muon.isMediumMuon();
                 mu_features.mu_isLoose = muon.isLooseMuon();
                 mu_features.mu_isStandAlone = muon.isStandAloneMuon();
 
-                mu_features.mu_ptrel = muon.pt()/uncorrectedPt; 
-                mu_features.mu_deta = std::fabs(muon.eta()-jet.eta());                                                 
-                mu_features.mu_dphi = std::fabs(reco::deltaPhi(muon.phi(),jet.phi()));                                                 
-                mu_features.mu_charge = muon.charge();        
-                mu_features.mu_energy = muon.energy()/muon.pt();                                           
-                mu_features.mu_et = muon.et();   
-                mu_features.mu_jetDeltaR = reco::deltaR(muon ,jet); 
+                mu_features.mu_ptrel = muon.pt()/uncorrectedPt;
+                mu_features.mu_deta = std::fabs(muon.eta()-jet.eta());                                      
+                mu_features.mu_dphi = std::fabs(reco::deltaPhi(muon.phi(),jet.phi()));                                               
+                mu_features.mu_charge = muon.charge();
+                mu_features.mu_energy = muon.energy()/muon.pt();                                   
+                mu_features.mu_et = muon.et();
+                mu_features.mu_jetDeltaR = reco::deltaR(muon, jet);
                 mu_features.mu_numberOfMatchedStations = muon.numberOfMatchedStations();
 
-                mu_features.mu_2dIP = muon.dB() ; 
-                mu_features.mu_2dIPSig = muon.dB()/muon.edB(); 
-                mu_features.mu_3dIP = muon.dB(pat::Muon::PV3D); 
+                mu_features.mu_2dIP = muon.dB();
+                mu_features.mu_2dIPSig = muon.dB()/muon.edB();
+                mu_features.mu_3dIP = muon.dB(pat::Muon::PV3D);
                 mu_features.mu_3dIPSig = muon.dB(pat::Muon::PV3D)/muon.edB(pat::Muon::PV3D);
+
+
+
+                cpf_features.cpf_trackSip2dVal=meas_ip2d.value();
+                cpf_features.cpf_trackSip2dSig=meas_ip2d.significance();
+                cpf_features.cpf_trackSip3dVal=meas_ip3d.value();
+                cpf_features.cpf_trackSip3dSig=meas_ip3d.significance();
+
+                if (std::isnan(mu_features.mu_2dIPSig) || std::isnan(mu_features.mu_3dIPSig))
+                {
+                    mu_features.mu_2dIPSig = 0.;
+                    mu_features.mu_3dIPSig = 0.;
+                }
 
 
                 reco::Candidate::Vector muonMom = muon.bestTrack()->momentum();
@@ -527,6 +546,13 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_3dIPSig = electron.dB(pat::Electron::PV3D); 
                 elec_features.elec_2dIP = electron.dB();
                 elec_features.elec_2dIPSig = electron.dB()/electron.edB();
+
+                if (std::isnan(elec_features.elec_2dIPSig) || std::isnan(elec_features.elec_3dIPSig))
+                {
+                    elec_features.elec_2dIPSig = 0.;
+                    elec_features.elec_3dIPSig = 0.;
+                }
+
                 elec_features.elec_sCseedEta = electron.superCluster()->seed()->eta();
 
                 elec_features.elec_e5x5 = electron.e5x5();
@@ -785,7 +811,12 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             else if (cpf.cpf_trackDeltaR < 0.4) frac04 ++;
         }
 
-        features.jet_features.beta = (float)beta/(float)features.cpf_features.size();
+        if (features.cpf_features.size() > 0)
+        {
+            features.jet_features.beta = (float)beta/(float)features.cpf_features.size();
+
+        }
+
 
 
         for (size_t i = 0; i < features.npf_features.size(); i++){
