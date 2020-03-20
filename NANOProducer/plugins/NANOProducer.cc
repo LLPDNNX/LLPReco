@@ -758,6 +758,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     cpfTable->addColumn<int>("stripLayersWithMeasurement" , cpf_track_stripLayersWithMeasurement , "nb of strip layers with measurement ", nanoaod::FlatTable::IntColumn); 
     cpfTable->addColumn<float>("relmassdrop", cpf_relmassdrop, "doc", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("dzMin", cpf_dZmin, "min distance to other PV", nanoaod::FlatTable::FloatColumn);
+    cpfTable->addColumn<float>("deta", cpf_deta, "absolute difference between the charged PF candidate eta and jet eta", nanoaod::FlatTable::FloatColumn);
+    cpfTable->addColumn<float>("dphi", cpf_dphi, "absolute difference between the charged PF candidate phi and jet phi", nanoaod::FlatTable::FloatColumn);
 
     npfTable->addColumn<int>("jetIdx", npf_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     npfTable->addColumn<float>("ptrel", npf_ptrel, "neutral PF candidate transverse momentum over jet transverse momentum (uncorrelated)", nanoaod::FlatTable::FloatColumn);
