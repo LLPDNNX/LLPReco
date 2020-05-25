@@ -65,8 +65,6 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('FWCore.MessageLogger.MessageLogger_cfi')
 process.load('TrackingTools/TransientTrack/TransientTrackBuilder_cfi')
 
-## Events to process
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(1000) )
 
 if options.isData:
     process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
@@ -77,15 +75,19 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000)
+    input = cms.untracked.int32(10)
+)
+
+process.options = cms.untracked.PSet(
+    wantSummary = cms.untracked.bool(False)
 )
 
 files = {
     'test': {
         "mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
         },
-    '2016': { #mean displacement = 5 cm
-        "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_tau_Dirac_massiveAndCKM_LO/heavyNeutrino_1.root",
+    '2016': {
+        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200517/HNL_dirac_all_ctau1p0e00_massHNL6p0_Vall6p496e-03/miniaod16v3_200517/200517_004822/0000/HNL2016_140.root", #"root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_tau_Dirac_massiveAndCKM_LO/heavyNeutrino_1.root",
         #"mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-10_V-0.00112249721603_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_76.root",
         "data": "/store/data/Run2016B/SingleMuon/MINIAOD/17Jul2018_ver2-v1/30000/14F647C4-6C92-E811-9571-90E2BACBAD64.root",
     },
@@ -232,9 +234,7 @@ process.nanoGenTable = cms.EDProducer("NANOGenProducer",
     srcTags = cms.InputTag("pfXTagInfos")
 )
 
-process.options = cms.untracked.PSet(
-    wantSummary = cms.untracked.bool(True)
-)
+
 
 
 process.load('LLPReco.LLPLabelProducer.GenDisplacedVertices_cff')
@@ -292,6 +292,14 @@ process.llpLabels = cms.EDProducer(
     muonPtThreshold = cms.double(1.),
     electronPtThreshold = cms.double(1.),
 )
+
+
+process.genWeights = cms.EDProducer(
+    "GenWeightsProducer",
+    genEvent = cms.InputTag("generator"),
+    lheInfo = cms.VInputTag(cms.InputTag("externalLHEProducer"), cms.InputTag("source")),
+)
+
 #process.load('RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff')
 process.load('LLPReco.NANOProducer.adaptedSV_cff')
 
@@ -338,7 +346,8 @@ else:
         process.llpFlavour+
         process.llpLabels+
         process.nanoTable+
-        process.nanoGenTable
+        process.nanoGenTable+
+        process.genWeights
     )
     
 process.endjob_step = cms.EndPath(process.endOfProcess)
@@ -350,7 +359,7 @@ process.schedule = cms.Schedule(process.llpnanoAOD_step,process.endjob_step,proc
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
 
-
+#process.genWeightsTable.debug = True
 
 modulesToRemove = [
     'jetCorrFactorsAK8',
