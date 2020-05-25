@@ -83,11 +83,7 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(500)
-)
-
-process.options = cms.untracked.PSet(
-    wantSummary = cms.untracked.bool(True)
+    input = cms.untracked.int32(10000)
 )
 
 files = {
@@ -118,7 +114,7 @@ process.source = cms.Source("PoolSource",
 )
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
-    annotation = cms.untracked.string('test102X nevts:1000'),
+    annotation = cms.untracked.string('test102X nevts:10000'),
     name = cms.untracked.string('Applications'),
     version = cms.untracked.string('$Revision: 1.19 $')
 )
@@ -180,6 +176,9 @@ process.OUT = cms.OutputModule("PoolOutputModule",
     outputCommands = cms.untracked.vstring(['keep *'])
 )
 
+if options.year == "test":
+    options.year = "2016"
+
 if options.isData:
     if options.year == '2016':
         process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
@@ -210,7 +209,8 @@ updateJetCollection(
     jetCorrections = jetCorrectionsAK4PFchs,
     pfCandidates = cms.InputTag('packedPFCandidates'),
     pvSource = cms.InputTag("offlineSlimmedPrimaryVertices"),
-    svSource = cms.InputTag('adaptedSlimmedSecondaryVertices'), 
+    #svSource = cms.InputTag('adaptedSlimmedSecondaryVertices'), 
+    svSource = cms.InputTag('slimmedSecondaryVertices'),
     muSource = cms.InputTag('slimmedMuons'),
     elSource = cms.InputTag('slimmedElectrons'),
     btagInfos = [
@@ -228,7 +228,8 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     electronSrc = cms.InputTag("slimmedElectrons"),
     shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfosXTag'),
     vertices = cms.InputTag('offlineSlimmedPrimaryVertices'),
-    secondary_vertices = cms.InputTag("adaptedSlimmedSecondaryVertices")
+    #secondary_vertices = cms.InputTag("adaptedSlimmedSecondaryVertices")
+    secondary_vertices = cms.InputTag("slimmedSecondaryVertices")
 )
 
 process.nanoTable = cms.EDProducer("NANOProducer",
@@ -345,7 +346,7 @@ for scaleSet in [
         
 
 #process.load('RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff')
-process.load('LLPReco.NANOProducer.adaptedSV_cff')
+#process.load('LLPReco.NANOProducer.adaptedSV_cff')
 
 
 process.selectedMuonsForFilter = cms.EDFilter("CandViewSelector",
@@ -376,14 +377,14 @@ if options.isData:
     process.llpnanoAOD_step = cms.Path(
         process.muonFilterSequence+
         process.nanoSequence+
-        process.adaptedVertexing+
+        #process.adaptedVertexing+
         process.pfXTagInfos+
         process.nanoTable
     )
 else:
     process.llpnanoAOD_step = cms.Path(
         process.nanoSequenceMC+
-        process.adaptedVertexing+
+        #process.adaptedVertexing+
         process.pfXTagInfos+
         process.displacedGenVertexSequence+
         process.llpGenDecayInfo+
@@ -439,7 +440,9 @@ modulesToRemove = [
 
 #override final jets
 
-print process.nanoSequence
+#process.finalJets.addBTagInfo=cms.bool(True)
+#process.finalJets.addDiscriminators = cms.bool(True)
+#process.finalJets.addTagInfos=cms.bool(True)
 
 #remove unneeded modules
 for moduleName in modulesToRemove:
