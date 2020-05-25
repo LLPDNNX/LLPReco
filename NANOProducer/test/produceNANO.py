@@ -86,6 +86,8 @@ process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(10000)
 )
 
+process.options = cms.untracked.PSet()
+
 files = {
     'test': {
         "mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
