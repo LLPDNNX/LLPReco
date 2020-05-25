@@ -17,6 +17,14 @@ options.register(
 )
 
 options.register(
+    'addSignalLHE',
+    False,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.bool,
+    "adds LHE weights of signal samples"
+)
+
+options.register(
     'addLLPInfo',
     True,
     VarParsing.multiplicity.singleton,
@@ -75,11 +83,11 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(10)
+    input = cms.untracked.int32(500)
 )
 
 process.options = cms.untracked.PSet(
-    wantSummary = cms.untracked.bool(False)
+    wantSummary = cms.untracked.bool(True)
 )
 
 files = {
@@ -294,11 +302,47 @@ process.llpLabels = cms.EDProducer(
 )
 
 
-process.genWeights = cms.EDProducer(
-    "GenWeightsProducer",
-    genEvent = cms.InputTag("generator"),
+
+process.lheWeightsTable = cms.EDProducer(
+    "LHEWeightsProducer",
     lheInfo = cms.VInputTag(cms.InputTag("externalLHEProducer"), cms.InputTag("source")),
+    weightGroups = cms.PSet()
 )
+
+#coupling reweighting
+process.lheWeightsTable.weightGroups.coupling = cms.vstring()
+for i in range(1,68):
+    process.lheWeightsTable.weightGroups.coupling.append("rwgt_%i"%(i))
+    
+#PDF NNPDF3.1 NNLO hessian
+process.lheWeightsTable.weightGroups.nnpdfhessian = cms.vstring()
+for i in range(1048,1151):
+    process.lheWeightsTable.weightGroups.nnpdfhessian.append("%i"%(i))
+    
+#PDF NNPDF3.1 NNLO replicas
+process.lheWeightsTable.weightGroups.nnpdfreplica = cms.vstring()
+for i in range(1151,1252):
+    process.lheWeightsTable.weightGroups.nnpdfreplica.append("%i"%(i))
+    
+#scale weights
+for scaleSet in [
+    ['murNominal_mufNominal',range(1001,1006)],
+    ['murUp_mufNominal',range(1006,1011)],
+    ['murDown_mufNominal',range(1011,1016)],
+    ['murNominal_mufUp',range(1016,1021)],
+    ['murUp_mufUp',range(1021,1026)],
+    ['murDown_mufUp',range(1026,1031)],
+    ['murNominal_mufDown',range(1031,1036)],
+    ['murUp_mufDown',range(1036,1041)],
+    ['murDown_mufDown',range(1041,1046)],
+    ['emission',range(1046,1048)],
+]:
+    
+    setattr(process.lheWeightsTable.weightGroups,scaleSet[0],cms.vstring())
+    for i in scaleSet[1]:
+        getattr(process.lheWeightsTable.weightGroups,scaleSet[0]).append("%i"%(i))
+        
+        
 
 #process.load('RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff')
 process.load('LLPReco.NANOProducer.adaptedSV_cff')
@@ -346,9 +390,11 @@ else:
         process.llpFlavour+
         process.llpLabels+
         process.nanoTable+
-        process.nanoGenTable+
-        process.genWeights
+        process.nanoGenTable
     )
+    
+    if options.addSignalLHE:
+        process.llpnanoAOD_step += process.lheWeightsTable
     
 process.endjob_step = cms.EndPath(process.endOfProcess)
 process.NANOAODSIMoutput_step = cms.EndPath(process.NANOAODSIMoutput)
@@ -359,7 +405,6 @@ process.schedule = cms.Schedule(process.llpnanoAOD_step,process.endjob_step,proc
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
 
-#process.genWeightsTable.debug = True
 
 modulesToRemove = [
     'jetCorrFactorsAK8',
