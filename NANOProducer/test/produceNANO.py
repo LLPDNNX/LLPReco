@@ -17,6 +17,14 @@ options.register(
 )
 
 options.register(
+    'addSignalLHE',
+    False,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.bool,
+    "adds LHE weights of signal samples"
+)
+
+options.register(
     'addLLPInfo',
     True,
     VarParsing.multiplicity.singleton,
@@ -65,6 +73,7 @@ process.load('FWCore.MessageService.MessageLogger_cfi')
 process.load('FWCore.MessageLogger.MessageLogger_cfi')
 process.load('TrackingTools/TransientTrack/TransientTrackBuilder_cfi')
 
+
 if options.isData:
     process.load('Configuration.StandardSequences.MagneticField_AutoFromDBCurrent_cff')
     dataTier = cms.untracked.string('NANOAOD')
@@ -77,13 +86,15 @@ process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(10000)
 )
 
+process.options = cms.untracked.PSet()
+
 files = {
     'test': {
         "mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
         },
-    '2016': { #mean displacement = 5 cm
-        "mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-2_V-0.0137840487521_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_70.root",
-        #"mc": "root://cmsxrootd.fnal.gov//store/user/mcitron/ProjectMetis/HeavyNeutrino_lljj_M-2_V-0p0137840487521_mu_massiveAndCKM_LO_TuneCUETP8M1_madgraph-pythia8_privateMC_80X_MINIAODSIMv3_v1_generation_forHNL_2016/output_1.root",
+    '2016': {
+        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200517/HNL_dirac_all_ctau1p0e00_massHNL6p0_Vall6p496e-03/miniaod16v3_200517/200517_004822/0000/HNL2016_140.root", #"root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_tau_Dirac_massiveAndCKM_LO/heavyNeutrino_1.root",
+        #"mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-10_V-0.00112249721603_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_76.root",
         "data": "/store/data/Run2016B/SingleMuon/MINIAOD/17Jul2018_ver2-v1/30000/14F647C4-6C92-E811-9571-90E2BACBAD64.root",
     },
     '2017': {
@@ -234,9 +245,7 @@ process.nanoGenTable = cms.EDProducer("NANOGenProducer",
     srcTags = cms.InputTag("pfXTagInfos")
 )
 
-process.options = cms.untracked.PSet(
-    wantSummary = cms.untracked.bool(True)
-)
+
 
 
 process.load('LLPReco.LLPLabelProducer.GenDisplacedVertices_cff')
@@ -294,6 +303,50 @@ process.llpLabels = cms.EDProducer(
     muonPtThreshold = cms.double(1.),
     electronPtThreshold = cms.double(1.),
 )
+
+
+
+process.lheWeightsTable = cms.EDProducer(
+    "LHEWeightsProducer",
+    lheInfo = cms.VInputTag(cms.InputTag("externalLHEProducer"), cms.InputTag("source")),
+    weightGroups = cms.PSet()
+)
+
+#coupling reweighting
+process.lheWeightsTable.weightGroups.coupling = cms.vstring()
+for i in range(1,68):
+    process.lheWeightsTable.weightGroups.coupling.append("rwgt_%i"%(i))
+    
+#PDF NNPDF3.1 NNLO hessian
+process.lheWeightsTable.weightGroups.nnpdfhessian = cms.vstring()
+for i in range(1048,1151):
+    process.lheWeightsTable.weightGroups.nnpdfhessian.append("%i"%(i))
+    
+#PDF NNPDF3.1 NNLO replicas
+process.lheWeightsTable.weightGroups.nnpdfreplica = cms.vstring()
+for i in range(1151,1252):
+    process.lheWeightsTable.weightGroups.nnpdfreplica.append("%i"%(i))
+    
+#scale weights
+for scaleSet in [
+    ['murNominal_mufNominal',range(1001,1006)],
+    ['murUp_mufNominal',range(1006,1011)],
+    ['murDown_mufNominal',range(1011,1016)],
+    ['murNominal_mufUp',range(1016,1021)],
+    ['murUp_mufUp',range(1021,1026)],
+    ['murDown_mufUp',range(1026,1031)],
+    ['murNominal_mufDown',range(1031,1036)],
+    ['murUp_mufDown',range(1036,1041)],
+    ['murDown_mufDown',range(1041,1046)],
+    ['emission',range(1046,1048)],
+]:
+    
+    setattr(process.lheWeightsTable.weightGroups,scaleSet[0],cms.vstring())
+    for i in scaleSet[1]:
+        getattr(process.lheWeightsTable.weightGroups,scaleSet[0]).append("%i"%(i))
+        
+        
+
 #process.load('RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff')
 #process.load('LLPReco.NANOProducer.adaptedSV_cff')
 
@@ -343,6 +396,9 @@ else:
         process.nanoGenTable
     )
     
+    if options.addSignalLHE:
+        process.llpnanoAOD_step += process.lheWeightsTable
+    
 process.endjob_step = cms.EndPath(process.endOfProcess)
 process.NANOAODSIMoutput_step = cms.EndPath(process.NANOAODSIMoutput)
 
@@ -351,7 +407,6 @@ process.NANOAODSIMoutput_step = cms.EndPath(process.NANOAODSIMoutput)
 process.schedule = cms.Schedule(process.llpnanoAOD_step,process.endjob_step,process.NANOAODSIMoutput_step)
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
-
 
 
 modulesToRemove = [

@@ -5,7 +5,10 @@
 <use name="DataFormats/NanoAOD"/>
 <use name="DataFormats/Common"/>
 <use name="DataFormats/PatCandidates"/>
-
+<use name="xerces-c"/>
+<library file="LHEWeightsProducer.cc" name="LHEWeightsProducerPlugin">
+    <flags EDM_PLUGIN="1"/>
+</library>
 <library file="NANOProducer.cc" name="NANOProducerPlugin">
     <flags EDM_PLUGIN="1"/>
 </library>

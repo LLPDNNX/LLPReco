@@ -58,7 +58,7 @@ struct JetFeatures
         energy(0),
         
         area(-1),
-
+        
         beta(-1),
         dR2Mean(-1),
         frac01(-1),
