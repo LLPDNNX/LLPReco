@@ -53,7 +53,13 @@ class JetSubstructure
         
         std::vector<fastjet::PseudoJet> reclusterInclusive(ClusterType type, double r = 0.4, double minPt = 1e-10) const;
         std::vector<fastjet::PseudoJet> reclusterExclusive(ClusterType type, double r, int njets) const;
-        
+        bool has_beam() const
+        {
+            return has_beam();
+        }
+
+
+
         //default values from https://cmssdt.cern.ch/lxr/source/RecoJets/JetProducers/python/nJettinessAdder_cfi.py except R=0.8 -> 0.4
         double nSubjettiness(
             int n,
