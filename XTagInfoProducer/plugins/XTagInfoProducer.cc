@@ -153,15 +153,32 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         edm::RefToBase<reco::Jet> jet_ref(jets->refAt(ijet)); //upcast
 
         std::unordered_set<reco::CandidatePtr, CandidateHash> jetConstituentSet;
+
+        bool badJet = 0;
         for (unsigned int idaughter = 0; idaughter < jet.numberOfDaughters(); ++idaughter)
         {
             jetConstituentSet.insert(jet.daughterPtr(idaughter));
+            const pat::PackedCandidate* constituent = dynamic_cast<const pat::PackedCandidate*>(jet.daughter(idaughter));
+            if (std::isinf(constituent->pt()) or std::isnan(constituent->pt())){
+                std::cout << "one of the constituents does not have well defined properties, skipping the jet!" << std::endl;
+                badJet = 1;
+            }
         }
 
         // Cut on eta
-        if (std::abs(jet.eta()) > 2.4) continue;
+        if (std::abs(jet.eta()) > 2.4 or badJet) continue;
 
-    
+        float NHF  = jet.neutralHadronEnergyFraction();
+        float NEMF = jet.neutralEmEnergyFraction();
+        float CHF  = jet.chargedHadronEnergyFraction();
+        float MUF  = jet.muonEnergyFraction();
+        float CEMF = jet.chargedEmEnergyFraction();
+        int NumConst = jet.chargedMultiplicity()+jet.neutralMultiplicity();
+        int NumNeutralParticles =jet.neutralMultiplicity();
+        float CHM      = jet.chargedMultiplicity();
+
+        int looseJetID = (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(jet.eta())<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(jet.eta())>2.4) && abs(jet.eta())<=2.7;
+
         // create data containing structure
         llpdnnx::XTagFeatures features;
         
@@ -197,14 +214,12 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.jet_features.relSoftDropMassAK = jetSubstructure.relSoftDropMass(llpdnnx::JetSubstructure::ClusterType::AK);
         features.jet_features.relSoftDropMassCA = jetSubstructure.relSoftDropMass(llpdnnx::JetSubstructure::ClusterType::CA);
 
-        if (jetSubstructure.has_beam())
-        {
-       
-            features.jet_features.tau1 = jetSubstructure.nSubjettiness(1);
-            features.jet_features.tau2 = jetSubstructure.nSubjettiness(2);
-            features.jet_features.tau3 = jetSubstructure.nSubjettiness(3);
-        }
-       
+        // Still need to fix bug!
+
+        features.jet_features.tau1 = jetSubstructure.nSubjettiness(1);
+        features.jet_features.tau2 = jetSubstructure.nSubjettiness(2);
+        features.jet_features.tau3 = jetSubstructure.nSubjettiness(3);
+   
         if (jetSubstructure.nConstituents()>3)
         {
             auto eventShapes = jetSubstructure.eventShapeVariables();

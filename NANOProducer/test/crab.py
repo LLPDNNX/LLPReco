@@ -1,9 +1,10 @@
-from WMCore.Configuration import Configuration
+import CRABClient
 import datetime,sys,os
 import copy
 import math
 import urllib, json
-from CRABClient.UserUtilities import getUsernameFromSiteDB, getLumiListInValidFiles
+from WMCore.Configuration import Configuration
+#from CRABClient.UserUtilities import getUsernameFromSiteDB, getLumiListInValidFiles
 
 myJobs = {
     "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
@@ -593,6 +594,20 @@ myJobs = {
         "year": '2018D'
     }
 }
+myJobs = {} 
+with open("HNL_samples.txt") as f:
+    for line in f:
+        line = line.rstrip()
+        name = line.rsplit('/')[1]+"-2016"
+        print(name)
+        myJobs[name] = {
+            "inputDataset": line,
+            "year": '2016',
+            "unitsPerJob": 15,
+            "isData":False,
+            "addLLPInfo": True,
+            "addSignalLHE": True
+        }
 
 
 requestName = "NANOX_110320"
@@ -664,6 +679,7 @@ if __name__ == '__main__':
                 config.Data.inputDBS = myJob.get('inputDBS', 'global')
             else:
                 config.Data.inputDBS = "phys03"
+            print config.Data.inputDBS
             config.Data.publication = True
         else:
             config.Data.userInputFiles = map(lambda f: f.replace('\n','').replace('\r',''),open(userInputFiles).readlines())
