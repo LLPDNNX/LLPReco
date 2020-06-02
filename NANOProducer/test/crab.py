@@ -1,10 +1,10 @@
-from WMCore.Configuration import Configuration
+import CRABClient
 import datetime,sys,os
 import copy
 import math
 import urllib, json
-from CRABClient.UserUtilities import getUsernameFromSiteDB, getLumiListInValidFiles
-
+from WMCore.Configuration import Configuration
+#from CRABClient.UserUtilities import getUsernameFromSiteDB, getLumiListInValidFiles
 
 myJobs = {
     "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
@@ -93,7 +93,7 @@ myJobs = {
         "year": 2016
     },
     
-    "ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1-2016":{
+    "ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8-2016":{
         "inputDataset":"/ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016
     },
@@ -118,13 +118,14 @@ myJobs = {
         "year": 2018
     },
 
-    "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-2016":{
-        "inputDataset":"/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3/MINIAODSIM",
+    "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
+        "inputDataset":"/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
         "unitsPerJob": 2
     },
-    "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-ext1-2016":{
-        "inputDataset":"/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
+
+    "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-2016":{
+        "inputDataset":"/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3/MINIAODSIM",
         "year": 2016,
         "unitsPerJob": 2
     },
@@ -134,38 +135,29 @@ myJobs = {
         "year": 2016,
         "unitsPerJob": 2
     },
-   
-    "DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
-        "inputDataset":"/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+
+    "DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
+        "inputDataset":"/DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
+        "unitsPerJob": 3
     },
-    "DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
-        "inputDataset":"/DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+
+    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
+        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
+        "unitsPerJob": 3
     },
-    "DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
-        "inputDataset":"/DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
-    },
-    
-    
-    "DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
-        "inputDataset":"/DYJetsToLL_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+
+    "DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
+        "inputDataset":"/DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
+        "unitsPerJob": 3
     },
-    "DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
-        "inputDataset":"/DYJetsToLL_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+
+    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018": {
+        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
-    },
-    "DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
-        "inputDataset":"/DYJetsToLL_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
-        "year": 2018,
-        "unitsPerJob": 2
+        "unitsPerJob": 3
     },
 
     "WToLNu_0J_13TeV-amcatnloFXFX-pythia8-2016":{
@@ -261,7 +253,7 @@ myJobs = {
         "year": 2016,
         "unitsPerJob": 2
     },
-    "QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia-2016":{
+    "QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
         "year": 2016,
         "unitsPerJob": 2
@@ -417,9 +409,56 @@ myJobs = {
     },
 }
 
-
-
 '''
+for folder in os.listdir('hnl_mu_matthew'):
+    #HeavyNeutrino_lljj_M-8_V-0p00363318042492_mu_massiveAndCKM_LO_TuneCP5_madgraph-pythia8_privateMC_102X_MINIAODSIMv3_v2_generation_forHNL_2018.txt
+    #HeavyNeutrino_lljj_M-8_V-0p00363318042492_mu_massiveAndCKM_LO_TuneCP5_madgraph-pythia8_privateMC_94X_MINIAODSIMv3_v2_generation_forHNL_2017.txt
+    #HeavyNeutrino_lljj_M-8_V-0p00363318042492_mu_massiveAndCKM_LO_TuneCUETP8M1_madgraph-pythia8_privateMC_80X_MINIAODSIMv3_v1_generation_forHNL_2016.txt
+
+    name = folder.replace('.txt','')
+    name = name.replace("massiveAndCKM_LO_","")
+    name = name.replace("_privateMC","")
+    name = name.replace("_generation_forHNL","")
+    name = name.replace("_80X_MINIAODSIMv3_v2","")
+    name = name.replace("_94X_MINIAODSIMv3_v2","")
+    name = name.replace("_102X_MINIAODSIMv3_v2","")
+        
+    
+    year = None
+    if name.find('_2016')>0:
+        name = name.replace('_2016', '-2016')
+        year = 2016
+    elif name.find('_2017')>0:
+        name = name.replace('_2017', '-2017')
+        year = 2017
+    elif name.find('_2018')>0:
+        name = name.replace('_2018', '-2018')
+        year = 2018
+    if not year:
+        print "Year not found for ",folder
+        continue
+        
+    print name
+    userInputFiles = os.path.abspath(os.path.join('hnl_mu_matthew',folder))
+    
+    myJobs[name] = {
+        "userInputFiles": userInputFiles,
+        "year": year,
+        "unitsPerJob":2,
+        "isData":False,
+        #'whitelist': ['T2_BE_IIHE','T2_BE_UCL','T2_CH_CERN','T2_UK_London_IC'],
+    }
+with open("higgs.txt") as file: 
+    for line in file:
+        name = line.split('/')[1]
+        name = name.replace('_PRIVATE-MC', '')
+        myJobs[name] = {
+            "inputDataset":line.strip(),
+            "year": 2016,
+            "unitsPerJob": 3,
+        }
+
+
 myJobs = {}
 for folder in os.listdir('hnl_mu'):
     name = folder.replace('.txt','')
@@ -459,8 +498,6 @@ for folder in os.listdir('hnl_mu'):
         "isData":False,
         'whitelist': ['T2_BE_IIHE','T2_BE_UCL','T2_CH_CERN','T2_UK_London_IC'],
     }
-    #break
-
 '''
 
 myJobs = {
@@ -502,7 +539,7 @@ myJobs = {
     "SingleMuon_Run2016H":{
         "inputDataset": "/SingleMuon/Run2016H-17Jul2018-v1/MINIAOD",
         "isData": True,
-        "year": 2016
+        "year": '2016'
     },
     
     
@@ -515,7 +552,7 @@ myJobs = {
     "SingleMuon_Run2017C":{
         "inputDataset": "/SingleMuon/Run2017C-31Mar2018-v1/MINIAOD",
         "isData": True,
-        "year": 2017
+        "year": '2017'
     },
     "SingleMuon_Run2017D":{
         "inputDataset": "/SingleMuon/Run2017D-31Mar2018-v1/MINIAOD",
@@ -557,109 +594,25 @@ myJobs = {
         "year": '2018D'
     }
 }
-'''
+myJobs = {} 
+with open("HNL_samples.txt") as f:
+    for line in f:
+        line = line.rstrip()
+        name = line.rsplit('/')[1]+"-2016"
+        print(name)
+        myJobs[name] = {
+            "inputDataset": line,
+            "year": '2016',
+            "unitsPerJob": 15,
+            "isData":False,
+            "addLLPInfo": True,
+            "addSignalLHE": True
+        }
 
-'''
-hss2016Files = [
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-0_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-0p05_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-0p1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-10000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-1000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-100_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-10_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-2000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-25_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-5000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-500_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-50_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-5_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-0_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-0p05_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-0p1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-10000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-1000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-100_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-10_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-2000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-25_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-5000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-500_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-50_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-20_ctauS-5_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-0_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-0p05_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-0p1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-10000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-1000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-100_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-10_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-25_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-5000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-500_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-50_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-5_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-0_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-0p05_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-0p1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-10000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-1000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-100_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-10_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-2000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-25_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-5000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-500_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-50_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-30_ctauS-5_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-0_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-0p05_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-0p1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-10000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-1000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-100_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-10_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-2000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-25_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-5000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-500_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-50_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-40_ctauS-5_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-0_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-0p05_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-0p1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-10000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-1000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-100_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-10_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-2000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-25_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-5000_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-500_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-50_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-'/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-5_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/lbenato-RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets-1094e4be9b2393641646b907f4de5a1a/USER',
-]
 
-myJobs = {}
-
-for hss2016File in hss2016Files:
-    name = hss2016File.split('/')[1]
-    myJobs[name] = {
-        "inputDataset":hss2016File,
-        "year": 2016,
-        "unitsPerJob": 2,
-        'inputDBS':'prod/phys03'
-    }
-'''
-
-requestName = "NANOX_060320"
-userName = getUsernameFromSiteDB() 
+requestName = "NANOX_110320"
+userName = "vcepaiti"
+#userName = getUsernameFromSiteDB() 
 configTmpl = Configuration()
 
 configTmpl.section_('General')
@@ -715,13 +668,18 @@ if __name__ == '__main__':
         i=i+1
         config = copy.deepcopy(configTmpl)
         config.General.requestName = jobName+"_"+requestName
+        print len(jobName+"_"+requestName)
         print config.General.requestName
         config.General.workArea = "crab/"+requestName+"/"+jobName
         config.Data.outLFNDirBase = "/store/user/"+userName+"/LLP/"+requestName+"/"+jobName
         userInputFiles = myJob.get('userInputFiles', None)
         if not userInputFiles:
             config.Data.inputDataset = myJob["inputDataset"]
-            config.Data.inputDBS = myJob.get('inputDBS', 'global')
+            if "/USER" not in myJob["inputDataset"]:
+                config.Data.inputDBS = myJob.get('inputDBS', 'global')
+            else:
+                config.Data.inputDBS = "phys03"
+            print config.Data.inputDBS
             config.Data.publication = True
         else:
             config.Data.userInputFiles = map(lambda f: f.replace('\n','').replace('\r',''),open(userInputFiles).readlines())
@@ -743,7 +701,7 @@ if __name__ == '__main__':
         if isData:
             config.JobType.pyCfgParams.append("isData=True")
             config.Data.splitting = 'LumiBased'
-            config.Data.unitsPerJob = myJob.get('unitsPerJob', 80)
+            config.Data.unitsPerJob = myJob.get('unitsPerJob', 30)
             if year == '2016':
                 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification//Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
             if year == '2017':
@@ -767,8 +725,6 @@ if __name__ == '__main__':
         if "blacklist" in myJob:
             config.Site.whitelist = myJob['blacklist']
 
-        
-        
         if not os.path.exists(configTmpl.JobType.psetName):
             print "\nConfiguration file ", pSet, "does not exist.  Aborting..."
             sys.exit(1)

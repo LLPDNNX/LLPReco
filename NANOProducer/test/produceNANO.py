@@ -18,7 +18,7 @@ options.register(
 
 options.register(
     'addSignalLHE',
-    False,
+    True,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "adds LHE weights of signal samples"
@@ -29,16 +29,9 @@ options.register(
     True,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
-    "add llp info"
+    "add LLP Info"
 )
 
-options.register(
-    'LLPtype',
-    "HNL",
-    VarParsing.multiplicity.singleton,
-    VarParsing.varType.string,
-    "add llp type"
-)
 options.register(
     'year',
     '2016',
@@ -83,19 +76,19 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(10000)
+    input = cms.untracked.int32(1000)
 )
 
 process.options = cms.untracked.PSet()
 
 files = {
     'test': {
-        "mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
+        "mc": "/store/user/kjpena/miniAODv3_08Feb2020/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-500_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_MINIAODSIM/200209_212810/0000/output_1.root",
+        #"mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
         },
     '2016': {
-        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200517/HNL_dirac_all_ctau1p0e00_massHNL6p0_Vall6p496e-03/miniaod16v3_200517/200517_004822/0000/HNL2016_140.root", #"root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_tau_Dirac_massiveAndCKM_LO/heavyNeutrino_1.root",
-        #"mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-10_V-0.00112249721603_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_76.root",
-        "data": "/store/data/Run2016B/SingleMuon/MINIAOD/17Jul2018_ver2-v1/30000/14F647C4-6C92-E811-9571-90E2BACBAD64.root",
+        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200517/HNL_dirac_all_ctau1p0e00_massHNL6p0_Vall6p496e-03/miniaod16v3_200517/200517_004822/0000/HNL2016_140.root",
+        "data": "/store/data/Run2016H/SingleMuon/MINIAOD/17Jul2018-v1/00000/16924A85-4D8C-E811-A51C-A4BF01013F29.root",
     },
     '2017': {
         "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Fall17/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
@@ -110,9 +103,9 @@ files = {
     }
 }
 
-print files[options.year]['mc']
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(files[options.year]['data'] if options.isData else files[options.year]['mc'])
+
 )
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
@@ -155,14 +148,9 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         'drop *_puppiMetTable_*_*',
         'drop *_ttbarCategoryTable_*_*',
         
-        'drop *_photonTable_*_*',
-        'drop *_photonMCTable_*_*',
-        
         'drop *_saJetTable_*_*',
         'drop *_FatJetTable_*_*',
         'drop *_saTable_*_*',
-        
-        'drop *_simpleCleanerTable_photons_*',
         
         'drop *_rivetMetTable_*_*',
         'drop *_rivetProducerHTXS_*_*',
@@ -426,7 +414,6 @@ modulesToRemove = [
     'subJetTable',
     'saJetTable',
     'saTable',
-    'photonTable',
 
 
     "genJetAK8Table",
@@ -458,8 +445,8 @@ for moduleName in modulesToRemove:
         print "module for removal not found: ",moduleName
 
 #override final photons (required by object linker) so that ID evaluation is not needed
-process.finalPhotons.cut = cms.string("pt > 5")
-process.finalPhotons.src = cms.InputTag("slimmedPhotons")
+#process.finalPhotons.cut = cms.string("pt > 5")
+#process.finalPhotons.src = cms.InputTag("slimmedPhotons")
 
 '''
 process.MINIAODoutput = cms.OutputModule("PoolOutputModule",
