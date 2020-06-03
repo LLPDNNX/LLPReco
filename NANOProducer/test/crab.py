@@ -517,13 +517,46 @@ for folder in os.listdir('hnl_mu'):
         "isData":False,
         'whitelist': ['T2_BE_IIHE','T2_BE_UCL','T2_CH_CERN','T2_UK_London_IC'],
     }
+'''
 
 myJobs = {
-    "SingleMuon_Run2016B_ver1":{
-        "inputDataset": "/SingleMuon/Run2016B-17Jul2018_ver1-v1/MINIAOD",
+    "SingleElectron_Run2016B_ver2":{
+        "inputDataset": "/SingleElectron/Run2016B-17Jul2018_ver2-v1/MINIAOD",
         "isData": True,
         "year": '2016'
     },
+    "SingleElectron_Run2016C":{
+        "inputDataset": "/SingleElectron/Run2016C-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016D":{
+        "inputDataset": "/SingleElectron/Run2016D-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016E":{
+        "inputDataset": "/SingleElectron/Run2016E-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016F":{
+        "inputDataset": "/SingleElectron/Run2016F-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016G":{
+        "inputDataset": "/SingleElectron/Run2016G-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016H":{
+        "inputDataset": "/SingleElectron/Run2016H-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    
+
     "SingleMuon_Run2016B_ver2":{
         "inputDataset": "/SingleMuon/Run2016B-17Jul2018_ver2-v1/MINIAOD",
         "isData": True,
@@ -560,7 +593,32 @@ myJobs = {
         "year": '2016'
     },
     
-    
+     
+    "SingleElectron_Run2017B":{
+        "inputDataset": "/SingleElectron/Run2017B-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
+    "SingleElectron_Run2017C":{
+        "inputDataset": "/SingleElectron/Run2017C-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
+    "SingleElectron_Run2017D":{
+        "inputDataset": "/SingleElectron/Run2017D-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
+    "SingleElectron_Run2017E":{
+        "inputDataset": "/SingleElectron/Run2017E-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
+    "SingleElectron_Run2017F":{
+        "inputDataset": "/SingleElectron/Run2017F-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
     
     "SingleMuon_Run2017B":{
         "inputDataset": "/SingleMuon/Run2017B-31Mar2018-v1/MINIAOD",
@@ -588,6 +646,26 @@ myJobs = {
         "year": '2017'
     },
     
+    "EGamma_Run2018A":{
+        "inputDataset": "/EGamma/Run2018A-17Sep2018-v2/MINIAOD",
+        "isData": True,
+        "year": '2018'
+    },
+    "EGamma_Run2018B":{
+        "inputDataset": "/EGamma/Run2018B-17Sep2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2018'
+    },
+    "EGamma_Run2018C":{
+        "inputDataset": "/EGamma/Run2018C-17Sep2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2018'
+    },
+    "EGamma_Run2018D":{
+        "inputDataset": "/EGamma/Run2018D-22Jan2019-v2/MINIAOD",
+        "isData": True,
+        "year": '2018D'
+    },
     
     "SingleMuon_Run2018A":{
         "inputDataset": "/SingleMuon/Run2018A-17Sep2018-v2/MINIAOD",
@@ -604,14 +682,13 @@ myJobs = {
         "isData": True,
         "year": '2018'
     },
-    
-    
     "SingleMuon_Run2018D":{
         "inputDataset": "/SingleMuon/Run2018D-22Jan2019-v2/MINIAOD",
         "isData": True,
         "year": '2018D'
     }
 }
+'''
 myJobs = {} 
 with open("HNL_samples.txt") as f:
     for line in f:
