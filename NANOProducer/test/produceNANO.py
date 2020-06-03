@@ -18,7 +18,7 @@ options.register(
 
 options.register(
     'addSignalLHE',
-    True,
+    False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "adds LHE weights of signal samples"

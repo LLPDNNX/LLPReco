@@ -29,14 +29,33 @@ myJobs = {
         "unitsPerJob": 2
     },
 
+    "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
+        "inputDataset":"/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+
     "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_ext1-2017":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
         "year": 2017,
         "unitsPerJob": 2
-
     },
+
+    "TTToHadronic_TuneCP5_13TeV-powheg-pythia8-2017":{
+        "inputDataset":"/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
     "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8-2018":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "TTToHadronic_TuneCP5_13TeV-powheg-pythia8-2018":{
+        "inputDataset":"/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
         "unitsPerJob": 2
     },
@@ -498,7 +517,6 @@ for folder in os.listdir('hnl_mu'):
         "isData":False,
         'whitelist': ['T2_BE_IIHE','T2_BE_UCL','T2_CH_CERN','T2_UK_London_IC'],
     }
-'''
 
 myJobs = {
     "SingleMuon_Run2016B_ver1":{
@@ -608,6 +626,7 @@ with open("HNL_samples.txt") as f:
             "addLLPInfo": True,
             "addSignalLHE": True
         }
+'''
 
 
 requestName = "NANOX_110320"
