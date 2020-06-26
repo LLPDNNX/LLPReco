@@ -276,9 +276,9 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     int maxFlavor = 0;
                     
                     //take displacement from matched vertex, i.e. end of potential decay chain = largest displacement
-                    label.displacement = std::log10(std::max<float>(matchedVertex->d3d(),1e-10));
-                    label.displacement_xy = std::log10(std::max<float>(matchedVertex->dxy(),1e-10));
-                    label.displacement_z = std::log10(std::max<float>(matchedVertex->dz(),1e-10));
+                    label.displacement = std::log10(std::max<float>(matchedVertex->d3d(),DisplacedGenVertex::MIN_DISPLACEMENT));
+                    label.displacement_xy = std::log10(std::max<float>(matchedVertex->dxy(),DisplacedGenVertex::MIN_DISPLACEMENT));
+                    label.displacement_z = std::log10(std::max<float>(matchedVertex->dz(),DisplacedGenVertex::MIN_DISPLACEMENT));
 
                     //iteratively check the decay chain to detect e.g. LLP->B->C
                     
@@ -304,7 +304,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                         const auto &mother = *(llpVertex->motherLongLivedParticle);
                         label.llpId = mother.pdgId();
                         label.decay_angle = angle(matchedGenJet->p4(),mother.p4());
-                        label.betagamma = mother.p()/std::max(mother.mass(),1e-10);
+                        label.betagamma = mother.p()/std::max<float>(mother.mass(),DisplacedGenVertex::MIN_LLP_MASS);
                         label.llp_mass = mother.mass();
                         label.llp_pt = mother.pt();
 
@@ -320,7 +320,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             
                             //this will associate the decay vertex with a llp decay
                             
-                            if (std::sqrt((ghost->vertex()-llpVertex->vertex).mag2())>1e-10)
+                            if (std::sqrt((ghost->vertex()-llpVertex->vertex).mag2())>DisplacedGenVertex::MIN_DISPLACEMENT)
                             {
                                 continue;
                             }

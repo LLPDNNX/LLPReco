@@ -17,6 +17,7 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
 #include "LLPReco/DataFormats/interface/LLPGenDecayInfo.h"
+#include "LLPReco/DataFormats/interface/DisplacedGenVertex.h"
 
 #include <functional>
 
@@ -121,7 +122,7 @@ LLPGenDecayInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
             {
                 hardInteraction.reset(new reco::Candidate::Point(genParticle.vertex()));
             }
-            else if (distance(*hardInteraction,genParticle.vertex())>1e-10)
+            else if (distance(*hardInteraction,genParticle.vertex())>llpdnnx::DisplacedGenVertex::MIN_DISPLACEMENT)
             {
                 throw cms::Exception("PartonsFromLLPSelector: multiple hard interaction vertices found!");
             }
@@ -149,7 +150,7 @@ LLPGenDecayInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
 
                         //const reco::Candidate* daughter = genParticle.daughter(idaughter);
                         //llp decay products need to be displaced wrt hard interaction
-                        if (distance(*hardInteraction,daughter->vertex())<1e-10)
+                        if (distance(*hardInteraction,daughter->vertex())<llpdnnx::DisplacedGenVertex::MIN_DISPLACEMENT)
                         {
                             continue;
                         }
