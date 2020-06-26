@@ -29,6 +29,7 @@
 
 #include "LLPReco/DataFormats/interface/LLPGhostFlavourInfo.h"
 
+
 using llpdnnx::DisplacedGenVertex;
 using llpdnnx::DisplacedGenVertexCollection;
 
@@ -167,14 +168,22 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
            
             
-            for (const auto* constituent: jet.genJet()->getJetConstituentsQuick())
-            {   
+            for (unsigned int iConst = 0; iConst < jet.genJet()->numberOfDaughters(); iConst++)
+            {
+                const reco::Candidate* constituent = jet.genJet()->daughter(iConst);
+                auto packedConstituent = dynamic_cast<const pat::PackedGenParticle*>(constituent);
                 int absId = std::abs(constituent->pdgId());
-                if (constituent->mother() and (absId==11 or absId==13))
+                if (constituent->mother() and (absId==11 or absId==13) and packedConstituent->isPromptFinalState())
                 {
                     //if (ptFrac < 0.6) continue;
                     //account for photon/Z FSR walk up the decay tree
                     const reco::Candidate* mother = constituent->mother();
+
+                    int hadFlavor = getHadronFlavor(*constituent->mother());
+                    if (hadFlavor==5) nbHadronsToLeptons+=1;
+                    if (hadFlavor==4) ncHadronsToLeptons+=1;
+
+
                     while (mother->mother() and constituent->pdgId() == mother->pdgId())
                     {
                         mother = mother->mother();
@@ -195,9 +204,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             }                          
                         }
                     }
-                    int hadFlavor = getHadronFlavor(*constituent->mother());
-                    if (hadFlavor==5) nbHadronsToLeptons+=1;
-                    if (hadFlavor==4) ncHadronsToLeptons+=1;
  
                 }
             }
