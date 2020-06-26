@@ -72,9 +72,9 @@ class LLPLabel {
             llpId(0),
             llp_mass(DisplacedGenVertex::MIN_LLP_MASS),
             llp_pt(0),
-            displacement(DisplacedGenVertex::MIN_DISPLACEMENT), //log10(x/1cm)
-            displacement_xy(DisplacedGenVertex::MIN_DISPLACEMENT), //log10(x/1cm)
-            displacement_z(DisplacedGenVertex::MIN_DISPLACEMENT), //log10(x/1cm)
+            displacement(std::log10(DisplacedGenVertex::MIN_DISPLACEMENT)), //log10(x/1cm)
+            displacement_xy(std::log10(DisplacedGenVertex::MIN_DISPLACEMENT)), //log10(x/1cm)
+            displacement_z(std::log10(DisplacedGenVertex::MIN_DISPLACEMENT)), //log10(x/1cm)
             decay_angle(0),
             betagamma(0),
             matchedGenJetDeltaR(-1),

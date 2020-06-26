@@ -268,7 +268,8 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     }
                 }
                 
-                if (matchedVertex and matchedGenJet)
+                //excludes cases where the displaced vertex is located at 0,0,0
+                if (matchedVertex and matchedGenJet and matchedVertex->vertex.mag2()>(DisplacedGenVertex::MIN_DISPLACEMENT*DisplacedGenVertex::MIN_DISPLACEMENT))
                 {
                     label.matchedGenJetDeltaR = dRmin;
                     label.matchedGenJetPt = matchedGenJet->pt();
