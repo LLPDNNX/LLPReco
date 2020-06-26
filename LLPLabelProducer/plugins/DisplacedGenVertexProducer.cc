@@ -52,7 +52,7 @@ class DisplacedGenVertexProducer:
         static reco::Candidate::Point correctedDisplacement(const reco::Candidate& genParticle)
         {
             //return mother vertex if displacement is ignored
-            if (genParticle.mother() and ignoreDisplacement(*genParticle.mother()) and  (distance(genParticle.mother()->vertex(),genParticle.vertex())>1e-10))
+            if (genParticle.mother() and ignoreDisplacement(*genParticle.mother()) and  (distance(genParticle.mother()->vertex(),genParticle.vertex())>DisplacedGenVertex::MIN_DISPLACEMENT))
             {
                 return correctedDisplacement(*genParticle.mother()); //call recursively
             }
@@ -63,7 +63,7 @@ class DisplacedGenVertexProducer:
         {
             for (unsigned int idaughter = 0; idaughter<genParticle.numberOfDaughters(); ++idaughter)
             {
-                if (distance(genParticle.daughter(idaughter)->vertex(),genParticle.vertex())>1e-10)
+                if (distance(genParticle.daughter(idaughter)->vertex(),genParticle.vertex())>DisplacedGenVertex::MIN_DISPLACEMENT)
                 {
                     return true;
                 }
@@ -133,7 +133,7 @@ DisplacedGenVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
             {
                 hardInteractionVertex.reset(new reco::Candidate::Point(genParticle.vertex()));
             }
-            else if (distance(*hardInteractionVertex,correctedDisplacement(genParticle))>1e-10)
+            else if (distance(*hardInteractionVertex,correctedDisplacement(genParticle))>DisplacedGenVertex::MIN_DISPLACEMENT)
             {
                 throw cms::Exception("DisplacedGenVertexProducer: multiple hard interaction vertices found!");
             }
@@ -144,7 +144,7 @@ DisplacedGenVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
         for (unsigned int ivertex = 0; ivertex<displacedGenVertices->size(); ++ivertex)
         {
             DisplacedGenVertex& displacedGenVertex = displacedGenVertices->at(ivertex);
-            if (distance(displacedGenVertex.vertex,correctedDisplacement(genParticle))<1e-10)
+            if (distance(displacedGenVertex.vertex,correctedDisplacement(genParticle))<DisplacedGenVertex::MIN_DISPLACEMENT)
             {
                 displacedGenVertex.genParticles.push_back(genParticleCollection->ptrAt(igenParticle));
                 genParticleToVertexGroupMap[(size_t)&genParticle]=ivertex;
@@ -170,7 +170,7 @@ DisplacedGenVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
     for (unsigned int ivertex = 0; ivertex<displacedGenVertices->size(); ++ivertex)
     {
         displacedGenVertices->at(ivertex).hardInteraction = *hardInteractionVertex;
-        if (hardInteractionVertex and distance(displacedGenVertices->at(ivertex).vertex,*hardInteractionVertex)<1e-10)
+        if (hardInteractionVertex and distance(displacedGenVertices->at(ivertex).vertex,*hardInteractionVertex)<DisplacedGenVertex::MIN_DISPLACEMENT)
         {
             displacedGenVertices->at(ivertex).isHardInteraction=true;
         }
@@ -212,7 +212,7 @@ DisplacedGenVertexProducer::produce(edm::Event& iEvent, const edm::EventSetup& i
         int decayVertexIndex = -1;
         for (auto idMomentumPair: momentumDistribution)
         {
-            double massRatio = idMomentumPair.second.mass()/genParticle.mass()+1e-8;
+            double massRatio = idMomentumPair.second.mass()/std::max<float>(genParticle.mass(),DisplacedGenVertex::MIN_LLP_MASS);
             if (massRatio>maxMassRatio)
             {
                 maxMassRatio=massRatio;

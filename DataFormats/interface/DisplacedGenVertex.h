@@ -17,6 +17,9 @@ namespace llpdnnx
 
 struct DisplacedGenVertex
 {
+    static constexpr float MIN_DISPLACEMENT = 1e-10;
+    static constexpr float MIN_LLP_MASS = 1e-8;
+
     bool isHardInteraction;
     double sharedMassFraction; //fraction of invariant LLP mass carried by its first daughters in vertex
     reco::Candidate::Point vertex;
