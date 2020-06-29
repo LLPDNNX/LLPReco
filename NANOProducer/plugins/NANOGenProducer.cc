@@ -80,22 +80,16 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> isGBB;
     std::vector<int> isLeptonic_B;
     std::vector<int> isLeptonic_C;
-    std::vector<int> isB_MU;
-    std::vector<int> isB_E;
-    std::vector<int> isC_MU;
-    std::vector<int> isC_E;
     std::vector<int> isC;
     std::vector<int> isCC;
     std::vector<int> isGCC;
     std::vector<int> isS;
-    std::vector<int> isS_MU;
-    std::vector<int> isS_E;
     std::vector<int> isUD;
-    std::vector<int> isUD_MU;
-    std::vector<int> isUD_E;
     std::vector<int> isG;
-    std::vector<int> isG_MU;
-    std::vector<int> isG_E;
+    std::vector<int> isPrompt_MU;
+    std::vector<int> isPrompt_E;
+    std::vector<int> isPrompt_TAU;
+
 
     std::vector<int> isLLP_RAD; //no flavour match (likely from wide angle radiation)
     std::vector<int> isLLP_MU; //prompt lepton
@@ -156,22 +150,15 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         isGBB.push_back(labels.type == llpdnnx::LLPLabel::Type::isGBB ? 1 : 0);
         isLeptonic_B.push_back(labels.type == llpdnnx::LLPLabel::Type::isLeptonic_B ? 1 : 0);
         isLeptonic_C.push_back(labels.type == llpdnnx::LLPLabel::Type::isLeptonic_C ? 1 : 0);
-        isB_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isB_MU ? 1 : 0);
-        isB_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isB_E ? 1 : 0);
-        isC_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isC_MU ? 1 : 0);
-        isC_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isC_E ? 1 : 0);
         isC.push_back(labels.type == llpdnnx::LLPLabel::Type::isC ? 1 : 0);
         isCC.push_back(labels.type == llpdnnx::LLPLabel::Type::isCC ? 1 : 0);
         isGCC.push_back(labels.type == llpdnnx::LLPLabel::Type::isGCC ? 1 : 0);
         isS.push_back(labels.type == llpdnnx::LLPLabel::Type::isS ? 1 : 0);
-        isS_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isS_MU ? 1 : 0);
-        isS_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isS_E ? 1 : 0);
         isUD.push_back(labels.type == llpdnnx::LLPLabel::Type::isUD ? 1 : 0);
-        isUD_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isUD_MU ? 1 : 0);
-        isUD_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isUD_E ? 1 : 0);
         isG.push_back(labels.type == llpdnnx::LLPLabel::Type::isG ? 1 : 0);
-        isG_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isG_MU ? 1 : 0);
-        isG_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isG_E ? 1 : 0);
+        isPrompt_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_MU ? 1 : 0);
+        isPrompt_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_E ? 1 : 0);
+        isPrompt_TAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_TAU ? 1 : 0);
         isLLP_RAD.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_RAD ? 1 : 0);
         isLLP_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_MU ? 1 : 0);
         isLLP_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_E ? 1 : 0);
@@ -216,22 +203,15 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<int>("isGBB", isGBB, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLeptonic_B", isLeptonic_B, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLeptonic_C", isLeptonic_C, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isB_MU", isB_MU, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isB_E", isB_E, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isC_MU", isC_MU, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isC_E", isC_E, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isC", isC, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isCC", isCC, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isGCC", isGCC, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isS", isS, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isS_MU", isS_MU, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isS_E", isS_E, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isUD", isUD, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isUD_MU", isUD_MU, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isUD_E", isUD_E, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isG", isG, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isG_MU", isG_MU, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isG_E", isG_E, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isPrompt_MU", isPrompt_MU, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isPrompt_E", isPrompt_E, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isPrompt_TAU", isPrompt_TAU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_RAD", isLLP_RAD, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_MU", isLLP_MU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_E", isLLP_E, "doc", nanoaod::FlatTable::IntColumn);

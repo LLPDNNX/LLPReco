@@ -222,8 +222,6 @@ myJobs = {
         "unitsPerJob": 2
     },
     
-    
-    
     "WToLNu_2J_13TeV-amcatnloFXFX-pythia8-ext4-2016":{
         "inputDataset":"/WToLNu_2J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext4-v1/MINIAODSIM",
         "year": 2016,
@@ -250,13 +248,13 @@ myJobs = {
 
     "ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
         "inputDataset": "/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM",
-        "year": 2016,
+        "year": 2017,
         "unitsPerJob": 2
     },
 
     "ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
         "inputDataset": "/ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
-        "year": 2016,
+        "year": 2018,
         "unitsPerJob": 2
     },
 
@@ -666,6 +664,7 @@ myJobs = {
         "unitsPerJob": 2
     },
 }
+'''
 myJobs = {
     "SingleElectron_Run2016B_ver2":{
         "inputDataset": "/SingleElectron/Run2016B-17Jul2018_ver2-v1/MINIAOD",
@@ -836,6 +835,7 @@ myJobs = {
 }
 
 '''
+'''
 myJobs = {} 
 with open("HNL_samples.txt") as f:
     for line in f:
@@ -853,7 +853,7 @@ with open("HNL_samples.txt") as f:
 '''
 
 
-requestName = "NANOX_110320-v2"
+requestName = "NANOX_110320"
 userName = "vcepaiti"
 #userName = getUsernameFromSiteDB() 
 configTmpl = Configuration()
@@ -905,6 +905,9 @@ if __name__ == '__main__':
 
 
     for i,jobName in enumerate(sorted(myJobs.keys())):
+        if "ZGToLLG_01J_5f" not in jobName:
+            continue
+
 
         isData = False
         myJob = myJobs[jobName]
