@@ -18,7 +18,7 @@ options.register(
 
 options.register(
     'addSignalLHE',
-    False,
+    True,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "adds LHE weights of signal samples"
@@ -76,7 +76,7 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(10000)
+    input = cms.untracked.int32(1000)
 )
 
 process.options = cms.untracked.PSet()

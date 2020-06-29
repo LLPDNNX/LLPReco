@@ -149,9 +149,12 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             
             unsigned int nPromptElectrons = 0;
             unsigned int nPromptMuons = 0;
-            unsigned int nPromptTaus = 0;
 
             unsigned int nGluons = 0; 
+
+            float tauPtFrac = 0;
+
+            float promptPtThreshold = 0.6;
             
             if (jet.genParton() and (partonFlavor==5 or partonFlavor==4))
             {
@@ -177,18 +180,13 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 {
                     continue;
                 }
-                if (absId == 11 or absId == 13 or packedConstituent->isDirectPromptTauDecayProductFinalState() or std::abs(constituent->mother()->pdgId()) == 15)
+                if (absId == 11 or absId == 13)
                 {
-                    //if (ptFrac < 0.6) continue;
-                    //account for photon/Z FSR walk up the decay tree
                     const reco::Candidate* mother = constituent->mother();
 
-                    if (absId == 11 or absId == 13)
-                    {
-                        int hadFlavor = getHadronFlavor(*constituent->mother());
-                        if (hadFlavor==5) nbHadronsToLeptons+=1;
-                        if (hadFlavor==4) ncHadronsToLeptons+=1;                   
-                    }
+                    int hadFlavor = getHadronFlavor(*constituent->mother());
+                    if (hadFlavor==5) nbHadronsToLeptons+=1;
+                    if (hadFlavor==4) ncHadronsToLeptons+=1;                   
 
                     while (mother->mother() and constituent->pdgId() == mother->pdgId())
                     {
@@ -201,7 +199,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     }
 
                     float ptFrac = constituent->pt()/jet.genJet()->pt();
-                    if (ptFrac > 0.6)
+                    if (ptFrac > promptPtThreshold)
                     {
                         if (mother->pdgId() == 23 or abs(mother->pdgId()) == 24 or abs(mother->pdgId()) == 15){
                             if (absId == 13){
@@ -210,16 +208,29 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             else if (absId == 11){
                                 nPromptElectrons += 1;
                             }           
-                            else if (mother->pdgId() == 15){
-                                nPromptTaus += 1;
-                            }     
                         }
                     }
- 
+                }
+
+                else if (packedConstituent->isDirectPromptTauDecayProductFinalState() or std::abs(constituent->mother()->pdgId()) == 15)
+                {
+                    const reco::Candidate* mother = constituent->mother();
+
+                    while (mother->mother() and constituent->pdgId() == mother->pdgId())
+                    {
+                        mother = mother->mother();
+                    }
+
+                    while (mother->mother() and mother->pdgId()==mother->mother()->pdgId())
+                    {
+                        mother = mother->mother();
+                    }
+
+                    tauPtFrac += constituent->pt()/jet.genJet()->pt();
                 }
             }
 
-            if (nPromptTaus > 0)
+            if (tauPtFrac > promptPtThreshold)
             {
 
                 label.type = llpdnnx::LLPLabel::Type::isPrompt_TAU;
@@ -442,8 +453,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         iEvent.put(std::move(outputLLPLabelInfo));
 }
 
-
-
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
 LLPLabelProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
@@ -458,4 +467,3 @@ LLPLabelProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions)
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(LLPLabelProducer);
-
