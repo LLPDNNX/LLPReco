@@ -29,14 +29,33 @@ myJobs = {
         "unitsPerJob": 2
     },
 
+    "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
+        "inputDataset":"/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+
     "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_ext1-2017":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
         "year": 2017,
         "unitsPerJob": 2
-
     },
+
+    "TTToHadronic_TuneCP5_13TeV-powheg-pythia8-2017":{
+        "inputDataset":"/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
     "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8-2018":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "TTToHadronic_TuneCP5_13TeV-powheg-pythia8-2018":{
+        "inputDataset":"/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
         "unitsPerJob": 2
     },
@@ -203,8 +222,6 @@ myJobs = {
         "unitsPerJob": 2
     },
     
-    
-    
     "WToLNu_2J_13TeV-amcatnloFXFX-pythia8-ext4-2016":{
         "inputDataset":"/WToLNu_2J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext4-v1/MINIAODSIM",
         "year": 2016,
@@ -222,6 +239,245 @@ myJobs = {
         "year": 2018,
         "unitsPerJob": 2
     },
+
+    "ZGToLLG_01J_5f_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-2016":{
+        "inputDataset":"/ZGToLLG_01J_5f_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
+        "inputDataset": "/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+    "ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
+        "inputDataset": "/ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "WGToLNuG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
+        "inputDataset": "/WGToLNuG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
+        "inputDataset": "/WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+    "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
+        "inputDataset": "/WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8-2016":{
+        "inputDataset": "/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
+        "inputDataset": "/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+
+    "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
+        "inputDataset": "/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+
+    "TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8-2016":{
+        "inputDataset": "/TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-2017":{
+        "inputDataset": "/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+
+    "TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-2018":{
+        "inputDataset": "/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+
+    "TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8-2016":{
+        "inputDataset": "/TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8-2017":{
+        "inputDataset": "/TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+    "TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8-2018":{
+        "inputDataset": "/TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-20to30_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt-20to30_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-170to300_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt-170to300_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+    "QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+
+    "QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+
+    "QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+
+    "QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+
+    "QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+
+    "QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob": 2
+    },
+
+
+    "QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+    "QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
+
+    "QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob": 2
+    },
+
 
     "QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
@@ -408,104 +664,94 @@ myJobs = {
         "unitsPerJob": 2
     },
 }
-
 '''
-for folder in os.listdir('hnl_mu_matthew'):
-    #HeavyNeutrino_lljj_M-8_V-0p00363318042492_mu_massiveAndCKM_LO_TuneCP5_madgraph-pythia8_privateMC_102X_MINIAODSIMv3_v2_generation_forHNL_2018.txt
-    #HeavyNeutrino_lljj_M-8_V-0p00363318042492_mu_massiveAndCKM_LO_TuneCP5_madgraph-pythia8_privateMC_94X_MINIAODSIMv3_v2_generation_forHNL_2017.txt
-    #HeavyNeutrino_lljj_M-8_V-0p00363318042492_mu_massiveAndCKM_LO_TuneCUETP8M1_madgraph-pythia8_privateMC_80X_MINIAODSIMv3_v1_generation_forHNL_2016.txt
-
-    name = folder.replace('.txt','')
-    name = name.replace("massiveAndCKM_LO_","")
-    name = name.replace("_privateMC","")
-    name = name.replace("_generation_forHNL","")
-    name = name.replace("_80X_MINIAODSIMv3_v2","")
-    name = name.replace("_94X_MINIAODSIMv3_v2","")
-    name = name.replace("_102X_MINIAODSIMv3_v2","")
-        
-    
-    year = None
-    if name.find('_2016')>0:
-        name = name.replace('_2016', '-2016')
-        year = 2016
-    elif name.find('_2017')>0:
-        name = name.replace('_2017', '-2017')
-        year = 2017
-    elif name.find('_2018')>0:
-        name = name.replace('_2018', '-2018')
-        year = 2018
-    if not year:
-        print "Year not found for ",folder
-        continue
-        
-    print name
-    userInputFiles = os.path.abspath(os.path.join('hnl_mu_matthew',folder))
-    
-    myJobs[name] = {
-        "userInputFiles": userInputFiles,
-        "year": year,
-        "unitsPerJob":2,
-        "isData":False,
-        #'whitelist': ['T2_BE_IIHE','T2_BE_UCL','T2_CH_CERN','T2_UK_London_IC'],
-    }
-with open("higgs.txt") as file: 
-    for line in file:
-        name = line.split('/')[1]
-        name = name.replace('_PRIVATE-MC', '')
-        myJobs[name] = {
-            "inputDataset":line.strip(),
-            "year": 2016,
-            "unitsPerJob": 3,
-        }
-
-
-myJobs = {}
-for folder in os.listdir('hnl_mu'):
-    name = folder.replace('.txt','')
-    name = name.replace(".","_") #'.' not allowed in name
-    name = name.replace("massiveAndCKM_LO_","")
-    if name.find('_Dirac_')<0:
-        continue
-    if name.find('_pre2017_')>=0:
-        continue
-    if name.find('Moriond17_aug2018')>0 and name.find('miniAODv3')<0:
-        continue
-        
-    print name
-    
-    year = None
-    if name.find('Moriond17_aug2018')>0:
-        year = 2016
-    elif name.find('Fall17')>0:
-        year = 2017
-    elif name.find('Autumn18')>0:
-        year = 2018
-    if not year:
-        print "Year not found for ",folder
-        continue
-    name = name+"-"+str(year)
-        
-    userInputFiles = os.path.abspath(os.path.join('hnl_mu',folder))
-        
-    if len(open(userInputFiles).readlines())<2:
-        print "WARNING: only 1 file found"
-        continue
-    
-    myJobs[name] = {
-        "userInputFiles": userInputFiles,
-        "year": year,
-        "unitsPerJob":20,
-        "isData":False,
-        'whitelist': ['T2_BE_IIHE','T2_BE_UCL','T2_CH_CERN','T2_UK_London_IC'],
-    }
-'''
-
 myJobs = {
-    "SingleMuon_Run2016B_ver1":{
-        "inputDataset": "/SingleMuon/Run2016B-17Jul2018_ver1-v1/MINIAOD",
+    "SingleElectron_Run2016B_ver2":{
+        "inputDataset": "/SingleElectron/Run2016B-17Jul2018_ver2-v1/MINIAOD",
         "isData": True,
         "year": '2016'
     },
+    "SingleElectron_Run2016C":{
+        "inputDataset": "/SingleElectron/Run2016C-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016D":{
+        "inputDataset": "/SingleElectron/Run2016D-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016E":{
+        "inputDataset": "/SingleElectron/Run2016E-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016F":{
+        "inputDataset": "/SingleElectron/Run2016F-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016G":{
+        "inputDataset": "/SingleElectron/Run2016G-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+    "SingleElectron_Run2016H":{
+        "inputDataset": "/SingleElectron/Run2016H-17Jul2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2016'
+    },
+        
+    "SingleElectron_Run2017B":{
+        "inputDataset": "/SingleElectron/Run2017B-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
+    "SingleElectron_Run2017C":{
+        "inputDataset": "/SingleElectron/Run2017C-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
+    "SingleElectron_Run2017D":{
+        "inputDataset": "/SingleElectron/Run2017D-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
+    "SingleElectron_Run2017E":{
+        "inputDataset": "/SingleElectron/Run2017E-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
+    "SingleElectron_Run2017F":{
+        "inputDataset": "/SingleElectron/Run2017F-31Mar2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2017'
+    },
+    
+    
+    "EGamma_Run2018A":{
+        "inputDataset": "/EGamma/Run2018A-17Sep2018-v2/MINIAOD",
+        "isData": True,
+        "year": '2018'
+    },
+    "EGamma_Run2018B":{
+        "inputDataset": "/EGamma/Run2018B-17Sep2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2018'
+    },
+    "EGamma_Run2018C":{
+        "inputDataset": "/EGamma/Run2018C-17Sep2018-v1/MINIAOD",
+        "isData": True,
+        "year": '2018'
+    },
+    "EGamma_Run2018D":{
+        "inputDataset": "/EGamma/Run2018D-22Jan2019-v2/MINIAOD",
+        "isData": True,
+        "year": '2018D'
+    }
+}
+    
+myJobs = {
     "SingleMuon_Run2016B_ver2":{
         "inputDataset": "/SingleMuon/Run2016B-17Jul2018_ver2-v1/MINIAOD",
         "isData": True,
@@ -541,9 +787,6 @@ myJobs = {
         "isData": True,
         "year": '2016'
     },
-    
-    
-    
     "SingleMuon_Run2017B":{
         "inputDataset": "/SingleMuon/Run2017B-31Mar2018-v1/MINIAOD",
         "isData": True,
@@ -569,8 +812,6 @@ myJobs = {
         "isData": True,
         "year": '2017'
     },
-    
-    
     "SingleMuon_Run2018A":{
         "inputDataset": "/SingleMuon/Run2018A-17Sep2018-v2/MINIAOD",
         "isData": True,
@@ -586,14 +827,15 @@ myJobs = {
         "isData": True,
         "year": '2018'
     },
-    
-    
     "SingleMuon_Run2018D":{
         "inputDataset": "/SingleMuon/Run2018D-22Jan2019-v2/MINIAOD",
         "isData": True,
         "year": '2018D'
     }
 }
+
+'''
+'''
 myJobs = {} 
 with open("HNL_samples.txt") as f:
     for line in f:
@@ -608,6 +850,7 @@ with open("HNL_samples.txt") as f:
             "addLLPInfo": True,
             "addSignalLHE": True
         }
+'''
 
 
 requestName = "NANOX_110320"
@@ -624,7 +867,7 @@ configTmpl.JobType.psetName = "LLPReco/NANOProducer/test/produceNANO.py"
 configTmpl.JobType.pluginName = 'Analysis'
 configTmpl.JobType.outputFiles = ['nano.root']
 configTmpl.JobType.allowUndistributedCMSSW = True
-configTmpl.JobType.maxJobRuntimeMin= 20*60
+configTmpl.JobType.maxJobRuntimeMin= 15*60
 configTmpl.JobType.pyCfgParams = []
 configTmpl.JobType.inputFiles = []
 configTmpl.JobType.maxMemoryMB = 2499
@@ -662,6 +905,9 @@ if __name__ == '__main__':
 
 
     for i,jobName in enumerate(sorted(myJobs.keys())):
+        if "ZGToLLG_01J_5f" not in jobName:
+            continue
+
 
         isData = False
         myJob = myJobs[jobName]

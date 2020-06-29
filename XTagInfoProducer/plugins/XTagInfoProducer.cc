@@ -168,6 +168,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         // Cut on eta
         if (std::abs(jet.eta()) > 2.4 or badJet) continue;
 
+        /*
         float NHF  = jet.neutralHadronEnergyFraction();
         float NEMF = jet.neutralEmEnergyFraction();
         float CHF  = jet.chargedHadronEnergyFraction();
@@ -178,6 +179,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         float CHM      = jet.chargedMultiplicity();
 
         int looseJetID = (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(jet.eta())<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(jet.eta())>2.4) && abs(jet.eta())<=2.7;
+        */
 
         // create data containing structure
         llpdnnx::XTagFeatures features;
