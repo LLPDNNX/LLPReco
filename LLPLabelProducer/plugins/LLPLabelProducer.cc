@@ -142,10 +142,13 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             
             unsigned int nbHadrons = jet.jetFlavourInfo().getbHadrons().size();
             unsigned int ncHadrons = jet.jetFlavourInfo().getcHadrons().size();
-            
+
             unsigned int nbHadronsToLeptons = 0;
             unsigned int ncHadronsToLeptons = 0;
             
+            unsigned int nPromptElectrons = 0;
+            unsigned int nPromptMuons = 0;
+
             unsigned int nGluons = 0; 
             
             if (jet.genParton() and (partonFlavor==5 or partonFlavor==4))
@@ -169,21 +172,46 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 int absId = std::abs(constituent->pdgId());
                 if (constituent->mother() and (absId==11 or absId==13))
                 {
+                    //if (ptFrac < 0.6) continue;
                     //account for photon/Z FSR walk up the decay tree
                     const reco::Candidate* mother = constituent->mother();
+                    while (mother->mother() and constituent->pdgId() == mother->pdgId())
+                    {
+                        mother = mother->mother();
+                    }
                     while (mother->mother() and mother->pdgId()==mother->mother()->pdgId())
                     {
                         mother = mother->mother();
                     }
+                    float ptFrac = constituent->pt()/jet.genJet()->pt();
+                    if (ptFrac > 0.6)
+                    {
+                        if (mother->pdgId() == 23 or abs(mother->pdgId()) == 24 or abs(mother->pdgId()) == 15){
+                            if (absId==13){
+                                nPromptMuons += 1;
+                            }
+                            else if (absId==11){
+                                nPromptElectrons +=1;
+                            }                          
+                        }
+                    }
                     int hadFlavor = getHadronFlavor(*constituent->mother());
                     if (hadFlavor==5) nbHadronsToLeptons+=1;
                     if (hadFlavor==4) ncHadronsToLeptons+=1;
+ 
                 }
             }
             
             if (hadronFlavor==5)
             {
-                if (nbHadronsToLeptons==0 and ncHadronsToLeptons==0)
+                if (nPromptMuons > 0){
+                    label.type = llpdnnx::LLPLabel::Type::isB_MU;
+                }
+                else if (nPromptMuons == 0 and nPromptElectrons > 0){
+                    label.type = llpdnnx::LLPLabel::Type::isB_E;                    
+                }
+  
+                else if (nbHadronsToLeptons==0 and ncHadronsToLeptons==0)
                 {
                     if (nbHadrons>1)
                     {
@@ -215,7 +243,13 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
             else if (hadronFlavor==4)
             {
-                if (ncHadrons>1)
+                if (nPromptMuons > 0){
+                    label.type = llpdnnx::LLPLabel::Type::isC_MU;
+                }
+                else if (nPromptMuons == 0 and nPromptElectrons > 0){
+                    label.type = llpdnnx::LLPLabel::Type::isC_E;                    
+                }
+                else if (ncHadrons>1)
                 {
                     if (nGluons==0)
                     {
@@ -233,11 +267,66 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
             else if (partonFlavor!=0)
             {
-                if (partonFlavor==5) label.type = llpdnnx::LLPLabel::Type::isB;
-                if (partonFlavor==4) label.type = llpdnnx::LLPLabel::Type::isC;
-                if (partonFlavor==3) label.type = llpdnnx::LLPLabel::Type::isS;
-                if (partonFlavor==2 or partonFlavor==1) label.type = llpdnnx::LLPLabel::Type::isUD;
-                if (partonFlavor==21) label.type = llpdnnx::LLPLabel::Type::isG;
+                if (partonFlavor==5)
+                {
+                    if (nPromptMuons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isB_MU;
+                    }
+                    else if (nPromptMuons == 0 and nPromptElectrons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isB_E;                    
+                    }
+                    else {
+                        label.type = llpdnnx::LLPLabel::Type::isB;
+                    }
+                }
+                if (partonFlavor==4)
+                {
+                    if (nPromptMuons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isC_MU;
+                    }
+                    else if (nPromptMuons == 0 and nPromptElectrons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isC_E;                    
+                    }
+                    else {
+                        label.type = llpdnnx::LLPLabel::Type::isC;
+                    }  
+                }
+                if (partonFlavor==3)
+                {
+                    if (nPromptMuons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isS_MU;
+                    }
+                    else if (nPromptMuons == 0 and nPromptElectrons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isS_E;                    
+                    }
+                    else {
+                        label.type = llpdnnx::LLPLabel::Type::isS;
+                    }
+                }
+                if (partonFlavor==2 or partonFlavor==1)
+                {
+                    if (nPromptMuons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isUD_MU;
+                    }
+                    else if (nPromptMuons == 0 and nPromptElectrons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isUD_E;                    
+                    }
+                    else {
+                        label.type = llpdnnx::LLPLabel::Type::isUD;
+                    }
+                }
+                if (partonFlavor==21)
+                {
+                    if (nPromptMuons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isG_MU;
+                    }
+                    else if (nPromptMuons == 0 and nPromptElectrons > 0){
+                        label.type = llpdnnx::LLPLabel::Type::isG_E;                    
+                    }
+                    else {
+                        label.type = llpdnnx::LLPLabel::Type::isG;
+                    }
+                }
             }  
             else
             {

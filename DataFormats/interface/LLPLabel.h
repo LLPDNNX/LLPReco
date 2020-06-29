@@ -18,12 +18,22 @@ class LLPLabel {
             isGBB,
             isLeptonic_B,
             isLeptonic_C,
+            isB_MU,
+            isB_E,
+            isC_MU,
+            isC_E,
             isC,
             isCC,
             isGCC,
             isS,
+            isS_MU,
+            isS_E,
             isUD,
+            isUD_MU,
+            isUD_E,
             isG,
+            isG_MU,
+            isG_E,
             
             isLLP_RAD, //no flavour match (likely from wide angle radiation)
             isLLP_MU, //prompt lepton
@@ -98,6 +108,14 @@ class LLPLabel {
                     return "isLeptonic_B";
                 case Type::isLeptonic_C:
                     return "isLeptonic_C";
+                case Type::isB_MU:
+                    return "isB_MU";
+                case Type::isB_E:
+                    return "isB_E";
+                case Type::isC_MU:
+                    return "isC_MU";
+                case Type::isC_E:
+                    return "isC_E";
                 case Type::isC:
                     return "isC";
                 case Type::isCC:
@@ -105,11 +123,23 @@ class LLPLabel {
                 case Type::isGCC:
                     return "isGCC";
                 case Type::isS:
-                    return "isS";                
+                    return "isS"; 
+                case Type::isS_MU:
+                    return "isS_MU";
+                case Type::isS_E:
+                    return "isS_E";               
                 case Type::isUD:
                     return "isUD";
+                case Type::isUD_MU:
+                    return "isUD_MU";
+                case Type::isUD_E:
+                    return "isUD_E";
                 case Type::isG:
                     return "isG";
+                case Type::isG_MU:
+                    return "isG_MU";
+                case Type::isG_E:
+                    return "isG_E";
                 
                 case Type::isLLP_RAD:
                     return "isLLP_RAD";
