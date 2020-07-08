@@ -94,7 +94,8 @@ files = {
         "data": "/store/data/Run2017E/SingleMuon/MINIAOD/31Mar2018-v1/00000/A6325FCE-1C39-E811-BB22-0CC47A745298.root"
     },
     '2018': {
-        "mc": "/store/mc/RunIIAutumn18MiniAOD/WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/90000/0AFFFA80-7665-7445-BF33-1553204306E9.root",
+        "mc": "/store/mc/RunIIAutumn18MiniAOD/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/280000/476F85B5-BDDA-5A4D-BB9E-199B03CE1FD7.root",
+        #"mc": "/store/mc/RunIIAutumn18MiniAOD/WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/90000/0AFFFA80-7665-7445-BF33-1553204306E9.root",
         "data": "/store/data/Run2018B/SingleMuon/MINIAOD/17Sep2018-v1/60000/FF47BB90-FC1A-CC44-A635-2B8B8C64AA39.root"
     },
     '2018D': {

@@ -190,7 +190,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 if (absId == 11 or absId == 13)
                 {
-                    if (packedConstituent->isPromptFinalState())
+                    if (packedConstituent->isPromptFinalState() or packedConstituent->isDirectPromptTauDecayProductFinalState())
                     {
                         int hadFlavor = getHadronFlavor(*constituent->mother());
                         if (hadFlavor==5) nbHadronsToLeptons+=1;
@@ -216,24 +216,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
 
 
-                    /*
-                    const reco::Candidate* mother = constituent->mother();
-
-                    while (mother->mother() and constituent->pdgId() == mother->pdgId())
-                    {
-                        mother = mother->mother();
-                    }
-
-                    while (mother->mother() and mother->pdgId()==mother->mother()->pdgId())
-                    {
-                        mother = mother->mother();
-                    }
-                    if (std::abs(constituent->mother()->pdgId()) == 15)
-                    {
-                        tauPtFrac += constituent->pt()/jet.genJet()->pt();
-                    }
-                    */
-
             if (tauPtFrac > promptPtThreshold)
             {
                 //hist->Fill(tauPtFrac);
@@ -242,18 +224,15 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             else if (nPromptMuons > 0)
             {
-
                 label.type = llpdnnx::LLPLabel::Type::isPrompt_MU;
             }
 
 
             else if (nPromptElectrons > 0)
             {
-
                 label.type = llpdnnx::LLPLabel::Type::isPrompt_E;
             }
 
-            
             else if (hadronFlavor==5)
             {
                 if (nbHadronsToLeptons==0 and ncHadronsToLeptons==0)
@@ -314,7 +293,18 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }  
             else
             {
+                /*
+                std::cout<<"  jet: "<<ijet<<"/"<<(jetCollection->size())<<", pt="<<jet.pt()<<", eta="<<jet.eta()<<", phi="<<jet.phi()<<", d="<<(label.displacement)<<", partonFlavor="<<(partonFlavor)<<", hadronFlavour="<<(hadronFlavor)<<", nConstituents="<<(jet.numberOfDaughters())<<std::endl;
+                std::cout<<"matched gen jet: pt="<<jet.genJet()->pt()<<", eta="<<jet.genJet()->eta()<<", phi="<<jet.genJet()->phi()<<std::endl;
+                for (unsigned int iConst = 0; iConst < jet.numberOfDaughters(); iConst++)
+                {
+                    const reco::Candidate* constituent = jet.daughter(iConst);
+                    unsigned int absId = std::abs(constituent->pdgId());
+                    std::cout<<"  constituent: "<<iConst<<"/"<<(jet.numberOfDaughters())<<", pt="<<constituent->pt()<<", eta="<<constituent->eta()<<", phi="<<constituent->phi()<<", pdgId="<<absId<<std::endl;
+                }
+                */
                 label.type = llpdnnx::LLPLabel::Type::isUndefined;
+
             }
             
             
