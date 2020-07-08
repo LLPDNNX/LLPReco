@@ -17,11 +17,15 @@ process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc')
 process.load("FWCore.MessageService.MessageLogger_cfi")
 process.MessageLogger.cerr.FwkReport.reportEvery = 1000
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(500) )
+process.TFileService = cms.Service("TFileService",
+                           fileName = cms.string('histo.root')
+                                                                                  )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(10000) )
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
         "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root"
+        #"/store/mc/RunIIFall17MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/40375A25-3C42-E811-B3CB-008CFAC91A4C.root",
         #"root://cms-xrd-global.cern.ch//store/mc/RunIISummer16MiniAODv2/SMS-T1qqqq_ctau-1_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_GridpackScan_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v2/10000/023CA233-4289-E711-9B01-002590FD5A48.root"
         #"/store/user/lbenato/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-5_Summer16_MINIAODSIM_calojets/GluGluH_HToSSTobbbb_MH-125_MS-50_ctauS-5_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets/181203_133916/0000/miniaod_6.root"
         #"/store/user/lbenato/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-1_Summer16_MINIAODSIM_calojets/GluGluH_HToSSTobbbb_MH-125_MS-15_ctauS-1_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/RunIISummer16-PU_premix-Moriond17_80X_mcRun2_2016_MINIAODSIM_calojets/181203_134848/0000/miniaod_1.root"

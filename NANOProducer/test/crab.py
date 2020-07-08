@@ -4,7 +4,6 @@ import copy
 import math
 import urllib, json
 from WMCore.Configuration import Configuration
-#from CRABClient.UserUtilities import getUsernameFromSiteDB, getLumiListInValidFiles
 
 myJobs = {
     "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
@@ -161,8 +160,8 @@ myJobs = {
         "unitsPerJob": 3
     },
 
-    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
-        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_ext3-2017":{
+        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext3-v1/MINIAODSIM",
         "year": 2017,
         "unitsPerJob": 3
     },
@@ -173,17 +172,14 @@ myJobs = {
         "unitsPerJob": 3
     },
 
-    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018": {
-        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_ext2-2018": {
+        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext2-v1/MINIAODSIM",
         "year": 2018,
         "unitsPerJob": 3
     },
 
-    "WToLNu_0J_13TeV-amcatnloFXFX-pythia8-2016":{
-        "inputDataset":"/WToLNu_0J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_backup_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
-        "year": 2016,
-        "unitsPerJob": 2
-    },
+
+
     "WToLNu_0J_13TeV-amcatnloFXFX-pythia8-ext1-2016":{
         "inputDataset":"/WToLNu_0J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
         "year": 2016,
@@ -664,7 +660,6 @@ myJobs = {
         "unitsPerJob": 2
     },
 }
-'''
 myJobs = {
     "SingleElectron_Run2016B_ver2":{
         "inputDataset": "/SingleElectron/Run2016B-17Jul2018_ver2-v1/MINIAOD",
@@ -748,10 +743,8 @@ myJobs = {
         "inputDataset": "/EGamma/Run2018D-22Jan2019-v2/MINIAOD",
         "isData": True,
         "year": '2018D'
-    }
-}
+    },
     
-myJobs = {
     "SingleMuon_Run2016B_ver2":{
         "inputDataset": "/SingleMuon/Run2016B-17Jul2018_ver2-v1/MINIAOD",
         "isData": True,
@@ -835,7 +828,6 @@ myJobs = {
 }
 
 '''
-'''
 myJobs = {} 
 with open("HNL_samples.txt") as f:
     for line in f:
@@ -853,9 +845,8 @@ with open("HNL_samples.txt") as f:
 '''
 
 
-requestName = "NANOX_110320"
+requestName = "NANOX_110320-v2"
 userName = "vcepaiti"
-#userName = getUsernameFromSiteDB() 
 configTmpl = Configuration()
 
 configTmpl.section_('General')
@@ -867,22 +858,14 @@ configTmpl.JobType.psetName = "LLPReco/NANOProducer/test/produceNANO.py"
 configTmpl.JobType.pluginName = 'Analysis'
 configTmpl.JobType.outputFiles = ['nano.root']
 configTmpl.JobType.allowUndistributedCMSSW = True
-configTmpl.JobType.maxJobRuntimeMin= 15*60
+configTmpl.JobType.maxJobRuntimeMin= 20*60
 configTmpl.JobType.pyCfgParams = []
 configTmpl.JobType.inputFiles = []
-configTmpl.JobType.maxMemoryMB = 2499
+configTmpl.JobType.maxMemoryMB = 2500
 configTmpl.section_('Data')
 configTmpl.Data.useParent = False
 configTmpl.section_('Site')
 configTmpl.Site.storageSite = 'T2_UK_London_IC'
-
-'''
-configTmpl.Data.ignoreLocality = True
-configTmpl.Site.whitelist = [
-    'T2_BE_IIHE','T2_BE_UCL','T2_CH_CERN','T2_UK_London_IC',
-    'T2_DE_DESY','T2_DE_RWTH',
-]
-'''
 
 if __name__ == '__main__':
 
@@ -905,16 +888,12 @@ if __name__ == '__main__':
 
 
     for i,jobName in enumerate(sorted(myJobs.keys())):
-        if "ZGToLLG_01J_5f" not in jobName:
-            continue
-
-
+        print(jobName)
         isData = False
         myJob = myJobs[jobName]
         i=i+1
         config = copy.deepcopy(configTmpl)
         config.General.requestName = jobName+"_"+requestName
-        print len(jobName+"_"+requestName)
         print config.General.requestName
         config.General.workArea = "crab/"+requestName+"/"+jobName
         config.Data.outLFNDirBase = "/store/user/"+userName+"/LLP/"+requestName+"/"+jobName
@@ -947,13 +926,17 @@ if __name__ == '__main__':
         if isData:
             config.JobType.pyCfgParams.append("isData=True")
             config.Data.splitting = 'LumiBased'
-            config.Data.unitsPerJob = myJob.get('unitsPerJob', 30)
+            config.Data.unitsPerJob = myJob.get('unitsPerJob', 10)
             if year == '2016':
                 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification//Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
             if year == '2017':
                 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions17/13TeV/Final/Cert_294927-306462_13TeV_PromptReco_Collisions17_JSON.txt'
             if year == '2018' or year== '2018D':
                 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions18/13TeV/PromptReco/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.txt' 
+
+            # Recovery task!
+            config.Data.lumiMask = '{}.json'.format(jobName) 
+
         else:
             config.JobType.pyCfgParams.append("isData=False")
             config.Data.splitting = 'FileBased'
