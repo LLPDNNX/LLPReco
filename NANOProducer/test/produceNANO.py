@@ -26,7 +26,7 @@ options.register(
 
 options.register(
     'addLLPInfo',
-    True,
+    False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "add LLP Info"
@@ -90,12 +90,12 @@ files = {
         "data": "/store/data/Run2016B/SingleElectron/MINIAOD/17Jul2018_ver2-v1/40000/6E260591-B88C-E811-AA91-001E67DBE79B.root",
     },
     '2017': {
-        "mc": "/store/mc/RunIIFall17MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/40375A25-3C42-E811-B3CB-008CFAC91A4C.root",
+        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk:1097//store/user/mkomm/HNL/miniaod17v2_200625/HNL_dirac_all_ctau1p0e01_massHNL2p0_Vall4p066e-02/miniaod17v2_200625/200706_192938/0000/HNL2017_93.root",
+        #"mc": "/store/mc/RunIIFall17MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/40375A25-3C42-E811-B3CB-008CFAC91A4C.root",
         "data": "/store/data/Run2017E/SingleMuon/MINIAOD/31Mar2018-v1/00000/A6325FCE-1C39-E811-BB22-0CC47A745298.root"
     },
     '2018': {
         "mc": "/store/mc/RunIIAutumn18MiniAOD/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/280000/476F85B5-BDDA-5A4D-BB9E-199B03CE1FD7.root",
-        #"mc": "/store/mc/RunIIAutumn18MiniAOD/WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/90000/0AFFFA80-7665-7445-BF33-1553204306E9.root",
         "data": "/store/data/Run2018B/SingleMuon/MINIAOD/17Sep2018-v1/60000/FF47BB90-FC1A-CC44-A635-2B8B8C64AA39.root"
     },
     '2018D': {
@@ -129,7 +129,6 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         SelectEvents = cms.vstring('llpnanoAOD_step') #only events passing this path will be saved
     ),
     fileName = cms.untracked.string('nano.root'),
-    #outputCommands = process.NANOAODSIMEventContent.outputCommands+cms.untracked.vstring(
     outputCommands = cms.untracked.vstring(
         'drop *',
         'keep nanoaodFlatTable_*Table_*_*',
@@ -154,8 +153,6 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         
         'drop *_rivetMetTable_*_*',
         'drop *_rivetProducerHTXS_*_*',
-        
-        #'drop *_rivetMetTable_*_*',
     )
 )
 
@@ -444,9 +441,11 @@ for moduleName in modulesToRemove:
     else:
         print "module for removal not found: ",moduleName
 
-#override final photons (required by object linker) so that ID evaluation is not needed
-#process.finalPhotons.cut = cms.string("pt > 5")
-#process.finalPhotons.src = cms.InputTag("slimmedPhotons")
+
+process.genParticleTable.variables.vertex_x = Var("vertex().x()", float, doc="vertex x position")
+process.genParticleTable.variables.vertex_y = Var("vertex().y()", float, doc="vertex y position")
+process.genParticleTable.variables.vertex_z = Var("vertex().z()", float, doc="vertex z position")
+
 
 '''
 process.MINIAODoutput = cms.OutputModule("PoolOutputModule",

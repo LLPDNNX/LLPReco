@@ -827,25 +827,30 @@ myJobs = {
     }
 }
 
-'''
 myJobs = {} 
 with open("HNL_samples.txt") as f:
     for line in f:
         line = line.rstrip()
-        name = line.rsplit('/')[1]+"-2016"
-        print(name)
+        chunks = line.rsplit('/')
+        version = chunks[2]
+        if "miniaod16v3" in version:
+            year = "2016"
+        elif "miniaod17v2" in version:
+            year = "2017"
+        elif "miniaod18" in version:
+            year = "2018"
+        name = chunks[1]+"-"+year
         myJobs[name] = {
             "inputDataset": line,
-            "year": '2016',
+            "year": year,
             "unitsPerJob": 15,
-            "isData":False,
+            "isData": False,
             "addLLPInfo": True,
             "addSignalLHE": True
         }
-'''
 
 
-requestName = "NANOX_110320-v2"
+requestName = "NANOX_200720"
 userName = "vcepaiti"
 configTmpl = Configuration()
 
@@ -858,7 +863,7 @@ configTmpl.JobType.psetName = "LLPReco/NANOProducer/test/produceNANO.py"
 configTmpl.JobType.pluginName = 'Analysis'
 configTmpl.JobType.outputFiles = ['nano.root']
 configTmpl.JobType.allowUndistributedCMSSW = True
-configTmpl.JobType.maxJobRuntimeMin= 20*60
+configTmpl.JobType.maxJobRuntimeMin= 8*60
 configTmpl.JobType.pyCfgParams = []
 configTmpl.JobType.inputFiles = []
 configTmpl.JobType.maxMemoryMB = 2500
@@ -896,7 +901,7 @@ if __name__ == '__main__':
         config.General.requestName = jobName+"_"+requestName
         print config.General.requestName
         config.General.workArea = "crab/"+requestName+"/"+jobName
-        config.Data.outLFNDirBase = "/store/user/"+userName+"/LLP/"+requestName+"/"+jobName
+        config.Data.outLFNDirBase = "/store/user/"+userName+"/HNL/"+requestName+"/"+jobName
         userInputFiles = myJob.get('userInputFiles', None)
         if not userInputFiles:
             config.Data.inputDataset = myJob["inputDataset"]
@@ -917,7 +922,7 @@ if __name__ == '__main__':
         year = str(myJob.get('year', '0'))
         
         if year not in ['2016','2017','2018','2018D']:
-            print "ERROR: Year invalid: ",year
+            print "ERROR: Year invalid: ", year
             continue
         print "year:", year
         
@@ -935,7 +940,7 @@ if __name__ == '__main__':
                 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions18/13TeV/PromptReco/Cert_314472-325175_13TeV_PromptReco_Collisions18_JSON.txt' 
 
             # Recovery task!
-            config.Data.lumiMask = '{}.json'.format(jobName) 
+            #config.Data.lumiMask = '{}.json'.format(jobName) 
 
         else:
             config.JobType.pyCfgParams.append("isData=False")
@@ -952,13 +957,11 @@ if __name__ == '__main__':
             config.Site.whitelist = myJob['whitelist']
             
         if "blacklist" in myJob:
-            config.Site.whitelist = myJob['blacklist']
+            config.Site.blacklist = myJob['blacklist']
 
         if not os.path.exists(configTmpl.JobType.psetName):
             print "\nConfiguration file ", pSet, "does not exist.  Aborting..."
             sys.exit(1)
-        
-        
         
         if os.path.isdir(os.path.join(os.getcwd(),config.General.workArea)):
             print "Output directory ",os.path.join(os.getcwd(),config.General.workArea)," exists -> skipping"
