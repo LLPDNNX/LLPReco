@@ -173,6 +173,16 @@ LLPGhostFlavourProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSet
     // loop over all input jets and collect all their constituents
     for (auto const& jet: *jetCollection)
     {
+        bool badJet = 0;
+        for (unsigned int iconstituent = 0; iconstituent < jet.numberOfDaughters(); ++iconstituent)
+        {
+            const reco::Candidate* constituent = jet.daughter(iconstituent);
+            if (std::isinf(constituent->pt())){
+                edm::LogWarning("BadTransverseMomentum") << "Skipping jet with infinite pt constituent!";
+                badJet = 1;
+            }
+        }
+        if (badJet) continue;
         for(unsigned int iconstituent = 0; iconstituent < jet.numberOfDaughters(); ++iconstituent)
         {
             const reco::Candidate* constituent = jet.daughter(iconstituent);
