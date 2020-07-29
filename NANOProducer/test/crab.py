@@ -5,22 +5,53 @@ import math
 import urllib, json
 from WMCore.Configuration import Configuration
 
-myJobs = {
+myJobsTraining = {
     "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
         "inputDataset":"/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
         "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
         "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
+
+    "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia-2016":{
+        "inputDataset":"/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+        "year": 2016
+    },
+    "WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
+        "inputDataset":"/WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017
+    },
+    "WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
+        "inputDataset":"/WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018
+    },
+
+    "QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
+        "inputDataset":"/QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016
+    },
+
+    "QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
+        "inputDataset":"/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017
+    },
+
+    "QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
+        "inputDataset":"/QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018
+    },
+
+
+
+}
+
+myJobsAnalysis = {
 
     "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
@@ -660,7 +691,7 @@ myJobs = {
         "unitsPerJob": 2
     },
 }
-myJobs = {
+myJobsData = {
     "SingleElectron_Run2016B_ver2":{
         "inputDataset": "/SingleElectron/Run2016B-17Jul2018_ver2-v1/MINIAOD",
         "isData": True,
@@ -827,7 +858,7 @@ myJobs = {
     }
 }
 
-myJobs = {} 
+myJobsHNL = {} 
 with open("HNL_samples.txt") as f:
     for line in f:
         line = line.rstrip()
@@ -840,7 +871,7 @@ with open("HNL_samples.txt") as f:
         elif "miniaod18" in version:
             year = "2018"
         name = chunks[1]+"-"+year
-        myJobs[name] = {
+        myJobsHNL[name] = {
             "inputDataset": line,
             "year": year,
             "unitsPerJob": 15,
@@ -848,6 +879,9 @@ with open("HNL_samples.txt") as f:
             "addLLPInfo": True,
             "addSignalLHE": True
         }
+
+myJobs = myJobsTraining
+myJobs = myJobsHNL
 
 
 requestName = "NANOX_200720"
@@ -920,6 +954,8 @@ if __name__ == '__main__':
             
         isData = myJob.get('isData', False)
         year = str(myJob.get('year', '0'))
+        addLLPInfo = str(myJob.get('addLLPInfo', False))
+        addSignalLHE = str(myJob.get('addSignalLHE', False))
         
         if year not in ['2016','2017','2018','2018D']:
             print "ERROR: Year invalid: ", year
@@ -927,6 +963,8 @@ if __name__ == '__main__':
         print "year:", year
         
         config.JobType.pyCfgParams.append("year="+str(year))
+        config.JobType.pyCfgParams.append("addLLPInfo={}".format(addLLPInfo))
+        config.JobType.pyCfgParams.append("addSignalLHE={}".format(addSignalLHE))
 
         if isData:
             config.JobType.pyCfgParams.append("isData=True")
@@ -944,8 +982,12 @@ if __name__ == '__main__':
 
         else:
             config.JobType.pyCfgParams.append("isData=False")
-            config.Data.splitting = 'FileBased'
-            config.Data.unitsPerJob = myJob.get('unitsPerJob', 1)
+            if myJobs == myJobsHNL:
+                config.Data.splitting = 'FileBased'
+                config.Data.unitsPerJob = myJob.get('unitsPerJob', 1)
+            else:
+                config.Data.splitting = 'Automatic'
+                config.Data.unitsPerJob = 8*60
 
         if "params" in myJob:
             params = myJob["params"]

@@ -18,7 +18,7 @@ options.register(
 
 options.register(
     'addSignalLHE',
-    False,
+    True,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "adds LHE weights of signal samples"
@@ -26,7 +26,7 @@ options.register(
 
 options.register(
     'addLLPInfo',
-    False,
+    True,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
     "add LLP Info"
@@ -38,6 +38,14 @@ options.register(
     VarParsing.multiplicity.singleton,
     VarParsing.varType.string,
     "add year file"
+)
+
+options.register(
+    'test',
+    False,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.bool,
+    "test mode"
 )
 options.parseArguments() 
 
@@ -82,9 +90,6 @@ process.maxEvents = cms.untracked.PSet(
 process.options = cms.untracked.PSet()
 
 files = {
-    'test': {
-        "mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
-        },
     '2016': {
         "mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200625/HNL_dirac_all_ctau1p0e-02_massHNL8p0_Vall2p996e-02/miniaod16v3_200625/200625_171726/0000/HNL2016_9.root",
         "data": "/store/data/Run2016B/SingleElectron/MINIAOD/17Jul2018_ver2-v1/40000/6E260591-B88C-E811-AA91-001E67DBE79B.root",
@@ -103,10 +108,15 @@ files = {
     }
 }
 
-process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring(files[options.year]['data'] if options.isData else files[options.year]['mc'])
+if options.test:
+    process.source = cms.Source("PoolSource",
+        fileNames = cms.untracked.vstring(options.inputFiles)
+    )
+else:
+    process.source = cms.Source("PoolSource",
+        fileNames = cms.untracked.vstring(files[options.year]['data'] if options.isData else files[options.year]['mc'])
+    )
 
-)
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
     annotation = cms.untracked.string('test102X nevts:10000'),
@@ -162,9 +172,6 @@ process.OUT = cms.OutputModule("PoolOutputModule",
     fileName = cms.untracked.string('test.root'),
     outputCommands = cms.untracked.vstring(['keep *'])
 )
-
-if options.year == "test":
-    options.year = "2016"
 
 if options.isData:
     if options.year == '2016':
