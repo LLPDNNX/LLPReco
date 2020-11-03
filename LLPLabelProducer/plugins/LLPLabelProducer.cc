@@ -29,6 +29,9 @@
 
 #include "LLPReco/DataFormats/interface/LLPGhostFlavourInfo.h"
 
+#include "TH1.h"
+
+
 using llpdnnx::DisplacedGenVertex;
 using llpdnnx::DisplacedGenVertexCollection;
 
@@ -47,6 +50,9 @@ class LLPLabelProducer:
             {
             }
         };
+
+        //TH1D *hist;
+        //edm::Service<TFileService> fs;
     
     
         static int getHadronFlavor(const reco::Candidate& genParticle)
@@ -74,6 +80,7 @@ class LLPLabelProducer:
         edm::EDGetTokenT<edm::View<llpdnnx::DisplacedGenVertex>> displacedGenVertexToken_;
         edm::EDGetTokenT<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>> llpFlavourInfoToken_;
 
+
         virtual void produce(edm::Event& iEvent, const edm::EventSetup& iSetup) override;
 
     public:
@@ -95,6 +102,7 @@ LLPLabelProducer::LLPLabelProducer(const edm::ParameterSet& iConfig):
     llpFlavourInfoToken_(consumes<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>>(iConfig.getParameter<edm::InputTag>("srcFlavourInfo")))
 {
     produces<reco::LLPLabelInfoCollection>();
+    //hist = fs->make<TH1D>("ptfrac" , "ptfrac" , 100 , 0 , 1. );
 }
 
 
@@ -142,11 +150,18 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             
             unsigned int nbHadrons = jet.jetFlavourInfo().getbHadrons().size();
             unsigned int ncHadrons = jet.jetFlavourInfo().getcHadrons().size();
-            
+
             unsigned int nbHadronsToLeptons = 0;
             unsigned int ncHadronsToLeptons = 0;
             
+            unsigned int nPromptElectrons = 0;
+            unsigned int nPromptMuons = 0;
+
             unsigned int nGluons = 0; 
+
+            float tauPtFrac = 0;
+
+            float promptPtThreshold = 0.6;
             
             if (jet.genParton() and (partonFlavor==5 or partonFlavor==4))
             {
@@ -162,26 +177,63 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     nGluons+=1;
                 }
             }
-           
-            
-            for (const auto* constituent: jet.genJet()->getJetConstituentsQuick())
-            {   
-                int absId = std::abs(constituent->pdgId());
-                if (constituent->mother() and (absId==11 or absId==13))
+
+            for (unsigned int iConst = 0; iConst < jet.genJet()->numberOfDaughters(); iConst++)
+            {
+                const reco::Candidate* constituent = jet.genJet()->daughter(iConst);
+                const pat::PackedGenParticle* packedConstituent = dynamic_cast<const pat::PackedGenParticle*>(constituent);
+                unsigned int absId = std::abs(constituent->pdgId());
+                if (not (constituent->mother()))
                 {
-                    //account for photon/Z FSR walk up the decay tree
-                    const reco::Candidate* mother = constituent->mother();
-                    while (mother->mother() and mother->pdgId()==mother->mother()->pdgId())
+                    continue;
+                }
+
+                if (absId == 11 or absId == 13)
+                {
+                    if (packedConstituent->isPromptFinalState() or packedConstituent->isDirectPromptTauDecayProductFinalState())
                     {
-                        mother = mother->mother();
+                        int hadFlavor = getHadronFlavor(*constituent->mother());
+                        if (hadFlavor==5) nbHadronsToLeptons+=1;
+                        if (hadFlavor==4) ncHadronsToLeptons+=1;                   
+
+                        float ptFrac = constituent->pt()/jet.genJet()->pt();
+                        if (ptFrac > promptPtThreshold)
+                        {
+                            if (absId == 13){
+                                nPromptMuons += 1;
+                            }
+                            else if (absId == 11){
+                                nPromptElectrons += 1;
+                            }           
+                        }
                     }
-                    int hadFlavor = getHadronFlavor(*constituent->mother());
-                    if (hadFlavor==5) nbHadronsToLeptons+=1;
-                    if (hadFlavor==4) ncHadronsToLeptons+=1;
+                }
+
+                else if (packedConstituent->isDirectPromptTauDecayProductFinalState())
+                {
+                    tauPtFrac += constituent->pt()/jet.genJet()->pt();
                 }
             }
-            
-            if (hadronFlavor==5)
+
+
+            if (tauPtFrac > promptPtThreshold)
+            {
+                //hist->Fill(tauPtFrac);
+                label.type = llpdnnx::LLPLabel::Type::isPrompt_TAU;
+            }
+
+            else if (nPromptMuons > 0)
+            {
+                label.type = llpdnnx::LLPLabel::Type::isPrompt_MU;
+            }
+
+
+            else if (nPromptElectrons > 0)
+            {
+                label.type = llpdnnx::LLPLabel::Type::isPrompt_E;
+            }
+
+            else if (hadronFlavor==5)
             {
                 if (nbHadronsToLeptons==0 and ncHadronsToLeptons==0)
                 {
@@ -241,7 +293,18 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }  
             else
             {
+                /*
+                std::cout<<"  jet: "<<ijet<<"/"<<(jetCollection->size())<<", pt="<<jet.pt()<<", eta="<<jet.eta()<<", phi="<<jet.phi()<<", d="<<(label.displacement)<<", partonFlavor="<<(partonFlavor)<<", hadronFlavour="<<(hadronFlavor)<<", nConstituents="<<(jet.numberOfDaughters())<<std::endl;
+                std::cout<<"matched gen jet: pt="<<jet.genJet()->pt()<<", eta="<<jet.genJet()->eta()<<", phi="<<jet.genJet()->phi()<<std::endl;
+                for (unsigned int iConst = 0; iConst < jet.numberOfDaughters(); iConst++)
+                {
+                    const reco::Candidate* constituent = jet.daughter(iConst);
+                    unsigned int absId = std::abs(constituent->pdgId());
+                    std::cout<<"  constituent: "<<iConst<<"/"<<(jet.numberOfDaughters())<<", pt="<<constituent->pt()<<", eta="<<constituent->eta()<<", phi="<<constituent->phi()<<", pdgId="<<absId<<std::endl;
+                }
+                */
                 label.type = llpdnnx::LLPLabel::Type::isUndefined;
+
             }
             
             
@@ -384,8 +447,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         iEvent.put(std::move(outputLLPLabelInfo));
 }
 
-
-
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------
 void
 LLPLabelProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) {
@@ -400,4 +461,3 @@ LLPLabelProducer::fillDescriptions(edm::ConfigurationDescriptions& descriptions)
 
 //define this as a plug-in
 DEFINE_FWK_MODULE(LLPLabelProducer);
-

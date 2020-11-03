@@ -86,6 +86,10 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> isS;
     std::vector<int> isUD;
     std::vector<int> isG;
+    std::vector<int> isPrompt_MU;
+    std::vector<int> isPrompt_E;
+    std::vector<int> isPrompt_TAU;
+
 
     std::vector<int> isLLP_RAD; //no flavour match (likely from wide angle radiation)
     std::vector<int> isLLP_MU; //prompt lepton
@@ -152,6 +156,9 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         isS.push_back(labels.type == llpdnnx::LLPLabel::Type::isS ? 1 : 0);
         isUD.push_back(labels.type == llpdnnx::LLPLabel::Type::isUD ? 1 : 0);
         isG.push_back(labels.type == llpdnnx::LLPLabel::Type::isG ? 1 : 0);
+        isPrompt_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_MU ? 1 : 0);
+        isPrompt_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_E ? 1 : 0);
+        isPrompt_TAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_TAU ? 1 : 0);
         isLLP_RAD.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_RAD ? 1 : 0);
         isLLP_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_MU ? 1 : 0);
         isLLP_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_E ? 1 : 0);
@@ -202,6 +209,9 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<int>("isS", isS, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isUD", isUD, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isG", isG, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isPrompt_MU", isPrompt_MU, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isPrompt_E", isPrompt_E, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isPrompt_TAU", isPrompt_TAU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_RAD", isLLP_RAD, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_MU", isLLP_MU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_E", isLLP_E, "doc", nanoaod::FlatTable::IntColumn);

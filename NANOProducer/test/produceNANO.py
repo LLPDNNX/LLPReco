@@ -25,14 +25,6 @@ options.register(
 )
 
 options.register(
-    'addLLPInfo',
-    True,
-    VarParsing.multiplicity.singleton,
-    VarParsing.varType.bool,
-    "add LLP Info"
-)
-
-options.register(
     'year',
     '2016',
     VarParsing.multiplicity.singleton,
@@ -76,7 +68,7 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(1000)
+    input = cms.untracked.int32(-1)
 )
 
 process.options = cms.untracked.PSet()
@@ -87,17 +79,21 @@ files = {
         #"mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
         },
     '2016': {
-        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200625/HNL_dirac_all_ctau1p0e-02_massHNL8p0_Vall2p996e-02/miniaod16v3_200625/200625_171726/0000/HNL2016_9.root",
+        "mc": [
+            "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200929/LLPGun/miniaod16v3_200929/201007_212837/0000/GUN2016_%i.root"%(i) for i in range(1,10)
+        ],
         #"mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200517/HNL_dirac_all_ctau1p0e00_massHNL6p0_Vall6p496e-03/miniaod16v3_200517/200517_004822/0000/HNL2016_140.root", #"root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_tau_Dirac_massiveAndCKM_LO/heavyNeutrino_1.root",
         #"mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-10_V-0.00112249721603_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_76.root",
         "data": "/store/data/Run2016H/SingleMuon/MINIAOD/17Jul2018-v1/00000/16924A85-4D8C-E811-A51C-A4BF01013F29.root",
     },
     '2017': {
-        "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Fall17/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
+        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/testgun17v2/LLPGun/testgun17v2/200724_143441/0000/GUN2017_1.root",
+        #"mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Fall17/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
         "data": "/store/data/Run2017E/SingleMuon/MINIAOD/31Mar2018-v1/00000/A6325FCE-1C39-E811-BB22-0CC47A745298.root"
     },
     '2018': {
-        "mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Autumn18/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
+        "mc":"root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod18_200625/HNL_dirac_all_ctau1p0e-01_massHNL10p0_Vall5p262e-03/miniaod18_200625/200709_103117/0000/HNL2018_283.root",
+        #"mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Autumn18/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
         "data": "/store/data/Run2018B/SingleMuon/MINIAOD/17Sep2018-v1/60000/FF47BB90-FC1A-CC44-A635-2B8B8C64AA39.root"
     },
     '2018D': {
@@ -245,8 +241,12 @@ process.llpGenDecayInfo = cms.EDProducer(
     src = cms.InputTag("genParticlesMerged"),
     decays = cms.PSet(
         #hnl -> qql
-        hnl = cms.PSet(
+        hnl_dirac = cms.PSet(
             llpId = cms.int32(9990012),
+            daughterIds = cms.vint32([1,2,3,4,5,11,13,15])
+        ),
+        hnl_majorana = cms.PSet(
+            llpId = cms.int32(9900012),
             daughterIds = cms.vint32([1,2,3,4,5,11,13,15])
         ),
         #gluino -> qq chi0
@@ -301,6 +301,9 @@ process.lheWeightsTable = cms.EDProducer(
     lheInfo = cms.VInputTag(cms.InputTag("externalLHEProducer"), cms.InputTag("source")),
     weightGroups = cms.PSet()
 )
+#gun parameters
+process.lheWeightsTable.weightGroups.gun_ctau = cms.vstring(['ctau'])
+process.lheWeightsTable.weightGroups.gun_llpmass = cms.vstring(['llpmass'])
 
 #coupling reweighting
 process.lheWeightsTable.weightGroups.coupling = cms.vstring()
@@ -334,7 +337,6 @@ for scaleSet in [
     setattr(process.lheWeightsTable.weightGroups,scaleSet[0],cms.vstring())
     for i in scaleSet[1]:
         getattr(process.lheWeightsTable.weightGroups,scaleSet[0]).append("%i"%(i))
-        
         
 
 #process.load('RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff')

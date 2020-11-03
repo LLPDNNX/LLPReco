@@ -159,15 +159,16 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         {
             jetConstituentSet.insert(jet.daughterPtr(idaughter));
             const pat::PackedCandidate* constituent = dynamic_cast<const pat::PackedCandidate*>(jet.daughter(idaughter));
-            if (std::isinf(constituent->pt()) or std::isnan(constituent->pt())){
-                std::cout << "one of the constituents does not have well defined properties, skipping the jet!" << std::endl;
+            if (std::isinf(constituent->pt())){
+                edm::LogWarning("BadTransverseMomentum") << "dropping jet with input candidate with inf";
                 badJet = 1;
             }
         }
 
         // Cut on eta
-        if (std::abs(jet.eta()) > 2.4 or badJet) continue;
+        if (std::abs(jet.eta()) > 2.5 or badJet) continue;
 
+        /*
         float NHF  = jet.neutralHadronEnergyFraction();
         float NEMF = jet.neutralEmEnergyFraction();
         float CHF  = jet.chargedHadronEnergyFraction();
@@ -178,6 +179,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         float CHM      = jet.chargedMultiplicity();
 
         int looseJetID = (NHF<0.99 && NEMF<0.99 && NumConst>1) && ((abs(jet.eta())<=2.4 && CHF>0 && CHM>0 && CEMF<0.99) || abs(jet.eta())>2.4) && abs(jet.eta())<=2.7;
+        */
 
         // create data containing structure
         llpdnnx::XTagFeatures features;
@@ -334,6 +336,11 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             const pat::PackedCandidate* constituent = dynamic_cast<const pat::PackedCandidate*>(jet.daughter(idaughter));
             if ((not constituent) or constituent->charge()==0 or (not constituent->hasTrackDetails()))
             {
+                continue;
+            }
+
+            if (constituent->pt() < 1e-10){
+                edm::LogWarning("NullTransverseMomentum") << "dropping input candidate with pt<1e-10";
                 continue;
             }
 

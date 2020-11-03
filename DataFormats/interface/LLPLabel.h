@@ -24,6 +24,9 @@ class LLPLabel {
             isS,
             isUD,
             isG,
+            isPrompt_MU,
+            isPrompt_E,
+            isPrompt_TAU,
             
             isLLP_RAD, //no flavour match (likely from wide angle radiation)
             isLLP_MU, //prompt lepton
@@ -105,11 +108,18 @@ class LLPLabel {
                 case Type::isGCC:
                     return "isGCC";
                 case Type::isS:
-                    return "isS";                
+                    return "isS";               
                 case Type::isUD:
                     return "isUD";
                 case Type::isG:
                     return "isG";
+
+                case Type::isPrompt_MU:
+                    return "isPrompt_MU";
+                case Type::isPrompt_E:
+                    return "isPrompt_E";
+                case Type::isPrompt_TAU:
+                    return "isPrompt_TAU";
                 
                 case Type::isLLP_RAD:
                     return "isLLP_RAD";
