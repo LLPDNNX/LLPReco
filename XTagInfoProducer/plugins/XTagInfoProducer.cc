@@ -349,6 +349,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_features.cpf_ptrel = constituent->pt()/uncorrectedPt;
             cpf_features.cpf_deta = constituent->eta()-jet.eta();
             cpf_features.cpf_dphi = reco::deltaPhi(constituent->phi(),jet.phi());
+            
+            cpf_features.cpf_px = constituent->px();
+            cpf_features.cpf_py = constituent->py();
+            cpf_features.cpf_pz = constituent->pz();
 
             cpf_features.cpf_drminsv = 0.4;
             for (const auto& sv: *svs.product())
@@ -437,10 +441,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             
             //find matching muons
-            llpdnnx::MuonCandidateFeatures mu_features; 
             auto findMuon = muonMap.find(jet.daughterPtr(idaughter));  
             if (findMuon!=muonMap.end())
             {
+                llpdnnx::MuonCandidateFeatures mu_features; 
                 const pat::Muon & muon = *findMuon->second;
 
                 if (not muon.isGlobalMuon() || reco::deltaR(muon, jet) > 0.4) continue;
@@ -453,24 +457,20 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 mu_features.mu_ptrel = muon.pt()/uncorrectedPt;
                 mu_features.mu_deta = muon.eta()-jet.eta();                                      
-                mu_features.mu_dphi = reco::deltaPhi(muon.phi(),jet.phi());                                               
+                mu_features.mu_dphi = reco::deltaPhi(muon.phi(),jet.phi());     
+                mu_features.mu_px = muon.px();
+                mu_features.mu_py = muon.py();
+                mu_features.mu_pz = muon.pz();                                          
                 mu_features.mu_charge = muon.charge();
                 mu_features.mu_energy = muon.energy()/muon.pt();                                   
                 mu_features.mu_et = muon.et();
-                mu_features.mu_jetDeltaR = reco::deltaR(muon, jet);
+                mu_features.mu_deltaR = reco::deltaR(muon, jet);
                 mu_features.mu_numberOfMatchedStations = muon.numberOfMatchedStations();
 
                 mu_features.mu_2dIP = muon.dB();
                 mu_features.mu_2dIPSig = muon.dB()/muon.edB();
                 mu_features.mu_3dIP = muon.dB(pat::Muon::PV3D);
                 mu_features.mu_3dIPSig = muon.dB(pat::Muon::PV3D)/muon.edB(pat::Muon::PV3D);
-
-
-
-                cpf_features.cpf_trackSip2dVal=meas_ip2d.value();
-                cpf_features.cpf_trackSip2dSig=meas_ip2d.significance();
-                cpf_features.cpf_trackSip3dVal=meas_ip3d.value();
-                cpf_features.cpf_trackSip3dSig=meas_ip3d.significance();
 
                 if (std::isnan(mu_features.mu_2dIPSig) || std::isnan(mu_features.mu_3dIPSig))
                 {
@@ -484,9 +484,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 mu_features.mu_EtaRel =reco::btau::etaRel(jetDir, muonMom);
                 mu_features.mu_dxy = muon.bestTrack()->dxy(pv.position());
                 mu_features.mu_dxyError = muon.bestTrack()->dxyError();
-                mu_features.mu_dxySig = muon.bestTrack()->dxy(pv.position())/muon.bestTrack()->dxyError(); 
+                mu_features.mu_dxySig = muon.bestTrack()->dxy(pv.position())/(1e-10+std::fabs(muon.bestTrack()->dxyError())); 
                 mu_features.mu_dz = muon.bestTrack()->dz(pv.position());
                 mu_features.mu_dzError = muon.bestTrack()->dzError();
+                mu_features.mu_dzSig = muon.bestTrack()->dz(pv.position())/(1e-10+std::fabs(muon.bestTrack()->dzError()));
                 mu_features.mu_numberOfValidPixelHits = muon.bestTrack()->hitPattern().numberOfValidPixelHits();
                 mu_features.mu_numberOfpixelLayersWithMeasurement = muon.bestTrack()->hitPattern().pixelLayersWithMeasurement();
                 mu_features.mu_numberOfstripLayersWithMeasurement = muon.bestTrack()->hitPattern().stripLayersWithMeasurement();
@@ -533,10 +534,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
             //find matching electrons
-            llpdnnx::ElectronCandidateFeatures elec_features;
             auto findElectron = electronMap.find(jet.daughterPtr(idaughter));  
             if(findElectron!=electronMap.end())
             {
+                llpdnnx::ElectronCandidateFeatures elec_features;
                 const pat::Electron & electron = *findElectron->second;
                 cpf_features.cpf_matchedElectron = 1;
 		        if (reco::deltaR(electron, jet) > 0.4) continue; 
@@ -545,8 +546,12 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_deta = electron.eta()-jet.eta();
                 elec_features.elec_dphi = reco::deltaPhi(electron.phi(),jet.phi()); 
                 elec_features.elec_charge = electron.charge(); 
+                elec_features.elec_px = electron.px();
+                elec_features.elec_py = electron.py();
+                elec_features.elec_pz = electron.pz();
+                
                 elec_features.elec_energy = electron.energy()/electron.pt(); 
-                elec_features.elec_jetDeltaR = reco::deltaR(electron,jet); 
+                elec_features.elec_deltaR = reco::deltaR(electron,jet); 
                 elec_features.elec_EtFromCaloEn = electron.caloEnergy() * sin(electron.p4().theta())/ electron.pt();
                 elec_features.elec_ecalDrivenSeed = electron.ecalDrivenSeed();
 
@@ -554,20 +559,22 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elec_isEE  = electron.isEE();
                 elec_features.elec_ecalEnergy  = electron.ecalEnergy()/electron.pt();
                 elec_features.elec_isPassConversionVeto = electron.passConversionVeto();
-        		if(electron.convDist() >= 0.){
-                        elec_features.elec_convDist = electron.convDist(); 
-                        elec_features.elec_convFlags = electron.convFlags(); 
-                        elec_features.elec_convRadius = electron.convRadius();
+        		if(electron.convDist() >= 0.)
+        		{
+                    elec_features.elec_convDist = electron.convDist(); 
+                    elec_features.elec_convFlags = electron.convFlags(); 
+                    elec_features.elec_convRadius = electron.convRadius();
          		}
-        		else{
-                        elec_features.elec_convDist = -1.; 
-                        elec_features.elec_convFlags = -1.; 
-                        elec_features.elec_convRadius = -1.;
+        		else 
+        		{
+                    elec_features.elec_convDist = -1.; 
+                    elec_features.elec_convFlags = -1.; 
+                    elec_features.elec_convRadius = -1.;
         		}
 
 
                 elec_features.elec_3dIP = electron.dB(pat::Electron::PV3D); 
-                elec_features.elec_3dIPSig = electron.dB(pat::Electron::PV3D); 
+                elec_features.elec_3dIPSig = electron.dB(pat::Electron::PV3D)/electron.edB(pat::Electron::PV3D); 
                 elec_features.elec_2dIP = electron.dB();
                 elec_features.elec_2dIPSig = electron.dB()/electron.edB();
 
@@ -601,7 +608,12 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
                 elec_features.elec_EtaRel = reco::btau::etaRel(jetDir, electronMom); 
                 elec_features.elec_dxy = electron.gsfTrack()->dxy(pv.position());
+                elec_features.elec_dxyError = electron.gsfTrack()->dxyError();
+                elec_features.elec_dxySig = electron.gsfTrack()->dxy(pv.position())/(1e-10+std::fabs(electron.gsfTrack()->dxyError()));
                 elec_features.elec_dz = electron.gsfTrack()->dz(pv.position());
+                elec_features.elec_dzError = electron.gsfTrack()->dzError();
+                elec_features.elec_dzSig = electron.gsfTrack()->dz(pv.position())/(1e-10+std::fabs(electron.gsfTrack()->dzError()));
+                
                 elec_features.elec_nbOfMissingHits = electron.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
                 elec_features.elec_gsfCharge = electron.gsfTrack()->charge();
         		elec_features.elec_ndof = electron.gsfTrack()->ndof(); 
@@ -741,6 +753,11 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             npf_features.npf_ptrel = constituent->pt()/uncorrectedPt;
             npf_features.npf_deta = constituent->eta()-jet.eta();
             npf_features.npf_dphi = reco::deltaPhi(constituent->phi(),jet.phi());
+            
+            npf_features.npf_px = constituent->px();
+            npf_features.npf_py = constituent->py();
+            npf_features.npf_pz = constituent->pz();
+            
             npf_features.npf_puppi_weight = constituent->puppiWeight();
             npf_features.npf_deltaR = reco::deltaR(*constituent,jet);
             npf_features.npf_isGamma = abs(constituent->pdgId())==22;
@@ -839,7 +856,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             features.jet_features.frac04 = (float)frac04/nCandidates;
             features.jet_features.dR2Mean = dR2Mean/pt2Sum;
         }
-
+        
         output_tag_infos->emplace_back(features, jet_ref);
     }
 

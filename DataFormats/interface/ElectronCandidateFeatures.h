@@ -8,9 +8,12 @@ class ElectronCandidateFeatures {
   public:
     int elec_jetIdx;
     float elec_ptrel;
-    float elec_jetDeltaR;
+    float elec_deltaR;
     float elec_deta;
     float elec_dphi;
+    float elec_px;
+    float elec_py;
+    float elec_pz;
     float elec_charge;
     float elec_energy;
     float elec_EtFromCaloEn;
@@ -67,7 +70,11 @@ class ElectronCandidateFeatures {
     // electron gsf variables. 
     float elec_EtaRel;
     float elec_dxy;
+    float elec_dxyError;
+    float elec_dxySig;
     float elec_dz;
+    float elec_dzError;
+    float elec_dzSig;
     int elec_nbOfMissingHits;
     float elec_gsfCharge;
     int   elec_ndof;

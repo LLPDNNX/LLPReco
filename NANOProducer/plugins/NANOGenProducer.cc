@@ -77,19 +77,17 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> isPU;
     std::vector<int> isB;
     std::vector<int> isBB;
-    std::vector<int> isGBB;
     std::vector<int> isLeptonic_B;
     std::vector<int> isLeptonic_C;
     std::vector<int> isC;
     std::vector<int> isCC;
-    std::vector<int> isGCC;
     std::vector<int> isS;
     std::vector<int> isUD;
     std::vector<int> isG;
     std::vector<int> isPrompt_MU;
     std::vector<int> isPrompt_E;
     std::vector<int> isPrompt_TAU;
-
+    std::vector<int> isPrompt_PHOTON;
 
     std::vector<int> isLLP_RAD; //no flavour match (likely from wide angle radiation)
     std::vector<int> isLLP_MU; //prompt lepton
@@ -109,6 +107,18 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> isLLP_TAU; // hadronic tau decay
     std::vector<int> isLLP_QTAU; 
     std::vector<int> isLLP_QQTAU;
+    std::vector<int> isLLP_BTAU; 
+    std::vector<int> isLLP_BBTAU;
+    
+    std::vector<int> isTauDecay_NO_TAU;     //no tau decay
+    std::vector<int> isTauDecay_INVISIBLE;  //tau decay but not reconstructable
+    std::vector<int> isTauDecay_E;          //to electron
+    std::vector<int> isTauDecay_MU;         //to muon
+    std::vector<int> isTauDecay_H;          //1 charged hadron
+    std::vector<int> isTauDecay_H_1PI0;     //1 charged hadron + pi0(->2gamma)
+    std::vector<int> isTauDecay_H_XPI0;     //1 charged hadron + 2 or more pi0(->2gamma)
+    std::vector<int> isTauDecay_HHH;         //3 charged hadrons
+    std::vector<int> isTauDecay_HHH_XPI0;    //3 charged hadron + 1 or more pi0(->2gamma)
 
     std::vector<int> isUndefined;
         
@@ -147,18 +157,17 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         isPU.push_back(labels.type == llpdnnx::LLPLabel::Type::isPU ? 1 : 0);
         isB.push_back(labels.type == llpdnnx::LLPLabel::Type::isB ? 1 : 0);
         isBB.push_back(labels.type == llpdnnx::LLPLabel::Type::isBB ? 1 : 0);
-        isGBB.push_back(labels.type == llpdnnx::LLPLabel::Type::isGBB ? 1 : 0);
         isLeptonic_B.push_back(labels.type == llpdnnx::LLPLabel::Type::isLeptonic_B ? 1 : 0);
         isLeptonic_C.push_back(labels.type == llpdnnx::LLPLabel::Type::isLeptonic_C ? 1 : 0);
         isC.push_back(labels.type == llpdnnx::LLPLabel::Type::isC ? 1 : 0);
         isCC.push_back(labels.type == llpdnnx::LLPLabel::Type::isCC ? 1 : 0);
-        isGCC.push_back(labels.type == llpdnnx::LLPLabel::Type::isGCC ? 1 : 0);
         isS.push_back(labels.type == llpdnnx::LLPLabel::Type::isS ? 1 : 0);
         isUD.push_back(labels.type == llpdnnx::LLPLabel::Type::isUD ? 1 : 0);
         isG.push_back(labels.type == llpdnnx::LLPLabel::Type::isG ? 1 : 0);
         isPrompt_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_MU ? 1 : 0);
         isPrompt_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_E ? 1 : 0);
         isPrompt_TAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_TAU ? 1 : 0);
+        isPrompt_PHOTON.push_back(labels.type == llpdnnx::LLPLabel::Type::isPrompt_PHOTON ? 1 : 0);
         isLLP_RAD.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_RAD ? 1 : 0);
         isLLP_MU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_MU ? 1 : 0);
         isLLP_E.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_E ? 1 : 0);
@@ -177,7 +186,21 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         isLLP_TAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_TAU ? 1 : 0);
         isLLP_QTAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_QTAU ? 1 : 0);
         isLLP_QQTAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_QQTAU ? 1 : 0);
+        isLLP_BTAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_BTAU ? 1 : 0);
+        isLLP_BBTAU.push_back(labels.type == llpdnnx::LLPLabel::Type::isLLP_BBTAU ? 1 : 0);
         isUndefined.push_back(labels.type == llpdnnx::LLPLabel::Type::isUndefined ? 1 : 0);
+        
+        
+        isTauDecay_NO_TAU.push_back(labels.tauDecay == llpdnnx::LLPLabel::TauDecay::NO_TAU ? 1 : 0);
+        isTauDecay_INVISIBLE.push_back(labels.tauDecay == llpdnnx::LLPLabel::TauDecay::INVISIBLE ? 1 : 0);
+        isTauDecay_E.push_back(labels.tauDecay == llpdnnx::LLPLabel::TauDecay::E ? 1 : 0);
+        isTauDecay_MU.push_back(labels.tauDecay == llpdnnx::LLPLabel::TauDecay::MU ? 1 : 0);
+        isTauDecay_H.push_back(labels.tauDecay == llpdnnx::LLPLabel::TauDecay::H ? 1 : 0);
+        isTauDecay_H_1PI0.push_back(labels.tauDecay == llpdnnx::LLPLabel::TauDecay::H_1PI0 ? 1 : 0);
+        isTauDecay_H_XPI0.push_back(labels.tauDecay == llpdnnx::LLPLabel::TauDecay::H_XPI0 ? 1 : 0);
+        isTauDecay_HHH.push_back(labels.tauDecay == llpdnnx::LLPLabel::TauDecay::HHH ? 1 : 0);
+        isTauDecay_HHH_XPI0.push_back(labels.tauDecay == llpdnnx::LLPLabel::TauDecay::HHH_XPI0 ? 1 : 0);
+
 
         partonFlavor.push_back(labels.partonFlavor);
         hadronFlavor.push_back(labels.hadronFlavor);
@@ -200,18 +223,17 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<int>("isPU", isPU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isB", isB, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isBB", isBB, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isGBB", isGBB, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLeptonic_B", isLeptonic_B, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLeptonic_C", isLeptonic_C, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isC", isC, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isCC", isCC, "doc", nanoaod::FlatTable::IntColumn);
-    jetOriginTable->addColumn<int>("isGCC", isGCC, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isS", isS, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isUD", isUD, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isG", isG, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isPrompt_MU", isPrompt_MU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isPrompt_E", isPrompt_E, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isPrompt_TAU", isPrompt_TAU, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isPrompt_PHOTON", isPrompt_PHOTON, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_RAD", isLLP_RAD, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_MU", isLLP_MU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_E", isLLP_E, "doc", nanoaod::FlatTable::IntColumn);
@@ -230,7 +252,19 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<int>("isLLP_TAU", isLLP_TAU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_QTAU", isLLP_QTAU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isLLP_QQTAU", isLLP_QQTAU, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isLLP_BTAU", isLLP_BTAU, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isLLP_BBTAU", isLLP_BBTAU, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("isUndefined", isUndefined, "doc", nanoaod::FlatTable::IntColumn);
+    
+    jetOriginTable->addColumn<int>("isTauDecay_NO_TAU", isTauDecay_NO_TAU, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isTauDecay_INVISIBLE", isTauDecay_INVISIBLE, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isTauDecay_E", isTauDecay_E, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isTauDecay_MU", isTauDecay_MU, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isTauDecay_H", isTauDecay_H, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isTauDecay_H_1PI0", isTauDecay_H_1PI0, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isTauDecay_H_XPI0", isTauDecay_H_XPI0, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isTauDecay_HHH", isTauDecay_HHH, "doc", nanoaod::FlatTable::IntColumn);
+    jetOriginTable->addColumn<int>("isTauDecay_HHH_XPI0", isTauDecay_HHH_XPI0, "doc", nanoaod::FlatTable::IntColumn);
 
     jetOriginTable->addColumn<int>("partonFlavor", partonFlavor, "doc", nanoaod::FlatTable::IntColumn);
     jetOriginTable->addColumn<int>("hadronFlavor", hadronFlavor, "doc", nanoaod::FlatTable::IntColumn);

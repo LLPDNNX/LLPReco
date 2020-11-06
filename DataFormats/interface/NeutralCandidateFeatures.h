@@ -10,6 +10,11 @@ struct NeutralCandidateFeatures
     float npf_deta;
     float npf_dphi;
     float npf_deltaR;
+    
+    float npf_px;
+    float npf_py;
+    float npf_pz;
+    
     int npf_isGamma;
     float npf_hcal_fraction;
     float npf_drminsv;

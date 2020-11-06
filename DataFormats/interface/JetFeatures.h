@@ -91,7 +91,7 @@ struct JetFeatures
         circularity(-1),
         isotropy(-1),
         eventShapeC(-1),
-        eventShapeD(-1)  
+        eventShapeD(-1)
     {
     }
     

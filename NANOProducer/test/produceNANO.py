@@ -68,7 +68,7 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(200)
 )
 
 process.options = cms.untracked.PSet()
@@ -79,6 +79,9 @@ files = {
         #"mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
         },
     '2016': {
+        #"mc":"root://xrootd.grid.hep.ph.ic.ac.uk//store/mc/RunIISummer16MiniAODv3/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/40000/0A4EAAB1-9223-E911-B512-A4BF01283A8B.root",
+        #"mc":"root://xrootd.grid.hep.ph.ic.ac.uk//store/mc/RunIISummer16MiniAODv3/GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/50000/AEF4E98A-C672-E911-9FD1-AC1F6BAC7D18.root",
+        #"mc":"root://xrootd.grid.hep.ph.ic.ac.uk//store/mc/RunIISummer16MiniAODv3/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/00000/025CA8F7-7C08-E911-8165-0242AC1C0501.root",
         "mc": [
             "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200929/LLPGun/miniaod16v3_200929/201007_212837/0000/GUN2016_%i.root"%(i) for i in range(1,10)
         ],
@@ -287,6 +290,8 @@ process.llpLabels = cms.EDProducer(
     srcVertices = cms.InputTag("displacedGenVertices"),
     srcJets = cms.InputTag("updatedJets"),
     srcFlavourInfo = cms.InputTag("llpFlavour"),
+    srcDecayInfo = cms.InputTag("llpGenDecayInfo"),
+    srcTaus = cms.InputTag("slimmedTaus"),
     tauPtThreshold = cms.double(1.),
     quarkPtThreshold = cms.double(1.),
     bPtThreshold = cms.double(1.),

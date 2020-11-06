@@ -10,6 +10,11 @@ struct ChargedCandidateFeatures
     float cpf_ptrel;
     float cpf_deta;
     float cpf_dphi;
+    float cpf_deltaR;
+    
+    float cpf_px;
+    float cpf_py;
+    float cpf_pz;
 
     float cpf_trackEtaRel;
     float cpf_trackPtRel;

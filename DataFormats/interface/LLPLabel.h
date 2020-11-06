@@ -15,17 +15,16 @@ class LLPLabel {
             isPU,
             isB,
             isBB,
-            isGBB,
             isLeptonic_B,
-            isLeptonic_C,
             isC,
             isCC,
-            isGCC,
+            isLeptonic_C,
             isS,
             isUD,
             isG,
             isPrompt_MU,
             isPrompt_E,
+            isPrompt_PHOTON,
             isPrompt_TAU,
             
             isLLP_RAD, //no flavour match (likely from wide angle radiation)
@@ -46,11 +45,27 @@ class LLPLabel {
             isLLP_TAU,
             isLLP_QTAU,
             isLLP_QQTAU,
+            isLLP_BTAU,
+            isLLP_BBTAU,
             isUndefined
             
         };
         
         Type type;
+        
+        enum class TauDecay {
+            NO_TAU,     //no tau decay
+            INVISIBLE,  //tau decay but not reconstructable
+            E,          //to electron
+            MU,         //to muon
+            H,          //1 charged hadron
+            H_1PI0,     //1 charged hadron + pi0(->2gamma)
+            H_XPI0,     //1 charged hadron + 2 or more pi0(->2gamma)
+            HHH,         //3 charged hadrons
+            HHH_XPI0     //3 charged hadron + 1 or more pi0(->2gamma)
+        };
+        
+        TauDecay tauDecay;
         
         int jetIdx;
         int partonFlavor;
@@ -70,6 +85,7 @@ class LLPLabel {
         
         LLPLabel():
             type(Type::isUndefined),
+            tauDecay(TauDecay::NO_TAU),
             partonFlavor(0),
             hadronFlavor(0),
             llpId(0),
@@ -95,8 +111,6 @@ class LLPLabel {
                     return "isB";
                 case Type::isBB:
                     return "isBB";
-                case Type::isGBB:
-                    return "isGBB";
                 case Type::isLeptonic_B:
                     return "isLeptonic_B";
                 case Type::isLeptonic_C:
@@ -105,8 +119,6 @@ class LLPLabel {
                     return "isC";
                 case Type::isCC:
                     return "isCC";
-                case Type::isGCC:
-                    return "isGCC";
                 case Type::isS:
                     return "isS";               
                 case Type::isUD:
@@ -120,6 +132,8 @@ class LLPLabel {
                     return "isPrompt_E";
                 case Type::isPrompt_TAU:
                     return "isPrompt_TAU";
+                case Type::isPrompt_PHOTON:
+                    return "isPrompt_PHOTON";
                 
                 case Type::isLLP_RAD:
                     return "isLLP_RAD";
@@ -167,7 +181,10 @@ class LLPLabel {
                     return "isLLP_QTAU";
                 case Type::isLLP_QQTAU:
                     return "isLLP_QQTAU";
-                    
+                case Type::isLLP_BTAU:
+                    return "isLLP_BTAU";
+                case Type::isLLP_BBTAU:
+                    return "isLLP_BBTAU";
                 case Type::isUndefined:
                     return "isUndefined";
             }

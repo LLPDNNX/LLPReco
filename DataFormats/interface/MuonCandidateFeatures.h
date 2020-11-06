@@ -15,10 +15,13 @@ struct MuonCandidateFeatures {
     float mu_ptrel;
     float mu_deta;
     float mu_dphi;
+    float mu_px;
+    float mu_py;
+    float mu_pz;
     float mu_charge;
     float mu_energy;
     float mu_et;
-    float mu_jetDeltaR;
+    float mu_deltaR;
     int mu_numberOfMatchedStations;
 
     float mu_2dIP;
@@ -32,6 +35,7 @@ struct MuonCandidateFeatures {
     float mu_dxySig;
     float mu_dz;
     float mu_dzError;
+    float mu_dzSig;
     int mu_numberOfValidPixelHits;
     int mu_numberOfpixelLayersWithMeasurement;
     int mu_numberOfstripLayersWithMeasurement; //that does not help. needs to be discussed.
