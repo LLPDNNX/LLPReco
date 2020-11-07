@@ -68,7 +68,7 @@ else:
     dataTier = cms.untracked.string('NANOAODSIM')
 
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(200)
+    input = cms.untracked.int32(1000)
 )
 
 process.options = cms.untracked.PSet()
@@ -275,30 +275,26 @@ process.llpGenDecayInfo = cms.EDProducer(
     )
 )
 
-process.llpFlavour = cms.EDProducer(
-    "LLPGhostFlavourProducer",
-    srcJets = cms.InputTag("updatedJets"),
-    srcDecayInfo = cms.InputTag("llpGenDecayInfo"),
-    jetAlgorithm = cms.string("AntiKt"),
-    rParam = cms.double(0.4),
-    ghostRescaling = cms.double(1e-18),
-    relPtTolerance = cms.double(1e-3)
-)
 
 process.llpLabels = cms.EDProducer(
     "LLPLabelProducer",
     srcVertices = cms.InputTag("displacedGenVertices"),
     srcJets = cms.InputTag("updatedJets"),
-    srcFlavourInfo = cms.InputTag("llpFlavour"),
     srcDecayInfo = cms.InputTag("llpGenDecayInfo"),
-    srcTaus = cms.InputTag("slimmedTaus"),
+)
+'''
+process.llpLabelsOld = cms.EDProducer(
+    "LLPLabelOldProducer",
+    srcVertices = cms.InputTag("displacedGenVertices"),
+    srcJets = cms.InputTag("updatedJets"),
+    srcFlavourInfo = cms.InputTag("llpFlavour"),
     tauPtThreshold = cms.double(1.),
     quarkPtThreshold = cms.double(1.),
     bPtThreshold = cms.double(1.),
     muonPtThreshold = cms.double(1.),
     electronPtThreshold = cms.double(1.),
 )
-
+'''
 
 
 process.lheWeightsTable = cms.EDProducer(
@@ -387,7 +383,6 @@ else:
         process.pfXTagInfos+
         process.displacedGenVertexSequence+
         process.llpGenDecayInfo+
-        process.llpFlavour+
         process.llpLabels+
         process.nanoTable+
         process.nanoGenTable

@@ -111,11 +111,6 @@ class LLPLabelProducer:
             return match;
         }
         
-        static void classifyTauDecay(const reco::GenParticle* tau, std::vector<const reco::Candidate*> constituents)
-        {
-            
-        }
-        
         static double calcFraction(const reco::Candidate::LorentzVector& p, const reco::Candidate::LorentzVector& base)
         {
             return p.Vect().Dot(base.Vect())/base.Vect().mag2();
@@ -151,25 +146,14 @@ class LLPLabelProducer:
             int n   = (absPdgId/1000000)%10;
             return std::max({nq1,nq2,nq3})+n*10000+(n>0 and nL==9)*100;
         }
+
         
-        double tauPtThreshold_;
-        double quarkPtThreshold_;
-        double bPtThreshold_;
-        double muonPtThreshold_;
-        double electronPtThreshold_;
-        
-        int nGenTau_;
-        int nLabelledTau_;
-        int nPatTau_;
-        int nPatNotGen_;
-        int nLabelledNotPat_;
+        std::unordered_map<llpdnnx::LLPLabel::Type,int> jetsPerLabel_;
     
         edm::EDGetTokenT<edm::View<pat::Jet>> jetToken_;
         edm::EDGetTokenT<edm::View<llpdnnx::DisplacedGenVertex>> displacedGenVertexToken_;
-        edm::EDGetTokenT<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>> llpFlavourInfoToken_;
         edm::EDGetTokenT<edm::View<llpdnnx::LLPGenDecayInfo>> llpGenDecayInfoToken_;
         
-        edm::EDGetTokenT<edm::View<pat::Tau>> tauToken_;
 
         virtual void produce(edm::Event& iEvent, const edm::EventSetup& iSetup) override;
 
@@ -184,36 +168,20 @@ class LLPLabelProducer:
 };
 
 LLPLabelProducer::LLPLabelProducer(const edm::ParameterSet& iConfig):
-    tauPtThreshold_(iConfig.getParameter<double>("tauPtThreshold")),
-    quarkPtThreshold_(iConfig.getParameter<double>("quarkPtThreshold")),
-    bPtThreshold_(iConfig.getParameter<double>("bPtThreshold")),
-    muonPtThreshold_(iConfig.getParameter<double>("muonPtThreshold")),
-    electronPtThreshold_(iConfig.getParameter<double>("electronPtThreshold")),
     jetToken_(consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("srcJets"))),
     displacedGenVertexToken_(consumes<edm::View<llpdnnx::DisplacedGenVertex>>(iConfig.getParameter<edm::InputTag>("srcVertices"))),
-    llpFlavourInfoToken_(consumes<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>>(iConfig.getParameter<edm::InputTag>("srcFlavourInfo"))),
-    llpGenDecayInfoToken_(consumes<edm::View<llpdnnx::LLPGenDecayInfo>>( iConfig.getParameter<edm::InputTag>("srcDecayInfo") )),
-    tauToken_(consumes<edm::View<pat::Tau>>( iConfig.getParameter<edm::InputTag>("srcTaus") ))
+    llpGenDecayInfoToken_(consumes<edm::View<llpdnnx::LLPGenDecayInfo>>( iConfig.getParameter<edm::InputTag>("srcDecayInfo") ))
 {
     produces<reco::LLPLabelInfoCollection>();
-    //hist = fs->make<TH1D>("ptfrac" , "ptfrac" , 100 , 0 , 1. );
-    
-    nGenTau_ = 0;
-    nLabelledTau_ = 0;
-    nPatTau_ = 0;
-    nPatNotGen_ = 0;
-    nLabelledNotPat_ = 0;
 }
 
 
 LLPLabelProducer::~LLPLabelProducer()
 {
-    std::cout<<"gentau="<<nGenTau_;
-    std::cout<<", labelled="<<nLabelledTau_<<" ("<<(1.*nLabelledTau_/nGenTau_);
-    std::cout<<"), pat="<<nPatTau_<<" ("<<(1.*nPatTau_/nGenTau_);
-    std::cout<<"), fakePat="<<nPatNotGen_<<" ("<<(1.*nPatNotGen_/nPatTau_);
-    std::cout<<"), correctPat="<<(nPatTau_-nPatNotGen_)<<" ("<<(1.*(nPatTau_-nPatNotGen_)/nPatTau_);
-    std::cout<<"), failedPat "<<nLabelledNotPat_<<" ("<<(1.*nLabelledNotPat_/nLabelledTau_)<<")"<<std::endl;
+    for (const auto& labelCountPair: jetsPerLabel_)
+    {
+        std::cout<<llpdnnx::LLPLabel::typeToString(labelCountPair.first)<<": "<<labelCountPair.second<<std::endl;
+    }
 }
 
 
@@ -230,14 +198,8 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     edm::Handle<edm::View<llpdnnx::DisplacedGenVertex>> displacedGenVertexCollection;
     iEvent.getByToken(displacedGenVertexToken_, displacedGenVertexCollection);
     
-    edm::Handle<edm::ValueMap<llpdnnx::LLPGhostFlavourInfo>> llpGhostFlavourInfoMap;
-    iEvent.getByToken(llpFlavourInfoToken_, llpGhostFlavourInfoMap);
-    
     edm::Handle<edm::View<llpdnnx::LLPGenDecayInfo>> llpGenDecayInfoCollection;
     iEvent.getByToken(llpGenDecayInfoToken_, llpGenDecayInfoCollection);
-    
-    edm::Handle<edm::View<pat::Tau>> tauCollection;
-    iEvent.getByToken(tauToken_, tauCollection);
     
     auto outputLLPLabelInfo = std::make_unique<reco::LLPLabelInfoCollection>();
     
@@ -245,7 +207,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     for (std::size_t ijet = 0; ijet < jetCollection->size(); ijet++) 
     {
         const pat::Jet& jet = jetCollection->at(ijet);
-        if (jet.pt()<15.) continue;
         
         edm::RefToBase<reco::Jet> jet_ref(jetCollection->refAt(ijet));
         llpdnnx::LLPLabel label;
@@ -394,6 +355,41 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                         promptRecoMaxId = 15;
                         promptRecoMax = tauRecoSum;
                     }
+                    
+                    //classify tau decay
+                    int nH = 0;
+                    int nPi0 = 0;
+                    int nE = 0;
+                    int nMu = 0;
+                    for (size_t idaughter = 0; idaughter < tau->numberOfDaughters(); ++idaughter)
+                    {
+                        int daughterAbsId = std::abs( tau->daughter(idaughter)->pdgId());
+                        if (daughterAbsId==11) nE+=1;
+                        else if (daughterAbsId==13) nMu+=1;
+                        else if (daughterAbsId==111) nPi0+=1;
+                        else if (daughterAbsId>111 and daughterAbsId<500) nH+=1;
+                    }
+                    if (nE>0) label.tauDecay = llpdnnx::LLPLabel::TauDecay::E;
+                    else if (nMu>0) label.tauDecay = llpdnnx::LLPLabel::TauDecay::MU;
+                    else if (nH==1) 
+                    {
+                        if (nPi0==0) label.tauDecay = llpdnnx::LLPLabel::TauDecay::H;
+                        else if (nPi0==1) label.tauDecay = llpdnnx::LLPLabel::TauDecay::H_1PI0;
+                        else label.tauDecay = llpdnnx::LLPLabel::TauDecay::H_XPI0;
+                    }   
+                    else if (nH>1) 
+                    {
+                        if (nPi0==0) label.tauDecay = llpdnnx::LLPLabel::TauDecay::HHH;
+                        else label.tauDecay = llpdnnx::LLPLabel::TauDecay::HHH_XPI0;
+                    }   
+                    else
+                    {
+                        std::cout<<"WARNING: Tau decay cannot be characterised"<<std::endl;
+                    }
+                }
+                else
+                {
+                    label.tauDecay = llpdnnx::LLPLabel::TauDecay::INVISIBLE;
                 }
             }
             
@@ -445,8 +441,16 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             else if (std::abs(jet.partonFlavour()!=0))
             {
                 int partonFlavor = std::abs(jet.partonFlavour());
-                if (partonFlavor==5) label.type = llpdnnx::LLPLabel::Type::isB;
-                if (partonFlavor==4) label.type = llpdnnx::LLPLabel::Type::isC;
+                if (partonFlavor==5) 
+                {
+                    if (nonPromptLeptonRecoMax.pt()<1e-3) label.type = llpdnnx::LLPLabel::Type::isLeptonic_B;
+                    else label.type = llpdnnx::LLPLabel::Type::isB;
+                }
+                if (partonFlavor==4)
+                {
+                    if (nonPromptLeptonRecoMax.pt()<1e-3) label.type = llpdnnx::LLPLabel::Type::isLeptonic_C;
+                    else label.type = llpdnnx::LLPLabel::Type::isC;
+                }
                 if (partonFlavor==3) label.type = llpdnnx::LLPLabel::Type::isS;
                 if (partonFlavor==2 or partonFlavor==1) label.type = llpdnnx::LLPLabel::Type::isUD;
                 if (partonFlavor==21) label.type = llpdnnx::LLPLabel::Type::isG;
@@ -454,24 +458,6 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             else //no hadrons and parton flavour=0 => jet cannot be classified!
             {
                 label.type = llpdnnx::LLPLabel::Type::isUndefined;
-            }
-            
-            if (taus.size()>0) nGenTau_+=1;
-            
-            bool matchTau = false;
-            for (const auto& tau: *tauCollection)
-            {
-                if (reco::deltaR(tau,jet)<0.4) 
-                {
-                    matchTau=true;
-                    nPatTau_+=1;//std::cout<<" - "<<"reco tau pt="<<tau.pt()<<std::endl;
-                    if (taus.size()==0) nPatNotGen_+=1;
-                }
-            }
-            if (label.type == llpdnnx::LLPLabel::Type::isPrompt_TAU)
-            {
-                nLabelledTau_+=1;
-                if (not matchTau) nLabelledNotPat_+=1;
             }
             
             if (displacedGenVertexCollection.product())
@@ -616,15 +602,14 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     }
                 }
             }
-            if (label.type!=llpdnnx::LLPLabel::Type::isPU)
-            std::cout<<"  jet: "<<ijet<<"/"<<(jetCollection->size())<<", pt="<<jet.pt()<<", eta="<<jet.eta()<<", type="<< llpdnnx::LLPLabel::typeToString(label.type)<<std::endl;
         }
-
+        if (jetsPerLabel_.find(label.type)==jetsPerLabel_.end()) jetsPerLabel_[label.type] = 0;
+        jetsPerLabel_[label.type] += 1;
 
         outputLLPLabelInfo->emplace_back(label,jet_ref);
     }
 
-        iEvent.put(std::move(outputLLPLabelInfo));
+    iEvent.put(std::move(outputLLPLabelInfo));
 }
 
 // ------------ method fills 'descriptions' with the allowed parameters for the module  ------------

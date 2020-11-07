@@ -21,4 +21,7 @@
 <library file="LLPLabelProducer.cc" name="LLPLabelProducerPlugin">
   <flags EDM_PLUGIN="1"/>
 </library>
+<library file="LLPLabelOldProducer.cc" name="LLPLabelOldProducerPlugin">
+  <flags EDM_PLUGIN="1"/>
+</library>
 
