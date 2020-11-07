@@ -116,6 +116,11 @@ class LLPLabelProducer:
             
         }
         
+        static double calcFraction(const reco::Candidate::LorentzVector& p, const reco::Candidate::LorentzVector& base)
+        {
+            return p.Vect().Dot(base.Vect())/base.Vect().mag2();
+        }
+        
         static void printDecayChain(std::vector<const reco::Candidate*>& finals, const reco::Candidate* p, int indent=1)
         {
             for (int i=0; i < indent; ++i) std::cout<<" - ";
@@ -260,25 +265,20 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         
             //std::cout<<"jet "<<ijet<<": pt="<<jet.pt()<<", genpt="<<genJet->pt()<<std::endl;
         
-            
-
-            
-            
-            int nPartons = jet.jetFlavourInfo().getPartons().size();
             int nbHadrons =  jet.jetFlavourInfo().getbHadrons().size();
             int ncHadrons =  jet.jetFlavourInfo().getcHadrons().size();
             
             
-            std::vector<const reco::Candidate*> promptElectrons;
-            std::vector<const reco::Candidate*> promptMuons;
-            std::vector<const reco::Candidate*> promptPhotons;
+            std::vector<reco::CandidatePtr> promptElectrons;
+            std::vector<reco::CandidatePtr> promptMuons;
+            std::vector<reco::CandidatePtr> promptPhotons;
             
-            std::vector<const reco::Candidate*> nonPromptElectrons;
-            std::vector<const reco::Candidate*> nonPromptMuons;
+            std::vector<reco::CandidatePtr> nonPromptElectrons;
+            std::vector<reco::CandidatePtr> nonPromptMuons;
             
             std::vector<reco::CandidatePtr> taus;
             
-            for (unsigned int iConst = 0; iConst < jet.genJet()->numberOfDaughters(); iConst++)
+            for (unsigned int iConst = 0; iConst < genJet->numberOfDaughters(); iConst++)
             {
                 const pat::PackedGenParticle* packedGenConstituent = dynamic_cast<const pat::PackedGenParticle*>(genJet->daughter(iConst));
                 if (not packedGenConstituent) continue;
@@ -307,73 +307,74 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 //find prompt e/mu/photon
                 else if (packedGenConstituent->isPromptFinalState())
                 {
-                    if (absId==11) promptElectrons.push_back(packedGenConstituent);
-                    if (absId==13) promptMuons.push_back(packedGenConstituent);
-                    if (absId==22) promptPhotons.push_back(packedGenConstituent);
+                    if (absId==11) promptElectrons.push_back(genJet->daughterPtr(iConst));
+                    if (absId==13) promptMuons.push_back(genJet->daughterPtr(iConst));
+                    if (absId==22) promptPhotons.push_back(genJet->daughterPtr(iConst));
                 }
                 //find non prompt e/mu/photon
                 else 
                 {
-                    if (absId==11) nonPromptElectrons.push_back(packedGenConstituent);
-                    if (absId==13) nonPromptMuons.push_back(packedGenConstituent);
+                    if (absId==11) nonPromptElectrons.push_back(genJet->daughterPtr(iConst));
+                    if (absId==13) nonPromptMuons.push_back(genJet->daughterPtr(iConst));
                 }
             }
             
 
-            const reco::Candidate* promptElectronMax = nullptr;
-            const reco::Candidate* promptMuonMax = nullptr;
-            const reco::Candidate* tauMax = nullptr;
-            
-            reco::Candidate::LorentzVector promptElectronRecoP4Max(0,0,0,0);
-            reco::Candidate::LorentzVector promptMuonRecoP4Max(0,0,0,0);
-            reco::Candidate::LorentzVector promptPhotonRecoP4Max(0,0,0,0);
-            
-            reco::Candidate::LorentzVector nonPromptElectronRecoP4Max(0,0,0,0);
-            reco::Candidate::LorentzVector nonPromptMuonRecoP4Max(0,0,0,0);
-            
-            reco::Candidate::LorentzVector tauRecoP4Max(0,0,0,0);
+            int promptRecoMaxId = -1;
+            reco::Candidate::LorentzVector promptRecoMax(0,0,0,0);
+            reco::Candidate::LorentzVector nonPromptLeptonRecoMax(0,0,0,0);
             
             const auto jetConstituents = jet.getJetConstituentsQuick(); //no ref!
             
             for (const auto electron: promptElectrons)
             {
-                auto match = findRecoConstituent(electron,jetConstituents);
-                if (match and promptElectronRecoP4Max.pt()<match->pt()) 
+                auto match = findRecoConstituent(electron.get(),jetConstituents);
+                if (match) 
                 {
-                    promptElectronRecoP4Max = match->p4();
-                    promptElectronMax = electron;
+                    if (calcFraction(promptRecoMax,jet.p4())<calcFraction(match->p4(),jet.p4()))
+                    {
+                        promptRecoMaxId = 11;
+                        promptRecoMax = match->p4();
+                    }
                 }
             }
             
             for (const auto muon: promptMuons)
             {
-                auto match = findRecoConstituent(muon,jetConstituents);
-                if (match and promptMuonRecoP4Max.pt()<match->pt())
+                auto match = findRecoConstituent(muon.get(),jetConstituents);
+                if (match)
                 {
-                    promptMuonRecoP4Max = match->p4();
-                    promptMuonMax = muon;
+                    if (calcFraction(promptRecoMax,jet.p4())<calcFraction(match->p4(),jet.p4()))
+                    {
+                        promptRecoMaxId = 13;
+                        promptRecoMax = match->p4();
+                    }
                 }
             }
             
             for (const auto photon: promptPhotons)
             {
-                auto match = findRecoConstituent(photon,jetConstituents);
-                if (match and promptPhotonRecoP4Max.pt()<match->pt())
+                auto match = findRecoConstituent(photon.get(),jetConstituents);
+                if (match)
                 {
-                    promptPhotonRecoP4Max = match->p4();
+                    if (calcFraction(promptRecoMax,jet.p4())<calcFraction(match->p4(),jet.p4()))
+                    {
+                        promptRecoMaxId = 22;
+                        promptRecoMax = match->p4();
+                    }
                 }
             }
             
             for (const auto electron: nonPromptElectrons)
             {
-                auto match = findRecoConstituent(electron,jetConstituents);
-                if (match and nonPromptElectronRecoP4Max.pt()<match->pt()) nonPromptElectronRecoP4Max = match->p4();
+                auto match = findRecoConstituent(electron.get(),jetConstituents);
+                if (match and calcFraction(nonPromptLeptonRecoMax,jet.p4())<calcFraction(nonPromptLeptonRecoMax,match->p4())) nonPromptLeptonRecoMax = match->p4();
             }
             
             for (const auto muon: nonPromptMuons)
             {
-                auto match = findRecoConstituent(muon,jetConstituents);
-                if (match and nonPromptMuonRecoP4Max.pt()<match->pt()) nonPromptMuonRecoP4Max = match->p4();
+                auto match = findRecoConstituent(muon.get(),jetConstituents);
+                if (match and calcFraction(nonPromptLeptonRecoMax,jet.p4())<calcFraction(nonPromptLeptonRecoMax,match->p4())) nonPromptLeptonRecoMax = match->p4();
             }
             
             for (const auto tau: taus)
@@ -386,12 +387,12 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     auto match = findRecoConstituent(decayProduct,jetConstituents);
                     if (match) tauRecoSum+=match->p4(); 
                 }
-                if (tauRecoSum.pt()/tau->pt()>0.5)
+                if (calcFraction(tauRecoSum,tau->p4())>0.5) //at least 50% of momentum reconstructed
                 {
-                    if (tauRecoP4Max.pt()<tauRecoSum.pt())
+                    if (calcFraction(promptRecoMax,jet.p4())<calcFraction(tauRecoSum,jet.p4()))
                     {
-                        tauRecoP4Max = tauRecoSum;
-                        tauMax = tau.get();
+                        promptRecoMaxId = 15;
+                        promptRecoMax = tauRecoSum;
                     }
                 }
             }
@@ -400,7 +401,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             //assign flavour depending on found particles
             if (nbHadrons>0)
             {
-                if (nonPromptElectronRecoP4Max.pt()<1e-3 and nonPromptMuonRecoP4Max.pt()<1e-3) //note: these thresholds are arbitrary small; what counts is if the lepton is reconstructed!
+                if (nonPromptLeptonRecoMax.pt()<1e-3) //note: these thresholds are arbitrary small; what counts is if the lepton is reconstructed!
                 {
                     if (nbHadrons>1)
                     {
@@ -418,7 +419,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
             else if (nbHadrons==0 and ncHadrons>0)
             {
-                if (nonPromptElectronRecoP4Max.pt()<1e-3 and nonPromptMuonRecoP4Max.pt()<1e-3)
+                if (nonPromptLeptonRecoMax.pt()<1e-3)
                 {
                     if (ncHadrons>1)
                     {
@@ -434,22 +435,12 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                     label.type = llpdnnx::LLPLabel::Type::isLeptonic_C;
                 }
             }
-            else if (promptElectronRecoP4Max.pt()/jet.pt()>0.5)
+            else if (calcFraction(promptRecoMax,jet.p4())>0.5)
             {
-                label.type = llpdnnx::LLPLabel::Type::isPrompt_E;
-            }
-            else if (promptMuonRecoP4Max.pt()/jet.pt()>0.5)
-            {
-                label.type = llpdnnx::LLPLabel::Type::isPrompt_MU;
-            }
-            else if (promptPhotonRecoP4Max.pt()/jet.pt()>0.5)
-            {
-                label.type = llpdnnx::LLPLabel::Type::isPrompt_PHOTON;
-            }
-            else if (tauRecoP4Max.pt()/jet.pt()>0.5)
-            {
-                label.type = llpdnnx::LLPLabel::Type::isPrompt_TAU;
-                //label.tauDecay = ?
+                if (promptRecoMaxId==11) label.type = llpdnnx::LLPLabel::Type::isPrompt_E;
+                else if (promptRecoMaxId==13) label.type = llpdnnx::LLPLabel::Type::isPrompt_MU;
+                else if (promptRecoMaxId==15) label.type = llpdnnx::LLPLabel::Type::isPrompt_TAU;
+                else if (promptRecoMaxId==22) label.type = llpdnnx::LLPLabel::Type::isPrompt_PHOTON;
             }
             else if (std::abs(jet.partonFlavour()!=0))
             {
@@ -460,7 +451,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 if (partonFlavor==2 or partonFlavor==1) label.type = llpdnnx::LLPLabel::Type::isUD;
                 if (partonFlavor==21) label.type = llpdnnx::LLPLabel::Type::isG;
             }
-            else
+            else //no hadrons and parton flavour=0 => jet cannot be classified!
             {
                 label.type = llpdnnx::LLPLabel::Type::isUndefined;
             }
@@ -545,91 +536,79 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                         label.llp_pt = mother.pt();
                         
                         
-                        const reco::Candidate* displacedLepton = nullptr; //select the highest pt displaced lepton; no 50% requirement here since jet can also be q+l, qq+l
-                        if (promptElectronMax)
+                        int nQuarks = 0;
+                        for (const auto& llpGenDecayInfo: *llpGenDecayInfoCollection)
                         {
-                            //const auto electronVertex = getVertex(promptElectronMax);
-                            //if (electronVertex.mag2()>DisplacedGenVertex::MIN_DISPLACEMENT and (electronVertex-llpVertex->vertex).mag2()>DisplacedGenVertex::MIN_DISPLACEMENT)
-                            //{
-                                if (not displacedLepton or displacedLepton->pt()<promptElectronMax->pt()) displacedLepton = promptElectronMax;
-                            //}
+                            if ((llpGenDecayInfo.decayProducts[0]->vertex()-llpVertex->vertex).mag2()>DisplacedGenVertex::MIN_DISPLACEMENT) continue;
+                            for (const auto& particle: llpGenDecayInfo.decayProducts)
+                            {
+                                if (std::abs(particle->pdgId())<5 and reco::deltaR(*particle,jet)<0.4) nQuarks+=1;
+                            }
                         }
-                        
-                        if (promptMuonMax)
-                        {
-                            //const auto muonVertex = getVertex(promptMuonMax);
-                            //if (muonVertex.mag2()>DisplacedGenVertex::MIN_DISPLACEMENT and (muonVertex-llpVertex->vertex).mag2()>DisplacedGenVertex::MIN_DISPLACEMENT)
-                            //{
-                               if (not displacedLepton or displacedLepton->pt()<promptMuonMax->pt()) displacedLepton = promptMuonMax;
-                            //}
-                        }
-                        
-                        if (tauMax)
-                        {
-                            //const auto tauVertex = getVertex(tauMax);
-                            //if (tauVertex.mag2()>DisplacedGenVertex::MIN_DISPLACEMENT and (tauVertex-llpVertex->vertex).mag2()>DisplacedGenVertex::MIN_DISPLACEMENT)
-                            //{
-                                if (not displacedLepton or displacedLepton->pt()<tauMax->pt()) displacedLepton = tauMax;
-                            //}
-                        }
-                        
+                            
                         if (label.type==llpdnnx::LLPLabel::Type::isB or label.type==llpdnnx::LLPLabel::Type::isLeptonic_B) 
                         {
-                            if (not displacedLepton)
+                            if (calcFraction(promptRecoMax,jet.p4())<0.1) //arbitrary threshold; reconstructed candidates count!
                             {
                                 label.type=llpdnnx::LLPLabel::Type::isLLP_B;
                             }
                             else
                             {
-                                if (std::abs(displacedLepton->pdgId())==11) label.type=llpdnnx::LLPLabel::Type::isLLP_BE;
-                                else if (std::abs(displacedLepton->pdgId())==13) label.type=llpdnnx::LLPLabel::Type::isLLP_BMU;
-                                else if (std::abs(displacedLepton->pdgId())==15) label.type=llpdnnx::LLPLabel::Type::isLLP_BTAU;
+                                if (promptRecoMaxId==11) label.type=llpdnnx::LLPLabel::Type::isLLP_BE;
+                                else if (promptRecoMaxId==13) label.type=llpdnnx::LLPLabel::Type::isLLP_BMU;
+                                else if (promptRecoMaxId==15) label.type=llpdnnx::LLPLabel::Type::isLLP_BTAU;
+                                else if (promptRecoMaxId==22) label.type=llpdnnx::LLPLabel::Type::isLLP_BPHOTON;
                                 else throw std::runtime_error("LLPLabel not well defined");
                             }
                         }
+                        
                         else if (label.type==llpdnnx::LLPLabel::Type::isBB or label.type==llpdnnx::LLPLabel::Type::isCC) 
                         {
-                            if (not displacedLepton)
+                            if (calcFraction(promptRecoMax,jet.p4())<0.1) //arbitrary threshold; reconstructed candidates count!
                             {
                                 label.type=llpdnnx::LLPLabel::Type::isLLP_BB;
                             }
                             else
                             {
-                                if (std::abs(displacedLepton->pdgId())==11) label.type=llpdnnx::LLPLabel::Type::isLLP_BBE;
-                                else if (std::abs(displacedLepton->pdgId())==13) label.type=llpdnnx::LLPLabel::Type::isLLP_BBMU;
-                                else if (std::abs(displacedLepton->pdgId())==15) label.type=llpdnnx::LLPLabel::Type::isLLP_BBTAU;
+                                if (promptRecoMaxId==11) label.type=llpdnnx::LLPLabel::Type::isLLP_BBE;
+                                else if (promptRecoMaxId==13) label.type=llpdnnx::LLPLabel::Type::isLLP_BBMU;
+                                else if (promptRecoMaxId==15) label.type=llpdnnx::LLPLabel::Type::isLLP_BBTAU;
+                                else if (promptRecoMaxId==22) label.type=llpdnnx::LLPLabel::Type::isLLP_BBPHOTON;
                                 else throw std::runtime_error("LLPLabel not well defined");
                             }
                         }
                         else
                         {
-                            if (not displacedLepton)
+                            if (calcFraction(promptRecoMax,jet.p4())<0.1) //arbitrary threshold; reconstructed candidates count!
                             {
-                                if (nPartons==0) label.type=llpdnnx::LLPLabel::Type::isLLP_RAD;
-                                else if (nPartons==1) label.type=llpdnnx::LLPLabel::Type::isLLP_Q;
+                                if (nQuarks==0) label.type=llpdnnx::LLPLabel::Type::isLLP_RAD;
+                                else if (nQuarks==1) label.type=llpdnnx::LLPLabel::Type::isLLP_Q;
                                 else label.type=llpdnnx::LLPLabel::Type::isLLP_QQ;
                             }
                             else
                             {
-                                if (nPartons==0) 
+                                if (nQuarks==0) 
                                 {
-                                    if (std::abs(displacedLepton->pdgId())==11) label.type=llpdnnx::LLPLabel::Type::isLLP_E;
-                                    else if (std::abs(displacedLepton->pdgId())==13) label.type=llpdnnx::LLPLabel::Type::isLLP_MU;
-                                    else if (std::abs(displacedLepton->pdgId())==15) label.type=llpdnnx::LLPLabel::Type::isLLP_TAU;
+                                    if (promptRecoMaxId==11) label.type=llpdnnx::LLPLabel::Type::isLLP_E;
+                                    else if (promptRecoMaxId==13) label.type=llpdnnx::LLPLabel::Type::isLLP_MU;
+                                    else if (promptRecoMaxId==15) label.type=llpdnnx::LLPLabel::Type::isLLP_TAU;
+                                    else if (promptRecoMaxId==22) label.type=llpdnnx::LLPLabel::Type::isLLP_PHOTON;
                                     else throw std::runtime_error("LLPLabel not well defined");
                                 }
-                                else if (nPartons==1)
+                                else if (nQuarks==1)
                                 {
-                                    if (std::abs(displacedLepton->pdgId())==11) label.type=llpdnnx::LLPLabel::Type::isLLP_QE;
-                                    else if (std::abs(displacedLepton->pdgId())==13) label.type=llpdnnx::LLPLabel::Type::isLLP_QMU;
-                                    else if (std::abs(displacedLepton->pdgId())==15) label.type=llpdnnx::LLPLabel::Type::isLLP_QTAU;
+                                    if (promptRecoMaxId==11) label.type=llpdnnx::LLPLabel::Type::isLLP_QE;
+                                    else if (promptRecoMaxId==13) label.type=llpdnnx::LLPLabel::Type::isLLP_QMU;
+                                    else if (promptRecoMaxId==15) label.type=llpdnnx::LLPLabel::Type::isLLP_QTAU;
+                                    else if (promptRecoMaxId==22) label.type=llpdnnx::LLPLabel::Type::isLLP_QPHOTON;
                                     else throw std::runtime_error("LLPLabel not well defined");
                                 }
                                 else
                                 {
-                                    if (std::abs(displacedLepton->pdgId())==11) label.type=llpdnnx::LLPLabel::Type::isLLP_QQE;
-                                    else if (std::abs(displacedLepton->pdgId())==13) label.type=llpdnnx::LLPLabel::Type::isLLP_QQMU;
-                                    else if (std::abs(displacedLepton->pdgId())==15) label.type=llpdnnx::LLPLabel::Type::isLLP_QQTAU;
+                                    if (promptRecoMaxId==11) label.type=llpdnnx::LLPLabel::Type::isLLP_QQE;
+                                    else if (promptRecoMaxId==13) label.type=llpdnnx::LLPLabel::Type::isLLP_QQMU;
+                                    else if (promptRecoMaxId==15) label.type=llpdnnx::LLPLabel::Type::isLLP_QQTAU;
+                                    else if (promptRecoMaxId==22) label.type=llpdnnx::LLPLabel::Type::isLLP_QQPHOTON;
                                     else throw std::runtime_error("LLPLabel not well defined");
                                 }
                             }

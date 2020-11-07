@@ -47,6 +47,12 @@ class LLPLabel {
             isLLP_QQTAU,
             isLLP_BTAU,
             isLLP_BBTAU,
+            
+            isLLP_PHOTON,
+            isLLP_QPHOTON,
+            isLLP_QQPHOTON,
+            isLLP_BPHOTON,
+            isLLP_BBPHOTON,
             isUndefined
             
         };
@@ -185,6 +191,18 @@ class LLPLabel {
                     return "isLLP_BTAU";
                 case Type::isLLP_BBTAU:
                     return "isLLP_BBTAU";
+                    
+                case Type::isLLP_PHOTON:
+                    return "isLLP_TAU";
+                case Type::isLLP_QPHOTON:
+                    return "isLLP_QTAU";
+                case Type::isLLP_QQPHOTON:
+                    return "isLLP_QQTAU";
+                case Type::isLLP_BPHOTON:
+                    return "isLLP_BTAU";
+                case Type::isLLP_BBPHOTON:
+                    return "isLLP_BBTAU";
+                    
                 case Type::isUndefined:
                     return "isUndefined";
             }
