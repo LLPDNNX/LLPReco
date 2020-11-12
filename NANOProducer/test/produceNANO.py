@@ -147,19 +147,20 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         'keep nanoaodUniqueString_nanoMetadata_*_*',
         
         'drop *_caloMetTable_*_*',
-        
+        'drop *_saJetTable_*_*',
+        'drop *_saTable_*_*',
         'drop *_fatJetTable_*_*',
+        'drop *_fatJetMCTable_*_*',
+        'drop *_subJetTable_*_*',
+        'drop *_subjetMCTable_*_*',
         'drop *_genJetAK8FlavourTable_*_*',
         'drop *_genJetAK8Table_*_*',
+        'drop *_genSubJetAK8Table_*_*',
         'drop *_genVisTauTable_*_*',
-        'drop *_subJetTable_*_*',
         'drop *_tkMetTable_*_*',
         'drop *_puppiMetTable_*_*',
         'drop *_ttbarCategoryTable_*_*',
         
-        'drop *_saJetTable_*_*',
-        'drop *_FatJetTable_*_*',
-        'drop *_saTable_*_*',
         
         'drop *_rivetMetTable_*_*',
         'drop *_rivetProducerHTXS_*_*',
@@ -236,8 +237,6 @@ process.nanoGenTable = cms.EDProducer("NANOGenProducer",
     srcLabels = cms.InputTag("llpLabels"),
     srcTags = cms.InputTag("pfXTagInfos")
 )
-
-
 
 
 process.load('LLPReco.LLPLabelProducer.GenDisplacedVertices_cff')
@@ -339,8 +338,8 @@ for scaleSet in [
         
         
 
-#process.load('RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff')
-#process.load('LLPReco.NANOProducer.adaptedSV_cff')
+process.load('RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff')
+process.load('LLPReco.NANOProducer.adaptedSV_cff')
 
 
 process.selectedMuonsForFilter = cms.EDFilter("CandViewSelector",
@@ -371,14 +370,14 @@ if options.isData:
     process.llpnanoAOD_step = cms.Path(
         #process.muonFilterSequence+
         process.nanoSequence+
-        #process.adaptedVertexing+
+        process.adaptedVertexing+
         process.pfXTagInfos+
         process.nanoTable
     )
 else:
     process.llpnanoAOD_step = cms.Path(
         process.nanoSequenceMC+
-        #process.adaptedVertexing+
+        process.adaptedVertexing+
         process.pfXTagInfos+
         process.displacedGenVertexSequence+
         process.llpGenDecayInfo+
@@ -404,10 +403,12 @@ associatePatAlgosToolsTask(process)
 modulesToRemove = [
     'jetCorrFactorsAK8',
     'updatedJetsAK8',
+    'finalJetsAK8',
     'tightJetIdAK8',
     'looseJetIdAK8',
     'tightJetIdLepVetoAK8',
     'updatedJetsAK8WithUserData',
+    'lepInJetVars',
     'chsForSATkJets',
     'softActivityJets',
     'softActivityJets2',
@@ -415,11 +416,12 @@ modulesToRemove = [
     'softActivityJets10',
     'finalJetsAK8',
     'fatJetTable',
+    'fatJetMCTable',
     'subJetTable',
+    'subjetMCTable',
+    'genSubJetAK8Table',
     'saJetTable',
     'saTable',
-
-
     "genJetAK8Table",
     "genJetAK8FlavourAssociation",
     "genJetAK8FlavourTable",
