@@ -91,7 +91,8 @@ process.options = cms.untracked.PSet()
 
 files = {
     '2016': {
-        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200625/HNL_dirac_all_ctau1p0e-02_massHNL8p0_Vall2p996e-02/miniaod16v3_200625/200625_171726/0000/HNL2016_9.root",
+        #"mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200625/HNL_dirac_all_ctau1p0e-02_massHNL8p0_Vall2p996e-02/miniaod16v3_200625/200625_171726/0000/HNL2016_9.root",
+        "mc": "/store/user/mkomm/HNL/miniaod16v3_200625/LLPGun/miniaod16v3_200625/200724_114912/0001/GUN2016_1085.root",
         "data": "/store/data/Run2016B/SingleElectron/MINIAOD/17Jul2018_ver2-v1/40000/6E260591-B88C-E811-AA91-001E67DBE79B.root",
     },
     '2017': {
@@ -248,6 +249,10 @@ process.llpGenDecayInfo = cms.EDProducer(
         #hnl -> qql
         hnl = cms.PSet(
             llpId = cms.int32(9990012),
+            daughterIds = cms.vint32([1,2,3,4,5,11,13,15])
+        ),
+        antihnl = cms.PSet(
+            llpId = cms.int32(9900012),
             daughterIds = cms.vint32([1,2,3,4,5,11,13,15])
         ),
         #gluino -> qq chi0
