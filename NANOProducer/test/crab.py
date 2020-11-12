@@ -19,34 +19,33 @@ myJobsTraining = {
         "year": 2018,
     },
 
-    "WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia-2016":{
-        "inputDataset":"/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+    "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
+        "inputDataset":"/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016
     },
-    "WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
-        "inputDataset":"/WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+    "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
+        "inputDataset":"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM",
         "year": 2017
     },
-    "WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
-        "inputDataset":"/WJetsToLNu_Pt-50To100_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+    "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
+        "inputDataset":"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
         "year": 2018
     },
 
-    "QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
-        "inputDataset":"/QCD_HT200to300_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+    "QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016
     },
 
-    "QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
-        "inputDataset":"/QCD_HT200to300_TuneCP5_13TeV-madgraph-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+    "QCD_Pt-15to7000_TuneCP5_Flat2017_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-15to7000_TuneCP5_Flat2017_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017
     },
 
-    "QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
-        "inputDataset":"/QCD_HT200to300_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+    "QCD_Pt-15to7000_TuneCP5_Flat2018_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-15to7000_TuneCP5_Flat2018_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM",
         "year": 2018
     },
-
 
 
 }
@@ -897,7 +896,6 @@ configTmpl.JobType.psetName = "LLPReco/NANOProducer/test/produceNANO.py"
 configTmpl.JobType.pluginName = 'Analysis'
 configTmpl.JobType.outputFiles = ['nano.root']
 configTmpl.JobType.allowUndistributedCMSSW = True
-configTmpl.JobType.maxJobRuntimeMin= 8*60
 configTmpl.JobType.pyCfgParams = []
 configTmpl.JobType.inputFiles = []
 configTmpl.JobType.maxMemoryMB = 2500
@@ -984,6 +982,7 @@ if __name__ == '__main__':
             config.JobType.pyCfgParams.append("isData=False")
             if myJobs == myJobsHNL:
                 config.Data.splitting = 'FileBased'
+                config.JobType.maxJobRuntimeMin= 8*60
                 config.Data.unitsPerJob = myJob.get('unitsPerJob', 1)
             else:
                 config.Data.splitting = 'Automatic'
