@@ -175,21 +175,21 @@ process.OUT = cms.OutputModule("PoolOutputModule",
 
 if options.isData:
     if options.year == '2016':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v13', '')
     if options.year == '2017':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v13', '')
     if options.year == '2018':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v12', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_v13', '')
     if options.year == '2018D':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v15', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_dataRun2_Prompt_v16', '')
     jetCorrectionsAK4PFchs = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute','L2L3Residual'], 'None')
 else:
     if options.year == '2016':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_mcRun2_asymptotic_v7', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_mcRun2_asymptotic_v8', '')
     if options.year == '2017':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_mc2017_realistic_v7', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_mc2017_realistic_v8', '')
     if options.year == '2018' or options.year == '2018D':
-        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v20', '')
+        process.GlobalTag = GlobalTag(process.GlobalTag, '102X_upgrade2018_realistic_v21', '')
     jetCorrectionsAK4PFchs = ('AK4PFchs', ['L1FastJet', 'L2Relative', 'L3Absolute'], 'None')
 
 
