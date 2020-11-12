@@ -17,6 +17,7 @@ class XTagFeatures {
     JetFeatures jet_features;
     ShallowTagInfoFeatures tag_info_features;
     std::vector<SecondaryVertexFeatures> sv_features;
+    std::vector<SecondaryVertexFeatures> sv_adapted_features;
     std::vector<NeutralCandidateFeatures> npf_features;
     std::vector<ChargedCandidateFeatures> cpf_features;
     std::vector<MuonCandidateFeatures> mu_features;

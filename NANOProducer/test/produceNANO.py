@@ -224,7 +224,7 @@ process.pfXTagInfos = cms.EDProducer("XTagInfoProducer",
     electronSrc = cms.InputTag("slimmedElectrons"),
     shallow_tag_infos = cms.InputTag('pfDeepCSVTagInfosXTag'),
     vertices = cms.InputTag('offlineSlimmedPrimaryVertices'),
-    #secondary_vertices = cms.InputTag("adaptedSlimmedSecondaryVertices")
+    secondary_vertices_adapted = cms.InputTag("adaptedSlimmedSecondaryVertices"),
     secondary_vertices = cms.InputTag("slimmedSecondaryVertices")
 )
 

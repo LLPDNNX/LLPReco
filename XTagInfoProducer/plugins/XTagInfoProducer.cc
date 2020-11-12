@@ -50,6 +50,48 @@
 #include "TVector3.h"
 
 
+llpdnnx::SecondaryVertexFeatures fillSVFeatures(const reco::VertexCompositePtrCandidate& sv, const reco::Vertex& pv, const pat::Jet& jet){
+    float uncorrectedPt = jet.correctedP4("Uncorrected").pt();
+    llpdnnx::SecondaryVertexFeatures sv_features;
+
+    sv_features.sv_ptrel = sv.pt()/uncorrectedPt;
+    sv_features.sv_deta = sv.eta()-jet.eta();
+    sv_features.sv_dphi = reco::deltaPhi(sv.phi(),jet.phi());
+    sv_features.sv_deltaR = reco::deltaR(sv,jet);
+    sv_features.sv_mass = sv.mass();
+    sv_features.sv_ntracks = sv.numberOfDaughters();
+    sv_features.sv_chi2 = sv.vertexChi2();
+    sv_features.sv_ndof = sv.vertexNdof();
+
+
+    reco::Vertex::CovarianceMatrix covsv; 
+    sv.fillVertexCovariance(covsv);
+    reco::Vertex svtx(sv.vertex(), covsv);
+
+    VertexDistanceXY distXY;
+    Measurement1D distanceXY = distXY.distance(svtx, pv);
+    sv_features.sv_dxy = distanceXY.value();
+    sv_features.sv_dxysig = distanceXY.value()/distanceXY.error();
+
+    VertexDistance3D dist3D;
+    Measurement1D distance3D = dist3D.distance(svtx, pv);
+    sv_features.sv_d3d = distance3D.value();
+    sv_features.sv_d3dsig = distance3D.value()/distance3D.error();
+
+    if (std::isnan(sv_features.sv_dxysig) || std::isnan(sv_features.sv_d3dsig))
+        {
+            sv_features.sv_dxysig = 0.;
+            sv_features.sv_d3dsig = 0.;
+        }
+
+    reco::Candidate::Vector distance(sv.vx() - pv.x(), sv.vy() - pv.y(), sv.vz() - pv.z());
+    sv_features.sv_costhetasvpv = sv.momentum().Unit().Dot(distance.Unit());
+    sv_features.sv_enratio = sv.energy()/jet.pt();
+
+    return sv_features;
+}
+
+
 class XTagInfoProducer : public edm::stream::EDProducer<> {
 public:
     explicit XTagInfoProducer(const edm::ParameterSet&);
@@ -73,6 +115,7 @@ public:
         edm::EDGetTokenT<edm::View<pat::Jet>> jet_token_;
         edm::EDGetTokenT<reco::VertexCollection> vtx_token_;
         edm::EDGetTokenT<reco::VertexCompositePtrCandidateCollection> sv_token_;
+        edm::EDGetTokenT<reco::VertexCompositePtrCandidateCollection> sv_adapted_token_;
         edm::EDGetTokenT<edm::View<reco::ShallowTagInfo>> shallow_tag_info_token_;
         edm::EDGetTokenT<edm::View<reco::Candidate>> candidateToken_;
         typedef std::vector<reco::XTagInfo> XTagInfoCollection;
@@ -85,6 +128,7 @@ XTagInfoProducer::XTagInfoProducer(const edm::ParameterSet& iConfig) :
     jet_token_(consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("jets"))),
     vtx_token_(consumes<reco::VertexCollection>(iConfig.getParameter<edm::InputTag>("vertices"))),
     sv_token_(consumes<reco::VertexCompositePtrCandidateCollection>(iConfig.getParameter<edm::InputTag>("secondary_vertices"))),
+    sv_adapted_token_(consumes<reco::VertexCompositePtrCandidateCollection>(iConfig.getParameter<edm::InputTag>("secondary_vertices_adapted"))),
     shallow_tag_info_token_(consumes<edm::View<reco::ShallowTagInfo>>(iConfig.getParameter<edm::InputTag>("shallow_tag_infos"))),
     muonsMiniAODToken_(consumes<pat::MuonCollection>(iConfig.getParameter<edm::InputTag>("muonSrc"))),
     electronsMiniAODToken_(consumes<pat::ElectronCollection>(iConfig.getParameter<edm::InputTag>("electronSrc")))
@@ -121,6 +165,9 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     edm::Handle<reco::VertexCompositePtrCandidateCollection> svs;
     iEvent.getByToken(sv_token_, svs);
 
+    edm::Handle<reco::VertexCompositePtrCandidateCollection> svs_adapted;
+    iEvent.getByToken(sv_adapted_token_, svs_adapted);
+
     edm::Handle< pat::MuonCollection > muons;
     iEvent.getByToken(muonsMiniAODToken_, muons);
 
@@ -150,6 +197,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     for (std::size_t ijet = 0; ijet < jets->size(); ijet++) 
     {
         const pat::Jet& jet = jets->at(ijet);
+
         edm::RefToBase<reco::Jet> jet_ref(jets->refAt(ijet)); //upcast
 
         std::unordered_set<reco::CandidatePtr, CandidateHash> jetConstituentSet;
@@ -264,7 +312,10 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 
         std::unordered_set<reco::CandidatePtr, CandidateHash> candidatesMatchedToSV;
-        // fill features from secondary vertices
+        std::unordered_set<reco::CandidatePtr, CandidateHash> candidatesMatchedToSVAdapted;
+
+        // fill features from secondary vertices  
+        
         for (unsigned int isv = 0; isv < svs->size(); ++isv)
         {
             const reco::VertexCompositePtrCandidate& sv = svs->at(isv);
@@ -283,48 +334,47 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 }
             }
             if (not matchingTrack) continue;
-            
-            llpdnnx::SecondaryVertexFeatures sv_features;
 
-            sv_features.sv_ptrel = sv.pt()/uncorrectedPt;
-            sv_features.sv_deta = sv.eta()-jet.eta();
-            sv_features.sv_dphi = reco::deltaPhi(sv.phi(),jet.phi());
-            sv_features.sv_deltaR = reco::deltaR(sv,jet);
-            sv_features.sv_mass = sv.mass();
-            sv_features.sv_ntracks = sv.numberOfDaughters();
-            sv_features.sv_chi2 = sv.vertexChi2();
-            sv_features.sv_ndof = sv.vertexNdof();
-
-
-            reco::Vertex::CovarianceMatrix covsv; 
-            sv.fillVertexCovariance(covsv);
-            reco::Vertex svtx(sv.vertex(), covsv);
-
-            VertexDistanceXY distXY;
-            Measurement1D distanceXY = distXY.distance(svtx, pv);
-            sv_features.sv_dxy = distanceXY.value();
-            sv_features.sv_dxysig = distanceXY.value()/distanceXY.error();
-
-            VertexDistance3D dist3D;
-            Measurement1D distance3D = dist3D.distance(svtx, pv);
-            sv_features.sv_d3d = distance3D.value();
-            sv_features.sv_d3dsig = distance3D.value()/distance3D.error();
-
-            if (std::isnan(sv_features.sv_dxysig) || std::isnan(sv_features.sv_d3dsig))
-                {
-                    sv_features.sv_dxysig = 0.;
-                    sv_features.sv_d3dsig = 0.;
-                }
-
-            reco::Candidate::Vector distance(sv.vx() - pv.x(), sv.vy() - pv.y(), sv.vz() - pv.z());
-            sv_features.sv_costhetasvpv = sv.momentum().Unit().Dot(distance.Unit());
-            sv_features.sv_enratio = sv.energy()/jet.pt();
+            llpdnnx::SecondaryVertexFeatures sv_features = fillSVFeatures(sv, pv, jet);
 
 
             features.sv_features.emplace_back(sv_features);
         }
 
         std::stable_sort(features.sv_features.begin(),features.sv_features.end(),[](const auto& d1, const auto& d2)
+        {
+            return d1.sv_dxysig>d2.sv_dxysig; //sort decreasing
+        });
+
+
+        // fill features from secondary vertices  
+        
+        for (unsigned int isv = 0; isv < svs_adapted->size(); ++isv)
+        {
+            const reco::VertexCompositePtrCandidate& sv_adapted = svs_adapted->at(isv);
+            
+            if (reco::deltaR(sv_adapted,jet)>0.4)
+            {
+                continue;
+            }
+            bool matchingTrack = false;
+            for (auto const& candidateFromVertex: sv_adapted.daughterPtrVector())
+            {
+                if (jetConstituentSet.find(candidateFromVertex)!=jetConstituentSet.end())
+                {
+                    candidatesMatchedToSVAdapted.insert(candidateFromVertex);
+                    matchingTrack = true;
+                }
+            }
+            if (not matchingTrack) continue;
+
+            llpdnnx::SecondaryVertexFeatures sv_adapted_features = fillSVFeatures(sv_adapted, pv, jet);
+
+
+            features.sv_adapted_features.emplace_back(sv_adapted_features);
+        }
+
+        std::stable_sort(features.sv_adapted_features.begin(),features.sv_adapted_features.end(),[](const auto& d1, const auto& d2)
         {
             return d1.sv_dxysig>d2.sv_dxysig; //sort decreasing
         });
@@ -433,6 +483,15 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             else
             {
                 cpf_features.cpf_matchedSV = 0;
+            }
+
+            if (candidatesMatchedToSVAdapted.find(jet.daughterPtr(idaughter))!=candidatesMatchedToSVAdapted.end())
+            {
+                cpf_features.cpf_matchedSV_adapted = 1;
+            }
+            else
+            {
+                cpf_features.cpf_matchedSV_adapted = 0;
             }
 
             

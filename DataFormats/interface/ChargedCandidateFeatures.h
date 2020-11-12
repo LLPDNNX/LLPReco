@@ -38,6 +38,7 @@ struct ChargedCandidateFeatures
     int cpf_matchedMuon;
     int cpf_matchedElectron;
     int cpf_matchedSV;
+    int cpf_matchedSV_adapted;
     int cpf_track_ndof;
 
     float cpf_dZmin;
