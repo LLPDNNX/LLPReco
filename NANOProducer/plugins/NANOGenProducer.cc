@@ -142,6 +142,7 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     
     std::vector<float> matchedGenJetDeltaR;
     std::vector<float> matchedGenJetPt;
+    std::vector<float> sharedVertexFraction;
             
     for (std::size_t itag = 0; itag < ntruth; itag++) {
     	const auto& labels = label_infos->at(itag).features();
@@ -226,6 +227,7 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         
         matchedGenJetDeltaR.push_back(labels.matchedGenJetDeltaR);
         matchedGenJetPt.push_back(labels.matchedGenJetPt);
+        sharedVertexFraction.push_back(labels.sharedVertexFraction);
  
     }
 
@@ -296,6 +298,7 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     
     jetOriginTable->addColumn<float>("matchedGenJetDeltaR", matchedGenJetDeltaR, "doc", nanoaod::FlatTable::FloatColumn);
     jetOriginTable->addColumn<float>("matchedGenJetPt", matchedGenJetPt, "doc", nanoaod::FlatTable::FloatColumn);
+    jetOriginTable->addColumn<float>("sharedVertexFraction", sharedVertexFraction, "doc", nanoaod::FlatTable::FloatColumn);
      
     iEvent.put(std::move(jetOriginTable), "jetorigin");
 }

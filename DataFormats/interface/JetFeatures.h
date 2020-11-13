@@ -49,6 +49,12 @@ struct JetFeatures
     float eventShapeC;
     float eventShapeD;
     
+    int ncpf;
+    int nnpf;
+    int nsv;
+    int nmuon;
+    int nelectron;
+    
     JetFeatures():
         jetIdx(-1),
         pt(-1),
@@ -91,7 +97,13 @@ struct JetFeatures
         circularity(-1),
         isotropy(-1),
         eventShapeC(-1),
-        eventShapeD(-1)
+        eventShapeD(-1),
+        
+        ncpf(0),
+        nnpf(0),
+        nsv(0),
+        nmuon(0),
+        nelectron(0)
     {
     }
     

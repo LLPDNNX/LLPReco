@@ -140,6 +140,12 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> trackSip3dSigAboveCharm;
     std::vector<int> jetNSelectedTracks;
     std::vector<int> jetNTracksEtaRel;
+    
+    std::vector<int> ncpf_list;
+    std::vector<int> nnpf_list;
+    std::vector<int> nsv_list;
+    std::vector<int> nmuon_list;
+    std::vector<int> nelectron_list;
 
     std::vector<float> cpf_trackEtaRel;
     std::vector<float> cpf_trackPtRel;
@@ -156,6 +162,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> cpf_ptrel;
     std::vector<float> cpf_deta;
     std::vector<float> cpf_dphi;
+    std::vector<float> cpf_deltaR;
     std::vector<float> cpf_px;
     std::vector<float> cpf_py;
     std::vector<float> cpf_pz;
@@ -445,6 +452,13 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         jetNSelectedTracks.push_back(tag_info_features.csv_jetNSelectedTracks);
         jetNTracksEtaRel.push_back(tag_info_features.csv_jetNTracksEtaRel);
         vertexCategory.push_back(tag_info_features.csv_vertexCategory);
+        
+        ncpf_list.push_back(features.jet_features.ncpf);
+        nnpf_list.push_back(features.jet_features.nnpf);
+        nsv_list.push_back(features.jet_features.nsv);
+        nmuon_list.push_back(features.jet_features.nmuon);
+        nelectron_list.push_back(features.jet_features.nelectron);
+
     }
 
     auto muonTable = std::make_unique<nanoaod::FlatTable>(nmu_total, "muon", false, false);
@@ -489,6 +503,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_ptrel.push_back(cpf_features.cpf_ptrel);
             cpf_deta.push_back(cpf_features.cpf_deta);
             cpf_dphi.push_back(cpf_features.cpf_dphi);
+            cpf_deltaR.push_back(cpf_features.cpf_deltaR);
             cpf_px.push_back(cpf_features.cpf_px);
             cpf_py.push_back(cpf_features.cpf_py);
             cpf_pz.push_back(cpf_features.cpf_pz);
@@ -752,6 +767,12 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     globalTable->addColumn<float>("jetR", jetR, "fraction of jet pt carried by lead constituent", nanoaod::FlatTable::FloatColumn);
     globalTable->addColumn<float>("jetRchg", jetRchg, "fraction of jet pt carried by lead jet constituent", nanoaod::FlatTable::FloatColumn);  
 
+    globalTable->addColumn<int>("ncpf", ncpf_list, "doc", nanoaod::FlatTable::IntColumn);  
+    globalTable->addColumn<int>("nnpf", nnpf_list, "doc", nanoaod::FlatTable::IntColumn);  
+    globalTable->addColumn<int>("nsv", nsv_list, "doc", nanoaod::FlatTable::IntColumn);  
+    globalTable->addColumn<int>("nmuon", nmuon_list, "doc", nanoaod::FlatTable::IntColumn);  
+    globalTable->addColumn<int>("nelectron", nelectron_list, "doc", nanoaod::FlatTable::IntColumn);  
+
     csvTable->addColumn<float>("trackSumJetEtRatio", trackSumJetEtRatio, "ratio of track sum transverse energy over jet energy", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("trackSumJetDeltaR", trackSumJetDeltaR, "pseudoangular distance between jet axis and track fourvector sum", nanoaod::FlatTable::FloatColumn);
     csvTable->addColumn<float>("vertexCategory", vertexCategory, "category of secondary vertex (Reco, Pseudo, No)", nanoaod::FlatTable::FloatColumn);
@@ -794,6 +815,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     cpfTable->addColumn<float>("dzMin", cpf_dZmin, "min distance to other PV", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("deta", cpf_deta, "absolute difference between the charged PF candidate eta and jet eta", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("dphi", cpf_dphi, "absolute difference between the charged PF candidate phi and jet phi", nanoaod::FlatTable::FloatColumn);
+    cpfTable->addColumn<float>("deltaR", cpf_deltaR, "R between the charged PF candidate and jet", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("px", cpf_px, "px", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("py", cpf_py, "py", nanoaod::FlatTable::FloatColumn);
     cpfTable->addColumn<float>("pz", cpf_pz, "pz", nanoaod::FlatTable::FloatColumn);

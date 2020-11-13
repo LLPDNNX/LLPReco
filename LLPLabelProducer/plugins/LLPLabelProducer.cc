@@ -478,6 +478,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                             dRmin = dRGenJets;
                             matchedVertex = &vertex;
                             matchedGenJet = &genJet;
+                            label.sharedVertexFraction = vertex.jetFractions[igenJet];
                         }
                     }
                 }
@@ -487,6 +488,7 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 {
                     label.matchedGenJetDeltaR = dRmin;
                     label.matchedGenJetPt = matchedGenJet->pt();
+                    
                     
                     int maxFlavor = 0;
                     

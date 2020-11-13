@@ -233,7 +233,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             features.jet_features.eventShapeD = eventShapes.D();
         }
         
-
+       
         // Add CSV variables
         const edm::View<reco::ShallowTagInfo>& taginfos = *shallow_tag_infos;
         edm::Ptr<reco::ShallowTagInfo> match;
@@ -362,14 +362,13 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             }
 
 
-            float dZ0 = std::abs(constituent->dz(pv.position()));
-            float dZmin = dZ0;
+            float dZmin = 100;
             for (size_t i = 0; i < vtxs->size(); i++){
-                if (i == 0) continue;
                 auto vtx = vtxs->at(i);
                 if (vtx.isFake() || vtx.ndof() < 4) {
                     continue;
                 }
+                if ((vtx.position()-pv.position()).mag2()<1e-3) continue; //skip PV
                 dZmin = std::min(dZmin, std::abs(constituent->dz(vtx.position())));
             }
 
@@ -847,15 +846,21 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             else if (npf.npf_deltaR < 0.4) frac04 ++;
         }
 
-        float nCandidates = (float)features.cpf_features.size()+(float)features.npf_features.size();
+        int nCandidates = features.cpf_features.size()+features.npf_features.size();
 
-        if (nCandidates > 0.){
-            features.jet_features.frac01 = (float)frac01/nCandidates;
-            features.jet_features.frac02 = (float)frac02/nCandidates;
-            features.jet_features.frac03 = (float)frac03/nCandidates;
-            features.jet_features.frac04 = (float)frac04/nCandidates;
+        if (nCandidates > 0) {
+            features.jet_features.frac01 = 1.*frac01/nCandidates;
+            features.jet_features.frac02 = 1.*frac02/nCandidates;
+            features.jet_features.frac03 = 1.*frac03/nCandidates;
+            features.jet_features.frac04 = 1.*frac04/nCandidates;
             features.jet_features.dR2Mean = dR2Mean/pt2Sum;
         }
+        
+        features.jet_features.ncpf = features.cpf_features.size();
+        features.jet_features.nnpf = features.npf_features.size();
+        features.jet_features.nsv = features.sv_features.size();
+        features.jet_features.nmuon = features.mu_features.size();
+        features.jet_features.nelectron = features.elec_features.size();
         
         output_tag_infos->emplace_back(features, jet_ref);
     }

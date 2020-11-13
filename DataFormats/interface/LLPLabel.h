@@ -86,8 +86,10 @@ class LLPLabel {
         float decay_angle;
         float betagamma;
         
+        
         float matchedGenJetDeltaR;
         float matchedGenJetPt;
+        float sharedVertexFraction;
         
         LLPLabel():
             type(Type::isUndefined),
@@ -103,7 +105,8 @@ class LLPLabel {
             decay_angle(0),
             betagamma(0),
             matchedGenJetDeltaR(-1),
-            matchedGenJetPt(-1)
+            matchedGenJetPt(-1),
+            sharedVertexFraction(0)
         {
         }
         
