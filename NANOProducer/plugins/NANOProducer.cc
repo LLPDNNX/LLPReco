@@ -18,18 +18,22 @@
 #include "DataFormats/NanoAOD/interface/FlatTable.h"
 #include <Math/Vector4D.h>
 
-
+#include "FlatTableFiller.h"
 
 //
 // class declaration
 //
 
 class NANOProducer : public edm::stream::EDProducer<> {
-   public:
-      explicit NANOProducer(const edm::ParameterSet&);
-      ~NANOProducer();
+    public:
+        explicit NANOProducer(const edm::ParameterSet&);
+        ~NANOProducer();
 
-      static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+        static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
+
+        PropertyList<llpdnnx::JetFeatures> globalProperties;
+        PropertyList<llpdnnx::ShallowTagInfoFeatures> csvProperties;
+        PropertyList<llpdnnx::ChargedCandidateFeatures> cpfProperties;
 
    private:
       const edm::EDGetTokenT<edm::View<pat::Jet>> _jet_src;
@@ -43,6 +47,112 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
     _jet_src(consumes<edm::View<pat::Jet>>(iConfig.getParameter<edm::InputTag>("srcJets"))),
     _tag_src(consumes<std::vector<reco::XTagInfo>>(iConfig.getParameter<edm::InputTag>("srcTags")))
 {
+    globalProperties = {
+        PROPERTY(llpdnnx::JetFeatures, pt, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, eta, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, phi, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, mass, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, energy, "doc"),
+
+        PROPERTY(llpdnnx::JetFeatures, area, "doc"),
+
+        PROPERTY(llpdnnx::JetFeatures, beta, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, dR2Mean, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, frac01, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, frac02, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, frac03, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, frac04, "doc"),
+
+        PROPERTY(llpdnnx::JetFeatures, jetR, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, jetRchg, "doc"),
+
+        PROPERTY(llpdnnx::JetFeatures, n60, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, n90, "doc"),
+
+        PROPERTY(llpdnnx::JetFeatures, chargedEmEnergyFraction, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, chargedHadronEnergyFraction, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, chargedMuEnergyFraction, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, electronEnergyFraction, "doc"),
+
+        PROPERTY(llpdnnx::JetFeatures, tau1, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, tau2, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, tau3, "doc"),
+
+        PROPERTY(llpdnnx::JetFeatures, relMassDropMassAK, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, relMassDropMassCA, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, relSoftDropMassAK, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, relSoftDropMassCA, "doc"),
+
+        PROPERTY(llpdnnx::JetFeatures, thrust, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, sphericity, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, circularity, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, isotropy, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, eventShapeC, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, eventShapeD, "doc"),
+
+        PROPERTY(llpdnnx::JetFeatures, numberCpf, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, numberNpf, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, numberSv, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, numberMuon, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, numberElectron, "doc")
+    
+    };
+    
+    csvProperties = {
+        PROPERTY(llpdnnx::ShallowTagInfoFeatures, trackSumJetEtRatio, "ratio of track sum transverse energy over jet energy"),
+        PROPERTY(llpdnnx::ShallowTagInfoFeatures, trackSumJetDeltaR, "pseudoangular distance between jet axis and track fourvector sum"),
+        PROPERTY(llpdnnx::ShallowTagInfoFeatures, vertexCategory, "category of secondary vertex (Reco, Pseudo, No)"),
+        PROPERTY(llpdnnx::ShallowTagInfoFeatures, trackSip2dValAboveCharm, "track 2D signed impact parameter of first track lifting mass above charm"),
+        PROPERTY(llpdnnx::ShallowTagInfoFeatures, trackSip2dSigAboveCharm, "track 2D signed impact parameter significance of first track lifting mass above charm"),
+        PROPERTY(llpdnnx::ShallowTagInfoFeatures, trackSip3dValAboveCharm, "track 3D signed impact parameter of first track lifting mass above charm"),
+        PROPERTY(llpdnnx::ShallowTagInfoFeatures, trackSip3dSigAboveCharm, "track 3D signed impact parameter significance of first track lifting mass above charm"),
+        PROPERTY(llpdnnx::ShallowTagInfoFeatures, jetNTracksEtaRel, "tracks associated to jet for which trackEtaRel is calculated"),
+        PROPERTY(llpdnnx::ShallowTagInfoFeatures, jetNSelectedTracks, "doc")
+    };
+    
+    cpfProperties = {
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, ptrel, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, deta, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, dphi, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, deltaR, "doc"),
+
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, px, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, py, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, pz, "doc"),
+
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackEtaRel, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackPtRel, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackPPar, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackDeltaR, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackPParRatio, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackPtRatio, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip2dVal, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip2dSig, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip3dVal, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip3dSig, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackJetDistVal, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackJetDistSig, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, drminsv, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, vertex_association, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, fromPV, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, puppi_weight, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, track_chi2, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, track_quality, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, track_numberOfValidPixelHits, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, track_pixelLayersWithMeasurement, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, track_numberOfValidStripHits, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, track_stripLayersWithMeasurement, "doc"), 
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, relmassdrop, "doc"),
+
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedMuon, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedElectron, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedSV, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, track_ndof, "doc"),
+
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, dZmin, "doc")
+    };
+
+
     produces<nanoaod::FlatTable>("global");
     produces<nanoaod::FlatTable>("csv");
     produces<nanoaod::FlatTable>("cpf");
@@ -73,6 +183,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     unsigned int ntags = tag_infos->size();
 
     std::vector<int> global_jetIdx;
+    std::vector<int> csv_jetIdx;
     std::vector<int> cpf_jetIdx;
     std::vector<int> npf_jetIdx;
     std::vector<int> sv_jetIdx;
@@ -88,64 +199,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> mu_length;
 
     auto globalTable = std::make_unique<nanoaod::FlatTable>(ntags, "global", false, false);
-    std::vector<float> pt;
-    std::vector<float> eta;
-    std::vector<float> phi;
-    std::vector<float> mass;
-
-    std::vector<float> area;
-
-    std::vector<int> n60;
-    std::vector<int> n90;
-
-    std::vector<float> beta;
-    std::vector<float> dR2Mean;
-    std::vector<float> frac01;
-    std::vector<float> frac02;
-    std::vector<float> frac03;
-    std::vector<float> frac04;
-
-    std::vector<float> jetR;
-    std::vector<float> jetRchg;
-
-    std::vector<float> chargedEmEnergyFraction;
-    std::vector<float> chargedHadronEnergyFraction;
-    std::vector<float> chargedMuEnergyFraction;
-    std::vector<float> electronEnergyFraction;
-
-    std::vector<float> tau1;
-    std::vector<float> tau2;
-    std::vector<float> tau3;
-
-    std::vector<float> relMassDropMassAK;
-    std::vector<float> relMassDropMassCA;
-    std::vector<float> relSoftDropMassAK;
-    std::vector<float> relSoftDropMassCA;
-
-    std::vector<float> thrust;
-    std::vector<float> sphericity;
-    std::vector<float> circularity;
-    std::vector<float> isotropy;
-    std::vector<float> eventShapeC;
-    std::vector<float> eventShapeD;
-
-
     auto csvTable = std::make_unique<nanoaod::FlatTable>(ntags, "csv", false, false);
-    std::vector<float> trackSumJetEtRatio;
-    std::vector<float> trackSumJetDeltaR;
-    std::vector<float> vertexCategory;
-    std::vector<float> trackSip2dValAboveCharm;
-    std::vector<float> trackSip2dSigAboveCharm;
-    std::vector<float> trackSip3dValAboveCharm;
-    std::vector<float> trackSip3dSigAboveCharm;
-    std::vector<int> jetNSelectedTracks;
-    std::vector<int> jetNTracksEtaRel;
     
-    std::vector<int> ncpf_list;
-    std::vector<int> nnpf_list;
-    std::vector<int> nsv_list;
-    std::vector<int> nmuon_list;
-    std::vector<int> nelectron_list;
 
     std::vector<float> cpf_trackEtaRel;
     std::vector<float> cpf_trackPtRel;
@@ -361,6 +416,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<float> elec_dr04HcalDepth2TowerSumEtBc;
     std::vector<float> elec_dr04HcalTowerSumEt;
     std::vector<float> elec_dr04HcalTowerSumEtBc;
+    
+    FlatTableFillerList<llpdnnx::JetFeatures> globalFillerList(globalProperties);
+    FlatTableFillerList<llpdnnx::ShallowTagInfoFeatures> csvFillerList(csvProperties);
+    
+    FlatTableFillerList<llpdnnx::ChargedCandidateFeatures> cpfFillerList(cpfProperties);
 
     unsigned int nmu_total = 0;
     unsigned int nelec_total = 0;
@@ -370,7 +430,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     for (unsigned int itag= 0; itag < ntags; itag++){
         const auto& features = tag_infos->at(itag).features();
-        const auto& tag_info_features = features.tag_info_features;
 
         unsigned int nmu = features.mu_features.size();
         unsigned int nelec = features.elec_features.size();
@@ -400,65 +459,13 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 }
             }
         } 
-
-        global_jetIdx.push_back(jetIdx);
-        pt.push_back(features.jet_features.pt);
-        eta.push_back(features.jet_features.eta);
-        phi.push_back(features.jet_features.phi);
-        mass.push_back(features.jet_features.mass);
-
-        area.push_back(features.jet_features.area);
-
-        n60.push_back(features.jet_features.n60);
-        n90.push_back(features.jet_features.n90);
-
-        beta.push_back(features.jet_features.beta);
-        dR2Mean.push_back(features.jet_features.dR2Mean);
-        frac01.push_back(features.jet_features.frac01);
-        frac02.push_back(features.jet_features.frac02);
-        frac03.push_back(features.jet_features.frac03);
-        frac04.push_back(features.jet_features.frac04);
-    
-        jetR.push_back(features.jet_features.jetR);
-        jetRchg.push_back(features.jet_features.jetRchg);
-
-        chargedEmEnergyFraction.push_back(features.jet_features.chargedEmEnergyFraction);
-        chargedHadronEnergyFraction.push_back(features.jet_features.chargedHadronEnergyFraction);
-        chargedMuEnergyFraction.push_back(features.jet_features.chargedMuEnergyFraction);
-        electronEnergyFraction.push_back(features.jet_features.electronEnergyFraction);
-
-        tau1.push_back(features.jet_features.tau1);
-        tau2.push_back(features.jet_features.tau2);
-        tau3.push_back(features.jet_features.tau3);
-
-        relMassDropMassAK.push_back(features.jet_features.relMassDropMassAK);
-        relMassDropMassCA.push_back(features.jet_features.relMassDropMassCA);
-        relSoftDropMassAK.push_back(features.jet_features.relSoftDropMassAK);
-        relSoftDropMassCA.push_back(features.jet_features.relSoftDropMassCA);
-
-        thrust.push_back(features.jet_features.thrust);
-        sphericity.push_back(features.jet_features.sphericity);
-        circularity.push_back(features.jet_features.circularity);
-        isotropy.push_back(features.jet_features.isotropy);
-        eventShapeC.push_back(features.jet_features.eventShapeC);
-        eventShapeD.push_back(features.jet_features.eventShapeD);
-
-        trackSumJetEtRatio.push_back(tag_info_features.csv_trackSumJetEtRatio);
-        trackSumJetDeltaR.push_back(tag_info_features.csv_trackSumJetDeltaR);
-        trackSip2dValAboveCharm.push_back(tag_info_features.csv_trackSip2dValAboveCharm);
-        trackSip2dSigAboveCharm.push_back(tag_info_features.csv_trackSip2dSigAboveCharm);
-        trackSip3dValAboveCharm.push_back(tag_info_features.csv_trackSip3dValAboveCharm);
-        trackSip3dSigAboveCharm.push_back(tag_info_features.csv_trackSip3dSigAboveCharm);
-        jetNSelectedTracks.push_back(tag_info_features.csv_jetNSelectedTracks);
-        jetNTracksEtaRel.push_back(tag_info_features.csv_jetNTracksEtaRel);
-        vertexCategory.push_back(tag_info_features.csv_vertexCategory);
         
-        ncpf_list.push_back(features.jet_features.ncpf);
-        nnpf_list.push_back(features.jet_features.nnpf);
-        nsv_list.push_back(features.jet_features.nsv);
-        nmuon_list.push_back(features.jet_features.nmuon);
-        nelectron_list.push_back(features.jet_features.nelectron);
-
+        global_jetIdx.push_back(jetIdx);
+        csv_jetIdx.push_back(jetIdx);
+        
+        globalFillerList.push_back(features.jet_features);
+        csvFillerList.push_back(features.tag_info_features);
+       
     }
 
     auto muonTable = std::make_unique<nanoaod::FlatTable>(nmu_total, "muon", false, false);
@@ -486,43 +493,8 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         for (unsigned int i = 0; i < ncpf; i++)
         {
-            const auto& cpf_features = cpf.at(i);
             cpf_jetIdx.push_back(jetIdx);
-            cpf_trackEtaRel.push_back(cpf_features.cpf_trackEtaRel);
-            cpf_trackPtRel.push_back(cpf_features.cpf_trackPtRel);
-            cpf_trackPPar.push_back(cpf_features.cpf_trackPPar);
-            cpf_trackDeltaR.push_back(cpf_features.cpf_trackDeltaR);
-            cpf_trackPParRatio.push_back(cpf_features.cpf_trackPParRatio);
-            cpf_trackPtRatio.push_back(cpf_features.cpf_trackPtRatio);
-            cpf_trackSip2dVal.push_back(cpf_features.cpf_trackSip2dVal);
-            cpf_trackSip2dSig.push_back(cpf_features.cpf_trackSip2dSig);
-            cpf_trackSip3dVal.push_back(cpf_features.cpf_trackSip3dVal);
-            cpf_trackSip3dSig.push_back(cpf_features.cpf_trackSip3dSig);
-            cpf_trackJetDistVal.push_back(cpf_features.cpf_trackJetDistVal);
-            cpf_trackJetDistSig.push_back(cpf_features.cpf_trackJetDistSig);
-            cpf_ptrel.push_back(cpf_features.cpf_ptrel);
-            cpf_deta.push_back(cpf_features.cpf_deta);
-            cpf_dphi.push_back(cpf_features.cpf_dphi);
-            cpf_deltaR.push_back(cpf_features.cpf_deltaR);
-            cpf_px.push_back(cpf_features.cpf_px);
-            cpf_py.push_back(cpf_features.cpf_py);
-            cpf_pz.push_back(cpf_features.cpf_pz);
-            cpf_drminsv.push_back(cpf_features.cpf_drminsv);
-            cpf_vertex_association.push_back(cpf_features.cpf_vertex_association);
-            cpf_fromPV.push_back(cpf_features.cpf_fromPV);
-            cpf_puppi_weight.push_back(cpf_features.cpf_puppi_weight);
-            cpf_track_chi2.push_back(cpf_features.cpf_track_chi2);
-            cpf_track_quality.push_back(cpf_features.cpf_track_quality);
-            cpf_relmassdrop.push_back(cpf_features.cpf_relmassdrop);
-            cpf_track_ndof.push_back(cpf_features.cpf_track_ndof);
-            cpf_matchedMuon.push_back(cpf_features.cpf_matchedMuon);
-            cpf_matchedElectron.push_back(cpf_features.cpf_matchedElectron);
-            cpf_matchedSV.push_back(cpf_features.cpf_matchedSV);
-	        cpf_track_numberOfValidPixelHits.push_back(cpf_features.cpf_track_numberOfValidPixelHits);
-            cpf_track_pixelLayersWithMeasurement.push_back(cpf_features.cpf_track_pixelLayersWithMeasurement);
-	        cpf_track_numberOfValidStripHits.push_back(cpf_features.cpf_track_numberOfValidStripHits);
-	        cpf_track_stripLayersWithMeasurement.push_back(cpf_features.cpf_track_stripLayersWithMeasurement);
-            cpf_dZmin.push_back(cpf_features.cpf_dZmin);
+            cpfFillerList.push_back(cpf.at(i));
         }
 
         for (unsigned int i = 0; i < nnpf; i++)
@@ -734,91 +706,13 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     }
     globalTable->addColumn<int>("jetIdx", global_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
-    globalTable->addColumn<float>("pt", pt, "global jet pt (uncorrected)", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("eta", eta, "global jet eta", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("phi", phi, "global jet phi", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("mass", mass, "global jet mass", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("area", area, "global jet area", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<int>("n60", n60, "n60", nanoaod::FlatTable::IntColumn);
-    globalTable->addColumn<int>("n90", n90, "n90", nanoaod::FlatTable::IntColumn);
-    globalTable->addColumn<float>("chargedEmEnergyFraction", chargedEmEnergyFraction, "chargedEmEnergyFraction", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("chargedHadronEnergyFraction", chargedHadronEnergyFraction, "chargedHadronEnergyFraction", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("chargedMuEnergyFraction", chargedMuEnergyFraction, "chargedMuEnergyFraction", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("electronEnergyFraction", electronEnergyFraction, "electronEnergyFraction", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("tau1", tau1, "nsubjettiness 1", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("tau2", tau2, "nsubjettiness 2", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("tau3", tau3, "nsubjettiness 3", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("relMassDropMassAK", relMassDropMassAK, "mass drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("relMassDropMassCA", relMassDropMassCA, "mass drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("relSoftDropMassAK", relSoftDropMassAK, "soft drop mass with anti-kT", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("relSoftDropMassCA", relSoftDropMassCA, "soft drop mass with Cambridge/Aachen", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("thrust", thrust, "thrust", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("sphericity", sphericity, "sphericity", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("circularity", circularity, "circularity", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("isotropy", isotropy, "isotropy", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("eventShapeC", eventShapeC, "eventShapeC", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("eventShapeD", eventShapeD, "eventShapeD", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("beta", beta, "fraction of tracks associated to the PV", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("dR2Mean", dR2Mean, "pt2 weighted average square distance of jet constituents from the jet axis", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("frac01", frac01, "fraction of constituents in the region dR < 0.1 around the jet axis", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("frac02", frac02, "fraction of constituents in the region 0.1 < dR < 0.2 around the jet axis", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("frac03", frac03, "fraction of constituents in the region 0.2 < dR < 0.3 around the jet axis", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("frac04", frac04, "fraction of constituents in the region 0.3 < dR < 0.4 around the jet axis", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("jetR", jetR, "fraction of jet pt carried by lead constituent", nanoaod::FlatTable::FloatColumn);
-    globalTable->addColumn<float>("jetRchg", jetRchg, "fraction of jet pt carried by lead jet constituent", nanoaod::FlatTable::FloatColumn);  
-
-    globalTable->addColumn<int>("ncpf", ncpf_list, "doc", nanoaod::FlatTable::IntColumn);  
-    globalTable->addColumn<int>("nnpf", nnpf_list, "doc", nanoaod::FlatTable::IntColumn);  
-    globalTable->addColumn<int>("nsv", nsv_list, "doc", nanoaod::FlatTable::IntColumn);  
-    globalTable->addColumn<int>("nmuon", nmuon_list, "doc", nanoaod::FlatTable::IntColumn);  
-    globalTable->addColumn<int>("nelectron", nelectron_list, "doc", nanoaod::FlatTable::IntColumn);  
-
-    csvTable->addColumn<float>("trackSumJetEtRatio", trackSumJetEtRatio, "ratio of track sum transverse energy over jet energy", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("trackSumJetDeltaR", trackSumJetDeltaR, "pseudoangular distance between jet axis and track fourvector sum", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("vertexCategory", vertexCategory, "category of secondary vertex (Reco, Pseudo, No)", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("trackSip2dValAboveCharm", trackSip2dValAboveCharm, "track 2D signed impact parameter of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("trackSip2dSigAboveCharm", trackSip2dSigAboveCharm, "track 2D signed impact parameter significance of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("trackSip3dValAboveCharm", trackSip3dValAboveCharm, "track 3D signed impact parameter of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<float>("trackSip3dSigAboveCharm", trackSip3dSigAboveCharm, "track 3D signed impact parameter significance of first track lifting mass above charm", nanoaod::FlatTable::FloatColumn);
-    csvTable->addColumn<int>("jetNSelectedTracks", jetNSelectedTracks, "tracks associated to jet", nanoaod::FlatTable::IntColumn);
-    csvTable->addColumn<int>("jetNTracksEtaRel", jetNTracksEtaRel, "number of tracks for which etaRel is computed", nanoaod::FlatTable::IntColumn);
-
+    globalFillerList.fill(globalTable);
+    
+    csvTable->addColumn<int>("jetIdx", csv_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
+    csvFillerList.fill(csvTable);
+   
     cpfTable->addColumn<int>("jetIdx", cpf_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
-    cpfTable->addColumn<float>("trackEtaRel", cpf_trackEtaRel, "track pseudorapidity, relative to the jet axis", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackPtRel", cpf_trackPtRel, "track transverse momentum, relative to the jet axis", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackPPar", cpf_trackPPar, "track parallel momentum, along the jet axis", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackDeltaR", cpf_trackDeltaR, "charged PF candidate track pseudoangular distance (Delta R) from the jet axis", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackPParRatio", cpf_trackPParRatio, "track parallel momentum, along the jet axis, normalized to its energy", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackPtRatio", cpf_trackPtRatio, "track transverse momentum, relative to the jet axis, normalized to its energy", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackSip2dVal", cpf_trackSip2dVal, "track 2D signed impact parameter", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackSip2dSig", cpf_trackSip2dSig, "track 2D signed impact parameter significance", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackSip3dVal", cpf_trackSip3dVal, "track 3D signed impact parameter", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackSip3dSig", cpf_trackSip3dSig, "track 3D signed impact parameter significance", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackJetDistVal", cpf_trackJetDistVal, "minimum track approach distance to jet axis", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("trackJetDistSig", cpf_trackJetDistSig, "minimum track approach distance to jet axis significance", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("ptrel", cpf_ptrel, "Charged PF candidate track transverse momentum over jet transverse momentum (uncorrelated)", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("drminsv", cpf_drminsv, "pseudoangular distance (Delta R) between the charged PF candidate track and closest secondary vertex (SV) within the jet", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("vertex_association", cpf_vertex_association, "Indicates whether the charged PF candidate track is used in the primary vertex fit", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("fromPV", cpf_fromPV, "Indicates whether the charged PF candidate track is associated to the primary vertex (PV)", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("puppi_weight", cpf_puppi_weight, "weight assigned by the PUPPI algorithm to neutral PF candidate track", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("track_chi2", cpf_track_chi2, "chi^2 of a charged PF candidate track", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("track_quality", cpf_track_quality, "Indicates charged particle track reconstruction quality", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<int>("track_ndof", cpf_track_ndof, "Track fit number of degrees of freedom of charged PF candidate track", nanoaod::FlatTable::IntColumn);
-    cpfTable->addColumn<int>("matchedMuon", cpf_matchedMuon, "flag to specify whether the track is matched to a PF muon", nanoaod::FlatTable::IntColumn);
-    cpfTable->addColumn<int>("matchedElectron", cpf_matchedElectron, "flag to specify whether the track is matched to a PF electron", nanoaod::FlatTable::IntColumn);
-    cpfTable->addColumn<int>("matchedSV", cpf_matchedSV, "flag to specify whether the track is matched to a PF secondary vertex", nanoaod::FlatTable::IntColumn);
-    cpfTable->addColumn<int>("numberOfValidPixelHits", cpf_track_numberOfValidPixelHits , "number of valid pixel hits " , nanoaod::FlatTable::IntColumn);
-    cpfTable->addColumn<int>("pixelLayersWithMeasurement", cpf_track_pixelLayersWithMeasurement , "pixel layers with measurment ", nanoaod::FlatTable::IntColumn);  
-    cpfTable->addColumn<int>("numberOfValidStripHits" , cpf_track_numberOfValidStripHits , "nb of valid strip hits " , nanoaod::FlatTable::IntColumn);
-    cpfTable->addColumn<int>("stripLayersWithMeasurement" , cpf_track_stripLayersWithMeasurement , "nb of strip layers with measurement ", nanoaod::FlatTable::IntColumn); 
-    cpfTable->addColumn<float>("relmassdrop", cpf_relmassdrop, "doc", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("dzMin", cpf_dZmin, "min distance to other PV", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("deta", cpf_deta, "absolute difference between the charged PF candidate eta and jet eta", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("dphi", cpf_dphi, "absolute difference between the charged PF candidate phi and jet phi", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("deltaR", cpf_deltaR, "R between the charged PF candidate and jet", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("px", cpf_px, "px", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("py", cpf_py, "py", nanoaod::FlatTable::FloatColumn);
-    cpfTable->addColumn<float>("pz", cpf_pz, "pz", nanoaod::FlatTable::FloatColumn);
+    cpfFillerList.fill(cpfTable);
 
     npfTable->addColumn<int>("jetIdx", npf_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
     npfTable->addColumn<float>("ptrel", npf_ptrel, "neutral PF candidate transverse momentum over jet transverse momentum (uncorrelated)", nanoaod::FlatTable::FloatColumn);

@@ -340,20 +340,24 @@ LLPLabelProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             
             for (const auto tau: taus)
             {
+                reco::Candidate::LorentzVector tauGenSum(0,0,0,0);
                 reco::Candidate::LorentzVector tauRecoSum(0,0,0,0);
                 std::vector<const reco::Candidate*> decayProducts;
                 gatherVisibleDecayProducts(decayProducts, tau.get());
                 for (const auto decayProduct: decayProducts)
                 {
+                    tauGenSum += decayProduct->p4();
                     auto match = findRecoConstituent(decayProduct,jetConstituents);
                     if (match) tauRecoSum+=match->p4(); 
                 }
                 if (calcFraction(tauRecoSum,tau->p4())>0.5) //at least 50% of momentum reconstructed
                 {
+                    label.genTauMass = tauGenSum.mass();
                     if (calcFraction(promptRecoMax,jet.p4())<calcFraction(tauRecoSum,jet.p4()))
                     {
                         promptRecoMaxId = 15;
                         promptRecoMax = tauRecoSum;
+                        label.recoTauMass = tauRecoSum.mass();
                     }
                     
                     //classify tau decay

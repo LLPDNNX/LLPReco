@@ -91,6 +91,9 @@ class LLPLabel {
         float matchedGenJetPt;
         float sharedVertexFraction;
         
+        float genTauMass;
+        float recoTauMass;
+        
         LLPLabel():
             type(Type::isUndefined),
             tauDecay(TauDecay::NO_TAU),
@@ -106,7 +109,9 @@ class LLPLabel {
             betagamma(0),
             matchedGenJetDeltaR(-1),
             matchedGenJetPt(-1),
-            sharedVertexFraction(0)
+            sharedVertexFraction(0),
+            genTauMass(-1),
+            recoTauMass(-1)
         {
         }
         

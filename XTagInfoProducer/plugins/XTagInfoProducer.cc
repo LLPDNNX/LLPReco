@@ -252,15 +252,15 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         }  // will be default values otherwise
 
         reco::TaggingVariableList vars = tag_info.taggingVariables();
-        features.tag_info_features.csv_trackSumJetEtRatio = vars.get(reco::btau::trackSumJetEtRatio, -1);
-        features.tag_info_features.csv_trackSumJetDeltaR = vars.get(reco::btau::trackSumJetDeltaR, -1);
-        features.tag_info_features.csv_vertexCategory = vars.get(reco::btau::vertexCategory, -1);
-        features.tag_info_features.csv_trackSip2dValAboveCharm = vars.get(reco::btau::trackSip2dValAboveCharm, -1);
-        features.tag_info_features.csv_trackSip2dSigAboveCharm = vars.get(reco::btau::trackSip2dSigAboveCharm, -1);
-        features.tag_info_features.csv_trackSip3dValAboveCharm = vars.get(reco::btau::trackSip3dValAboveCharm, -1);
-        features.tag_info_features.csv_trackSip3dSigAboveCharm = vars.get(reco::btau::trackSip3dSigAboveCharm, -1);
-        features.tag_info_features.csv_jetNTracksEtaRel = vars.get(reco::btau::jetNTracksEtaRel, -1);
-        features.tag_info_features.csv_jetNSelectedTracks = vars.get(reco::btau::jetNSelectedTracks, -1);
+        features.tag_info_features.trackSumJetEtRatio = vars.get(reco::btau::trackSumJetEtRatio, -1);
+        features.tag_info_features.trackSumJetDeltaR = vars.get(reco::btau::trackSumJetDeltaR, -1);
+        features.tag_info_features.vertexCategory = vars.get(reco::btau::vertexCategory, -1);
+        features.tag_info_features.trackSip2dValAboveCharm = vars.get(reco::btau::trackSip2dValAboveCharm, -1);
+        features.tag_info_features.trackSip2dSigAboveCharm = vars.get(reco::btau::trackSip2dSigAboveCharm, -1);
+        features.tag_info_features.trackSip3dValAboveCharm = vars.get(reco::btau::trackSip3dValAboveCharm, -1);
+        features.tag_info_features.trackSip3dSigAboveCharm = vars.get(reco::btau::trackSip3dSigAboveCharm, -1);
+        features.tag_info_features.jetNTracksEtaRel = vars.get(reco::btau::jetNTracksEtaRel, -1);
+        features.tag_info_features.jetNSelectedTracks = vars.get(reco::btau::jetNSelectedTracks, -1);
 
 
         std::unordered_set<reco::CandidatePtr, CandidateHash> candidatesMatchedToSV;
@@ -346,19 +346,19 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
             llpdnnx::ChargedCandidateFeatures cpf_features;
 
-            cpf_features.cpf_ptrel = constituent->pt()/uncorrectedPt;
-            cpf_features.cpf_deta = constituent->eta()-jet.eta();
-            cpf_features.cpf_dphi = reco::deltaPhi(constituent->phi(),jet.phi());
+            cpf_features.ptrel = constituent->pt()/uncorrectedPt;
+            cpf_features.deta = constituent->eta()-jet.eta();
+            cpf_features.dphi = reco::deltaPhi(constituent->phi(),jet.phi());
             
-            cpf_features.cpf_px = constituent->px();
-            cpf_features.cpf_py = constituent->py();
-            cpf_features.cpf_pz = constituent->pz();
+            cpf_features.px = constituent->px();
+            cpf_features.py = constituent->py();
+            cpf_features.pz = constituent->pz();
 
-            cpf_features.cpf_drminsv = 0.4;
+            cpf_features.drminsv = 0.4;
             for (const auto& sv: *svs.product())
             {
                 float dR = reco::deltaR(sv,*constituent);
-                cpf_features.cpf_drminsv = std::min(cpf_features.cpf_drminsv,dR);
+                cpf_features.drminsv = std::min(cpf_features.drminsv,dR);
             }
 
 
@@ -372,26 +372,26 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 dZmin = std::min(dZmin, std::abs(constituent->dz(vtx.position())));
             }
 
-            cpf_features.cpf_dZmin = dZmin;
-            cpf_features.cpf_vertex_association = constituent->pvAssociationQuality();
-            cpf_features.cpf_fromPV = constituent->fromPV();
-            cpf_features.cpf_puppi_weight = constituent->puppiWeight();
-            cpf_features.cpf_track_chi2 = constituent->pseudoTrack().chi2();
-            cpf_features.cpf_track_ndof = constituent->pseudoTrack().ndof();
-            cpf_features.cpf_track_quality = constituent->pseudoTrack().qualityMask();
-    	    cpf_features.cpf_track_numberOfValidPixelHits = constituent->pseudoTrack().hitPattern().numberOfValidPixelHits();
-    	    cpf_features.cpf_track_pixelLayersWithMeasurement  = constituent->pseudoTrack().hitPattern().pixelLayersWithMeasurement();
-    	    cpf_features.cpf_track_numberOfValidStripHits = constituent->pseudoTrack().hitPattern().numberOfValidStripHits();
-    	    cpf_features.cpf_track_stripLayersWithMeasurement = constituent->pseudoTrack().hitPattern().stripLayersWithMeasurement();
+            cpf_features.dZmin = dZmin;
+            cpf_features.vertex_association = constituent->pvAssociationQuality();
+            cpf_features.fromPV = constituent->fromPV();
+            cpf_features.puppi_weight = constituent->puppiWeight();
+            cpf_features.track_chi2 = constituent->pseudoTrack().chi2();
+            cpf_features.track_ndof = constituent->pseudoTrack().ndof();
+            cpf_features.track_quality = constituent->pseudoTrack().qualityMask();
+    	    cpf_features.track_numberOfValidPixelHits = constituent->pseudoTrack().hitPattern().numberOfValidPixelHits();
+    	    cpf_features.track_pixelLayersWithMeasurement  = constituent->pseudoTrack().hitPattern().pixelLayersWithMeasurement();
+    	    cpf_features.track_numberOfValidStripHits = constituent->pseudoTrack().hitPattern().numberOfValidStripHits();
+    	    cpf_features.track_stripLayersWithMeasurement = constituent->pseudoTrack().hitPattern().stripLayersWithMeasurement();
 		
 
             if (jet.mass()<1e-10)
             {
-                cpf_features.cpf_relmassdrop = -1;
+                cpf_features.relmassdrop = -1;
             }
             else
             {
-                cpf_features.cpf_relmassdrop = (jet.p4()-constituent->p4()).mass()/jet.mass();
+                cpf_features.relmassdrop = (jet.p4()-constituent->p4()).mass()/jet.mass();
             }
             
             reco::TransientTrack transientTrack = builder->build(constituent->pseudoTrack());
@@ -406,36 +406,36 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             TVector3 trackMom3(trackMom.x(),trackMom.y(),trackMom.z());
             TVector3 jetDir3(jetDir.x(),jetDir.y(),jetDir.z());
 
-            cpf_features.cpf_trackEtaRel=reco::btau::etaRel(jetDir, trackMom);
-            cpf_features.cpf_trackPtRel=trackMom3.Perp(jetDir3);
-            cpf_features.cpf_trackPPar=jetDir.Dot(trackMom);
-            cpf_features.cpf_trackDeltaR=reco::deltaR(trackMom, jetDir);
-            cpf_features.cpf_trackPtRatio=cpf_features.cpf_trackPtRel / trackMag;
-            cpf_features.cpf_trackPParRatio=cpf_features.cpf_trackPPar / trackMag;
+            cpf_features.trackEtaRel=reco::btau::etaRel(jetDir, trackMom);
+            cpf_features.trackPtRel=trackMom3.Perp(jetDir3);
+            cpf_features.trackPPar=jetDir.Dot(trackMom);
+            cpf_features.trackDeltaR=reco::deltaR(trackMom, jetDir);
+            cpf_features.trackPtRatio=cpf_features.trackPtRel / trackMag;
+            cpf_features.trackPParRatio=cpf_features.trackPPar / trackMag;
 
-            cpf_features.cpf_trackSip2dVal=meas_ip2d.value();
-            cpf_features.cpf_trackSip2dSig=meas_ip2d.significance();
-            cpf_features.cpf_trackSip3dVal=meas_ip3d.value();
-            cpf_features.cpf_trackSip3dSig=meas_ip3d.significance();
-            if (std::isnan(cpf_features.cpf_trackSip2dSig) || std::isnan(cpf_features.cpf_trackSip3dSig))
+            cpf_features.trackSip2dVal=meas_ip2d.value();
+            cpf_features.trackSip2dSig=meas_ip2d.significance();
+            cpf_features.trackSip3dVal=meas_ip3d.value();
+            cpf_features.trackSip3dSig=meas_ip3d.significance();
+            if (std::isnan(cpf_features.trackSip2dSig) || std::isnan(cpf_features.trackSip3dSig))
             {
-                cpf_features.cpf_trackSip2dSig=0.;
-                cpf_features.cpf_trackSip3dSig=0.;
+                cpf_features.trackSip2dSig=0.;
+                cpf_features.trackSip3dSig=0.;
             }
 
-            cpf_features.cpf_trackJetDistVal = jetdist.value();
-            cpf_features.cpf_trackJetDistSig = jetdist.significance();
+            cpf_features.trackJetDistVal = jetdist.value();
+            cpf_features.trackJetDistSig = jetdist.significance();
 
-            cpf_features.cpf_matchedMuon = 0;
-            cpf_features.cpf_matchedElectron = 0;
+            cpf_features.matchedMuon = 0;
+            cpf_features.matchedElectron = 0;
             
             if (candidatesMatchedToSV.find(jet.daughterPtr(idaughter))!=candidatesMatchedToSV.end())
             {
-                cpf_features.cpf_matchedSV = 1;
+                cpf_features.matchedSV = 1;
             }
             else
             {
-                cpf_features.cpf_matchedSV = 0;
+                cpf_features.matchedSV = 0;
             }
 
             
@@ -447,7 +447,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 const pat::Muon & muon = *findMuon->second;
 
                 if (not muon.isGlobalMuon() || reco::deltaR(muon, jet) > 0.4) continue;
-                cpf_features.cpf_matchedMuon = 1;
+                cpf_features.matchedMuon = 1;
                 mu_features.mu_isGlobal = muon.isGlobalMuon();                                   
                 mu_features.mu_isTight = muon.isTightMuon(pv);                                     
                 mu_features.mu_isMedium = muon.isMediumMuon();
@@ -538,7 +538,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             {
                 llpdnnx::ElectronCandidateFeatures elec_features;
                 const pat::Electron & electron = *findElectron->second;
-                cpf_features.cpf_matchedElectron = 1;
+                cpf_features.matchedElectron = 1;
 		        if (reco::deltaR(electron, jet) > 0.4) continue; 
 
                 elec_features.elec_ptrel = electron.pt()/uncorrectedPt;
@@ -714,28 +714,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     
         std::stable_sort(features.cpf_features.begin(),features.cpf_features.end(),[](const auto& d1, const auto& d2)
         {
-            if (d1.cpf_trackSip2dSig>0 and d2.cpf_trackSip2dSig>0)
-            {
-                return std::fabs(d1.cpf_trackSip2dSig)>std::fabs(d2.cpf_trackSip2dSig); //sort decreasing
-            }
-            else if (d1.cpf_trackSip2dSig<0 and d2.cpf_trackSip2dSig>0)
-            {
-                return false;
-            }
-            else if (d1.cpf_trackSip2dSig>0 and d2.cpf_trackSip2dSig<0)
-            {
-                return true;
-            }
-            else if (std::fabs(d1.cpf_drminsv-d2.cpf_drminsv)>std::numeric_limits<float>::epsilon())
-            {
-                return d1.cpf_drminsv<d2.cpf_drminsv; //sort increasing
-            }
-            else
-            {
-                return d1.cpf_ptrel>d2.cpf_ptrel;  //sort decreasing
-            }
-            
-            return false;
+            return d1<d2;
         });
         
         
@@ -796,7 +775,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         float jetRchg(-1), jetRntr(-1);
         if (features.cpf_features.size() > 0){
-            jetRchg = features.cpf_features.at(0).cpf_ptrel;
+            jetRchg = features.cpf_features.at(0).ptrel;
         }
         
         if (features.npf_features.size() > 0){
@@ -819,13 +798,13 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         for (size_t i = 0; i < features.cpf_features.size(); i++){
             llpdnnx::ChargedCandidateFeatures cpf = features.cpf_features.at(i);
-            beta += cpf.cpf_fromPV;
-            dR2Mean += (cpf.cpf_ptrel*cpf.cpf_trackDeltaR) * (cpf.cpf_ptrel*cpf.cpf_trackDeltaR);
-            pt2Sum += (cpf.cpf_ptrel) * (cpf.cpf_ptrel);
-            if (cpf.cpf_trackDeltaR < 0.1) frac01 ++;
-            else if (cpf.cpf_trackDeltaR < 0.2) frac02 ++;
-            else if (cpf.cpf_trackDeltaR < 0.3) frac03 ++;
-            else if (cpf.cpf_trackDeltaR < 0.4) frac04 ++;
+            beta += cpf.fromPV;
+            dR2Mean += (cpf.ptrel*cpf.trackDeltaR) * (cpf.ptrel*cpf.trackDeltaR);
+            pt2Sum += (cpf.ptrel) * (cpf.ptrel);
+            if (cpf.trackDeltaR < 0.1) frac01 ++;
+            else if (cpf.trackDeltaR < 0.2) frac02 ++;
+            else if (cpf.trackDeltaR < 0.3) frac03 ++;
+            else if (cpf.trackDeltaR < 0.4) frac04 ++;
         }
 
         if (features.cpf_features.size() > 0)
@@ -856,11 +835,11 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             features.jet_features.dR2Mean = dR2Mean/pt2Sum;
         }
         
-        features.jet_features.ncpf = features.cpf_features.size();
-        features.jet_features.nnpf = features.npf_features.size();
-        features.jet_features.nsv = features.sv_features.size();
-        features.jet_features.nmuon = features.mu_features.size();
-        features.jet_features.nelectron = features.elec_features.size();
+        features.jet_features.numberCpf = features.cpf_features.size();
+        features.jet_features.numberNpf = features.npf_features.size();
+        features.jet_features.numberSv = features.sv_features.size();
+        features.jet_features.numberMuon = features.mu_features.size();
+        features.jet_features.numberElectron = features.elec_features.size();
         
         output_tag_infos->emplace_back(features, jet_ref);
     }

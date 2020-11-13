@@ -26,15 +26,15 @@ namespace llpdnnx {
     *(++ptr) = features.sv_features.size();
     // variables from ShallowTagInfo
     const auto& tag_info_features = features.tag_info_features;
-    *(++ptr) = tag_info_features.csv_trackSumJetEtRatio;
-    *(++ptr) = tag_info_features.csv_trackSumJetDeltaR;
-    *(++ptr) = tag_info_features.csv_vertexCategory;
-    *(++ptr) = tag_info_features.csv_trackSip2dValAboveCharm;
-    *(++ptr) = tag_info_features.csv_trackSip2dSigAboveCharm;
-    *(++ptr) = tag_info_features.csv_trackSip3dValAboveCharm;
-    *(++ptr) = tag_info_features.csv_trackSip3dSigAboveCharm;
-    *(++ptr) = tag_info_features.csv_jetNSelectedTracks;
-    *(++ptr) = tag_info_features.csv_jetNTracksEtaRel;
+    *(++ptr) = tag_info_features.trackSumJetEtRatio;
+    *(++ptr) = tag_info_features.trackSumJetDeltaR;
+    *(++ptr) = tag_info_features.vertexCategory;
+    *(++ptr) = tag_info_features.trackSip2dValAboveCharm;
+    *(++ptr) = tag_info_features.trackSip2dSigAboveCharm;
+    *(++ptr) = tag_info_features.trackSip3dValAboveCharm;
+    *(++ptr) = tag_info_features.trackSip3dSigAboveCharm;
+    *(++ptr) = tag_info_features.jetNSelectedTracks;
+    *(++ptr) = tag_info_features.jetNTracksEtaRel;
   }
 
   void cpf_tensor_filler(tensorflow::Tensor& tensor,
@@ -43,24 +43,24 @@ namespace llpdnnx {
                           const llpdnnx::ChargedCandidateFeatures& cpf_features) {
     float* ptr = &tensor.tensor<float, 3>()(jet_n, cpf_n, 0);
 
-    *ptr = cpf_features.cpf_trackEtaRel;
-    *(++ptr) = cpf_features.cpf_trackPtRel;
-    *(++ptr) = cpf_features.cpf_trackPPar;
-    *(++ptr) = cpf_features.cpf_trackDeltaR;
-    *(++ptr) = cpf_features.cpf_trackPParRatio;
-    *(++ptr) = cpf_features.cpf_trackSip2dVal;
-    *(++ptr) = cpf_features.cpf_trackSip2dSig;
-    *(++ptr) = cpf_features.cpf_trackSip3dVal;
-    *(++ptr) = cpf_features.cpf_trackSip3dSig;
-    *(++ptr) = cpf_features.cpf_trackJetDistVal;
-    *(++ptr) = cpf_features.cpf_ptrel;
-    *(++ptr) = cpf_features.cpf_drminsv;
-    *(++ptr) = cpf_features.cpf_vertex_association;
-    *(++ptr) = cpf_features.cpf_fromPV;
-    *(++ptr) = cpf_features.cpf_puppi_weight;
-    *(++ptr) = cpf_features.cpf_track_chi2;
-    *(++ptr) = cpf_features.cpf_track_ndof;
-    *(++ptr) = cpf_features.cpf_track_quality;
+    *ptr = cpf_features.trackEtaRel;
+    *(++ptr) = cpf_features.trackPtRel;
+    *(++ptr) = cpf_features.trackPPar;
+    *(++ptr) = cpf_features.trackDeltaR;
+    *(++ptr) = cpf_features.trackPParRatio;
+    *(++ptr) = cpf_features.trackSip2dVal;
+    *(++ptr) = cpf_features.trackSip2dSig;
+    *(++ptr) = cpf_features.trackSip3dVal;
+    *(++ptr) = cpf_features.trackSip3dSig;
+    *(++ptr) = cpf_features.trackJetDistVal;
+    *(++ptr) = cpf_features.ptrel;
+    *(++ptr) = cpf_features.drminsv;
+    *(++ptr) = cpf_features.vertex_association;
+    *(++ptr) = cpf_features.fromPV;
+    *(++ptr) = cpf_features.puppi_weight;
+    *(++ptr) = cpf_features.track_chi2;
+    *(++ptr) = cpf_features.track_ndof;
+    *(++ptr) = cpf_features.track_quality;
   }
 
   void npf_tensor_filler(tensorflow::Tensor& tensor,
