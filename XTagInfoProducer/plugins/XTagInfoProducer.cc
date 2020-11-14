@@ -815,39 +815,27 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             beta += cpf.fromPV;
             dR2Mean += (cpf.ptrel*cpf.trackDeltaR) * (cpf.ptrel*cpf.trackDeltaR);
             pt2Sum += (cpf.ptrel) * (cpf.ptrel);
-            if (cpf.trackDeltaR < 0.1) frac01 ++;
-            else if (cpf.trackDeltaR < 0.2) frac02 ++;
-            else if (cpf.trackDeltaR < 0.3) frac03 ++;
-            else if (cpf.trackDeltaR < 0.4) frac04 ++;
+            if (cpf.trackDeltaR < 0.1) frac01+=cpf.ptrel;
+            else if (cpf.trackDeltaR < 0.2) frac02+=cpf.ptrel;
+            else if (cpf.trackDeltaR < 0.3) frac03+=cpf.ptrel;
+            else if (cpf.trackDeltaR < 0.4) frac04+=cpf.ptrel;
         }
 
         if (features.cpf_features.size() > 0)
         {
             features.jet_features.beta = (float)beta/(float)features.cpf_features.size();
-
         }
-
-
 
         for (size_t i = 0; i < features.npf_features.size(); i++){
             llpdnnx::NeutralCandidateFeatures npf = features.npf_features.at(i);
             dR2Mean += (npf.ptrel*npf.deltaR) * (npf.ptrel*npf.deltaR);
             pt2Sum += (npf.ptrel) * (npf.ptrel);
-            if (npf.deltaR < 0.1) frac01 ++;
-            else if (npf.deltaR < 0.2) frac02 ++;
-            else if (npf.deltaR < 0.3) frac03 ++;
-            else if (npf.deltaR < 0.4) frac04 ++;
+            if (npf.deltaR < 0.1) frac01+=npf.ptrel;
+            else if (npf.deltaR < 0.2) frac02+=npf.ptrel;
+            else if (npf.deltaR < 0.3) frac03+=npf.ptrel;
+            else if (npf.deltaR < 0.4) frac04+=npf.ptrel;
         }
 
-        int nCandidates = features.cpf_features.size()+features.npf_features.size();
-
-        if (nCandidates > 0) {
-            features.jet_features.frac01 = 1.*frac01/nCandidates;
-            features.jet_features.frac02 = 1.*frac02/nCandidates;
-            features.jet_features.frac03 = 1.*frac03/nCandidates;
-            features.jet_features.frac04 = 1.*frac04/nCandidates;
-            features.jet_features.dR2Mean = dR2Mean/pt2Sum;
-        }
         
         features.jet_features.numberCpf = features.cpf_features.size();
         features.jet_features.numberNpf = features.npf_features.size();
