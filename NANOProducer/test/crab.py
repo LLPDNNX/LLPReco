@@ -9,33 +9,28 @@ myJobsTraining = {
     "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
         "inputDataset":"/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2,
     },
     "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
         "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2,
     },
     "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
         "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2,
     },
+
 
     "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
         "inputDataset":"/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 3,
     },
     "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
         "inputDataset":"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 3,
     },
     "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
         "inputDataset":"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 3,
     },
 
 
@@ -43,17 +38,14 @@ myJobsTraining = {
     "QCD_Pt_15to30_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt_15to30_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 3,
     },
     "QCD_Pt_30to50_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt_30to50_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 3,
     },
     "QCD_Pt_50to80_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt_50to80_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 3,
     },
     
     
@@ -61,17 +53,14 @@ myJobsTraining = {
     "QCD_Pt_15to30_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt_15to30_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 3,
     },
     "QCD_Pt_30to50_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt_30to50_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 3,
     },
     "QCD_Pt_50to80_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt_50to80_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 3,
     },
     
     
@@ -79,18 +68,33 @@ myJobsTraining = {
     "QCD_Pt_15to30_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt_15to30_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 3,
     },
     "QCD_Pt_30to50_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt_30to50_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 3,
     },
     "QCD_Pt_50to80_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt_50to80_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 3,
     },
+    
+    
+    
+    "QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016
+    },
+
+    "QCD_Pt-15to7000_TuneCP5_Flat2017_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt-15to7000_TuneCP5_Flat2017_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+        "year": 2017
+    },
+
+    "QCD_Pt-15to7000_TuneCP5_Flat2018_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt-15to7000_TuneCP5_Flat2018_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM",
+        "year": 2018
+    },
+    
     
     
     "LLPGun-2016":{
@@ -108,8 +112,6 @@ myJobsTraining = {
         "year": 2018,
         "unitsPerJob": 15,
     },
-    
-
 }
 
 myJobsAnalysis = {
@@ -937,21 +939,16 @@ with open("HNL_samples.txt") as f:
             "year": year,
             "unitsPerJob": 15,
             "isData": False,
+            "addLLPInfo": True,
             "addSignalLHE": True
         }
 
+myJobs = myJobsTraining
 myJobs = myJobsHNL
 
-for k,v in myJobs.items():
-    if str(v['year'])!='2016':
-        del myJobs[k]
 
-
-#myJobs = myJobsHNL
-
-
-requestName = "NANOX_201107"
-userName = "mkomm"
+requestName = "NANOX_200720"
+userName = "vcepaiti"
 configTmpl = Configuration()
 
 configTmpl.section_('General')
@@ -963,16 +960,11 @@ configTmpl.JobType.psetName = "LLPReco/NANOProducer/test/produceNANO.py"
 configTmpl.JobType.pluginName = 'Analysis'
 configTmpl.JobType.outputFiles = ['nano.root']
 configTmpl.JobType.allowUndistributedCMSSW = True
-configTmpl.JobType.maxJobRuntimeMin= 12*60
-
-
 configTmpl.JobType.pyCfgParams = []
 configTmpl.JobType.inputFiles = []
 configTmpl.JobType.maxMemoryMB = 2500
 configTmpl.section_('Data')
 configTmpl.Data.useParent = False
-configTmpl.Data.splitting = 'FileBased'
-configTmpl.Data.unitsPerJob = 2
 configTmpl.section_('Site')
 configTmpl.Site.storageSite = 'T2_UK_London_IC'
 
@@ -1024,6 +1016,7 @@ if __name__ == '__main__':
             
         isData = myJob.get('isData', False)
         year = str(myJob.get('year', '0'))
+        addLLPInfo = str(myJob.get('addLLPInfo', False))
         addSignalLHE = str(myJob.get('addSignalLHE', False))
         
         if year not in ['2016','2017','2018','2018D']:
@@ -1032,6 +1025,7 @@ if __name__ == '__main__':
         print "year:", year
         
         config.JobType.pyCfgParams.append("year="+str(year))
+        config.JobType.pyCfgParams.append("addLLPInfo={}".format(addLLPInfo))
         config.JobType.pyCfgParams.append("addSignalLHE={}".format(addSignalLHE))
 
         if isData:
@@ -1050,9 +1044,13 @@ if __name__ == '__main__':
 
         else:
             config.JobType.pyCfgParams.append("isData=False")
-
-            config.Data.splitting = 'FileBased'
-            config.Data.unitsPerJob = myJob.get('unitsPerJob', 2)
+            if myJobs == myJobsHNL:
+                config.Data.splitting = 'FileBased'
+                config.JobType.maxJobRuntimeMin= 8*60
+                config.Data.unitsPerJob = myJob.get('unitsPerJob', 1)
+            else:
+                config.Data.splitting = 'Automatic'
+                config.Data.unitsPerJob = 8*60
 
         if "params" in myJob:
             params = myJob["params"]
@@ -1085,4 +1083,3 @@ if __name__ == '__main__':
         print
         print
         
-        #break

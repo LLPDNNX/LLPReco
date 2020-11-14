@@ -97,6 +97,7 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
         PROPERTY(llpdnnx::JetFeatures, numberCpf, "doc"),
         PROPERTY(llpdnnx::JetFeatures, numberNpf, "doc"),
         PROPERTY(llpdnnx::JetFeatures, numberSv, "doc"),
+        PROPERTY(llpdnnx::JetFeatures, numberSvAdapted, "doc"),
         PROPERTY(llpdnnx::JetFeatures, numberMuon, "doc"),
         PROPERTY(llpdnnx::JetFeatures, numberElectron, "doc")
     
@@ -151,6 +152,8 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
         PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedMuon, "doc"),
         PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedElectron, "doc"),
         PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedSV, "doc"),
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedSV_adapted, "doc"),
+        
         PROPERTY(llpdnnx::ChargedCandidateFeatures, track_ndof, "doc"),
 
         PROPERTY(llpdnnx::ChargedCandidateFeatures, dZmin, "doc")
@@ -354,6 +357,7 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
     produces<nanoaod::FlatTable>("cpf");
     produces<nanoaod::FlatTable>("npf");
     produces<nanoaod::FlatTable>("sv");
+    produces<nanoaod::FlatTable>("svAdapted");
     produces<nanoaod::FlatTable>("length");
     produces<nanoaod::FlatTable>("muon") ;
     produces<nanoaod::FlatTable>("electron") ;
@@ -384,6 +388,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> cpf_jetIdx;
     std::vector<int> npf_jetIdx;
     std::vector<int> sv_jetIdx;
+    std::vector<int> sv_adapted_jetIdx;
     std::vector<int> mu_jetIdx;
     std::vector<int> elec_jetIdx;
 
@@ -391,12 +396,14 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     std::vector<int> cpf_length;
     std::vector<int> npf_length;
     std::vector<int> sv_length;
+    std::vector<int> sv_adapted_length;
 
     std::vector<int> elec_length;
     std::vector<int> mu_length;
 
     auto globalTable = std::make_unique<nanoaod::FlatTable>(ntags, "global", false, false);
     auto csvTable = std::make_unique<nanoaod::FlatTable>(ntags, "csv", false, false);
+
     
 
     FlatTableFillerList<llpdnnx::JetFeatures> globalFillerList(globalProperties);
@@ -405,15 +412,16 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     FlatTableFillerList<llpdnnx::ChargedCandidateFeatures> cpfFillerList(cpfProperties);
     FlatTableFillerList<llpdnnx::NeutralCandidateFeatures> npfFillerList(npfProperties);
     FlatTableFillerList<llpdnnx::SecondaryVertexFeatures> svFillerList(svProperties);
+    FlatTableFillerList<llpdnnx::SecondaryVertexFeatures> svAdaptedFillerList(svProperties);
     FlatTableFillerList<llpdnnx::MuonCandidateFeatures> muonFillerList(muonProperties);
     FlatTableFillerList<llpdnnx::ElectronCandidateFeatures> electronFillerList(electronProperties);
-    
 
     unsigned int nmu_total = 0;
     unsigned int nelec_total = 0;
     unsigned int ncpf_total = 0;
     unsigned int nnpf_total = 0;
     unsigned int nsv_total = 0;
+    unsigned int nsv_total_adapted = 0;
 
     for (unsigned int itag= 0; itag < ntags; itag++){
         const auto& features = tag_infos->at(itag).features();
@@ -423,14 +431,19 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         unsigned int ncpf = features.cpf_features.size();
         unsigned int nnpf = features.npf_features.size();
         unsigned int nsv = features.sv_features.size();
+        unsigned int nsv_adapted = features.sv_adapted_features.size();
+    
         nmu_total += nmu;
         nelec_total += nelec;
         ncpf_total += ncpf;
         nnpf_total += nnpf;
         nsv_total += nsv;
+        nsv_total_adapted += nsv_adapted;
+
         cpf_length.push_back(ncpf);
         npf_length.push_back(nnpf);
         sv_length.push_back(nsv);
+        sv_adapted_length.push_back(nsv_adapted);
         elec_length.push_back(nelec);
         mu_length.push_back(nmu);
 
@@ -460,6 +473,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     auto cpfTable = std::make_unique<nanoaod::FlatTable>(ncpf_total, "cpf", false, false);
     auto npfTable = std::make_unique<nanoaod::FlatTable>(nnpf_total, "npf", false, false);
     auto svTable = std::make_unique<nanoaod::FlatTable>(nsv_total, "sv", false, false);
+    auto svTable_adapted = std::make_unique<nanoaod::FlatTable>(nsv_total_adapted, "svAdapted", false, false);
 
     for (unsigned int itag= 0; itag < ntags; itag++)
     {
@@ -469,18 +483,21 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         auto cpf = features.cpf_features;
         auto npf = features.npf_features;
         auto sv = features.sv_features;
+        auto sv_adapted = features.sv_adapted_features;
 
         unsigned int nmu = features.mu_features.size();
         unsigned int nelec = features.elec_features.size();
         unsigned int ncpf = features.cpf_features.size();
         unsigned int nnpf = features.npf_features.size();
         unsigned int nsv = features.sv_features.size();
+        unsigned int nsv_adapted = features.sv_adapted_features.size();
 
         int jetIdx = global_jetIdx[itag];
 
         for (unsigned int i = 0; i < ncpf; i++)
         {
             cpf_jetIdx.push_back(jetIdx);
+
             cpfFillerList.push_back(cpf.at(i));
         }
 
@@ -496,6 +513,11 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             svFillerList.push_back(sv.at(i));
         }
 
+        for (unsigned int i = 0; i < nsv_adapted; i++)
+        {
+            sv_adapted_jetIdx.push_back(jetIdx);
+            svAdaptedFillerList.push_back(sv_adapted.at(i));
+        }
 
         for(unsigned int i = 0; i < nmu; i++)
         {
@@ -510,10 +532,12 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         }
 
     }
-    
+
+ 
     lengthTable->addColumn<int>("cpf", cpf_length, "charged PF candidate track offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("npf", npf_length, "neutral PF candidate offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("sv", sv_length, "secondary vertex (SV) offset", nanoaod::FlatTable::IntColumn);
+    lengthTable->addColumn<int>("svAdapted", sv_adapted_length, "secondary vertex (SV) offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("mu", mu_length, "muon offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("ele", elec_length, "electron offset", nanoaod::FlatTable::IntColumn);
     
@@ -532,6 +556,9 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
     svTable->addColumn<int>("jetIdx", sv_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
     svFillerList.fill(svTable);
+    
+    svTable_adapted->addColumn<int>("jetIdx", sv_adapted_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
+    svAdaptedFillerList.fill(svTable_adapted);
 
     muonTable->addColumn<int>("jetIdx", mu_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
     muonFillerList.fill(muonTable);
@@ -544,6 +571,7 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     iEvent.put(std::move(cpfTable), "cpf");
     iEvent.put(std::move(npfTable), "npf");
     iEvent.put(std::move(svTable), "sv");
+    iEvent.put(std::move(svTable_adapted), "svAdapted");
     iEvent.put(std::move(lengthTable), "length");
     iEvent.put(std::move(muonTable), "muon");
     iEvent.put(std::move(electronTable), "electron");

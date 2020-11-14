@@ -1,5 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
+# https://gist.github.com/daiktas/d3e0ed47b82e45502aaf787ae12934fd
+
 adaptedInclusiveCandidateVertexFinder = cms.EDProducer("InclusiveCandidateVertexFinder",
     beamSpot = cms.InputTag("offlineBeamSpot"),
     clusterizer = cms.PSet(
@@ -16,8 +18,8 @@ adaptedInclusiveCandidateVertexFinder = cms.EDProducer("InclusiveCandidateVertex
     fitterSigmacut = cms.double(3),
     fitterTini = cms.double(256),
     maxNTracks = cms.uint32(30),
-    maximumLongitudinalImpactParameter = cms.double(3), # Default is 0.3->3
-    minHits = cms.uint32(0),
+    maximumLongitudinalImpactParameter = cms.double(1), # Default is 0.3->20 (Ghent) -> 1 may be safer
+    minHits = cms.uint32(6), # 8 -> 6
     minPt = cms.double(0.8),
     primaryVertices = cms.InputTag("offlineSlimmedPrimaryVertices"),
     tracks = cms.InputTag("packedPFCandidates"),
@@ -43,8 +45,8 @@ adaptedCandidateVertexMerger = cms.EDProducer("CandidateVertexMerger",
 adaptedCandidateVertexArbitrator = cms.EDProducer("CandidateVertexArbitrator",
     beamSpot = cms.InputTag("offlineBeamSpot"),
     dLenFraction = cms.double(0.333),
-    dRCut = cms.double(0.4),
-    distCut = cms.double(0.04),
+    dRCut = cms.double(0.4), # 0.4 -> 1 # not sure good idea...
+    distCut = cms.double(0.04), # 0.04 -> 0.1 # check if safe
     fitterRatio = cms.double(0.25),
     fitterSigmacut = cms.double(3),
     fitterTini = cms.double(256),
@@ -52,8 +54,8 @@ adaptedCandidateVertexArbitrator = cms.EDProducer("CandidateVertexArbitrator",
     secondaryVertices = cms.InputTag("adaptedCandidateVertexMerger"),
     sigCut = cms.double(5),
     trackMinLayers = cms.int32(4),
-    trackMinPixels = cms.int32(0), # Default is 1->0
-    trackMinPt = cms.double(0.4),
+    trackMinPixels = cms.int32(0), # 1->0
+    trackMinPt = cms.double(0.8),
     tracks = cms.InputTag("packedPFCandidates")
 )
 
