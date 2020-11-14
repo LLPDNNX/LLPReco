@@ -51,6 +51,7 @@ struct JetFeatures
     int numberCpf;
     int numberNpf;
     int numberSv;
+    int numberSvAdapted;
     int numberMuon;
     int numberElectron;
     
@@ -101,6 +102,7 @@ struct JetFeatures
         numberCpf(0),
         numberNpf(0),
         numberSv(0),
+        numberSvAdapted(0),
         numberMuon(0),
         numberElectron(0)
     {
