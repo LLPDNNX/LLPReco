@@ -1,25 +1,40 @@
 #ifndef LLPReco_DataFormats_NeutralCandidateFeatures_h
 #define LLPReco_DataFormats_NeutralCandidateFeatures_h
 
+#include <cmath>
+
 namespace llpdnnx {
 
 struct NeutralCandidateFeatures 
 {
-    int npf_jetIdx;
-    float npf_ptrel;
-    float npf_deta;
-    float npf_dphi;
-    float npf_deltaR;
+    int jetIdx;
+    float ptrel;
+    float deta;
+    float dphi;
+    float deltaR;
     
-    float npf_px;
-    float npf_py;
-    float npf_pz;
+    float px;
+    float py;
+    float pz;
     
-    int npf_isGamma;
-    float npf_hcal_fraction;
-    float npf_drminsv;
-    float npf_puppi_weight;
-    float npf_relmassdrop;
+    int isGamma;
+    float hcal_fraction;
+    float drminsv;
+    float puppi_weight;
+    float relmassdrop;
+    
+    bool operator<(const NeutralCandidateFeatures& other) const
+    {
+        if (std::fabs(drminsv-other.drminsv)>std::numeric_limits<float>::epsilon())
+        {
+            return drminsv<other.drminsv; //sort increasing
+        }
+        else
+        {
+            return ptrel>other.ptrel; //sort decreasing
+        }
+        return false;
+    }
 };
 
 }

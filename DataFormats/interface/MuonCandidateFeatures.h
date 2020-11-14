@@ -5,63 +5,134 @@ namespace llpdnnx {
 
 struct MuonCandidateFeatures {
 
-    int mu_jetIdx;
-    int mu_isGlobal;
-    int mu_isTight;
-    int mu_isMedium;
-    int mu_isLoose;
-    int mu_isStandAlone;
+    int jetIdx;
+    int isGlobal;
+    int isTight;
+    int isMedium;
+    int isLoose;
+    int isStandAlone;
 
-    float mu_ptrel;
-    float mu_deta;
-    float mu_dphi;
-    float mu_px;
-    float mu_py;
-    float mu_pz;
-    float mu_charge;
-    float mu_energy;
-    float mu_et;
-    float mu_deltaR;
-    int mu_numberOfMatchedStations;
+    float ptrel;
+    float deta;
+    float dphi;
+    float px;
+    float py;
+    float pz;
+    float charge;
+    float energy;
+    float et;
+    float deltaR;
+    int numberOfMatchedStations;
 
-    float mu_2dIP;
-    float mu_2dIPSig;
-    float mu_3dIP;
-    float mu_3dIPSig;
+    float IP2d;
+    float IP2dSig;
+    float IP3d;
+    float IP3dSig;
 
-    float mu_EtaRel;
-    float mu_dxy;
-    float mu_dxyError;
-    float mu_dxySig;
-    float mu_dz;
-    float mu_dzError;
-    float mu_dzSig;
-    int mu_numberOfValidPixelHits;
-    int mu_numberOfpixelLayersWithMeasurement;
-    int mu_numberOfstripLayersWithMeasurement; //that does not help. needs to be discussed.
+    float EtaRel;
+    float dxy;
+    float dxyError;
+    float dxySig;
+    float dz;
+    float dzError;
+    float dzSig;
+    int numberOfValidPixelHits;
+    int numberOfpixelLayersWithMeasurement;
+    int numberOfstripLayersWithMeasurement; //that does not help. needs to be discussed.
 
-    float mu_chi2;
-    int mu_ndof;
+    float chi2;
+    int ndof;
 
-    float mu_caloIso;
-    float mu_ecalIso;
-    float mu_hcalIso;
+    float caloIso;
+    float ecalIso;
+    float hcalIso;
 
-    float mu_sumPfChHadronPt;
-    float mu_sumPfNeuHadronEt;
-    float mu_Pfpileup;
-    float mu_sumPfPhotonEt;
+    float sumPfChHadronPt;
+    float sumPfNeuHadronEt;
+    float Pfpileup;
+    float sumPfPhotonEt;
 
-    float mu_sumPfChHadronPt03;
-    float mu_sumPfNeuHadronEt03;
-    float mu_Pfpileup03;
-    float mu_sumPfPhotonEt03;
+    float sumPfChHadronPt03;
+    float sumPfNeuHadronEt03;
+    float Pfpileup03;
+    float sumPfPhotonEt03;
 
 
-    float mu_timeAtIpInOut;
-    float mu_timeAtIpInOutErr;
-    float mu_timeAtIpOutIn;
+    float timeAtIpInOut;
+    float timeAtIpInOutErr;
+    float timeAtIpOutIn;
+    
+    
+    MuonCandidateFeatures():
+        jetIdx(-1),
+        isGlobal(-1),
+        isTight(-1),
+        isMedium(-1),
+        isLoose(-1),
+        isStandAlone(-1),
 
+        ptrel(0),
+        deta(0),
+        dphi(0),
+        px(0),
+        py(0),
+        pz(0),
+        charge(0),
+        energy(0),
+        et(0),
+        deltaR(0),
+        numberOfMatchedStations(0),
+
+        IP2d(0),
+        IP2dSig(0),
+        IP3d(0),
+        IP3dSig(0),
+
+        EtaRel(0),
+        dxy(0),
+        dxyError(0),
+        dxySig(0),
+        dz(0),
+        dzError(0),
+        dzSig(0),
+        numberOfValidPixelHits(0),
+        numberOfpixelLayersWithMeasurement(0),
+        numberOfstripLayersWithMeasurement(0), //that does not help. needs to be discussed.
+
+        chi2(0),
+        ndof(0),
+
+        caloIso(0),
+        ecalIso(0),
+        hcalIso(0),
+
+        sumPfChHadronPt(0),
+        sumPfNeuHadronEt(0),
+        Pfpileup(0),
+        sumPfPhotonEt(0),
+
+        sumPfChHadronPt03(0),
+        sumPfNeuHadronEt03(0),
+        Pfpileup03(0),
+        sumPfPhotonEt03(0),
+
+
+        timeAtIpInOut(0),
+        timeAtIpInOutErr(0),
+        timeAtIpOutIn(0)
+    {}
+
+    bool operator<(const MuonCandidateFeatures& other) const
+    {
+        if (IP2dSig>0 and other.IP2dSig>0)
+        {
+            if (std::fabs(IP2dSig-other.IP2dSig)>std::numeric_limits<float>::epsilon())
+            {
+                return std::fabs(IP2dSig)>std::fabs(other.IP2dSig); //sort decreasing
+            }
+        }
+        return ptrel>other.ptrel; //sort decreasing
+    }
 
 };
 

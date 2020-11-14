@@ -69,12 +69,12 @@ namespace llpdnnx {
                           const llpdnnx::NeutralCandidateFeatures& npf_features) {
     float* ptr = &tensor.tensor<float, 3>()(jet_n, npf_n, 0);
 
-    *ptr = npf_features.npf_ptrel;
-    *(++ptr) = npf_features.npf_deltaR;
-    *(++ptr) = npf_features.npf_isGamma;
-    *(++ptr) = npf_features.npf_hcal_fraction;
-    *(++ptr) = npf_features.npf_drminsv;
-    *(++ptr) = npf_features.npf_puppi_weight;
+    *ptr = npf_features.ptrel;
+    *(++ptr) = npf_features.deltaR;
+    *(++ptr) = npf_features.isGamma;
+    *(++ptr) = npf_features.hcal_fraction;
+    *(++ptr) = npf_features.drminsv;
+    *(++ptr) = npf_features.puppi_weight;
   }
 
   void sv_tensor_filler(tensorflow::Tensor& tensor,
@@ -83,17 +83,17 @@ namespace llpdnnx {
                         const llpdnnx::SecondaryVertexFeatures& sv_features) {
     float* ptr = &tensor.tensor<float, 3>()(jet_n, sv_n, 0);
 
-    *ptr = sv_features.sv_ptrel;
-    *(++ptr) = sv_features.sv_deltaR;
-    *(++ptr) = sv_features.sv_mass;
-    *(++ptr) = sv_features.sv_ntracks;
-    *(++ptr) = sv_features.sv_chi2;
-    *(++ptr) = sv_features.sv_ndof;
-    *(++ptr) = sv_features.sv_dxy;
-    *(++ptr) = sv_features.sv_dxysig;
-    *(++ptr) = sv_features.sv_d3d;
-    *(++ptr) = sv_features.sv_d3dsig;
-    *(++ptr) = sv_features.sv_costhetasvpv;
-    *(++ptr) = sv_features.sv_enratio;
+    *ptr = sv_features.ptrel;
+    *(++ptr) = sv_features.deltaR;
+    *(++ptr) = sv_features.mass;
+    *(++ptr) = sv_features.ntracks;
+    *(++ptr) = sv_features.chi2;
+    *(++ptr) = sv_features.ndof;
+    *(++ptr) = sv_features.dxy;
+    *(++ptr) = sv_features.dxysig;
+    *(++ptr) = sv_features.d3d;
+    *(++ptr) = sv_features.d3dsig;
+    *(++ptr) = sv_features.costhetasvpv;
+    *(++ptr) = sv_features.enratio;
   }
 }

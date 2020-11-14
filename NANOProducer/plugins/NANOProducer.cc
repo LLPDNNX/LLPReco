@@ -34,7 +34,11 @@ class NANOProducer : public edm::stream::EDProducer<> {
         PropertyList<llpdnnx::JetFeatures> globalProperties;
         PropertyList<llpdnnx::ShallowTagInfoFeatures> csvProperties;
         PropertyList<llpdnnx::ChargedCandidateFeatures> cpfProperties;
-
+        PropertyList<llpdnnx::NeutralCandidateFeatures> npfProperties;
+        PropertyList<llpdnnx::SecondaryVertexFeatures> svProperties;
+        PropertyList<llpdnnx::MuonCandidateFeatures> muonProperties;
+        PropertyList<llpdnnx::ElectronCandidateFeatures> electronProperties;
+        
    private:
       const edm::EDGetTokenT<edm::View<pat::Jet>> _jet_src;
       const edm::EDGetTokenT<std::vector<reco::XTagInfo>> _tag_src;
@@ -151,6 +155,198 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
 
         PROPERTY(llpdnnx::ChargedCandidateFeatures, dZmin, "doc")
     };
+    
+    
+    npfProperties = {
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, ptrel, "doc"),
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, deta, "doc"),
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, dphi, "doc"),
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, deltaR, "doc"),
+
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, px, "doc"),
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, py, "doc"),
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, pz, "doc"),
+
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, isGamma, "doc"),
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, hcal_fraction, "doc"),
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, drminsv, "doc"),
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, puppi_weight, "doc"),
+        PROPERTY(llpdnnx::NeutralCandidateFeatures, relmassdrop, "doc")
+    };
+    
+    svProperties = {
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, ptrel, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, deta, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, dphi, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, deltaR, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, mass, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, ntracks, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, chi2, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, ndof, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, dxy, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, dxysig, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, d3d, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, d3dsig, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, costhetasvpv, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, enratio, "doc")
+    };
+    
+    muonProperties = {
+        PROPERTY(llpdnnx::MuonCandidateFeatures, isGlobal, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, isTight, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, isMedium, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, isLoose, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, isStandAlone, "doc"),
+
+        PROPERTY(llpdnnx::MuonCandidateFeatures, ptrel, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, deta, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, dphi, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, px, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, py, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, pz, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, charge, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, energy, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, et, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, deltaR, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, numberOfMatchedStations, "doc"),
+
+        PROPERTY(llpdnnx::MuonCandidateFeatures, IP2d, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, IP2dSig, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, IP3d, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, IP3dSig, "doc"),
+
+        PROPERTY(llpdnnx::MuonCandidateFeatures, EtaRel, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, dxy, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, dxyError, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, dxySig, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, dz, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, dzError, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, dzSig, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, numberOfValidPixelHits, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, numberOfpixelLayersWithMeasurement, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, numberOfstripLayersWithMeasurement, "doc"), //that does not help. needs to be discussed.
+
+        PROPERTY(llpdnnx::MuonCandidateFeatures, chi2, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, ndof, "doc"),
+
+        PROPERTY(llpdnnx::MuonCandidateFeatures, caloIso, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, ecalIso, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, hcalIso, "doc"),
+
+        PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfChHadronPt, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfNeuHadronEt, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, Pfpileup, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfPhotonEt, "doc"),
+
+        PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfChHadronPt03, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfNeuHadronEt03, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, Pfpileup03, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfPhotonEt03, "doc")
+    
+    };
+    
+    
+    electronProperties = {
+        PROPERTY(llpdnnx::ElectronCandidateFeatures, ptrel, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures, deltaR, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,deta, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dphi, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,px, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,py, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,pz, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,charge, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,energy, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,EtFromCaloEn, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures, isEB, "doc"), 
+        PROPERTY(llpdnnx::ElectronCandidateFeatures, isEE, "doc"), 
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,ecalEnergy, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures, isPassConversionVeto, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,convDist, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,   convFlags, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,convRadius, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,hadronicOverEm, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,ecalDrivenSeed, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,IP2d, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,IP2dSig, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,IP3d, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,IP3dSig, "doc"),
+
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,elecSC_energy, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,elecSC_deta, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,elecSC_dphi, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,elecSC_et, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,elecSC_eSuperClusterOverP, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,scPixCharge, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,superClusterFbrem, "doc"),
+
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,eSeedClusterOverP, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,eSeedClusterOverPout, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,eSuperClusterOverP, "doc"),
+
+        // shower shape
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,sigmaEtaEta, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,sigmaIetaIeta, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,sigmaIphiIphi, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,e5x5, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,e5x5Rel, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,e1x5Overe5x5, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,e2x5MaxOvere5x5, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,r9, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,hcalOverEcal, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,hcalDepth1OverEcal, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,hcalDepth2OverEcal, "doc"),
+
+        // Track-Cluster Matching Attributes
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,deltaEtaEleClusterTrackAtCalo, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,deltaEtaSeedClusterTrackAtCalo, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,deltaPhiSeedClusterTrackAtCalo, "doc"), 
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,deltaEtaSeedClusterTrackAtVtx, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,deltaEtaSuperClusterTrackAtVtx, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,deltaPhiEleClusterTrackAtCalo, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,deltaPhiSuperClusterTrackAtVtx, "doc"),
+
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,sCseedEta, "doc"),
+
+        // electron gsf variables. 
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,EtaRel, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dxy, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dxyError, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dxySig, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dz, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dzError, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dzSig, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures, nbOfMissingHits, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,gsfCharge, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,   ndof, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,chi2, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,   numberOfBrems, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,trackFbrem, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,fbrem, "doc"),
+
+        // Isolation block
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,neutralHadronIso, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,particleIso, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,photonIso, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,puChargedHadronIso, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,trackIso, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,ecalPFClusterIso, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,hcalPFClusterIso, "doc"),
+
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,pfSumPhotonEt, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,pfSumChargedHadronPt, "doc"), 
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,pfSumNeutralHadronEt, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,pfSumPUPt, "doc"),
+
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dr04TkSumPt, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dr04EcalRecHitSumEt, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dr04HcalDepth1TowerSumEt, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dr04HcalDepth1TowerSumEtBc, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dr04HcalDepth2TowerSumEt, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dr04HcalDepth2TowerSumEtBc, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dr04HcalTowerSumEt, "doc"),
+        PROPERTY(llpdnnx::ElectronCandidateFeatures,dr04HcalTowerSumEtBc, "doc")
+    
+    };
 
 
     produces<nanoaod::FlatTable>("global");
@@ -161,6 +357,7 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
     produces<nanoaod::FlatTable>("length");
     produces<nanoaod::FlatTable>("muon") ;
     produces<nanoaod::FlatTable>("electron") ;
+    
 }
 
 
@@ -202,225 +399,15 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     auto csvTable = std::make_unique<nanoaod::FlatTable>(ntags, "csv", false, false);
     
 
-    std::vector<float> cpf_trackEtaRel;
-    std::vector<float> cpf_trackPtRel;
-    std::vector<float> cpf_trackPPar;
-    std::vector<float> cpf_trackDeltaR;
-    std::vector<float> cpf_trackPParRatio;
-    std::vector<float> cpf_trackPtRatio;
-    std::vector<float> cpf_trackSip2dVal;
-    std::vector<float> cpf_trackSip2dSig;
-    std::vector<float> cpf_trackSip3dVal;
-    std::vector<float> cpf_trackSip3dSig;
-    std::vector<float> cpf_trackJetDistVal;
-    std::vector<float> cpf_trackJetDistSig;
-    std::vector<float> cpf_ptrel;
-    std::vector<float> cpf_deta;
-    std::vector<float> cpf_dphi;
-    std::vector<float> cpf_deltaR;
-    std::vector<float> cpf_px;
-    std::vector<float> cpf_py;
-    std::vector<float> cpf_pz;
-    std::vector<float> cpf_drminsv;
-    std::vector<float> cpf_vertex_association;
-    std::vector<float> cpf_fromPV;
-    std::vector<float> cpf_puppi_weight;
-    std::vector<float> cpf_track_chi2;
-    std::vector<float> cpf_track_quality;
-    std::vector<float> cpf_relmassdrop;
-    std::vector<int> cpf_track_ndof;
-    std::vector<int> cpf_matchedMuon;
-    std::vector<int> cpf_matchedElectron;
-    std::vector<int> cpf_matchedSV;
-    std::vector<int> cpf_track_numberOfValidPixelHits;
-    std::vector<int> cpf_track_pixelLayersWithMeasurement;
-    std::vector<int> cpf_track_numberOfValidStripHits; 
-    std::vector<int> cpf_track_stripLayersWithMeasurement;
-    std::vector<float> cpf_dZmin;
-
-    std::vector<float> npf_ptrel;
-    std::vector<float> npf_deta;
-    std::vector<float> npf_dphi;
-    std::vector<float> npf_px;
-    std::vector<float> npf_py;
-    std::vector<float> npf_pz;
-    std::vector<float> npf_deltaR;
-    std::vector<float> npf_isGamma;
-    std::vector<float> npf_hcal_fraction;
-    std::vector<float> npf_drminsv;
-    std::vector<float> npf_puppi_weight;
-    std::vector<float> npf_relmassdrop;
-
-    std::vector<float> sv_ptrel;
-    std::vector<float> sv_deta;
-    std::vector<float> sv_dphi;
-    std::vector<float> sv_deltaR;
-    std::vector<float> sv_mass;
-    std::vector<float> sv_ntracks;
-    std::vector<float> sv_chi2;
-    std::vector<int> sv_ndof;
-    std::vector<float> sv_dxy;
-    std::vector<float> sv_dxysig;
-    std::vector<float> sv_d3d;
-    std::vector<float> sv_d3dsig;
-    std::vector<float> sv_costhetasvpv;
-    std::vector<float> sv_enratio;
-
-    std::vector<int>  mu_isGlobal ;
-    std::vector<int>  mu_isTight ;
-    std::vector<int>  mu_isMedium ;
-    std::vector<int>  mu_isLoose ;
-    std::vector<int>  mu_isStandAlone ;
-
-
-    std::vector<float> mu_ptrel;
-    std::vector<float> mu_EtaRel;
-    std::vector<float> mu_deta;
-    std::vector<float> mu_dphi;
-    std::vector<float> mu_charge;
-    std::vector<float> mu_px;
-    std::vector<float> mu_py;
-    std::vector<float> mu_pz;
-    std::vector<float> mu_energy;
-    std::vector<float> mu_et;
-    std::vector<float> mu_deltaR;
-    std::vector<float> mu_numberOfMatchedStations;
-
-    std::vector<float> mu_2dIP;
-    std::vector<float> mu_2dIPSig;
-    std::vector<float> mu_3dIP;
-    std::vector<float> mu_3dIPSig;
-
-    std::vector<float> mu_dxy;
-    std::vector<float> mu_dxyError;
-    std::vector<float> mu_dxySig;
-    std::vector<float> mu_dz;
-    std::vector<float> mu_dzError;
-    std::vector<float> mu_dzSig;
-    std::vector<int> mu_numberOfValidPixelHits;
-    std::vector<int> mu_numberOfpixelLayersWithMeasurement;
-    std::vector<int> mu_numberOfstripLayersWithMeasurement ;
-
-    std::vector<float> mu_chi2;
-    std::vector<int> mu_ndof;
-
-    std::vector<float> mu_caloIso;
-    std::vector<float> mu_ecalIso;
-    std::vector<float> mu_hcalIso;
-
-    std::vector<float> mu_sumPfChHadronPt;
-    std::vector<float> mu_sumPfNeuHadronEt;
-    std::vector<float> mu_Pfpileup;
-    std::vector<float> mu_sumPfPhotonEt;
-
-    std::vector<float> mu_sumPfChHadronPt03;
-    std::vector<float> mu_sumPfNeuHadronEt03;
-    std::vector<float> mu_Pfpileup03;
-    std::vector<float> mu_sumPfPhotonEt03;
-
-
-
-    std::vector<float>  mu_timeAtIpInOut;
-    std::vector<float>  mu_timeAtIpInOutErr;
-    std::vector<float>  mu_timeAtIpOutIn;
-
-
-    // Electron Block
-
-    std::vector<float> elec_ptrel;
-    std::vector<float> elec_deltaR;
-    std::vector<float> elec_deta;
-    std::vector<float> elec_dphi;
-    std::vector<float> elec_px;
-    std::vector<float> elec_py;
-    std::vector<float> elec_pz;
-    std::vector<float> elec_charge;
-    std::vector<float> elec_energy;
-    std::vector<float> elec_EtFromCaloEn ;
-    std::vector<float> elec_isEB;
-    std::vector<float> elec_isEE;
-    std::vector<float> elec_ecalEnergy;
-    std::vector<float> elec_isPassConversionVeto;
-    std::vector<float> elec_convDist;
-    std::vector<int>   elec_convFlags;
-
-    std::vector<float> elec_convRadius;
-    std::vector<float> elec_hadronicOverEm;
-    std::vector<float> elec_ecalDrivenSeed;
-
-    std::vector<float> elecSC_energy;
-    std::vector<float> elecSC_deta;
-    std::vector<float> elecSC_dphi;
-    std::vector<float> elecSC_et;
-    std::vector<float> elecSC_eSuperClusterOverP;
-    std::vector<float> elec_scPixCharge;
-    std::vector<float> elec_sigmaEtaEta;
-    std::vector<float> elec_sigmaIetaIeta;
-    std::vector<float> elec_sigmaIphiIphi;
-    std::vector<float> elec_r9;
-    std::vector<float> elec_superClusterFbrem;
-
-    std::vector<float> elec_2dIP;
-    std::vector<float> elec_2dIPSig;
-    std::vector<float> elec_3dIP;
-    std::vector<float> elec_3dIPSig;
-    std::vector<float> elec_eSeedClusterOverP;
-    std::vector<float> elec_eSeedClusterOverPout;
-    std::vector<float> elec_eSuperClusterOverP;
-
-    std::vector<float> elec_deltaEtaEleClusterTrackAtCalo;
-    std::vector<float> elec_deltaEtaSeedClusterTrackAtCalo;
-    std::vector<float> elec_deltaPhiSeedClusterTrackAtCalo;
-    std::vector<float> elec_deltaEtaSeedClusterTrackAtVtx;
-    std::vector<float> elec_deltaEtaSuperClusterTrackAtVtx;
-    std::vector<float> elec_deltaPhiEleClusterTrackAtCalo;
-    std::vector<float> elec_deltaPhiSuperClusterTrackAtVtx;
-    std::vector<float> elec_sCseedEta;
-
-    std::vector<float> elec_EtaRel;
-    std::vector<float> elec_dxy;
-    std::vector<float> elec_dxyError;
-    std::vector<float> elec_dxySig;
-    std::vector<float> elec_dz;
-    std::vector<float> elec_dzError;
-    std::vector<float> elec_dzSig;
-    std::vector<float> elec_nbOfMissingHits;
-    std::vector<float> elec_gsfCharge;
-    std::vector<int> elec_ndof;
-    std::vector<float> elec_chi2;
-
-    std::vector<float> elec_e2x5MaxOvere5x5;
-    std::vector<float> elec_e1x5Overe5x5;
-    std::vector<float> elec_e5x5;
-    std::vector<float> elec_e5x5Rel;
-    std::vector<int>   elec_numberOfBrems;
-    std::vector<float> elec_fbrem;
-    std::vector<float> elec_neutralHadronIso;
-    std::vector<float> elec_particleIso;
-    std::vector<float> elec_photonIso;
-    std::vector<float> elec_puChargedHadronIso;
-    std::vector<float> elec_trackIso;
-    std::vector<float> elec_hcalDepth1OverEcal;
-    std::vector<float> elec_hcalDepth2OverEcal;
-    std::vector<float> elec_ecalPFClusterIso;
-    std::vector<float> elec_hcalPFClusterIso;
-    std::vector<float> elec_pfSumPhotonEt;
-    std::vector<float> elec_pfSumChargedHadronPt;
-    std::vector<float> elec_pfSumNeutralHadronEt;
-    std::vector<float> elec_pfSumPUPt;
-    std::vector<float> elec_dr04TkSumPt;
-    std::vector<float> elec_dr04EcalRecHitSumEt;
-    std::vector<float> elec_dr04HcalDepth1TowerSumEt;
-    std::vector<float> elec_dr04HcalDepth1TowerSumEtBc;
-    std::vector<float> elec_dr04HcalDepth2TowerSumEt;
-    std::vector<float> elec_dr04HcalDepth2TowerSumEtBc;
-    std::vector<float> elec_dr04HcalTowerSumEt;
-    std::vector<float> elec_dr04HcalTowerSumEtBc;
-    
     FlatTableFillerList<llpdnnx::JetFeatures> globalFillerList(globalProperties);
     FlatTableFillerList<llpdnnx::ShallowTagInfoFeatures> csvFillerList(csvProperties);
     
     FlatTableFillerList<llpdnnx::ChargedCandidateFeatures> cpfFillerList(cpfProperties);
+    FlatTableFillerList<llpdnnx::NeutralCandidateFeatures> npfFillerList(npfProperties);
+    FlatTableFillerList<llpdnnx::SecondaryVertexFeatures> svFillerList(svProperties);
+    FlatTableFillerList<llpdnnx::MuonCandidateFeatures> muonFillerList(muonProperties);
+    FlatTableFillerList<llpdnnx::ElectronCandidateFeatures> electronFillerList(electronProperties);
+    
 
     unsigned int nmu_total = 0;
     unsigned int nelec_total = 0;
@@ -499,408 +486,59 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 
         for (unsigned int i = 0; i < nnpf; i++)
         {
-            const auto& npf_features = npf.at(i);
-            npf_jetIdx.push_back(jetIdx);
-            npf_ptrel.push_back(npf_features.npf_ptrel);
-            npf_deta.push_back(npf_features.npf_deta);
-            npf_dphi.push_back(npf_features.npf_dphi);
-            npf_px.push_back(npf_features.npf_px);
-            npf_py.push_back(npf_features.npf_py);
-            npf_pz.push_back(npf_features.npf_pz);
-            npf_deltaR.push_back(npf_features.npf_deltaR);
-            npf_isGamma.push_back(npf_features.npf_isGamma);
-            npf_hcal_fraction.push_back(npf_features.npf_hcal_fraction);
-            npf_drminsv.push_back(npf_features.npf_drminsv);
-            npf_puppi_weight.push_back(npf_features.npf_puppi_weight);
-            npf_relmassdrop.push_back(npf_features.npf_relmassdrop);
+            npf_jetIdx.push_back(jetIdx);          
+            npfFillerList.push_back(npf.at(i));
         }
 
         for (unsigned int i = 0; i < nsv; i++)
         {
-            const auto& sv_features = sv.at(i);
             sv_jetIdx.push_back(jetIdx);
-            sv_ptrel.push_back(sv_features.sv_ptrel);
-            sv_deta.push_back(sv_features.sv_deta);
-            sv_dphi.push_back(sv_features.sv_dphi);
-            sv_deltaR.push_back(sv_features.sv_deltaR);
-            sv_mass.push_back(sv_features.sv_mass);
-            sv_ntracks.push_back(sv_features.sv_ntracks);
-            sv_chi2.push_back(sv_features.sv_chi2);
-            sv_ndof.push_back(sv_features.sv_ndof);
-            sv_dxy.push_back(sv_features.sv_dxy);
-            sv_dxysig.push_back(sv_features.sv_dxysig);
-            sv_d3d.push_back(sv_features.sv_d3d);
-            sv_d3dsig.push_back(sv_features.sv_d3dsig);
-            sv_costhetasvpv.push_back(sv_features.sv_costhetasvpv);
-            sv_enratio.push_back(sv_features.sv_enratio);
+            svFillerList.push_back(sv.at(i));
         }
 
 
         for(unsigned int i = 0; i < nmu; i++)
         {
-            const auto& mu_features = mu.at(i);
             mu_jetIdx.push_back(jetIdx);
-            mu_isGlobal.push_back(mu_features.mu_isGlobal) ;
-            mu_isTight.push_back(mu_features.mu_isTight) ;
-            mu_isMedium.push_back(mu_features.mu_isMedium) ;
-            mu_isLoose.push_back(mu_features.mu_isLoose) ;
-            mu_isStandAlone.push_back(mu_features.mu_isStandAlone) ;
-
-
-            mu_ptrel.push_back(mu_features.mu_ptrel);
-            mu_EtaRel.push_back(mu_features.mu_EtaRel);
-            mu_deta.push_back(mu_features.mu_deta);
-            mu_dphi.push_back(mu_features.mu_dphi);
-            mu_charge.push_back(mu_features.mu_charge);
-            mu_px.push_back(mu_features.mu_px);
-            mu_py.push_back(mu_features.mu_py);
-            mu_pz.push_back(mu_features.mu_pz);
-            mu_energy.push_back(mu_features.mu_energy);
-            mu_et.push_back(mu_features.mu_et);
-            mu_deltaR.push_back(mu_features.mu_deltaR);
-            mu_numberOfMatchedStations.push_back(mu_features.mu_numberOfMatchedStations);
-
-            mu_2dIP.push_back(mu_features.mu_2dIP);
-            mu_2dIPSig.push_back(mu_features.mu_2dIPSig);
-            mu_3dIP.push_back(mu_features.mu_3dIP);
-            mu_3dIPSig.push_back(mu_features.mu_3dIPSig);
-
-            mu_dxy.push_back(mu_features.mu_dxy);
-            mu_dxyError.push_back(mu_features.mu_dxyError);
-            mu_dxySig.push_back(mu_features.mu_dxySig);
-            mu_dz.push_back(mu_features.mu_dz);
-            mu_dzError.push_back(mu_features.mu_dzError);
-            mu_dzSig.push_back(mu_features.mu_dzSig);
-            mu_numberOfValidPixelHits.push_back(mu_features.mu_numberOfValidPixelHits);
-            mu_numberOfpixelLayersWithMeasurement.push_back(mu_features.mu_numberOfpixelLayersWithMeasurement);
-            mu_numberOfstripLayersWithMeasurement.push_back(mu_features.mu_numberOfstripLayersWithMeasurement);
-
-
-            mu_chi2.push_back(mu_features.mu_chi2);
-            mu_ndof.push_back(mu_features.mu_ndof);
-
-            mu_caloIso.push_back(mu_features.mu_caloIso);
-            mu_ecalIso.push_back(mu_features.mu_ecalIso);
-            mu_hcalIso.push_back(mu_features.mu_hcalIso);
-
-            mu_sumPfChHadronPt.push_back(mu_features.mu_sumPfChHadronPt);
-            mu_sumPfNeuHadronEt.push_back(mu_features.mu_sumPfNeuHadronEt);
-            mu_Pfpileup.push_back(mu_features.mu_Pfpileup);
-            mu_sumPfPhotonEt.push_back(mu_features.mu_sumPfPhotonEt);
-
-            mu_sumPfChHadronPt03.push_back(mu_features.mu_sumPfChHadronPt03);
-            mu_sumPfNeuHadronEt03.push_back(mu_features.mu_sumPfNeuHadronEt03);
-            mu_Pfpileup03.push_back(mu_features.mu_Pfpileup03);
-            mu_sumPfPhotonEt03.push_back(mu_features.mu_sumPfPhotonEt03);
-
-
-            mu_timeAtIpInOut.push_back(mu_features.mu_timeAtIpInOut) ;
-            mu_timeAtIpInOutErr.push_back(mu_features.mu_timeAtIpInOutErr) ;
-            mu_timeAtIpOutIn.push_back(mu_features.mu_timeAtIpOutIn) ;
-
-
+            muonFillerList.push_back(mu.at(i));
         }
 
         for(unsigned int i = 0; i < nelec ; i++)
         {
-
-            const auto& elec_features = elec.at(i);
-
             elec_jetIdx.push_back(jetIdx);
-
-            elec_ptrel.push_back(elec_features.elec_ptrel );
-            elec_deltaR.push_back(elec_features.elec_deltaR );
-            elec_deta.push_back(elec_features.elec_deta );
-            elec_dphi.push_back(elec_features.elec_dphi );
-            elec_px.push_back(elec_features.elec_px );
-            elec_py.push_back(elec_features.elec_py );
-            elec_pz.push_back(elec_features.elec_pz );
-            elec_charge.push_back(elec_features.elec_charge );
-
-            elec_energy.push_back(elec_features.elec_energy );
-            elec_EtFromCaloEn.push_back(elec_features.elec_EtFromCaloEn );
-            elec_isEB.push_back(elec_features.elec_isEB );
-            elec_isEE.push_back(elec_features.elec_isEE );
-            elec_ecalEnergy.push_back(elec_features.elec_ecalEnergy );
-            elec_isPassConversionVeto.push_back(elec_features.elec_isPassConversionVeto );
-            elec_convDist.push_back(elec_features.elec_convDist );
-            elec_convFlags.push_back(elec_features.elec_convFlags );
-
-            elec_convRadius.push_back(elec_features.elec_convRadius );
-            elec_hadronicOverEm.push_back(elec_features.elec_hadronicOverEm );
-            elec_ecalDrivenSeed.push_back(elec_features.elec_ecalDrivenSeed );
-
-
-            elecSC_energy.push_back(elec_features.elecSC_energy );
-            elecSC_deta.push_back(elec_features.elecSC_deta );
-            elecSC_dphi.push_back(elec_features.elecSC_dphi );
-            elecSC_et.push_back(elec_features.elecSC_et );
-            elecSC_eSuperClusterOverP.push_back(elec_features.elecSC_eSuperClusterOverP );
-
-            elec_scPixCharge.push_back(elec_features.elec_scPixCharge );
-            elec_sigmaEtaEta.push_back(elec_features.elec_sigmaEtaEta );
-            elec_sigmaIetaIeta.push_back(elec_features.elec_sigmaIetaIeta );
-            elec_sigmaIphiIphi.push_back(elec_features.elec_sigmaIphiIphi );
-            elec_r9.push_back(elec_features.elec_r9 );
-            elec_superClusterFbrem.push_back(elec_features.elec_superClusterFbrem );
-
-            elec_2dIP.push_back(elec_features.elec_2dIP );
-            elec_2dIPSig.push_back(elec_features.elec_2dIPSig );
-            elec_3dIP.push_back(elec_features.elec_3dIP );
-            elec_3dIPSig.push_back(elec_features.elec_3dIPSig );
-            elec_eSeedClusterOverP.push_back(elec_features.elec_eSeedClusterOverP );
-            elec_eSeedClusterOverPout.push_back(elec_features.elec_eSeedClusterOverPout );
-            elec_eSuperClusterOverP.push_back(elec_features.elec_eSuperClusterOverP );
-
-            elec_deltaEtaEleClusterTrackAtCalo.push_back(elec_features.elec_deltaEtaEleClusterTrackAtCalo );
-            elec_deltaEtaSeedClusterTrackAtCalo.push_back(elec_features.elec_deltaEtaSeedClusterTrackAtCalo );
-            elec_deltaPhiSeedClusterTrackAtCalo.push_back(elec_features.elec_deltaPhiSeedClusterTrackAtCalo );
-            elec_deltaEtaSeedClusterTrackAtVtx.push_back(elec_features.elec_deltaEtaSeedClusterTrackAtVtx );
-            elec_deltaEtaSuperClusterTrackAtVtx.push_back(elec_features.elec_deltaEtaSuperClusterTrackAtVtx );
-            elec_deltaPhiEleClusterTrackAtCalo.push_back(elec_features.elec_deltaPhiEleClusterTrackAtCalo );
-            elec_deltaPhiSuperClusterTrackAtVtx.push_back(elec_features.elec_deltaPhiSuperClusterTrackAtVtx );
-            elec_sCseedEta.push_back(elec_features.elec_sCseedEta );
-
-
-            elec_EtaRel.push_back(elec_features.elec_EtaRel );
-            elec_dxy.push_back(elec_features.elec_dxy );
-            elec_dxyError.push_back(elec_features.elec_dxyError);
-            elec_dxySig.push_back(elec_features.elec_dxySig);
-            elec_dz.push_back(elec_features.elec_dz );
-            elec_dzError.push_back(elec_features.elec_dzError);
-            elec_dzSig.push_back(elec_features.elec_dzSig);
-            elec_nbOfMissingHits.push_back(elec_features.elec_nbOfMissingHits );
-            elec_gsfCharge.push_back(elec_features.elec_gsfCharge );
-            elec_ndof.push_back(elec_features.elec_ndof );
-            elec_chi2.push_back(elec_features.elec_chi2 );
-            elec_numberOfBrems.push_back(elec_features.elec_numberOfBrems );
-            elec_fbrem.push_back(elec_features.elec_fbrem );
-            elec_e2x5MaxOvere5x5.push_back(elec_features.elec_e2x5MaxOvere5x5 );
-            elec_e1x5Overe5x5.push_back(elec_features.elec_e1x5Overe5x5 );
-            elec_e5x5.push_back(elec_features.elec_e5x5 );
-            elec_e5x5Rel.push_back(elec_features.elec_e5x5Rel );
-            elec_neutralHadronIso.push_back(elec_features.elec_neutralHadronIso );
-            elec_particleIso .push_back(elec_features.elec_particleIso );
-            elec_photonIso.push_back(elec_features.elec_photonIso );
-            elec_puChargedHadronIso.push_back(elec_features.elec_puChargedHadronIso );
-            elec_trackIso.push_back(elec_features.elec_trackIso );
-            elec_hcalDepth1OverEcal.push_back(elec_features.elec_hcalDepth1OverEcal );
-            elec_hcalDepth2OverEcal.push_back(elec_features.elec_hcalDepth2OverEcal );
-            elec_ecalPFClusterIso.push_back(elec_features.elec_ecalPFClusterIso );
-            elec_hcalPFClusterIso.push_back(elec_features.elec_hcalPFClusterIso );
-            elec_pfSumPhotonEt.push_back(elec_features.elec_pfSumPhotonEt );
-            elec_pfSumChargedHadronPt.push_back(elec_features.elec_pfSumChargedHadronPt );
-            elec_pfSumNeutralHadronEt.push_back(elec_features.elec_pfSumNeutralHadronEt );
-            elec_pfSumPUPt.push_back(elec_features.elec_pfSumPUPt );
-            elec_dr04TkSumPt.push_back(elec_features.elec_dr04TkSumPt );
-            elec_dr04EcalRecHitSumEt.push_back(elec_features.elec_dr04EcalRecHitSumEt );
-            elec_dr04HcalDepth1TowerSumEt.push_back(elec_features.elec_dr04HcalDepth1TowerSumEt );
-            elec_dr04HcalDepth1TowerSumEtBc.push_back(elec_features.elec_dr04HcalDepth1TowerSumEtBc );
-            elec_dr04HcalDepth2TowerSumEt.push_back(elec_features.elec_dr04HcalDepth2TowerSumEt );
-            elec_dr04HcalDepth2TowerSumEtBc.push_back(elec_features.elec_dr04HcalDepth2TowerSumEtBc );
-            elec_dr04HcalTowerSumEt.push_back(elec_features.elec_dr04HcalTowerSumEt );
-            elec_dr04HcalTowerSumEtBc.push_back(elec_features.elec_dr04HcalTowerSumEtBc );
-
-
+            electronFillerList.push_back(elec.at(i));
         }
 
     }
-    globalTable->addColumn<int>("jetIdx", global_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
-    globalFillerList.fill(globalTable);
     
-    csvTable->addColumn<int>("jetIdx", csv_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
-    csvFillerList.fill(csvTable);
-   
-    cpfTable->addColumn<int>("jetIdx", cpf_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
-    cpfFillerList.fill(cpfTable);
-
-    npfTable->addColumn<int>("jetIdx", npf_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
-    npfTable->addColumn<float>("ptrel", npf_ptrel, "neutral PF candidate transverse momentum over jet transverse momentum (uncorrelated)", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("deta", npf_deta, "absolute difference between the neutral PF candidate eta and jet eta", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("dphi", npf_dphi, "absolute difference between the neutral PF candidate phi and jet phi", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("deltaR", npf_deltaR, "neutral PF candidate pseudoangular distance (Delta R) from the jet axis", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("isGamma", npf_isGamma, "flag for passing loose photon identification requirements", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("hcal_fraction", npf_hcal_fraction, "fraction of energy deposited in the hadronic calorimeter", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("drminsv", npf_drminsv, "pseudoangular distance (Delta R) between neutral PF candidate and closest secondary vertex (SV) within the jet", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("puppi_weight", npf_puppi_weight, "weight assigned by the PUPPI algorithm to neutral PF candidate", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("relmassdrop", npf_relmassdrop, "neutral PF candidate mass drop normalized relative to the jet", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("px", npf_px, "px", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("py", npf_py, "py", nanoaod::FlatTable::FloatColumn);
-    npfTable->addColumn<float>("pz", npf_pz, "pz", nanoaod::FlatTable::FloatColumn);
-
-    svTable->addColumn<int>("jetIdx", sv_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
-    svTable->addColumn<float>("ptrel", sv_ptrel, "secondary vertex (SV) transverse momentum relative to the uncorrected jet energy pt", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("deta", sv_deta, "absolute difference between the secondary vertex (SV) eta and jet eta", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("dphi", sv_dphi, "absolute difference between the secondary vertex (SV) phi and jet phi", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("deltaR", sv_deltaR, "pseudoangular distance (Delta R) between jet axis and SV flight direction", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("mass", sv_mass, "invariant mass of reconstructed secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("ntracks", sv_ntracks, "number of tracks associated to the secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("chi2", sv_chi2,  "chi^2 of secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<int>("ndof", sv_ndof, "number of degrees of freedom of secondary vertex (SV) fit", nanoaod::FlatTable::IntColumn);
-    svTable->addColumn<float>("dxy", sv_dxy, "transverse impact parameter of the secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("dxysig", sv_dxysig, "transverse impact parameter significance of the secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("d3d", sv_d3d, "3D impact parameter of secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("d3dsig", sv_d3dsig, "3D impact parameter significance of secondary vertex (SV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("costhetasvpv", sv_costhetasvpv, "cos(theta) of the secondary vertex (SV) with respect to the primary vertex (PV)", nanoaod::FlatTable::FloatColumn);
-    svTable->addColumn<float>("enratio", sv_enratio, "ratio of secondary vertex (SV) energy with respect to the jet", nanoaod::FlatTable::FloatColumn);
-
     lengthTable->addColumn<int>("cpf", cpf_length, "charged PF candidate track offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("npf", npf_length, "neutral PF candidate offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("sv", sv_length, "secondary vertex (SV) offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("mu", mu_length, "muon offset", nanoaod::FlatTable::IntColumn);
     lengthTable->addColumn<int>("ele", elec_length, "electron offset", nanoaod::FlatTable::IntColumn);
-
-    muonTable->addColumn<int>("jetIdx", mu_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
-
-    muonTable->addColumn<int>("isGlobal",mu_isGlobal,"muon fitted from the tracker and muon stations",nanoaod::FlatTable::IntColumn);
-    muonTable->addColumn<int>("isTight",mu_isTight,"global muon with additional muon-quality requirements.Tight Muon ID selects a subset of the Particle-Flow muons",nanoaod::FlatTable::IntColumn);
-    muonTable->addColumn<int>("isMedium",mu_isMedium,"loose muon (i.e. PF muon that is either a global or an arbitrated tracker muon) with additional track-quality and muon-quality requirements.",nanoaod::FlatTable::IntColumn);
-    muonTable->addColumn<int>("isLoose",mu_isLoose,"particle identified as a muon by the Particle-Flow event reconstruction, and that is also reconstructed either as a global-muon or as an arbitrated tracker-muon.",nanoaod::FlatTable::IntColumn);
-    muonTable->addColumn<int>("isStandAlone",mu_isStandAlone,"particle identified as a muon by the Particle-Flow event reconstruction reconstructed only in the muon chambers", nanoaod::FlatTable::IntColumn);
-
-    muonTable->addColumn<float>("ptrel",mu_ptrel,"muon candidate transverse momentum relative to the uncorrected jet energy pt",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("EtaRel",mu_EtaRel,"muon candidate pseudorapidity, relative to the jet axis",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("dphi",mu_dphi,"absolute difference between the muon candidate phi and jet phi",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("deta",mu_deta,"absolute difference between the muon candidate eta and jet eta",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("px", mu_px, "px", nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("py", mu_py, "py", nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("pz", mu_pz, "pz", nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("charge",mu_charge,"muon candidate charge (-1 or +1)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("energy",mu_energy,"muon candidate energy",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("deltaR",mu_deltaR,"pseudoangular distance between jet axis and muon track fourvector",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("numberOfMatchedStations",mu_numberOfMatchedStations,"number of activated muon stations",nanoaod::FlatTable::FloatColumn);
-
-    muonTable->addColumn<float>("2dIP",mu_2dIP,"muon inner track transverse impact parameter relative to the primary vertex in transverse plane (2D), absolute value",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("2dIPSig",mu_2dIPSig,"muon inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in transverse plane (2D)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("3dIP",mu_3dIP,"muon inner track transverse impact parameter relative to the primary vertex in 3D",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("3dIPSig",mu_3dIPSig,"muon inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in 3D",nanoaod::FlatTable::FloatColumn);
-
-// Adding new documentation
-    muonTable->addColumn<float>("dxy",mu_dxy,"transverse impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("dxyError",mu_dxyError,"error on transverse impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("dxySig",mu_dxySig,"significance of the transverse impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("dz",mu_dz,"longitudinal impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("dzError",mu_dzError,"error on the longitudinal impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("dzSig",mu_dzSig,"significance on the longitudinal impact parameter of the best reconstructed muon track",nanoaod::FlatTable::FloatColumn);   
-    muonTable->addColumn<int>("numberOfValidPixelHits",mu_numberOfValidPixelHits,"number of pixel hits by the muon track to further suppress muons from decays in flight",nanoaod::FlatTable::IntColumn);
-    muonTable->addColumn<int>("numberOfpixelLayersWithMeasurement",mu_numberOfpixelLayersWithMeasurement,"number of pixel layers with valid hits by the muon track",nanoaod::FlatTable::IntColumn);
-    muonTable->addColumn<int>("numberOfstripLayersWithMeasurement",mu_numberOfstripLayersWithMeasurement,"doc",nanoaod::FlatTable::IntColumn);
-
-    muonTable->addColumn<float>("chi2",mu_chi2,"chi^2 of muon track",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<int>("ndof",mu_ndof,"number of degrees of freedom of muon track fit",nanoaod::FlatTable::IntColumn);
-
-    muonTable->addColumn<float>("caloIso",mu_caloIso,"returns the fraction of the summed transverse energy of the muon track recHits in the ECAL & HCAL in a cone of deltaR<0.3 normalized against its transverse momentum",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("ecalIso",mu_ecalIso,"returns the fraction of the transverse energy of the muon track recHits in the ECAL normalized against its transverse momentum",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("hcalIso",mu_hcalIso,"returns the fraction of the transverse energy of the muon track recHits in the HCAL normalized against its transverse momentum",nanoaod::FlatTable::FloatColumn);
-
-    muonTable->addColumn<float>("sumPfChHadronPt",mu_sumPfChHadronPt,"summed pt of charged hadron normalized against the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPfNeuHadronEt",mu_sumPfNeuHadronEt,"summed pt of neutral hadron normalized against the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("Pfpileup",mu_Pfpileup,"summed pt of charged particles not from PV (for PU corrections) normalized against the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPfPhotonEt",mu_sumPfPhotonEt,"summed pt of PF photons normalized against the muon's pt (PF based isolation of cone of 0.4 - Suggested)",nanoaod::FlatTable::FloatColumn);
-
-    muonTable->addColumn<float>("sumPfChHadronPt03",mu_sumPfChHadronPt03,"summed pt of charged hadron normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPfNeuHadronEt03",mu_sumPfNeuHadronEt03,"summed pt of neutral hadron normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("Pfpileup03",mu_Pfpileup03,"summed pt of charged particles not from PV (for PU corrections) normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("sumPfPhotonEt03",mu_sumPfPhotonEt03,"summed pt of PF photons normalized against the muon's pt (PF based isolation of cone of 0.3)",nanoaod::FlatTable::FloatColumn);
-
-    muonTable->addColumn<float>("timeAtIpInOut",mu_timeAtIpInOut,"the time at the interaction point for muons moving inside-out",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("timeAtIpInOutErr",mu_timeAtIpInOutErr,"error on the time at the interaction point for muons moving inside-out",nanoaod::FlatTable::FloatColumn);
-    muonTable->addColumn<float>("timeAtIpOutIn",mu_timeAtIpOutIn,"The time at the interaction point for muons moving outside-in",nanoaod::FlatTable::FloatColumn);
     
-    electronTable->addColumn<int>("jetIdx", elec_jetIdx, "linked jet Id", nanoaod::FlatTable::IntColumn);
-    electronTable->addColumn<float>("ptrel",elec_ptrel,"electron candidate transverse momentum relative to the uncorrected jet energy pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("deltaR",elec_deltaR,"pseudoangular distance between jet axis and electron track fourvector",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("deta",elec_deta,"absolute difference between the electron candidate eta and jet eta",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dphi",elec_dphi,"absolute difference between the electron candidate phi and jet phi",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("px", elec_px, "px", nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("py", elec_py, "py", nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("pz", elec_pz, "pz", nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("charge",elec_charge,"electron candidate charge (-1 or +1)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("energy",elec_energy,"electron candidate energy",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("EtFromCaloEn",elec_EtFromCaloEn,"electron transverse energy from calorimeters",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("isEB",elec_isEB,"electron energy deposited in the ECAL barrel",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("isEE",elec_isEE,"electron energy deposited in the ECAL endcap",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("ecalEnergy",elec_ecalEnergy,"electron energy deposited in the ECAL normalized against the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("isPassConversionVeto",elec_isPassConversionVeto,"vertex fit combined with missing number of hits method",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("convDist",elec_convDist,"minimum distance between conversion tracks",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<int>("convFlags",elec_convFlags,"flag for electron coming from photon conversion",nanoaod::FlatTable::IntColumn);
+    
+    globalTable->addColumn<int>("jetIdx", global_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
+    globalFillerList.fill(globalTable);
+    
+    csvTable->addColumn<int>("jetIdx", csv_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
+    csvFillerList.fill(csvTable);
+   
+    cpfTable->addColumn<int>("jetIdx", cpf_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
+    cpfFillerList.fill(cpfTable);
 
-    electronTable->addColumn<float>("convRadius",elec_convRadius,"electron conversion radius",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("hadronicOverEm",elec_hadronicOverEm,"sum of hcal over ecal seed cluster energy using 1st and 2nd hcal depth (using hcal towers within a cone)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("ecalDrivenSeed",elec_ecalDrivenSeed,"ECAL driven seed",nanoaod::FlatTable::FloatColumn);
+    npfTable->addColumn<int>("jetIdx", npf_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
+    npfFillerList.fill(npfTable);
 
+    svTable->addColumn<int>("jetIdx", sv_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
+    svFillerList.fill(svTable);
 
-    electronTable->addColumn<float>("SC_energy",elecSC_energy,"electron supercluster energy normalized against the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("SC_deta",elecSC_deta,"absolute difference between the electron supercluster eta and gsfTrack electron eta",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("SC_dphi",elecSC_dphi,"absolute difference between the electron supercluster phi and gsfTrack electron phi",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("SC_et",elecSC_et,"electron supercluster transverse energy normalized against the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("SC_eSuperClusterOverP",elecSC_eSuperClusterOverP,"the electron supercluster energy / track momentum at the PCA to the beam spot",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("scPixCharge",elec_scPixCharge,"electron supercluster pixel charge",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("sigmaEtaEta",elec_sigmaEtaEta,"electron supercluster Sigma Eta Eta variable (quite unintuitive)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("sigmaIetaIeta",elec_sigmaIetaIeta,"electron supercluster Sigma iEta iEta variable (improved variable against Sigma Eta Eta to resolv issues in cracks)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("sigmaIphiIphi",elec_sigmaIphiIphi,"electron supercluster Sigma iphi iphi variable",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("r9",elec_r9,"electron supercluster r9 variable",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("superClusterFbrem",elec_superClusterFbrem,"the brem fraction from supercluster: (supercluster energy - electron cluster energy) / supercluster energy",nanoaod::FlatTable::FloatColumn);
+    muonTable->addColumn<int>("jetIdx", mu_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
+    muonFillerList.fill(muonTable);
 
-    electronTable->addColumn<float>("2dIP",elec_2dIP,"electron inner track transverse impact parameter relative to the primary vertex in transverse plane (2D), absolute value",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("2dIPSig",elec_2dIPSig,"electron inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in transverse plane (2D)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("3dIP",elec_3dIP,"electron inner track transverse impact parameter relative to the primary vertex in 3D",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("3dIPSig",elec_3dIPSig,"electron inner track transverse impact parameter relative to the primary vertex relative to its uncertainty in 3D",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("eSeedClusterOverP",elec_eSeedClusterOverP,"the seed cluster energy / track momentum at the PCA to the beam spot",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("eSeedClusterOverPout",elec_eSeedClusterOverPout,"the seed cluster energy / track momentum at calo extrapolated from the outermost track state",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("eSuperClusterOverP",elec_eSuperClusterOverP,"the supercluster energy / track momentum at the PCA to the beam spot",nanoaod::FlatTable::FloatColumn);
-
-    electronTable->addColumn<float>("deltaEtaEleClusterTrackAtCalo",elec_deltaEtaEleClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("deltaEtaSeedClusterTrackAtCalo",elec_deltaEtaSeedClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("deltaPhiSeedClusterTrackAtCalo",elec_deltaPhiSeedClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("deltaEtaSeedClusterTrackAtVtx",elec_deltaEtaSeedClusterTrackAtVtx,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("deltaEtaSuperClusterTrackAtVtx",elec_deltaEtaSuperClusterTrackAtVtx,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("deltaPhiEleClusterTrackAtCalo",elec_deltaPhiEleClusterTrackAtCalo,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("deltaPhiSuperClusterTrackAtVtx",elec_deltaPhiSuperClusterTrackAtVtx,"doc",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("sCseedEta",elec_sCseedEta,"doc",nanoaod::FlatTable::FloatColumn);
-
-    electronTable->addColumn<float>("EtaRel",elec_EtaRel,"electron pseudorapidity, relative to the jet axis",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dxy",elec_dxy,"transverse impact parameter of the electron",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dxyError",elec_dxyError,"error on transverse impact parameter of the electron",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dxySig",elec_dxySig,"significance of transverse impact parameter of the electron",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dz",elec_dz,"longitudinal impact parameter of the best reconstructed electron track",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dzError",elec_dzError,"error on longitudinal impact parameter of the best reconstructed electron track",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dzSig",elec_dzSig,"significance of longitudinal impact parameter of the best reconstructed electron track",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("nbOfMissingHits",elec_nbOfMissingHits,"number of missing electron hits in its hit pattern",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("gsfCharge",elec_gsfCharge,"gsf electron charge",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<int>("ndof",elec_ndof,"gsf electron number degree of freedom",nanoaod::FlatTable::IntColumn);
-    electronTable->addColumn<float>("chi2",elec_chi2,"chi2 of the fit ",nanoaod::FlatTable::FloatColumn);
-
-    electronTable->addColumn<int>("numberOfBrems",elec_numberOfBrems,"number of Bremsstrahlung electrons in a shower",nanoaod::FlatTable::IntColumn);
-    electronTable->addColumn<float>("fbrem",elec_fbrem,"doc",nanoaod::FlatTable::FloatColumn);
-
-    electronTable->addColumn<float>("e5x5",elec_e5x5,"electron energy in 5x5 ECAL block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("e5x5Rel",elec_e5x5Rel,"electron energy in 5x5 ECAL block on seed relative to the jet pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("e2x5MaxOvere5x5",elec_e2x5MaxOvere5x5,"electron energy ratio of highest energy 2x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("e1x5Overe5x5",elec_e1x5Overe5x5,"electron energy ratio of highest energy 1x5 ECAL block containing seed over total energy in 5x5 block on seed",nanoaod::FlatTable::FloatColumn);
-
-    electronTable->addColumn<float>("neutralHadronIso",elec_neutralHadronIso,"returns the isolation calculated with only the neutral hadron PFCandidates relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("particleIso",elec_particleIso,"returns the isolation calculated with all the PFCandidates relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("photonIso",elec_photonIso,"returns the isolation calculated with only the gamma PFCandidates relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("puChargedHadronIso",elec_puChargedHadronIso,"returns the isolation calculated with only the pile-up charged hadron PFCandidates relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("trackIso",elec_trackIso,"returns the tracker isolation variable that was stored in this object when produced, or -1.0 if there is none, relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("hcalDepth1OverEcal",elec_hcalDepth1OverEcal,"HCAL over ECAL seed cluster energy using 1st HCAL depth (using HCAL towers within a cone)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("hcalDepth2OverEcal",elec_hcalDepth2OverEcal,"HCAL over ECAL seed cluster energy using 2nd HCAL depth (using HCAL towers within a cone)",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("ecalPFClusterIso",elec_ecalPFClusterIso,"sum pt of isolated ECAL clusters, vetoing clusters part of electron",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("hcalPFClusterIso",elec_hcalPFClusterIso,"sum pt of isolated HCAL clusters, vetoing clusters part of electron",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("pfSumPhotonEt",elec_pfSumPhotonEt,"sum pt of PF photons // old float photonIso, relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("pfSumChargedHadronPt",elec_pfSumChargedHadronPt,"sum pt of charged hadron // old float chargedHadronIso, relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("pfSumNeutralHadronEt",elec_pfSumNeutralHadronEt,"sum transverse energy of neutral hadron // old float neutralHadronIso, relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("pfSumPUPt",elec_pfSumPUPt,"sum pt of charged particles not from PV (for PU corrections) ",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr04TkSumPt",elec_dr04TkSumPt,"track iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr04EcalRecHitSumEt",elec_dr04EcalRecHitSumEt,"ECAL iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr04HcalDepth1TowerSumEt",elec_dr04HcalDepth1TowerSumEt,"HCAL depth 1 iso deposit with electron footprint removed relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr04HcalDepth1TowerSumEtBc",elec_dr04HcalDepth1TowerSumEtBc,"HCAL depth 1 iso deposit without towers behind cluster relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr04HcalDepth2TowerSumEt",elec_dr04HcalDepth2TowerSumEt,"HCAL depth 2 iso deposit with towers behind cluster relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr04HcalDepth2TowerSumEtBc",elec_dr04HcalDepth2TowerSumEtBc,"HCAL depth 2 iso deposit without towers behind cluster relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr04HcalTowerSumEt",elec_dr04HcalTowerSumEt,"HCAL depth 1+2 iso deposit with towers behind cluster relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-    electronTable->addColumn<float>("dr04HcalTowerSumEtBc",elec_dr04HcalTowerSumEtBc,"HCAL depth 1+2 iso deposit without towers behind cluster relative to the electron pt",nanoaod::FlatTable::FloatColumn);
-
+    electronTable->addColumn<int>("jetIdx", elec_jetIdx, "linked jet Idx", nanoaod::FlatTable::IntColumn);
+    electronFillerList.fill(electronTable);
+    
     iEvent.put(std::move(globalTable), "global");
     iEvent.put(std::move(csvTable), "csv");
     iEvent.put(std::move(cpfTable), "cpf");
