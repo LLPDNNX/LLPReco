@@ -315,8 +315,8 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         features.tag_info_features.jetNSelectedTracks = vars.get(reco::btau::jetNSelectedTracks, -1);
 
 
-        std::unordered_set<reco::CandidatePtr, CandidateHash> candidatesMatchedToSV;
-        std::unordered_set<reco::CandidatePtr, CandidateHash> candidatesMatchedToSVAdapted;
+        std::unordered_map<reco::CandidatePtr, std::vector<const reco::VertexCompositePtrCandidate*>, CandidateHash> candidatesMatchedToSV;
+        std::unordered_map<reco::CandidatePtr, std::vector<const reco::VertexCompositePtrCandidate*>, CandidateHash> candidatesMatchedToSVAdapted;
 
         // fill features from secondary vertices  
         
@@ -333,7 +333,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             {
                 if (jetConstituentSet.find(candidateFromVertex)!=jetConstituentSet.end())
                 {
-                    candidatesMatchedToSV.insert(candidateFromVertex);
+                    candidatesMatchedToSV[candidateFromVertex].push_back(&sv);
                     matchingTrack = true;
                 }
             }
@@ -363,7 +363,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             {
                 if (jetConstituentSet.find(candidateFromVertex)!=jetConstituentSet.end())
                 {
-                    candidatesMatchedToSVAdapted.insert(candidateFromVertex);
+                    candidatesMatchedToSVAdapted[candidateFromVertex].push_back(&sv_adapted);
                     matchingTrack = true;
                 }
             }
@@ -460,14 +460,9 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_features.trackPParRatio=cpf_features.trackPPar / trackMag;
 
             cpf_features.trackSip2dVal=meas_ip2d.value();
-            cpf_features.trackSip2dSig=meas_ip2d.significance();
+            cpf_features.trackSip2dSig=std::isnan(meas_ip2d.significance()) ? 0 : meas_ip2d.significance();
             cpf_features.trackSip3dVal=meas_ip3d.value();
-            cpf_features.trackSip3dSig=meas_ip3d.significance();
-            if (std::isnan(cpf_features.trackSip2dSig) || std::isnan(cpf_features.trackSip3dSig))
-            {
-                cpf_features.trackSip2dSig=0.;
-                cpf_features.trackSip3dSig=0.;
-            }
+            cpf_features.trackSip3dSig=std::isnan(meas_ip3d.significance()) ? 0 : meas_ip3d.significance();
 
             cpf_features.trackJetDistVal = jetdist.value();
             cpf_features.trackJetDistSig = jetdist.significance();
@@ -478,6 +473,20 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (candidatesMatchedToSV.find(jet.daughterPtr(idaughter))!=candidatesMatchedToSV.end())
             {
                 cpf_features.matchedSV = 1;
+                for (const auto& vertexCompositePtrCandidate: candidatesMatchedToSV[jet.daughterPtr(idaughter)])
+                {
+                    reco::Vertex svVertex(vertexCompositePtrCandidate->position(), vertexCompositePtrCandidate->error4D(),vertexCompositePtrCandidate->t());
+                    Measurement1D meas_sv_ip2d=IPTools::signedTransverseImpactParameter(transientTrack, jetRefTrackDir, svVertex).second;
+                    Measurement1D meas_sv_ip3d=IPTools::signedImpactParameter3D(transientTrack, jetRefTrackDir, svVertex).second;
+                    
+                    if (std::fabs(meas_sv_ip3d.value())<std::fabs(cpf_features.trackSip3dValSV))
+                    {
+                        cpf_features.trackSip2dValSV = meas_sv_ip2d.value();
+                        cpf_features.trackSip2dSigSV = std::isnan(meas_sv_ip2d.significance()) ? 0 : meas_sv_ip2d.significance();
+                        cpf_features.trackSip3dValSV = meas_sv_ip3d.value();
+                        cpf_features.trackSip3dSigSV = std::isnan(meas_sv_ip3d.significance()) ? 0 : meas_sv_ip3d.significance();
+                    }
+                }
             }
             else
             {
@@ -487,6 +496,20 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             if (candidatesMatchedToSVAdapted.find(jet.daughterPtr(idaughter))!=candidatesMatchedToSVAdapted.end())
             {
                 cpf_features.matchedSV_adapted = 1;
+                for (const auto& vertexCompositePtrCandidate: candidatesMatchedToSVAdapted[jet.daughterPtr(idaughter)])
+                {
+                    reco::Vertex svVertex(vertexCompositePtrCandidate->position(), vertexCompositePtrCandidate->error4D(),vertexCompositePtrCandidate->t());
+                    Measurement1D meas_sv_ip2d=IPTools::signedTransverseImpactParameter(transientTrack, jetRefTrackDir, svVertex).second;
+                    Measurement1D meas_sv_ip3d=IPTools::signedImpactParameter3D(transientTrack, jetRefTrackDir, svVertex).second;
+                    
+                    if (std::fabs(meas_sv_ip3d.value())<std::fabs(cpf_features.trackSip3dValSV_adapted))
+                    {
+                        cpf_features.trackSip2dValSV_adapted = meas_sv_ip2d.value();
+                        cpf_features.trackSip2dSigSV_adapted = std::isnan(meas_sv_ip2d.significance()) ? 0 : meas_sv_ip2d.significance();
+                        cpf_features.trackSip3dValSV_adapted = meas_sv_ip3d.value();
+                        cpf_features.trackSip3dSigSV_adapted = std::isnan(meas_sv_ip3d.significance()) ? 0 : meas_sv_ip3d.significance();
+                    }
+                }
             }
             else
             {

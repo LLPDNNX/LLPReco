@@ -148,6 +148,16 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
         PROPERTY(llpdnnx::ChargedCandidateFeatures, track_numberOfValidStripHits, "doc"),
         PROPERTY(llpdnnx::ChargedCandidateFeatures, track_stripLayersWithMeasurement, "doc"), 
         PROPERTY(llpdnnx::ChargedCandidateFeatures, relmassdrop, "doc"),
+        
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip2dValSV, "doc"), 
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip2dSigSV, "doc"), 
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip3dValSV, "doc"), 
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip3dSigSV, "doc"), 
+
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip2dValSV_adapted, "doc"), 
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip2dSigSV_adapted, "doc"), 
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip3dValSV_adapted, "doc"), 
+        PROPERTY(llpdnnx::ChargedCandidateFeatures, trackSip3dSigSV_adapted, "doc"), 
 
         PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedMuon, "doc"),
         PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedElectron, "doc"),
@@ -155,7 +165,6 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
         PROPERTY(llpdnnx::ChargedCandidateFeatures, matchedSV_adapted, "doc"),
         
         PROPERTY(llpdnnx::ChargedCandidateFeatures, track_ndof, "doc"),
-
         PROPERTY(llpdnnx::ChargedCandidateFeatures, dZmin, "doc")
     };
     

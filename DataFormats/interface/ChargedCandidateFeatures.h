@@ -40,6 +40,16 @@ struct ChargedCandidateFeatures
     int track_numberOfValidStripHits;
     int track_stripLayersWithMeasurement; 
     float relmassdrop;
+    
+    float trackSip2dValSV;
+    float trackSip2dSigSV;
+    float trackSip3dValSV;
+    float trackSip3dSigSV;
+
+    float trackSip2dValSV_adapted;
+    float trackSip2dSigSV_adapted;
+    float trackSip3dValSV_adapted;
+    float trackSip3dSigSV_adapted;
 
     int matchedMuon;
     int matchedElectron;
@@ -83,13 +93,23 @@ struct ChargedCandidateFeatures
         track_numberOfValidStripHits(0),
         track_stripLayersWithMeasurement(0),
         relmassdrop(0),
+        
+        trackSip2dValSV(1),
+        trackSip2dSigSV(0),
+        trackSip3dValSV(1),
+        trackSip3dSigSV(0),
+
+        trackSip2dValSV_adapted(1),
+        trackSip2dSigSV_adapted(0),
+        trackSip3dValSV_adapted(1),
+        trackSip3dSigSV_adapted(0),
 
         matchedMuon(0),
         matchedElectron(0),
         matchedSV(0),
         matchedSV_adapted(0),
+        
         track_ndof(0),
-
         dZmin(100)
     {}
     
