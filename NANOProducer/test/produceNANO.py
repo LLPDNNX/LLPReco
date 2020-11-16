@@ -31,6 +31,15 @@ options.register(
     VarParsing.varType.string,
     "add year file"
 )
+
+options.register(
+    'test',
+    False,
+    VarParsing.multiplicity.singleton,
+    VarParsing.varType.bool,
+    "running test"
+)
+
 options.parseArguments() 
 
 if options.year == '2016':
@@ -104,10 +113,14 @@ files = {
     }
 }
 
-process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring(files[options.year]['data'] if options.isData else files[options.year]['mc'])
-
-)
+if len(options.inputFiles)>0:
+    process.source = cms.Source("PoolSource",
+        fileNames = cms.untracked.vstring(options.inputFiles)
+    )
+else:
+    process.source = cms.Source("PoolSource",
+        fileNames = cms.untracked.vstring(files[options.year]['data'] if options.isData else files[options.year]['mc'])
+    )
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
     annotation = cms.untracked.string('test102X nevts:10000'),
