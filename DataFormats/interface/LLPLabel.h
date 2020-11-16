@@ -73,7 +73,6 @@ class LLPLabel {
         
         TauDecay tauDecay;
         
-        int jetIdx;
         int partonFlavor;
         int hadronFlavor;
         int llpId;
@@ -97,7 +96,6 @@ class LLPLabel {
         LLPLabel():
             type(Type::isUndefined),
             tauDecay(TauDecay::NO_TAU),
-            jetIdx(-1),
             partonFlavor(0),
             hadronFlavor(0),
             llpId(0),

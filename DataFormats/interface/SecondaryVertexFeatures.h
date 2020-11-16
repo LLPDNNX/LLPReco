@@ -7,8 +7,6 @@ namespace llpdnnx {
 
 struct SecondaryVertexFeatures
 {
-
-    int jetIdx;
     float ptrel;
     float deta;
     float dphi;
@@ -28,7 +26,6 @@ struct SecondaryVertexFeatures
     float vz;
     
     SecondaryVertexFeatures():
-        jetIdx(-1),
         ptrel(0),
         deta(0),
         dphi(0),

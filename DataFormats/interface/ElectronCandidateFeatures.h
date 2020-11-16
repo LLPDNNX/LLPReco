@@ -4,7 +4,6 @@
 namespace llpdnnx {
  
 struct ElectronCandidateFeatures { 
-    int jetIdx;
     float ptrel;
     float deltaR;
     float deta;
@@ -106,7 +105,6 @@ struct ElectronCandidateFeatures {
     
     
     ElectronCandidateFeatures():
-        jetIdx(-1),
         ptrel(0),
         deltaR(0),
         deta(0),

@@ -5,7 +5,6 @@ namespace llpdnnx {
 
 struct MuonCandidateFeatures {
 
-    int jetIdx;
     int isGlobal;
     int isTight;
     int isMedium;
@@ -63,7 +62,6 @@ struct MuonCandidateFeatures {
     
     
     MuonCandidateFeatures():
-        jetIdx(-1),
         isGlobal(-1),
         isTight(-1),
         isMedium(-1),

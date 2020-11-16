@@ -7,7 +7,6 @@ namespace llpdnnx {
 
 struct ChargedCandidateFeatures
 {
-    int jetIdx;
     float ptrel;
     float deta;
     float dphi;
@@ -60,7 +59,6 @@ struct ChargedCandidateFeatures
     float dZmin;
     
     ChargedCandidateFeatures():
-        jetIdx(-1),
         ptrel(-1),
         deta(1),
         dphi(1),

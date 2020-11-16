@@ -5,7 +5,6 @@ namespace llpdnnx {
 
 struct JetFeatures 
 {
-    int jetIdx;
     float pt;
     float eta;
     float phi;
@@ -56,7 +55,6 @@ struct JetFeatures
     int numberElectron;
     
     JetFeatures():
-        jetIdx(-1),
         pt(-1),
         eta(0),
         phi(0),

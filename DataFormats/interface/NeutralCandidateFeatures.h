@@ -7,7 +7,6 @@ namespace llpdnnx {
 
 struct NeutralCandidateFeatures 
 {
-    int jetIdx;
     float ptrel;
     float deta;
     float dphi;
@@ -24,7 +23,6 @@ struct NeutralCandidateFeatures
     float relmassdrop;
     
     NeutralCandidateFeatures():
-        jetIdx(-1),
         ptrel(0),
         deta(0),
         dphi(0),
