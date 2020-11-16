@@ -202,7 +202,7 @@ NANOGenProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
     jetOriginTable->addColumn<int>("jetIdx", truth_jetIdx, "doc", nanoaod::FlatTable::IntColumn);
     
     for (const auto& labelType: labelTypes) jetOriginTable->addColumn<int>(labelType.first, labelList[labelType.first], "doc", nanoaod::FlatTable::IntColumn);
-    for (const auto& tauDecayType: tauDecayTypes) jetOriginTable->addColumn<int>(tauDecayType.first, tauDecayList[tauDecayType.first], "doc", nanoaod::FlatTable::IntColumn);
+    for (const auto& tauDecayType: tauDecayTypes) jetOriginTable->addColumn<int>("tauDecay_"+tauDecayType.first, tauDecayList[tauDecayType.first], "doc", nanoaod::FlatTable::IntColumn);
 
     labelPropertyFillerList.fill(jetOriginTable);
      
