@@ -454,6 +454,10 @@ for moduleName in modulesToRemove:
 #process.finalPhotons.cut = cms.string("pt > 5")
 #process.finalPhotons.src = cms.InputTag("slimmedPhotons")
 
+process.genParticleTable.variables.vertex_x = Var("vertex().x()", float, doc="vertex x position")
+process.genParticleTable.variables.vertex_y = Var("vertex().y()", float, doc="vertex y position")
+process.genParticleTable.variables.vertex_z = Var("vertex().z()", float, doc="vertex z position")
+
 '''
 process.MINIAODoutput = cms.OutputModule("PoolOutputModule",
     fileName = cms.untracked.string('output.root'),
