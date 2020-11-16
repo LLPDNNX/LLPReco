@@ -480,7 +480,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         
         globalFillerList.push_back(features.jet_features);
         csvFillerList.push_back(features.tag_info_features);
-       
     }
 
     auto muonTable = std::make_unique<nanoaod::FlatTable>(nmu_total, "muon", false, false);
@@ -512,7 +511,6 @@ NANOProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
         for (unsigned int i = 0; i < ncpf; i++)
         {
             cpf_jetIdx.push_back(jetIdx);
-
             cpfFillerList.push_back(cpf.at(i));
         }
 
