@@ -23,6 +23,24 @@ struct NeutralCandidateFeatures
     float puppi_weight;
     float relmassdrop;
     
+    NeutralCandidateFeatures():
+        jetIdx(-1),
+        ptrel(0),
+        deta(0),
+        dphi(0),
+        deltaR(0),
+
+        px(0),
+        py(0),
+        pz(0),
+
+        isGamma(0),
+        hcal_fraction(0),
+        drminsv(0),
+        puppi_weight(0),
+        relmassdrop(0)
+    {}
+    
     bool operator<(const NeutralCandidateFeatures& other) const
     {
         if (std::fabs(drminsv-other.drminsv)>std::numeric_limits<float>::epsilon())
