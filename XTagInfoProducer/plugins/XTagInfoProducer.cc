@@ -88,6 +88,10 @@ llpdnnx::SecondaryVertexFeatures fillSVFeatures(const reco::VertexCompositePtrCa
     sv_features.costhetasvpv = sv.momentum().Unit().Dot(distance.Unit());
     sv_features.enratio = sv.energy()/jet.pt();
 
+    sv_features.vx = sv.vertex().x();
+    sv_features.vy = sv.vertex().y();
+    sv_features.vz = sv.vertex().z();
+
     return sv_features;
 }
 

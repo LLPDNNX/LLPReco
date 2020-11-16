@@ -191,7 +191,10 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
         PROPERTY(llpdnnx::SecondaryVertexFeatures, d3d, "doc"),
         PROPERTY(llpdnnx::SecondaryVertexFeatures, d3dsig, "doc"),
         PROPERTY(llpdnnx::SecondaryVertexFeatures, costhetasvpv, "doc"),
-        PROPERTY(llpdnnx::SecondaryVertexFeatures, enratio, "doc")
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, enratio, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, vx, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, vy, "doc"),
+        PROPERTY(llpdnnx::SecondaryVertexFeatures, vz, "doc")
     };
     
     muonProperties = {
