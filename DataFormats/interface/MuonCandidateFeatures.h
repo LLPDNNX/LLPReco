@@ -57,7 +57,6 @@ struct MuonCandidateFeatures {
     float Pfpileup03;
     float sumPfPhotonEt03;
 
-
     float timeAtIpInOut;
     float timeAtIpInOutErr;
     float timeAtIpOutIn;
@@ -115,7 +114,6 @@ struct MuonCandidateFeatures {
         sumPfNeuHadronEt03(0),
         Pfpileup03(0),
         sumPfPhotonEt03(0),
-
 
         timeAtIpInOut(0),
         timeAtIpInOutErr(0),

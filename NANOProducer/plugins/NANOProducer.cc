@@ -256,8 +256,11 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
         PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfChHadronPt03, "doc"),
         PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfNeuHadronEt03, "doc"),
         PROPERTY(llpdnnx::MuonCandidateFeatures, Pfpileup03, "doc"),
-        PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfPhotonEt03, "doc")
+        PROPERTY(llpdnnx::MuonCandidateFeatures, sumPfPhotonEt03, "doc"),
     
+        PROPERTY(llpdnnx::MuonCandidateFeatures, timeAtIpInOut, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, timeAtIpInOutErr, "doc"),
+        PROPERTY(llpdnnx::MuonCandidateFeatures, timeAtIpOutIn, "doc")
     };
     
     
