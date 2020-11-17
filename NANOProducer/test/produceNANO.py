@@ -80,7 +80,7 @@ process.maxEvents = cms.untracked.PSet(
     input = cms.untracked.int32(1000)
 )
 
-process.options = cms.untracked.PSet()
+process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 files = {
     'test': {
@@ -140,7 +140,9 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         filterName = cms.untracked.string('')
     ),
     SelectEvents = cms.untracked.PSet(
-        SelectEvents = cms.vstring('llpnanoAOD_step') #only events passing this path will be saved
+        SelectEvents = cms.vstring(
+            ['llpnanoAOD_step_mu','llpnanoAOD_step_ele'] if options.isData else ['llpnanoAOD_step']
+        ) #only events passing this path will be saved
     ),
     fileName = cms.untracked.string('nano.root'),
     #outputCommands = process.NANOAODSIMEventContent.outputCommands+cms.untracked.vstring(
@@ -369,6 +371,20 @@ process.muonFilterSequence = cms.Sequence(
     process.selectedMuonsForFilter+process.selectedMuonsMinFilter
 )
 
+
+process.selectedElectronsForFilter = cms.EDFilter("CandViewSelector",
+    src = cms.InputTag("slimmedElectrons"),
+    cut = cms.string("pt>25")
+)
+process.selectedElectronsMinFilter = cms.EDFilter("CandViewCountFilter",
+    src = cms.InputTag("selectedElectronsForFilter"),
+    minNumber = cms.uint32(1)
+)
+    
+process.electronFilterSequence = cms.Sequence(
+    process.selectedElectronsForFilter+process.selectedElectronsMinFilter
+)
+
 # Automatic addition of the customisation function from PhysicsTools.NanoAOD.nano_cff
 from PhysicsTools.NanoAOD.nano_cff import nanoAOD_customizeData,nanoAOD_customizeMC
 
@@ -381,8 +397,15 @@ else:
 
 
 if options.isData:
-    process.llpnanoAOD_step = cms.Path(
+    process.llpnanoAOD_step_mu = cms.Path(
         process.muonFilterSequence+
+        process.nanoSequence+
+        process.adaptedVertexing+
+        process.pfXTagInfos+
+        process.nanoTable
+    )
+    process.llpnanoAOD_step_ele = cms.Path(
+        process.electronFilterSequence+
         process.nanoSequence+
         process.adaptedVertexing+
         process.pfXTagInfos+
@@ -407,8 +430,11 @@ process.endjob_step = cms.EndPath(process.endOfProcess)
 process.NANOAODSIMoutput_step = cms.EndPath(process.NANOAODSIMoutput)
 
 
-
-process.schedule = cms.Schedule(process.llpnanoAOD_step,process.endjob_step,process.NANOAODSIMoutput_step)
+if options.isData:
+    process.schedule = cms.Schedule(process.llpnanoAOD_step_mu,process.llpnanoAOD_step_ele,process.endjob_step,process.NANOAODSIMoutput_step)
+else:
+    process.schedule = cms.Schedule(process.llpnanoAOD_step,process.endjob_step,process.NANOAODSIMoutput_step)
+    
 from PhysicsTools.PatAlgos.tools.helpers import associatePatAlgosToolsTask
 associatePatAlgosToolsTask(process)
 

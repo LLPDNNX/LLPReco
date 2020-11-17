@@ -921,6 +921,7 @@ myJobsData = {
     }
 }
 
+'''
 myJobsHNL = {} 
 with open("HNL_samples.txt") as f:
     for line in f:
@@ -942,13 +943,13 @@ with open("HNL_samples.txt") as f:
             "addLLPInfo": True,
             "addSignalLHE": True
         }
-
+'''
 myJobs = myJobsTraining
-myJobs = myJobsHNL
+#myJobs = myJobsHNL
 
 
-requestName = "NANOX_200720"
-userName = "vcepaiti"
+requestName = "NANOX_201117"
+userName = "mkomm"
 configTmpl = Configuration()
 
 configTmpl.section_('General')
@@ -1016,7 +1017,6 @@ if __name__ == '__main__':
             
         isData = myJob.get('isData', False)
         year = str(myJob.get('year', '0'))
-        addLLPInfo = str(myJob.get('addLLPInfo', False))
         addSignalLHE = str(myJob.get('addSignalLHE', False))
         
         if year not in ['2016','2017','2018','2018D']:
@@ -1025,7 +1025,6 @@ if __name__ == '__main__':
         print "year:", year
         
         config.JobType.pyCfgParams.append("year="+str(year))
-        config.JobType.pyCfgParams.append("addLLPInfo={}".format(addLLPInfo))
         config.JobType.pyCfgParams.append("addSignalLHE={}".format(addSignalLHE))
 
         if isData:
@@ -1044,13 +1043,13 @@ if __name__ == '__main__':
 
         else:
             config.JobType.pyCfgParams.append("isData=False")
-            if myJobs == myJobsHNL:
+            if myJob.has_key('unitsPerJob'):
                 config.Data.splitting = 'FileBased'
-                config.JobType.maxJobRuntimeMin= 8*60
+                config.JobType.maxJobRuntimeMin= 12*60
                 config.Data.unitsPerJob = myJob.get('unitsPerJob', 1)
             else:
                 config.Data.splitting = 'Automatic'
-                config.Data.unitsPerJob = 8*60
+                config.Data.unitsPerJob = 10*60
 
         if "params" in myJob:
             params = myJob["params"]
@@ -1077,9 +1076,11 @@ if __name__ == '__main__':
             
         print "Submitting job ",i," of ",len(myJobs.keys()),":",config.General.workArea
 
-        p = Process(target=submit, args=(config,))
-        p.start()
-        p.join()
+        #p = Process(target=submit, args=(config,))
+        #p.start()
+        #p.join()
+        break
+        
         print
         print
         
