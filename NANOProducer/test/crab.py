@@ -19,19 +19,67 @@ myJobsTraining = {
         "year": 2018,
     },
 
+
     "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
-        "inputDataset":"/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
-        "year": 2016
+        "inputDataset":"/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM",
+        "year": 2016,
     },
     "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
-        "inputDataset":"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM",
-        "year": 2017
+        "inputDataset":"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
+        "year": 2017,
     },
     "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
         "inputDataset":"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
-        "year": 2018
+        "year": 2018,
     },
 
+
+
+    "QCD_Pt_15to30_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt_15to30_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+    },
+    "QCD_Pt_30to50_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt_30to50_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+    },
+    "QCD_Pt_50to80_TuneCUETP8M1_13TeV_pythia8-2016":{
+        "inputDataset":"/QCD_Pt_50to80_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+        "year": 2016,
+    },
+    
+    
+    
+    "QCD_Pt_15to30_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt_15to30_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
+        "year": 2017,
+    },
+    "QCD_Pt_30to50_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt_30to50_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
+        "year": 2017,
+    },
+    "QCD_Pt_50to80_TuneCP5_13TeV_pythia8-2017":{
+        "inputDataset":"/QCD_Pt_50to80_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
+        "year": 2017,
+    },
+    
+    
+    
+    "QCD_Pt_15to30_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt_15to30_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
+        "year": 2018,
+    },
+    "QCD_Pt_30to50_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt_30to50_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+        "year": 2018,
+    },
+    "QCD_Pt_50to80_TuneCP5_13TeV_pythia8-2018":{
+        "inputDataset":"/QCD_Pt_50to80_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
+        "year": 2018,
+    },
+    
+    
+    
     "QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016
@@ -46,8 +94,24 @@ myJobsTraining = {
         "inputDataset":"/QCD_Pt-15to7000_TuneCP5_Flat2018_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM",
         "year": 2018
     },
-
-
+    
+    
+    
+    "LLPGun-2016":{
+        "inputDataset":"/LLPGun/mkomm-miniaod16v3_200929-53f8667ba4b240d5eafd36e71bf34742/USER",
+        "year": 2016,
+        "unitsPerJob": 15,
+    },
+    "LLPGun-2017":{
+        "inputDataset":"/LLPGun/mkomm-miniaod17v2_200929-442a7f6ea2510b243c486adb7160c528/USER",
+        "year": 2017,
+        "unitsPerJob": 15,
+    },
+    "LLPGun-2018":{
+        "inputDataset":"/LLPGun/mkomm-miniaod18_200929-c21dec93027231dc6f615dfe5c662834/USER",
+        "year": 2018,
+        "unitsPerJob": 15,
+    },
 }
 
 myJobsAnalysis = {

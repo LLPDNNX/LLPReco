@@ -25,16 +25,8 @@ options.register(
 )
 
 options.register(
-    'addLLPInfo',
-    True,
-    VarParsing.multiplicity.singleton,
-    VarParsing.varType.bool,
-    "add LLP Info"
-)
-
-options.register(
     'year',
-    '2017',
+    '2016',
     VarParsing.multiplicity.singleton,
     VarParsing.varType.string,
     "add year file"
@@ -45,8 +37,9 @@ options.register(
     False,
     VarParsing.multiplicity.singleton,
     VarParsing.varType.bool,
-    "test mode"
+    "running test"
 )
+
 options.parseArguments() 
 
 if options.year == '2016':
@@ -90,18 +83,29 @@ process.maxEvents = cms.untracked.PSet(
 process.options = cms.untracked.PSet()
 
 files = {
+    'test': {
+        "mc": "/store/user/kjpena/miniAODv3_08Feb2020/GluGluH_HToSSTobbbb_MH-125_MS-25_ctauS-500_TuneCUETP8M1_13TeV-powheg-pythia8_PRIVATE-MC/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_MINIAODSIM/200209_212810/0000/output_1.root",
+        #"mc": "https://github.com/LLPDNNX/test-files/raw/master/miniaod/Moriond17_aug2018_miniAODv3_HNL.root",
+        },
     '2016': {
-        #"mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200625/HNL_dirac_all_ctau1p0e-02_massHNL8p0_Vall2p996e-02/miniaod16v3_200625/200625_171726/0000/HNL2016_9.root",
-        "mc": "/store/user/mkomm/HNL/miniaod16v3_200625/LLPGun/miniaod16v3_200625/200724_114912/0001/GUN2016_1085.root",
-        "data": "/store/data/Run2016B/SingleElectron/MINIAOD/17Jul2018_ver2-v1/40000/6E260591-B88C-E811-AA91-001E67DBE79B.root",
+        #"mc":"root://xrootd.grid.hep.ph.ic.ac.uk//store/mc/RunIISummer16MiniAODv3/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/40000/0A4EAAB1-9223-E911-B512-A4BF01283A8B.root",
+        #"mc":"root://xrootd.grid.hep.ph.ic.ac.uk//store/mc/RunIISummer16MiniAODv3/GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/50000/AEF4E98A-C672-E911-9FD1-AC1F6BAC7D18.root",
+        #"mc":"root://xrootd.grid.hep.ph.ic.ac.uk//store/mc/RunIISummer16MiniAODv3/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/00000/025CA8F7-7C08-E911-8165-0242AC1C0501.root",
+        "mc": [
+            "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200929/LLPGun/miniaod16v3_200929/201007_212837/0000/GUN2016_%i.root"%(i) for i in range(1,10)
+        ],
+        #"mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200517/HNL_dirac_all_ctau1p0e00_massHNL6p0_Vall6p496e-03/miniaod16v3_200517/200517_004822/0000/HNL2016_140.root", #"root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_tau_Dirac_massiveAndCKM_LO/heavyNeutrino_1.root",
+        #"mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-10_V-0.00112249721603_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_76.root",
+        "data": "/store/data/Run2016H/SingleMuon/MINIAOD/17Jul2018-v1/00000/16924A85-4D8C-E811-A51C-A4BF01013F29.root",
     },
     '2017': {
-        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk:1097//store/user/mkomm/HNL/miniaod17v2_200625/HNL_dirac_all_ctau1p0e01_massHNL2p0_Vall4p066e-02/miniaod17v2_200625/200706_192938/0000/HNL2017_93.root",
-        #"mc": "/store/mc/RunIIFall17MiniAODv2/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/10000/40375A25-3C42-E811-B3CB-008CFAC91A4C.root",
+        "mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/testgun17v2/LLPGun/testgun17v2/200724_143441/0000/GUN2017_1.root",
+        #"mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Fall17/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
         "data": "/store/data/Run2017E/SingleMuon/MINIAOD/31Mar2018-v1/00000/A6325FCE-1C39-E811-BB22-0CC47A745298.root"
     },
     '2018': {
-        "mc": "/store/mc/RunIIAutumn18MiniAOD/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/MINIAODSIM/102X_upgrade2018_realistic_v15-v1/280000/476F85B5-BDDA-5A4D-BB9E-199B03CE1FD7.root",
+        "mc":"root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod18_200625/HNL_dirac_all_ctau1p0e-01_massHNL10p0_Vall5p262e-03/miniaod18_200625/200709_103117/0000/HNL2018_283.root",
+        #"mc": "root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Autumn18/displaced/HeavyNeutrino_lljj_M-8_V-0.00214242852856_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_10.root",
         "data": "/store/data/Run2018B/SingleMuon/MINIAOD/17Sep2018-v1/60000/FF47BB90-FC1A-CC44-A635-2B8B8C64AA39.root"
     },
     '2018D': {
@@ -109,7 +113,7 @@ files = {
     }
 }
 
-if options.test:
+if len(options.inputFiles)>0:
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(options.inputFiles)
     )
@@ -117,7 +121,6 @@ else:
     process.source = cms.Source("PoolSource",
         fileNames = cms.untracked.vstring(files[options.year]['data'] if options.isData else files[options.year]['mc'])
     )
-
 # Production Info
 process.configurationMetadata = cms.untracked.PSet(
     annotation = cms.untracked.string('test102X nevts:10000'),
@@ -140,6 +143,7 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         SelectEvents = cms.vstring('llpnanoAOD_step') #only events passing this path will be saved
     ),
     fileName = cms.untracked.string('nano.root'),
+    #outputCommands = process.NANOAODSIMEventContent.outputCommands+cms.untracked.vstring(
     outputCommands = cms.untracked.vstring(
         'drop *',
         'keep nanoaodFlatTable_*Table_*_*',
@@ -165,6 +169,8 @@ process.NANOAODSIMoutput = cms.OutputModule("NanoAODOutputModule",
         
         'drop *_rivetMetTable_*_*',
         'drop *_rivetProducerHTXS_*_*',
+        
+        #'drop *_rivetMetTable_*_*',
     )
 )
 
@@ -174,6 +180,9 @@ process.OUT = cms.OutputModule("PoolOutputModule",
     fileName = cms.untracked.string('test.root'),
     outputCommands = cms.untracked.vstring(['keep *'])
 )
+
+if options.year == "test":
+    options.year = "2016"
 
 if options.isData:
     if options.year == '2016':
@@ -247,11 +256,11 @@ process.llpGenDecayInfo = cms.EDProducer(
     src = cms.InputTag("genParticlesMerged"),
     decays = cms.PSet(
         #hnl -> qql
-        hnl = cms.PSet(
+        hnl_dirac = cms.PSet(
             llpId = cms.int32(9990012),
             daughterIds = cms.vint32([1,2,3,4,5,11,13,15])
         ),
-        antihnl = cms.PSet(
+        hnl_majorana = cms.PSet(
             llpId = cms.int32(9900012),
             daughterIds = cms.vint32([1,2,3,4,5,11,13,15])
         ),
@@ -278,18 +287,16 @@ process.llpGenDecayInfo = cms.EDProducer(
     )
 )
 
-process.llpFlavour = cms.EDProducer(
-    "LLPGhostFlavourProducer",
-    srcJets = cms.InputTag("updatedJets"),
-    srcDecayInfo = cms.InputTag("llpGenDecayInfo"),
-    jetAlgorithm = cms.string("AntiKt"),
-    rParam = cms.double(0.4),
-    ghostRescaling = cms.double(1e-18),
-    relPtTolerance = cms.double(1e-3)
-)
 
 process.llpLabels = cms.EDProducer(
     "LLPLabelProducer",
+    srcVertices = cms.InputTag("displacedGenVertices"),
+    srcJets = cms.InputTag("updatedJets"),
+    srcDecayInfo = cms.InputTag("llpGenDecayInfo"),
+)
+'''
+process.llpLabelsOld = cms.EDProducer(
+    "LLPLabelOldProducer",
     srcVertices = cms.InputTag("displacedGenVertices"),
     srcJets = cms.InputTag("updatedJets"),
     srcFlavourInfo = cms.InputTag("llpFlavour"),
@@ -299,7 +306,7 @@ process.llpLabels = cms.EDProducer(
     muonPtThreshold = cms.double(1.),
     electronPtThreshold = cms.double(1.),
 )
-
+'''
 
 
 process.lheWeightsTable = cms.EDProducer(
@@ -307,6 +314,9 @@ process.lheWeightsTable = cms.EDProducer(
     lheInfo = cms.VInputTag(cms.InputTag("externalLHEProducer"), cms.InputTag("source")),
     weightGroups = cms.PSet()
 )
+#gun parameters
+process.lheWeightsTable.weightGroups.gun_ctau = cms.vstring(['ctau'])
+process.lheWeightsTable.weightGroups.gun_llpmass = cms.vstring(['llpmass'])
 
 #coupling reweighting
 process.lheWeightsTable.weightGroups.coupling = cms.vstring()
@@ -341,7 +351,6 @@ for scaleSet in [
     for i in scaleSet[1]:
         getattr(process.lheWeightsTable.weightGroups,scaleSet[0]).append("%i"%(i))
         
-        
 
 process.load('RecoVertex.AdaptiveVertexFinder.inclusiveVertexing_cff')
 process.load('LLPReco.NANOProducer.adaptedSV_cff')
@@ -373,7 +382,7 @@ else:
 
 if options.isData:
     process.llpnanoAOD_step = cms.Path(
-        #process.muonFilterSequence+
+        process.muonFilterSequence+
         process.nanoSequence+
         process.adaptedVertexing+
         process.pfXTagInfos+
@@ -386,7 +395,6 @@ else:
         process.pfXTagInfos+
         process.displacedGenVertexSequence+
         process.llpGenDecayInfo+
-        process.llpFlavour+
         process.llpLabels+
         process.nanoTable+
         process.nanoGenTable
@@ -455,11 +463,13 @@ for moduleName in modulesToRemove:
     else:
         print "module for removal not found: ",moduleName
 
+#override final photons (required by object linker) so that ID evaluation is not needed
+#process.finalPhotons.cut = cms.string("pt > 5")
+#process.finalPhotons.src = cms.InputTag("slimmedPhotons")
 
 process.genParticleTable.variables.vertex_x = Var("vertex().x()", float, doc="vertex x position")
 process.genParticleTable.variables.vertex_y = Var("vertex().y()", float, doc="vertex y position")
 process.genParticleTable.variables.vertex_z = Var("vertex().z()", float, doc="vertex z position")
-
 
 '''
 process.MINIAODoutput = cms.OutputModule("PoolOutputModule",

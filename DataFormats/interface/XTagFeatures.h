@@ -22,7 +22,9 @@ class XTagFeatures {
     std::vector<ChargedCandidateFeatures> cpf_features;
     std::vector<MuonCandidateFeatures> mu_features;
     std::vector<ElectronCandidateFeatures> elec_features;
+    
     std::size_t npv;
+    
 };
 
 }  

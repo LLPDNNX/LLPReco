@@ -5,8 +5,6 @@ namespace llpdnnx {
 
 struct JetFeatures 
 {
-
-    int jetIdx;
     float pt;
     float eta;
     float phi;
@@ -49,8 +47,14 @@ struct JetFeatures
     float eventShapeC;
     float eventShapeD;
     
+    int numberCpf;
+    int numberNpf;
+    int numberSv;
+    int numberSvAdapted;
+    int numberMuon;
+    int numberElectron;
+    
     JetFeatures():
-        jetIdx(-1),
         pt(-1),
         eta(0),
         phi(0),
@@ -91,7 +95,14 @@ struct JetFeatures
         circularity(-1),
         isotropy(-1),
         eventShapeC(-1),
-        eventShapeD(-1)  
+        eventShapeD(-1),
+        
+        numberCpf(0),
+        numberNpf(0),
+        numberSv(0),
+        numberSvAdapted(0),
+        numberMuon(0),
+        numberElectron(0)
     {
     }
     

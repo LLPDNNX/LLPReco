@@ -10,7 +10,7 @@ JetSubstructure::JetSubstructure(const reco::Jet& jet)
     for(unsigned int iconstituent = 0; iconstituent < jet.numberOfDaughters(); ++iconstituent)
     {
         const reco::Candidate* constituent = jet.daughter(iconstituent);
-        if((constituent->energy() < 1e-10) or (constituent->mass()<1e-10))
+        if((constituent->energy() < 1e-10) or (constituent->energy() > 1e5) or (constituent->mass()<0) or std::fabs(constituent->eta())>1e3)
         {
             continue;
         }
@@ -30,7 +30,7 @@ JetSubstructure::JetSubstructure(const fastjet::PseudoJet& jet)
     TLorentzVector jetVectorFromConsituents(0,0,0,0);
     for(auto const& constituent: jet.constituents())
     {
-        if((constituent.e()<1e-10) or (constituent.m()<1e-10))
+        if((constituent.e()<1e-10) or (constituent.e() > 1e5) or (constituent.m()<0) or std::fabs(constituent.eta())>1e3)
         {
             continue;
         }
@@ -119,11 +119,12 @@ std::vector<fastjet::PseudoJet> JetSubstructure::reclusterExclusive(
 }
 
 double JetSubstructure::nSubjettiness(
-    int n,
+    size_t n,
     const fastjet::contrib::AxesDefinition& axisDef, 
     const fastjet::contrib::MeasureDefinition& measureDef
 ) const
 {
+    if (consituents_.size()<(n+1)) return 0;
     fastjet::contrib::Njettiness njettiness(axisDef,measureDef);
     return njettiness.getTau(n, consituents_);
 }
@@ -217,7 +218,7 @@ double JetSubstructure::thrust(bool boostToCM) const
 double JetSubstructure::relMassDropMass(ClusterType type, double r, double muCut, double yCut) const
 {
     if (massFromConstituents_<1e-10) return 0;
-    if (consituents_.size()<2) return 0;
+    if (consituents_.size()<3) return 0;
     
     fastjet::ClusterSequence clusterSequence(consituents_, makeJetDefinition(type,r));
     std::vector<fastjet::PseudoJet> reclusteredJets = fastjet::sorted_by_pt(
@@ -237,7 +238,7 @@ double JetSubstructure::relMassDropMass(ClusterType type, double r, double muCut
 double JetSubstructure::relSoftDropMass(ClusterType type, double r, double zCut, double beta) const
 {
     if (massFromConstituents_<1e-10) return 0;
-    if (consituents_.size()<2) return 0;
+    if (consituents_.size()<3) return 0;
     
     fastjet::ClusterSequence clusterSequence(consituents_, makeJetDefinition(type,r));
     std::vector<fastjet::PseudoJet> reclusteredJets = fastjet::sorted_by_pt(
