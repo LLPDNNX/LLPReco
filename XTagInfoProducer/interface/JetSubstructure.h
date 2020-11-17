@@ -56,7 +56,7 @@ class JetSubstructure
 
         //default values from https://cmssdt.cern.ch/lxr/source/RecoJets/JetProducers/python/nJettinessAdder_cfi.py except R=0.8 -> 0.4
         double nSubjettiness(
-            int n,
+            size_t n,
             const fastjet::contrib::AxesDefinition& axisDef = fastjet::contrib::OnePass_KT_Axes(), 
             const fastjet::contrib::MeasureDefinition& measureDef = fastjet::contrib::NormalizedMeasure(1.0, 0.4)
         ) const;

@@ -77,7 +77,6 @@ struct ElectronCandidateFeatures {
     int   ndof;
     float chi2;
     int   numberOfBrems;
-    float trackFbrem;
     float fbrem;
 
     // Isolation block
@@ -178,7 +177,6 @@ struct ElectronCandidateFeatures {
         ndof(0),
         chi2(0),
         numberOfBrems(0),
-        trackFbrem(0),
         fbrem(0),
 
         // Isolation block

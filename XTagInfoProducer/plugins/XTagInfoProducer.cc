@@ -395,6 +395,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
             cpf_features.ptrel = constituent->pt()/uncorrectedPt;
             cpf_features.deta = constituent->eta()-jet.eta();
             cpf_features.dphi = reco::deltaPhi(constituent->phi(),jet.phi());
+            cpf_features.deltaR = reco::deltaR(*constituent,jet);
             
             cpf_features.px = constituent->px();
             cpf_features.py = constituent->py();
@@ -729,6 +730,7 @@ XTagInfoProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
                 elec_features.elecSC_eSuperClusterOverP  = electron.eSuperClusterOverP();
  
                 elec_features.neutralHadronIso  = electron.neutralHadronIso()/electron.pt();
+                elec_features.particleIso  = electron.particleIso()/electron.pt();
                 elec_features.photonIso = electron.photonIso()/electron.pt(); 
                 elec_features.puChargedHadronIso = electron.puChargedHadronIso()/electron.pt(); 
 

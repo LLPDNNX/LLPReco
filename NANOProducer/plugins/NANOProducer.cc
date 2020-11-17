@@ -338,7 +338,6 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
         PROPERTY(llpdnnx::ElectronCandidateFeatures,   ndof, "doc"),
         PROPERTY(llpdnnx::ElectronCandidateFeatures,chi2, "doc"),
         PROPERTY(llpdnnx::ElectronCandidateFeatures,   numberOfBrems, "doc"),
-        PROPERTY(llpdnnx::ElectronCandidateFeatures,trackFbrem, "doc"),
         PROPERTY(llpdnnx::ElectronCandidateFeatures,fbrem, "doc"),
 
         // Isolation block
