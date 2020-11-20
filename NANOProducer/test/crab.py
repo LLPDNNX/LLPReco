@@ -1,9 +1,13 @@
 import CRABClient
+from dbs.apis.dbsClient import DbsApi
 import datetime,sys,os
 import copy
 import math
 import urllib, json
 from WMCore.Configuration import Configuration
+
+dbs = DbsApi('https://cmsweb.cern.ch/dbs/prod/global/DBSReader')
+
 
 myJobsTraining = {
     "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
@@ -119,54 +123,29 @@ myJobsAnalysis = {
     "TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
-
-    "TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
-        "inputDataset":"/TTToHadronic_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
-        "year": 2016,
-        "unitsPerJob": 2
-    },
-
 
     "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8_ext1-2017":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
-    },
-
-    "TTToHadronic_TuneCP5_13TeV-powheg-pythia8-2017":{
-        "inputDataset":"/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
     },
 
     "TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8-2018":{
         "inputDataset":"/TTToSemiLeptonic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
-    },
-
-    "TTToHadronic_TuneCP5_13TeV-powheg-pythia8-2018":{
-        "inputDataset":"/TTToHadronic_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
-        "year": 2018,
-        "unitsPerJob": 2
     },
 
     "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8-2016":{
         "inputDataset":"/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8-2017":{
         "inputDataset":"/TTTo2L2Nu_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8-2018":{
         "inputDataset":"/TTTo2L2Nu_TuneCP5_13TeV-powheg-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
     
@@ -210,13 +189,13 @@ myJobsAnalysis = {
         "year": 2016
     },
        
-    "ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8-2017":{
-        "inputDataset":"/ST_t-channel_top_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+    "ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8-2017":{
+        "inputDataset":"/ST_t-channel_top_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017
     },
     
-    "ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8-2017":{
-        "inputDataset":"/ST_t-channel_antitop_4f_inclusiveDecays_TuneCP5_13TeV-powhegV2-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+    "ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8-2017":{
+        "inputDataset":"/ST_t-channel_antitop_4f_InclusiveDecays_TuneCP5_PSweights_13TeV-powheg-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017
     },
     
@@ -233,43 +212,36 @@ myJobsAnalysis = {
     "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
         "inputDataset":"/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-2016":{
         "inputDataset":"/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-ext2-2016":{
         "inputDataset":"/DYJetsToLL_M-50_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v1/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
         "inputDataset":"/DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 3
     },
 
-    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_ext3-2017":{
-        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext3-v1/MINIAODSIM",
+    "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_ext1-2017":{
+        "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 3
     },
 
     "DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
         "inputDataset":"/DYJetsToLL_M-10to50_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 3
     },
 
     "DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8_ext2-2018": {
         "inputDataset":"/DYJetsToLL_M-50_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext2-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 3
     },
 
 
@@ -277,19 +249,16 @@ myJobsAnalysis = {
     "WToLNu_0J_13TeV-amcatnloFXFX-pythia8-ext1-2016":{
         "inputDataset":"/WToLNu_0J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
         "inputDataset":"/WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     
     "WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
         "inputDataset":"/WJetsToLNu_0J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     
     
@@ -297,463 +266,381 @@ myJobsAnalysis = {
     "WToLNu_1J_13TeV-amcatnloFXFX-pythia8-2016":{
         "inputDataset":"/WToLNu_1J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_backup_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8-ext1-2017":{
         "inputDataset":"/WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     
     "WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
         "inputDataset":"/WJetsToLNu_1J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     
     "WToLNu_2J_13TeV-amcatnloFXFX-pythia8-ext4-2016":{
         "inputDataset":"/WToLNu_2J_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext4-v1/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     
     "WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
         "inputDataset":"/WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
     "WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
         "inputDataset":"/WJetsToLNu_2J_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
+
 
     "ZGToLLG_01J_5f_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8-2016":{
         "inputDataset":"/ZGToLLG_01J_5f_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
         "inputDataset": "/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v3/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
-    "ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
-        "inputDataset": "/ZGToLLG_01J_5f_PDFWeights_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
+    "ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018-ext2-v2":{
+        "inputDataset": "/ZGToLLG_01J_5f_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext2-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
     "WGToLNuG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
         "inputDataset": "/WGToLNuG_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
         "inputDataset": "/WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
     "WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
         "inputDataset": "/WGToLNuG_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
-    "WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8-2016":{
-        "inputDataset": "/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
-        "year": 2016,
-        "unitsPerJob": 2
-    },
-
-    "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
-        "inputDataset": "/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
-    },
-
-
-    "WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
-        "inputDataset": "/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
-        "year": 2018,
-        "unitsPerJob": 2
-    },
-
-
-    "TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8-2016":{
-        "inputDataset": "/TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
-        "year": 2016,
-        "unitsPerJob": 2
-    },
-
-    "TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-2017":{
-        "inputDataset": "/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
-    },
-
-
-    "TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-2018":{
-        "inputDataset": "/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
-        "year": 2018,
-        "unitsPerJob": 2
-    },
-
-
-    "TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8-2016":{
-        "inputDataset": "/TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
-        "year": 2016,
-        "unitsPerJob": 2
-    },
-
-    "TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8-2017":{
-        "inputDataset": "/TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
-    },
-
-    "TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8-2018":{
-        "inputDataset": "/TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM",
-        "year": 2018,
-        "unitsPerJob": 2
-    },
 
     "QCD_Pt-20to30_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-20to30_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-30to50_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-50to80_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-80to120_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-120to170_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-170to300_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-170to300_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-300toInf_EMEnriched_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
-    "QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
-        "inputDataset":"/QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "year": 2017,
-        "unitsPerJob": 2
-    },
 
     "QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
 
     "QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
 
     "QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
 
     "QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
 
     "QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
 
     "QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
 
-
-    "QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
-        "inputDataset":"/QCD_Pt-15to20_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
-        "year": 2018,
-        "unitsPerJob": 2
-    },
 
     "QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-20to30_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-30to50_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-50to80_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-80to120_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-120to170_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
     "QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-170to300_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
 
     "QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-300toInf_EMEnriched_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 
 
     "QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-15to20_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-20to30_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-20to30_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-30to50_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-30to50_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-50to80_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-50to80_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-80to120_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-80to120_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-120to170_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-120to170_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-170to300_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-300to470_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-470to600_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-600to800_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-800to1000_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
     "QCD_Pt-1000toInf_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt-1000toInf_MuEnrichedPt5_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext1-v2/MINIAODSIM",
         "year": 2016,
-        "unitsPerJob": 2
     },
 
 
     "QCD_Pt-15to20_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-15to20_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-20to30_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-20to30_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-30to50_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-30to50_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-50to80_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-50to80_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-80to120_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-80to120_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-120to170_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-120to170_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-170to300_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-170to300_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-300to470_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-300to470_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-470to600_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-470to600_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-600to800_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-600to800_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-800to1000_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-800to1000_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     "QCD_Pt-1000toInf_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt-1000toInf_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
-        "unitsPerJob": 2
     },
     
    
     "QCD_Pt-15to20_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-15to20_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-20to30_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-20to30_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v4/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-30to50_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-30to50_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-50to80_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-50to80_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-80to120_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-80to120_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-120to170_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-120to170_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-170to300_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-170to300_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-300to470_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-300to470_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext3-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-470to600_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-470to600_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-600to800_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-600to800_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-800to1000_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-800to1000_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext3-v2/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
     "QCD_Pt-1000toInf_MuEnrichedPt5_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt-1000toInf_MuEnrichedPt5_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
-        "unitsPerJob": 2
     },
 }
+
+"""
+
+"WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8-2016":{
+    "inputDataset": "/WZTo3LNu_TuneCUETP8M1_13TeV-powheg-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
+    "year": 2016,
+},
+
+"WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8-2017":{
+    "inputDataset": "/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
+    "year": 2017,
+},
+
+
+"WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8-2018":{
+    "inputDataset": "/WZTo3LNu_TuneCP5_13TeV-amcatnloFXFX-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+    "year": 2018,
+},
+
+
+
+"TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8-2016":{
+    "inputDataset": "/TTGJets_TuneCUETP8M1_13TeV-amcatnloFXFX-madspin-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+    "year": 2016,
+},
+
+"TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-2017":{
+    "inputDataset": "/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
+    "year": 2017,
+},
+
+
+"TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8-2018":{
+    "inputDataset": "/TTGJets_TuneCP5_13TeV-amcatnloFXFX-madspin-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
+    "year": 2018,
+},
+
+
+"TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8-2016":{
+    "inputDataset": "/TGJets_TuneCUETP8M1_13TeV_amcatnlo_madspin_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
+    "year": 2016,
+},
+
+"TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8-2017":{
+    "inputDataset": "/TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v2/MINIAODSIM",
+    "year": 2017,
+},
+
+"TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8-2018":{
+    "inputDataset": "/TGJets_TuneCP5_13TeV_amcatnlo_madspin_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v3/MINIAODSIM",
+    "year": 2018,
+    }, 
+"""
+
 myJobsData = {
     "SingleElectron_Run2016B_ver2":{
         "inputDataset": "/SingleElectron/Run2016B-17Jul2018_ver2-v1/MINIAOD",
@@ -944,12 +831,13 @@ with open("HNL_samples.txt") as f:
             "addSignalLHE": True
         }
 '''
-myJobs = myJobsTraining
+myJobs = myJobsAnalysis
 #myJobs = myJobsHNL
+#myJobs = myJobsTraining
 
 
 requestName = "NANOX_201117"
-userName = "mkomm"
+userName = "vcepaiti" #mkomm 
 configTmpl = Configuration()
 
 configTmpl.section_('General')
@@ -996,7 +884,6 @@ if __name__ == '__main__':
         i=i+1
         config = copy.deepcopy(configTmpl)
         config.General.requestName = jobName+"_"+requestName
-        print config.General.requestName
         config.General.workArea = "crab/"+requestName+"/"+jobName
         config.Data.outLFNDirBase = "/store/user/"+userName+"/HNL/"+requestName+"/"+jobName
         userInputFiles = myJob.get('userInputFiles', None)
@@ -1006,7 +893,6 @@ if __name__ == '__main__':
                 config.Data.inputDBS = myJob.get('inputDBS', 'global')
             else:
                 config.Data.inputDBS = "phys03"
-            print config.Data.inputDBS
             config.Data.publication = True
         else:
             config.Data.userInputFiles = map(lambda f: f.replace('\n','').replace('\r',''),open(userInputFiles).readlines())
@@ -1026,11 +912,11 @@ if __name__ == '__main__':
         
         config.JobType.pyCfgParams.append("year="+str(year))
         config.JobType.pyCfgParams.append("addSignalLHE={}".format(addSignalLHE))
-
+        config.Data.unitsPerJob = 1.
         if isData:
             config.JobType.pyCfgParams.append("isData=True")
             config.Data.splitting = 'LumiBased'
-            config.Data.unitsPerJob = myJob.get('unitsPerJob', 10)
+            config.Data.unitsPerJob = myJob.get('unitsPerJob', 25)
             if year == '2016':
                 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification//Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
             if year == '2017':
@@ -1043,13 +929,21 @@ if __name__ == '__main__':
 
         else:
             config.JobType.pyCfgParams.append("isData=False")
-            if myJob.has_key('unitsPerJob'):
-                config.Data.splitting = 'FileBased'
-                config.JobType.maxJobRuntimeMin= 12*60
-                config.Data.unitsPerJob = myJob.get('unitsPerJob', 1)
-            else:
-                config.Data.splitting = 'Automatic'
-                config.Data.unitsPerJob = 10*60
+            # automate
+            dbs.listDatasets(dataset=config.Data.inputDataset)
+            filesummary=dbs.listFileSummaries(dataset=config.Data.inputDataset, validFileOnly=1)
+            num_file = filesummary[0]['num_file']
+            num_event = filesummary[0]['num_event']
+            myJob['events'] = num_event
+            num_event_per_file_desired = 100000
+            num_event_per_file = num_event/num_file
+            num_jobs = max(1, num_event_per_file_desired / num_event_per_file)
+            print("Mean number of events per file", num_event_per_file)
+            print("Optimal number of files per job", num_jobs)
+            config.Data.unitsPerJob = myJob.get('unitsPerJob', num_jobs)
+
+            config.Data.splitting = 'FileBased'
+            config.JobType.maxJobRuntimeMin= 16*60
 
         if "params" in myJob:
             params = myJob["params"]
@@ -1073,14 +967,15 @@ if __name__ == '__main__':
             continue
             
         print config,
-            
+
         print "Submitting job ",i," of ",len(myJobs.keys()),":",config.General.workArea
 
         #p = Process(target=submit, args=(config,))
         #p.start()
         #p.join()
-        break
         
         print
         print
-        
+    
+    for myJob in sorted(myJobs.keys()):
+        print(myJob, "events in M: ", myJobs[myJob]['events']/1e6)
