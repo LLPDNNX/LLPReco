@@ -3,6 +3,9 @@
 <use name="FWCore/ParameterSet"/>
 <use name="LLPReco/DataFormats"/>
 <use name="DataFormats/NanoAOD"/>
+<use name="SimGeneral/HepPDTRecord"/>
+<use name="SimDataFormats/GeneratorProducts"/>
+<use name="DataFormats/HepMCCandidate"/>
 <use name="DataFormats/Common"/>
 <use name="DataFormats/PatCandidates"/>
 <use name="xerces-c"/>
@@ -13,5 +16,8 @@
     <flags EDM_PLUGIN="1"/>
 </library>
 <library file="NANOGenProducer.cc" name="NANOGenProducerPlugin">
+    <flags EDM_PLUGIN="1"/>
+</library>
+<library file="HNLDecayInfoProducer.cc" name="HNLDecayInfoProducerPlugin">
     <flags EDM_PLUGIN="1"/>
 </library>

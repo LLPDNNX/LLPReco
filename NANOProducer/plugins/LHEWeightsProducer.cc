@@ -76,10 +76,15 @@ class LHEWeightsProducer:
                 for (auto const& weightGroup: weightIds_)
                 {
                     const auto weightIt = weightGroup.second.find(weight.id);
-                    if (weightIt==weightGroup.second.end()) continue;
-
-                    lheWeightTable->addColumnValue<float>(weightGroup.first+"_"+weightIt->second,weight.wgt/normWeight,"LHE weight",nanoaod::FlatTable::FloatColumn);
-                    
+                    if (weightIt==weightGroup.second.end())
+                    {
+                        lheWeightTable->addColumnValue<float>(weightGroup.first+"_"+weightIt->second,0.0,"LHE weight",nanoaod::FlatTable::FloatColumn);
+                        std::cerr<<"Warning - weight '"<<(weightGroup.first+"_"+weightIt->second)<<"' not found"<<std::endl;
+                    }
+                    else
+                    {
+                        lheWeightTable->addColumnValue<float>(weightGroup.first+"_"+weightIt->second,weight.wgt/normWeight,"LHE weight",nanoaod::FlatTable::FloatColumn);
+                    }
                     //std::cout<<weight.id<<" = "<<weight.wgt<<std::endl;
                 }
             }

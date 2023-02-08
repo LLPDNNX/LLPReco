@@ -9,28 +9,34 @@ myJobsTraining = {
     "TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
         "inputDataset":"/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM",
         "year": 2016,
+        "unitsPerJob":1,
     },
     "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
         "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
         "year": 2017,
+        "unitsPerJob":1,
     },
     "TTJets_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
         "inputDataset":"/TTJets_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
+        "unitsPerJob":1,
     },
 
 
     "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8-2016":{
         "inputDataset":"/WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3_ext2-v2/MINIAODSIM",
         "year": 2016,
+        "unitsPerJob":1,
     },
     "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8-2017":{
         "inputDataset":"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
         "year": 2017,
+        "unitsPerJob":1,
     },
     "WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8-2018":{
         "inputDataset":"/WJetsToLNu_TuneCP5_13TeV-madgraphMLM-pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
         "year": 2018,
+        "unitsPerJob":1,
     },
 
 
@@ -38,14 +44,17 @@ myJobsTraining = {
     "QCD_Pt_15to30_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt_15to30_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
+        "unitsPerJob":2,
     },
     "QCD_Pt_30to50_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt_30to50_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
+        "unitsPerJob":2,
     },
     "QCD_Pt_50to80_TuneCUETP8M1_13TeV_pythia8-2016":{
         "inputDataset":"/QCD_Pt_50to80_TuneCUETP8M1_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
         "year": 2016,
+        "unitsPerJob":2,
     },
     
     
@@ -53,14 +62,17 @@ myJobsTraining = {
     "QCD_Pt_15to30_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt_15to30_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
         "year": 2017,
+        "unitsPerJob":2,
     },
     "QCD_Pt_30to50_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt_30to50_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
         "year": 2017,
+        "unitsPerJob":2,
     },
     "QCD_Pt_50to80_TuneCP5_13TeV_pythia8-2017":{
         "inputDataset":"/QCD_Pt_50to80_TuneCP5_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v2/MINIAODSIM",
         "year": 2017,
+        "unitsPerJob":2,
     },
     
     
@@ -68,49 +80,53 @@ myJobsTraining = {
     "QCD_Pt_15to30_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt_15to30_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
         "year": 2018,
+        "unitsPerJob":2,
     },
     "QCD_Pt_30to50_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt_30to50_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v1/MINIAODSIM",
         "year": 2018,
+        "unitsPerJob":2,
     },
     "QCD_Pt_50to80_TuneCP5_13TeV_pythia8-2018":{
         "inputDataset":"/QCD_Pt_50to80_TuneCP5_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v2/MINIAODSIM",
         "year": 2018,
+        "unitsPerJob":2,
     },
     
     
+    "GluGluHToTauTau_M125_13TeV_powheg_pythia8-2016": {
+        "inputDataset": "/GluGluHToTauTau_M125_13TeV_powheg_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v3/MINIAODSIM",
+        "year": 2016,
+        "unitsPerJob":1,
+    },
     
-    "QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8-2016":{
-        "inputDataset":"/QCD_Pt-15to7000_TuneCUETP8M1_FlatP6_13TeV_pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v2/MINIAODSIM",
-        "year": 2016
+    "GluGluHToTauTau_M125_13TeV_powheg_pythia8-2017": {
+        "inputDataset": "/GluGluHToTauTau_M125_13TeV_powheg_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14_ext1-v1/MINIAODSIM",
+        "year": 2017,
+        "unitsPerJob":2,
+    },
+    
+    "GluGluHToTauTau_M125_13TeV_powheg_pythia8-2018": {
+        "inputDataset": "/GluGluHToTauTau_M125_13TeV_powheg_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15-v2/MINIAODSIM",
+        "year": 2018,
+        "unitsPerJob":2,
     },
 
-    "QCD_Pt-15to7000_TuneCP5_Flat2017_13TeV_pythia8-2017":{
-        "inputDataset":"/QCD_Pt-15to7000_TuneCP5_Flat2017_13TeV_pythia8/RunIIFall17MiniAODv2-PU2017_12Apr2018_94X_mc2017_realistic_v14-v1/MINIAODSIM",
-        "year": 2017
-    },
-
-    "QCD_Pt-15to7000_TuneCP5_Flat2018_13TeV_pythia8-2018":{
-        "inputDataset":"/QCD_Pt-15to7000_TuneCP5_Flat2018_13TeV_pythia8/RunIIAutumn18MiniAOD-102X_upgrade2018_realistic_v15_ext1-v1/MINIAODSIM",
-        "year": 2018
-    },
-    
-    
     
     "LLPGun-2016":{
         "inputDataset":"/LLPGun/mkomm-miniaod16v3_200929-53f8667ba4b240d5eafd36e71bf34742/USER",
         "year": 2016,
-        "unitsPerJob": 15,
+        "unitsPerJob": 50,
     },
     "LLPGun-2017":{
         "inputDataset":"/LLPGun/mkomm-miniaod17v2_200929-442a7f6ea2510b243c486adb7160c528/USER",
         "year": 2017,
-        "unitsPerJob": 15,
+        "unitsPerJob": 50,
     },
     "LLPGun-2018":{
         "inputDataset":"/LLPGun/mkomm-miniaod18_200929-c21dec93027231dc6f615dfe5c662834/USER",
         "year": 2018,
-        "unitsPerJob": 15,
+        "unitsPerJob": 50,
     },
 }
 
@@ -923,7 +939,7 @@ myJobsData = {
 
 '''
 myJobsHNL = {} 
-with open("HNL_samples.txt") as f:
+with open("HNL_signal2018.txt") as f:
     for line in f:
         line = line.rstrip()
         chunks = line.rsplit('/')
@@ -944,11 +960,366 @@ with open("HNL_samples.txt") as f:
             "addSignalLHE": True
         }
 '''
-myJobs = myJobsTraining
+#myJobs = myJobsTraining
 #myJobs = myJobsHNL
+#myJobs = myJobsData
+'''
+for k,job in myJobs.items():
+    #if str(job['year'])!='2018':
+    #    del myJobs[k]
+'''
 
 
-requestName = "NANOX_201117"
+ntau2016 =[
+    "/HNL_dirac_ntau0_ctau1p0e-01_massHNL10p0_Vall5p262e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-01_massHNL12p0_Vall3p272e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-01_massHNL14p0_Vall2p193e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-01_massHNL16p0_Vall1p551e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-01_massHNL18p0_Vall1p144e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-01_massHNL20p0_Vall8p709e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-01_massHNL8p0_Vall9p475e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-02_massHNL10p0_Vall1p664e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-02_massHNL12p0_Vall1p035e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-02_massHNL14p0_Vall6p933e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-02_massHNL16p0_Vall4p905e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-02_massHNL18p0_Vall3p617e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-02_massHNL20p0_Vall2p754e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-03_massHNL12p0_Vall3p272e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-03_massHNL14p0_Vall2p193e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-03_massHNL16p0_Vall1p551e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-03_massHNL18p0_Vall1p144e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-03_massHNL20p0_Vall8p709e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-04_massHNL14p0_Vall6p933e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-04_massHNL16p0_Vall4p905e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-04_massHNL18p0_Vall3p617e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e-04_massHNL20p0_Vall2p754e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e00_massHNL10p0_Vall1p664e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e00_massHNL12p0_Vall1p035e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e00_massHNL14p0_Vall6p933e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e00_massHNL16p0_Vall4p905e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e00_massHNL18p0_Vall3p617e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e00_massHNL4p5_Vall1p438e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e00_massHNL6p0_Vall6p496e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e00_massHNL8p0_Vall2p996e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL10p0_Vall5p262e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL12p0_Vall3p272e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL14p0_Vall2p193e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL16p0_Vall1p551e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL18p0_Vall1p144e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL1p0_Vall2p359e-01/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL1p5_Vall8p442e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL2p0_Vall4p066e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL3p0_Vall1p388e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL4p5_Vall4p549e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL6p0_Vall2p054e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e01_massHNL8p0_Vall9p475e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e02_massHNL10p0_Vall1p664e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e02_massHNL1p0_Vall7p460e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e02_massHNL1p5_Vall2p670e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e02_massHNL2p0_Vall1p286e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e02_massHNL3p0_Vall4p390e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e02_massHNL4p5_Vall1p438e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e02_massHNL6p0_Vall6p496e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e02_massHNL8p0_Vall2p996e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e03_massHNL1p0_Vall2p359e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e03_massHNL1p5_Vall8p442e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e03_massHNL2p0_Vall4p066e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e03_massHNL3p0_Vall1p388e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e03_massHNL4p5_Vall4p549e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e03_massHNL6p0_Vall2p054e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e04_massHNL1p0_Vall7p460e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e04_massHNL1p5_Vall2p670e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau0_ctau1p0e04_massHNL2p0_Vall1p286e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-01_massHNL10p0_Vall5p262e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-01_massHNL12p0_Vall3p272e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-01_massHNL14p0_Vall2p193e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-01_massHNL16p0_Vall1p551e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-01_massHNL18p0_Vall1p144e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-01_massHNL20p0_Vall8p709e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-01_massHNL8p0_Vall9p475e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-02_massHNL10p0_Vall1p664e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-02_massHNL12p0_Vall1p035e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-02_massHNL14p0_Vall6p933e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-02_massHNL16p0_Vall4p905e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-02_massHNL18p0_Vall3p617e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-02_massHNL20p0_Vall2p754e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-03_massHNL12p0_Vall3p272e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-03_massHNL14p0_Vall2p193e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-03_massHNL16p0_Vall1p551e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-03_massHNL18p0_Vall1p144e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-03_massHNL20p0_Vall8p709e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-04_massHNL14p0_Vall6p933e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-04_massHNL16p0_Vall4p905e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-04_massHNL18p0_Vall3p617e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e-04_massHNL20p0_Vall2p754e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e00_massHNL10p0_Vall1p664e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e00_massHNL12p0_Vall1p035e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e00_massHNL14p0_Vall6p933e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e00_massHNL16p0_Vall4p905e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e00_massHNL18p0_Vall3p617e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e00_massHNL4p5_Vall1p438e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e00_massHNL6p0_Vall6p496e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e00_massHNL8p0_Vall2p996e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL10p0_Vall5p262e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL12p0_Vall3p272e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL14p0_Vall2p193e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL16p0_Vall1p551e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL18p0_Vall1p144e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL1p0_Vall2p359e-01/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL1p5_Vall8p442e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL2p0_Vall4p066e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL3p0_Vall1p388e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL4p5_Vall4p549e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL6p0_Vall2p054e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e01_massHNL8p0_Vall9p475e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e02_massHNL10p0_Vall1p664e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e02_massHNL1p0_Vall7p460e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e02_massHNL1p5_Vall2p670e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e02_massHNL2p0_Vall1p286e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e02_massHNL3p0_Vall4p390e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e02_massHNL4p5_Vall1p438e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e02_massHNL6p0_Vall6p496e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e02_massHNL8p0_Vall2p996e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e03_massHNL1p0_Vall2p359e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e03_massHNL1p5_Vall8p442e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e03_massHNL2p0_Vall4p066e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e03_massHNL3p0_Vall1p388e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e03_massHNL4p5_Vall4p549e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e03_massHNL6p0_Vall2p054e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e04_massHNL1p0_Vall7p460e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e04_massHNL1p5_Vall2p670e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau1_ctau1p0e04_massHNL2p0_Vall1p286e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-01_massHNL10p0_Vall5p262e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-01_massHNL12p0_Vall3p272e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-01_massHNL14p0_Vall2p193e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-01_massHNL16p0_Vall1p551e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-01_massHNL18p0_Vall1p144e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-01_massHNL20p0_Vall8p709e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-01_massHNL8p0_Vall9p475e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-02_massHNL10p0_Vall1p664e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-02_massHNL12p0_Vall1p035e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-02_massHNL14p0_Vall6p933e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-02_massHNL16p0_Vall4p905e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-02_massHNL18p0_Vall3p617e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-02_massHNL20p0_Vall2p754e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-03_massHNL12p0_Vall3p272e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-03_massHNL14p0_Vall2p193e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-03_massHNL16p0_Vall1p551e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-03_massHNL18p0_Vall1p144e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-03_massHNL20p0_Vall8p709e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-04_massHNL14p0_Vall6p933e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-04_massHNL16p0_Vall4p905e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-04_massHNL18p0_Vall3p617e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e-04_massHNL20p0_Vall2p754e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e00_massHNL10p0_Vall1p664e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e00_massHNL12p0_Vall1p035e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e00_massHNL14p0_Vall6p933e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e00_massHNL16p0_Vall4p905e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e00_massHNL18p0_Vall3p617e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e00_massHNL4p5_Vall1p438e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e00_massHNL6p0_Vall6p496e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e00_massHNL8p0_Vall2p996e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL10p0_Vall5p262e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL12p0_Vall3p272e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL14p0_Vall2p193e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL16p0_Vall1p551e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL18p0_Vall1p144e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL1p0_Vall2p359e-01/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL1p5_Vall8p442e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL3p0_Vall1p388e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL4p5_Vall4p549e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL6p0_Vall2p054e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e01_massHNL8p0_Vall9p475e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e02_massHNL10p0_Vall1p664e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e02_massHNL1p0_Vall7p460e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e02_massHNL2p0_Vall1p286e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e02_massHNL3p0_Vall4p390e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e02_massHNL4p5_Vall1p438e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e02_massHNL6p0_Vall6p496e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e02_massHNL8p0_Vall2p996e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e03_massHNL3p0_Vall1p388e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e03_massHNL4p5_Vall4p549e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_dirac_ntau2_ctau1p0e03_massHNL6p0_Vall2p054e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-01_massHNL10p0_Vall3p721e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-01_massHNL12p0_Vall2p314e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-01_massHNL14p0_Vall1p551e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-01_massHNL16p0_Vall1p097e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-01_massHNL18p0_Vall8p092e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-01_massHNL20p0_Vall6p165e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-01_massHNL8p0_Vall6p702e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-02_massHNL10p0_Vall1p177e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-02_massHNL12p0_Vall7p319e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-02_massHNL14p0_Vall4p904e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-02_massHNL16p0_Vall3p470e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-02_massHNL18p0_Vall2p559e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-02_massHNL20p0_Vall1p950e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-03_massHNL12p0_Vall2p314e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-03_massHNL14p0_Vall1p551e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-03_massHNL16p0_Vall1p097e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-03_massHNL18p0_Vall8p092e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-03_massHNL20p0_Vall6p165e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-04_massHNL14p0_Vall4p904e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-04_massHNL16p0_Vall3p470e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-04_massHNL18p0_Vall2p559e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e-04_massHNL20p0_Vall1p950e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e00_massHNL10p0_Vall1p177e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e00_massHNL12p0_Vall7p319e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e00_massHNL14p0_Vall4p904e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e00_massHNL16p0_Vall3p470e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e00_massHNL18p0_Vall2p559e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e00_massHNL4p5_Vall1p016e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e00_massHNL6p0_Vall4p597e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e00_massHNL8p0_Vall2p119e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL10p0_Vall3p721e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL12p0_Vall2p314e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL14p0_Vall1p551e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL16p0_Vall1p097e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL18p0_Vall8p092e-05/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL1p0_Vall1p668e-01/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL1p5_Vall5p965e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL2p0_Vall2p871e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL3p0_Vall9p825e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL4p5_Vall3p213e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL6p0_Vall1p454e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e01_massHNL8p0_Vall6p702e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e02_massHNL10p0_Vall1p177e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e02_massHNL1p0_Vall5p274e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e02_massHNL1p5_Vall1p886e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e02_massHNL2p0_Vall9p078e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e02_massHNL3p0_Vall3p107e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e02_massHNL4p5_Vall1p016e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e02_massHNL6p0_Vall4p597e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e02_massHNL8p0_Vall2p119e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e03_massHNL1p0_Vall1p668e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e03_massHNL1p5_Vall5p965e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e03_massHNL2p0_Vall2p871e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e03_massHNL3p0_Vall9p825e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e03_massHNL4p5_Vall3p213e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e03_massHNL6p0_Vall1p454e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e04_massHNL1p0_Vall5p274e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e04_massHNL1p5_Vall1p886e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau0_ctau1p0e04_massHNL2p0_Vall9p078e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-01_massHNL10p0_Vall3p721e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-01_massHNL12p0_Vall2p314e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-01_massHNL14p0_Vall1p551e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-01_massHNL16p0_Vall1p097e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-01_massHNL18p0_Vall8p092e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-01_massHNL20p0_Vall6p165e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-01_massHNL8p0_Vall6p702e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-02_massHNL10p0_Vall1p177e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-02_massHNL12p0_Vall7p319e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-02_massHNL14p0_Vall4p904e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-02_massHNL16p0_Vall3p470e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-02_massHNL18p0_Vall2p559e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-02_massHNL20p0_Vall1p950e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-03_massHNL12p0_Vall2p314e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-03_massHNL14p0_Vall1p551e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-03_massHNL16p0_Vall1p097e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-03_massHNL18p0_Vall8p092e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-03_massHNL20p0_Vall6p165e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-04_massHNL14p0_Vall4p904e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-04_massHNL16p0_Vall3p470e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-04_massHNL18p0_Vall2p559e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e-04_massHNL20p0_Vall1p950e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e00_massHNL10p0_Vall1p177e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e00_massHNL12p0_Vall7p319e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e00_massHNL14p0_Vall4p904e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e00_massHNL16p0_Vall3p470e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e00_massHNL18p0_Vall2p559e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e00_massHNL4p5_Vall1p016e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e00_massHNL6p0_Vall4p597e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e00_massHNL8p0_Vall2p119e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL10p0_Vall3p721e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL12p0_Vall2p314e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL14p0_Vall1p551e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL16p0_Vall1p097e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL18p0_Vall8p092e-05/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL1p0_Vall1p668e-01/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL1p5_Vall5p965e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL2p0_Vall2p871e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL3p0_Vall9p825e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL4p5_Vall3p213e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL6p0_Vall1p454e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e01_massHNL8p0_Vall6p702e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e02_massHNL10p0_Vall1p177e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e02_massHNL1p0_Vall5p274e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e02_massHNL1p5_Vall1p886e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e02_massHNL2p0_Vall9p078e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e02_massHNL3p0_Vall3p107e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e02_massHNL4p5_Vall1p016e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e02_massHNL6p0_Vall4p597e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e02_massHNL8p0_Vall2p119e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e03_massHNL1p0_Vall1p668e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e03_massHNL1p5_Vall5p965e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e03_massHNL2p0_Vall2p871e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e03_massHNL3p0_Vall9p825e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e03_massHNL4p5_Vall3p213e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e03_massHNL6p0_Vall1p454e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e04_massHNL1p0_Vall5p274e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e04_massHNL1p5_Vall1p886e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau1_ctau1p0e04_massHNL2p0_Vall9p078e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-01_massHNL10p0_Vall3p721e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-01_massHNL12p0_Vall2p314e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-01_massHNL14p0_Vall1p551e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-01_massHNL16p0_Vall1p097e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-01_massHNL18p0_Vall8p092e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-01_massHNL20p0_Vall6p165e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-01_massHNL8p0_Vall6p702e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-02_massHNL10p0_Vall1p177e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-02_massHNL12p0_Vall7p319e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-02_massHNL14p0_Vall4p904e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-02_massHNL16p0_Vall3p470e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-02_massHNL18p0_Vall2p559e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-02_massHNL20p0_Vall1p950e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-03_massHNL12p0_Vall2p314e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-03_massHNL14p0_Vall1p551e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-03_massHNL16p0_Vall1p097e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-03_massHNL18p0_Vall8p092e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-03_massHNL20p0_Vall6p165e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-04_massHNL14p0_Vall4p904e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-04_massHNL16p0_Vall3p470e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-04_massHNL18p0_Vall2p559e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e-04_massHNL20p0_Vall1p950e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e00_massHNL10p0_Vall1p177e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e00_massHNL12p0_Vall7p319e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e00_massHNL12p0_Vall7p319e-04/mkomm-miniaod16v3_221221-dbc7933c2a7a8185653b951ff340c9d2/USER",
+    "/HNL_majorana_ntau2_ctau1p0e00_massHNL14p0_Vall4p904e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e00_massHNL16p0_Vall3p470e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e00_massHNL18p0_Vall2p559e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e00_massHNL4p5_Vall1p016e-02/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e00_massHNL6p0_Vall4p597e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e00_massHNL8p0_Vall2p119e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e01_massHNL10p0_Vall3p721e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e01_massHNL12p0_Vall2p314e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e01_massHNL14p0_Vall1p551e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e01_massHNL16p0_Vall1p097e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e01_massHNL18p0_Vall8p092e-05/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e01_massHNL3p0_Vall9p825e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e01_massHNL4p5_Vall3p213e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e01_massHNL6p0_Vall1p454e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e01_massHNL8p0_Vall6p702e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e02_massHNL10p0_Vall1p177e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e02_massHNL3p0_Vall3p107e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e02_massHNL4p5_Vall1p016e-03/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e02_massHNL6p0_Vall4p597e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e02_massHNL8p0_Vall2p119e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e03_massHNL3p0_Vall9p825e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e03_massHNL4p5_Vall3p213e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER",
+    "/HNL_majorana_ntau2_ctau1p0e03_massHNL6p0_Vall1p454e-04/mkomm-miniaod16v3_221221-53f8667ba4b240d5eafd36e71bf34742/USER"
+]
+
+myJobs = {}
+for ntauDataset in ntau2016:
+    sampleName = ntauDataset.split('/')[1]+"-2016"
+    #print sampleName
+    myJobs[sampleName] = {
+        "inputDataset":ntauDataset,
+        "year": 2016,
+        "unitsPerJob": 50,
+        "addSignalLHE": True
+    }
+    
+requestName = "NANOX_221221"
 userName = "mkomm"
 configTmpl = Configuration()
 
@@ -964,6 +1335,7 @@ configTmpl.JobType.allowUndistributedCMSSW = True
 configTmpl.JobType.pyCfgParams = []
 configTmpl.JobType.inputFiles = []
 configTmpl.JobType.maxMemoryMB = 2500
+configTmpl.JobType.maxJobRuntimeMin= 10*60
 configTmpl.section_('Data')
 configTmpl.Data.useParent = False
 configTmpl.section_('Site')
@@ -990,13 +1362,14 @@ if __name__ == '__main__':
 
 
     for i,jobName in enumerate(sorted(myJobs.keys())):
+        if i>400:
+            break
         print(jobName)
         isData = False
         myJob = myJobs[jobName]
         i=i+1
         config = copy.deepcopy(configTmpl)
-        config.General.requestName = jobName+"_"+requestName
-        print config.General.requestName
+        config.General.requestName = jobName
         config.General.workArea = "crab/"+requestName+"/"+jobName
         config.Data.outLFNDirBase = "/store/user/"+userName+"/HNL/"+requestName+"/"+jobName
         userInputFiles = myJob.get('userInputFiles', None)
@@ -1030,7 +1403,8 @@ if __name__ == '__main__':
         if isData:
             config.JobType.pyCfgParams.append("isData=True")
             config.Data.splitting = 'LumiBased'
-            config.Data.unitsPerJob = myJob.get('unitsPerJob', 10)
+            config.Data.unitsPerJob = myJob.get('unitsPerJob', 30)
+            config.JobType.maxJobRuntimeMin = myJob.get('maxJobRuntimeMin', 16*60)
             if year == '2016':
                 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification//Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
             if year == '2017':
@@ -1045,7 +1419,7 @@ if __name__ == '__main__':
             config.JobType.pyCfgParams.append("isData=False")
             if myJob.has_key('unitsPerJob'):
                 config.Data.splitting = 'FileBased'
-                config.JobType.maxJobRuntimeMin= 12*60
+                config.JobType.maxJobRuntimeMin= 10*60
                 config.Data.unitsPerJob = myJob.get('unitsPerJob', 1)
             else:
                 config.Data.splitting = 'Automatic'
@@ -1076,10 +1450,11 @@ if __name__ == '__main__':
             
         print "Submitting job ",i," of ",len(myJobs.keys()),":",config.General.workArea
 
-        #p = Process(target=submit, args=(config,))
-        #p.start()
-        #p.join()
-        break
+        p = Process(target=submit, args=(config,))
+        p.start()
+        p.join()
+        
+        #break
         
         print
         print

@@ -92,7 +92,12 @@ files = {
         #"mc":"root://xrootd.grid.hep.ph.ic.ac.uk//store/mc/RunIISummer16MiniAODv3/GluGluToHHTo2B2Tau_node_SM_13TeV-madgraph/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/50000/AEF4E98A-C672-E911-9FD1-AC1F6BAC7D18.root",
         #"mc":"root://xrootd.grid.hep.ph.ic.ac.uk//store/mc/RunIISummer16MiniAODv3/DYJetsToLL_M-10to50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v2/00000/025CA8F7-7C08-E911-8165-0242AC1C0501.root",
         "mc": [
-            "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200929/LLPGun/miniaod16v3_200929/201007_212837/0000/GUN2016_%i.root"%(i) for i in range(1,10)
+            #"root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200929/LLPGun/miniaod16v3_200929/201007_212837/0000/GUN2016_%i.root"%(i) for i in range(1,10)
+            "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_221220/HNL_dirac_ntau0_ctau1p0e00_massHNL10p0_Vall1p664e-03/miniaod16v3_221220/221219_200155/0000/HNL2016_41.root",
+            "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_221220/HNL_dirac_ntau0_ctau1p0e00_massHNL10p0_Vall1p664e-03/miniaod16v3_221220/221219_200155/0000/HNL2016_496.root",
+            "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_221220/HNL_dirac_ntau0_ctau1p0e00_massHNL10p0_Vall1p664e-03/miniaod16v3_221220/221219_200155/0001/HNL2016_1678.root",
+            "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_221220/HNL_dirac_ntau0_ctau1p0e00_massHNL10p0_Vall1p664e-03/miniaod16v3_221220/221219_200155/0000/HNL2016_232.root",
+            "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_221220/HNL_dirac_ntau0_ctau1p0e00_massHNL10p0_Vall1p664e-03/miniaod16v3_221220/221219_200155/0000/HNL2016_948.root",
         ],
         #"mc": "root://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/miniaod16v3_200517/HNL_dirac_all_ctau1p0e00_massHNL6p0_Vall6p496e-03/miniaod16v3_200517/200517_004822/0000/HNL2016_140.root", #"root://maite.iihe.ac.be//store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-8_V-0.004472135955_tau_Dirac_massiveAndCKM_LO/heavyNeutrino_1.root",
         #"mc": "root://maite.iihe.ac.be///store/user/tomc/heavyNeutrinoMiniAOD/Moriond17_aug2018_miniAODv3/displaced/HeavyNeutrino_lljj_M-10_V-0.00112249721603_mu_Dirac_massiveAndCKM_LO/heavyNeutrino_76.root",
@@ -289,6 +294,9 @@ process.llpGenDecayInfo = cms.EDProducer(
     )
 )
 
+process.hnlDecayInfoTable = cms.EDProducer("HNLDecayInfoProducer",
+    srcGenParticles = cms.InputTag("genParticlesMerged")
+)
 
 process.llpLabels = cms.EDProducer(
     "LLPLabelProducer",
@@ -425,6 +433,7 @@ else:
     
     if options.addSignalLHE:
         process.llpnanoAOD_step += process.lheWeightsTable
+        process.llpnanoAOD_step += process.hnlDecayInfoTable
     
 process.endjob_step = cms.EndPath(process.endOfProcess)
 process.NANOAODSIMoutput_step = cms.EndPath(process.NANOAODSIMoutput)

@@ -124,7 +124,7 @@ NANOProducer::NANOProducer(const edm::ParameterSet& iConfig) :
         PROPERTY(llpdnnx::ChargedCandidateFeatures, px, "doc"),
         PROPERTY(llpdnnx::ChargedCandidateFeatures, py, "doc"),
         PROPERTY(llpdnnx::ChargedCandidateFeatures, pz, "doc"),
-
+       
         PROPERTY(llpdnnx::ChargedCandidateFeatures, trackEtaRel, "doc"),
         PROPERTY(llpdnnx::ChargedCandidateFeatures, trackPtRel, "doc"),
         PROPERTY(llpdnnx::ChargedCandidateFeatures, trackPPar, "doc"),

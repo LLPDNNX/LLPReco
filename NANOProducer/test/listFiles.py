@@ -6,12 +6,10 @@ import os
 from fcntl import fcntl, F_GETFL, F_SETFL
 from os import O_NONBLOCK, read
 
-#basepath = "srm://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/NANOX_201117"
-#basepath = "srm://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/vcepaiti/HNL/NANOX_201117"
-basepath = "srm://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/NANOX_lpairtestv3"
+basepath = "srm://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/NANOX_201117"
 
 def listdir(path):
-    #print "query path ... ",path
+    print "query path ... ",path
     ret = -1
     retry = 0
     fetchedOutput = ""
@@ -119,45 +117,16 @@ folders = listdir(basepath)
 for i,folder in enumerate(folders):
     if not folder["isDir"]:
         continue
-    '''   
-    if folder["name"].find("Single")<0 and folder["name"].find("EG")<0:
-        continue
-    '''
-    '''
-    if folder["name"].find("ST_")<0:
-        continue
-    '''
-    print i+1,"/",len(folders),folder["name"]
-    
+    #if not (folder["name"].find("Single")>=0 or folder["name"].find("EG")>=0): 
+    #    continue
+        
     fileList = findFiles(
         basepath+'/'+folder["name"],
-        re.compile("\S+_[0-9]+.root")
+        re.compile("\\S+_[0-9]+.root")
     )
-    if len(fileList)==0:
-        print "  WARNING: directory empty -> skip"
-        continue
-        
-    filesPerDate = {}
-    for f in fileList:
-        g = re.match("\\S+([0-9][0-9][0-9][0-9][0-9][0-9])_([0-9][0-9][0-9][0-9][0-9][0-9])/[0-9]+/\\S+_[0-9]+.root",f)
-        if not g:
-            raise Exception("File path not recognized: "+f)
-        #print g.groups()[0],g.groups()[1],f
-        k = g.groups()[0]+'_'+g.groups()[1]
-        if not filesPerDate.has_key(k):
-            filesPerDate[k] = []
-        filesPerDate[k].append(f)
-        
-    if len(filesPerDate.keys())>1:
-        print "  WARNING - found multiple jobs: "
-        for k in filesPerDate.keys():
-            print '    ',k,len(filesPerDate[k])
-    kLatest = sorted(filesPerDate.keys(),key=lambda x: int(x[0:6])*1e8+int(x[7:]))[-1]
     
-    #print kLatest
-    fileList = filesPerDate[kLatest]
     
-    print '   #files=',len(fileList)
+    print i+1,"/",len(folders),folder["name"],len(fileList)
     
     outFile = open(folder["name"]+".txt","w")
     for f in fileList:
