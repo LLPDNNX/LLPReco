@@ -8,7 +8,7 @@ from os import O_NONBLOCK, read
 
 #basepath = "srm://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/NANOX_201117"
 #basepath = "srm://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/vcepaiti/HNL/NANOX_201117"
-basepath = "srm://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/NANOX_lpairtestv3"
+basepath = "srm://gfe02.grid.hep.ph.ic.ac.uk/pnfs/hep.ph.ic.ac.uk/data/cms/store/user/mkomm/HNL/NANOX_221221"
 
 def listdir(path):
     #print "query path ... ",path

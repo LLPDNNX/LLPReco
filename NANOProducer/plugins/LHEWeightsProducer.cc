@@ -28,6 +28,7 @@ class LHEWeightsProducer:
         const std::vector<edm::EDGetTokenT<LHEEventProduct>> lheTag_;
         
         std::unordered_map<std::string,std::unordered_map<std::string, std::string>> weightIds_;
+        std::unordered_set<std::string> missingWeights_;
 
     public:
         LHEWeightsProducer( edm::ParameterSet const & params ) :
@@ -49,7 +50,9 @@ class LHEWeightsProducer:
             produces<nanoaod::FlatTable>();
         }
 
-        ~LHEWeightsProducer() override {}
+        ~LHEWeightsProducer() override 
+        {   
+        }
 
         void produce(edm::Event& iEvent, const edm::EventSetup& iSetup) override 
         {
@@ -63,33 +66,30 @@ class LHEWeightsProducer:
                     break;
                 }
             }
-            if (lheInfo.isValid()) 
-            {
-            }
             
             auto lheWeightTable = std::make_unique<nanoaod::FlatTable>(1,"LHEWeights",true,false);
             
             double normWeight = lheInfo->originalXWGTUP();
             std::vector<gen::WeightsInfo> weights = lheInfo->weights();
-            for (const auto& weight: weights)
+            
+            
+            for (auto const& weightGroup: weightIds_)
             {
-                for (auto const& weightGroup: weightIds_)
+                for (auto const& weightName: weightGroup.second)
                 {
-                    const auto weightIt = weightGroup.second.find(weight.id);
-                    if (weightIt==weightGroup.second.end())
+                    double value = 0.0;
+                    for (const auto& weight: weights)
                     {
-                        lheWeightTable->addColumnValue<float>(weightGroup.first+"_"+weightIt->second,0.0,"LHE weight",nanoaod::FlatTable::FloatColumn);
-                        std::cerr<<"Warning - weight '"<<(weightGroup.first+"_"+weightIt->second)<<"' not found"<<std::endl;
+                        if (weight.id==weightName.first) 
+                        {
+                            value = weight.wgt/normWeight;
+                            break;
+                        }
                     }
-                    else
-                    {
-                        lheWeightTable->addColumnValue<float>(weightGroup.first+"_"+weightIt->second,weight.wgt/normWeight,"LHE weight",nanoaod::FlatTable::FloatColumn);
-                    }
-                    //std::cout<<weight.id<<" = "<<weight.wgt<<std::endl;
+                    lheWeightTable->addColumnValue<float>(weightGroup.first+"_"+weightName.second,value,"LHE weight",nanoaod::FlatTable::FloatColumn);
                 }
             }
-            
-            
+                
             
             iEvent.put(std::move(lheWeightTable));
         }
